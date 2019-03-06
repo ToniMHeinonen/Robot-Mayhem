@@ -27,8 +27,6 @@ public class RoomFight extends RoomParent {
     Body body;
     public static World world;
 
-    float startX = pixelWidth / 2;
-    float startY = pixelHeight / 2;
     float delta;
 
     int frameSpeed;
@@ -68,9 +66,11 @@ public class RoomFight extends RoomParent {
         return myBodyDef;
     }
 
+    int COLS = 2;
+    int ROWS = 1;
+    TextureRegion [] exampleFrames = new TextureRegion[COLS * ROWS];
     private TextureRegion [] transfromTo1D(TextureRegion[][] tmp) {
 
-        TextureRegion [] exampleFrames = new TextureRegion[COLS * ROWS];
         int index = 0;
 
         for (int i = 0; i < ROWS; i++) {
@@ -82,9 +82,6 @@ public class RoomFight extends RoomParent {
 
         return exampleFrames;
     }
-
-    int COLS = 2;
-    int ROWS = 1;
 
     Animation<TextureRegion> exampleAnimation;
     private Texture examplesheet;
@@ -98,7 +95,7 @@ public class RoomFight extends RoomParent {
         super.render(delta);
         stateTime += Gdx.graphics.getDeltaTime();
 
-        currentFrame = exampleAnimation.getKeyFrame(stateTime, true);
+        currentFrame = exampleAnimation.getKeyFrame(stateTime, false);
 
         batch.setProjectionMatrix(camera.combined);
 
@@ -120,21 +117,29 @@ public class RoomFight extends RoomParent {
         //Animation
         stateTime += Gdx.graphics.getDeltaTime() / frameSpeed;
         delta = Gdx.graphics.getDeltaTime();
+
         if (body.getLinearVelocity().len() > 0.05) {
-            currentFrame = exampleAnimation.getKeyFrame(stateTime, true);
+
+            currentFrame = exampleAnimation.getKeyFrame(stateTime, false);
         }
 
         draw();
     }
 
+    float startX = 3 * pixelWidth / 4;
+    float startY = pixelHeight / 2;
+
+    // System.out.println(body.getPosition().x + " " + body.getPosition().y);
+
     int width = 100;
     int height = 100;
 
     public void draw() {
-        batch.draw(currentFrame,
-                body.getPosition().x,
-                body.getPosition().y,
-                width,
-                height);
+
+            batch.draw(currentFrame,
+                    body.getPosition().x,
+                    body.getPosition().y,
+                    width,
+                    height);
     }
 }
