@@ -56,16 +56,8 @@ public class RoomFight extends RoomParent {
     int ROWS = 1;
 
     Animation<TextureRegion> exampleAnimation;
-    private Texture examplesheet;
     private Sprite example;
-    private OrthographicCamera camera;
-
-    public void create() {
-
-        // I don't know how to use the next 2 lines of code.
-        //RoomFight roomForFighting = new RoomFight(game);
-        //game.setScreen(roomForFighting);
-    }
+    private Texture examplesheet;
 
     TextureRegion currentFrame;
     float stateTime = 0.0f;
@@ -87,7 +79,9 @@ public class RoomFight extends RoomParent {
 
         Texture badlogic = new Texture("badlogic.jpg");
         batch.draw(badlogic, 0, 0, pixelWidth, pixelHeight);
-        batch.draw(currentFrame, example.getX(), example.getY());
+        // x: example.getX() & example.getY() caused a nullpoint interaction exception
+        // x: 0 & y: 0 is a bad fix, I know : D
+        batch.draw(currentFrame, 0, 0);
 
         //update();
 
