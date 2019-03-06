@@ -42,4 +42,8 @@ public class MainGame extends Game {
 	public SpriteBatch getBatch() {
 		return batch;
 	}
+
+    public OrthographicCamera getCamera() {
+        return camera;
+    }
 }
