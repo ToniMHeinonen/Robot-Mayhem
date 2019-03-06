@@ -24,6 +24,17 @@ public class RoomFight extends RoomParent {
     RoomFight(MainGame game) {
 
         super(game);
+
+        examplesheet = new Texture("exampleanimation.png");
+
+        TextureRegion[][] tmp = TextureRegion.split(
+
+                examplesheet,
+                examplesheet.getWidth() / COLS,
+                examplesheet.getHeight() / ROWS);
+
+        TextureRegion [] frames = transfromTo1D(tmp);
+        exampleAnimation = new Animation<TextureRegion>(1/10f, frames);
     }
 
     private TextureRegion [] transfromTo1D(TextureRegion[][] tmp) {
@@ -52,19 +63,8 @@ public class RoomFight extends RoomParent {
     public void create() {
 
         // I don't know how to use the next 2 lines of code.
-        RoomFight roomForFighting = new RoomFight(game);
-        game.setScreen(roomForFighting);
-
-        examplesheet = new Texture("exampleanimation.png");
-
-        TextureRegion[][] tmp = TextureRegion.split(
-
-                examplesheet,
-                examplesheet.getWidth() / COLS,
-                examplesheet.getHeight() / ROWS);
-
-        TextureRegion [] frames = transfromTo1D(tmp);
-        exampleAnimation = new Animation<TextureRegion>(1/10f, frames);
+        //RoomFight roomForFighting = new RoomFight(game);
+        //game.setScreen(roomForFighting);
     }
 
     TextureRegion currentFrame;
