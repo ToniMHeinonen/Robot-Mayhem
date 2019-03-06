@@ -8,6 +8,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 
 import static fi.tamk.fi.MainGame.pixelHeight;
@@ -20,12 +24,24 @@ import static javax.swing.text.html.HTML.Attribute.ROWS;
 // I comment out lines of code that aren't functional yet.
 public class RoomFight extends RoomParent {
 
-    // Not sure what I should put in this constructor.
+    Body body;
+    public static World world;
+
+    float startX = pixelWidth / 2;
+    float startY = pixelHeight / 2;
+    float delta;
+
+    int frameSpeed;
+
     RoomFight(MainGame game) {
 
         super(game);
 
+        world = new World(new Vector2(0, 0f), true);
+        body = world.createBody(createDynamicBody(true));
+        body.setUserData("player");
         examplesheet = new Texture("exampleanimation.png");
+        body.setUserData(examplesheet);
 
         TextureRegion[][] tmp = TextureRegion.split(
 
@@ -35,6 +51,21 @@ public class RoomFight extends RoomParent {
 
         TextureRegion [] frames = transfromTo1D(tmp);
         exampleAnimation = new Animation<TextureRegion>(1/10f, frames);
+    }
+
+    //startX = mainGame.worldWidth / game.TILES_AMOUNT_WIDTH * 2 - width/2;
+    //startY = mainGame.worldHeight / 2;
+
+    public BodyDef createDynamicBody(boolean notRotate) {
+        // Body Definition
+        BodyDef myBodyDef = new BodyDef();
+        // It's a body that moves
+        myBodyDef.type = BodyDef.BodyType.DynamicBody;
+        // Initial position is centered up
+        // This position is the CENTER of the shape!
+        myBodyDef.position.set(startX, startY);
+        myBodyDef.fixedRotation = notRotate;
+        return myBodyDef;
     }
 
     private TextureRegion [] transfromTo1D(TextureRegion[][] tmp) {
@@ -78,12 +109,32 @@ public class RoomFight extends RoomParent {
 
         Texture badlogic = new Texture("badlogic.jpg");
         batch.draw(badlogic, 0, 0, pixelWidth, pixelHeight);
-        // x: example.getX() & example.getY() caused a nullpoint interaction exception
-        // x: 0 & y: 0 is a bad fix, I know : D
-        batch.draw(currentFrame, 0, 0);
 
-        //update();
+        update();
 
         batch.end();
+    }
+
+    public void update() {
+        frameSpeed = 10;
+        //Animation
+        stateTime += Gdx.graphics.getDeltaTime() / frameSpeed;
+        delta = Gdx.graphics.getDeltaTime();
+        if (body.getLinearVelocity().len() > 0.05) {
+            currentFrame = exampleAnimation.getKeyFrame(stateTime, true);
+        }
+
+        draw();
+    }
+
+    int width = 100;
+    int height = 100;
+
+    public void draw() {
+        batch.draw(currentFrame,
+                body.getPosition().x,
+                body.getPosition().y,
+                width,
+                height);
     }
 }
