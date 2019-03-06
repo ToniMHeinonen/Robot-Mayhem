@@ -56,7 +56,6 @@ public class RoomFight extends RoomParent {
     int ROWS = 1;
 
     Animation<TextureRegion> exampleAnimation;
-    private Sprite example;
     private Texture examplesheet;
 
     TextureRegion currentFrame;
