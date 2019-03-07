@@ -68,10 +68,13 @@ public class RoomFight extends RoomParent {
 
     int COLS = 2;
     int ROWS = 1;
-    TextureRegion [] exampleFrames = new TextureRegion[COLS * ROWS];
-    private TextureRegion [] transfromTo1D(TextureRegion[][] tmp) {
 
-        int index = 0;
+    int index = 0;
+
+    TextureRegion [] exampleFrames = new TextureRegion[COLS * ROWS];
+    TextureRegion [][] tmp = new TextureRegion[COLS][ROWS];
+
+    private TextureRegion [] transfromTo1D(TextureRegion[][] tmp) {
 
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
@@ -95,7 +98,7 @@ public class RoomFight extends RoomParent {
         super.render(delta);
         stateTime += Gdx.graphics.getDeltaTime();
 
-        currentFrame = exampleAnimation.getKeyFrame(stateTime, false);
+        currentFrame = exampleAnimation.getKeyFrame(stateTime, true);
 
         batch.setProjectionMatrix(camera.combined);
 
@@ -118,9 +121,33 @@ public class RoomFight extends RoomParent {
         stateTime += Gdx.graphics.getDeltaTime() / frameSpeed;
         delta = Gdx.graphics.getDeltaTime();
 
+        for (int r = 1; r <= ROWS; r++) {
+            for (int c = 1; c <= COLS; c++) {
+
+                // Välillä tulee vain 1 frame, välillä molemmat.
+                // if ( (2 == 1 tai 2 == 2) TAI (2 == 2 tai 2 == 3)
+                // Koska r * c + 1 kasvaa 3 asti.
+                if ((ROWS * COLS) == (r * c) || (ROWS * COLS) == (r * c + 1)) {
+
+                    // Ei taida toimia.
+                    exampleAnimation.isAnimationFinished(stateTime);
+
+                    // Toimii välillä.
+                    currentFrame = exampleAnimation.getKeyFrame(stateTime, false);
+                }
+
+                // for testing
+                System.out.println(currentFrame);
+                System.out.print("This is ROWS * COLS: ");
+                System.out.println(ROWS * COLS);
+                System.out.print("This is c * r + 1: ");
+                System.out.println(c * r + 1);
+            }
+        }
+
         if (body.getLinearVelocity().len() > 0.05) {
 
-            currentFrame = exampleAnimation.getKeyFrame(stateTime, false);
+            currentFrame = exampleAnimation.getKeyFrame(stateTime, true);
         }
 
         draw();
