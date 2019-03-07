@@ -25,7 +25,7 @@ public class MainGame extends Game {
 		img = new Texture("badlogic.jpg");
 
 		// Swith to first room
-		RoomFight room = new RoomFight(this);
+		RoomSettings room = new RoomSettings(this);
 		setScreen(room);
 	}
 
