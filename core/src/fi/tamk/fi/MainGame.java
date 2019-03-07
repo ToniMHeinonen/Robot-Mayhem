@@ -23,7 +23,7 @@ public class MainGame extends Game {
 		camera.setToOrtho(false, pixelWidth, pixelHeight);
 
 		// Swith to first room
-		RoomFight room = new RoomFight(this);
+		RoomSettings room = new RoomSettings(this);
 		setScreen(room);
 	}
 

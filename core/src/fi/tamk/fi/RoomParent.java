@@ -29,8 +29,9 @@ public class RoomParent implements Screen {
         // Files in \android\assets:
         // font-big-export.fnt, font-export.fnt, glassy-ui.atlas,
         // glassy-ui.json, glassy-ui.png
-        //skin = new Skin( Gdx.files.internal("glassy-ui.json") );
+        skin = new Skin( Gdx.files.internal("glassy-ui.json") );
         // OLLI ET OO LADANNU TÄTÄ TIEDOSTOA GITTIIN, SE KAATAA PROJEKTIN
+        //  - Nyt pitäisi olla lisättynä
     }
 
     @Override
