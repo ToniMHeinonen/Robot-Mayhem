@@ -11,7 +11,6 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class MainGame extends Game {
 	SpriteBatch batch;
-	Texture img;
 
 	public static final float pixelWidth = 1920f;
 	public static final float pixelHeight = 1080f;
@@ -22,10 +21,9 @@ public class MainGame extends Game {
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, pixelWidth, pixelHeight);
-		img = new Texture("badlogic.jpg");
 
 		// Swith to first room
-		RoomSettings room = new RoomSettings(this);
+		RoomFight room = new RoomFight(this);
 		setScreen(room);
 	}
 
@@ -37,7 +35,6 @@ public class MainGame extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
-		img.dispose();
 	}
 
 	public SpriteBatch getBatch() {

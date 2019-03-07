@@ -29,7 +29,8 @@ public class RoomParent implements Screen {
         // Files in \android\assets:
         // font-big-export.fnt, font-export.fnt, glassy-ui.atlas,
         // glassy-ui.json, glassy-ui.png
-        skin = new Skin( Gdx.files.internal("glassy-ui.json") );
+        //skin = new Skin( Gdx.files.internal("glassy-ui.json") );
+        // OLLI ET OO LADANNU TÄTÄ TIEDOSTOA GITTIIN, SE KAATAA PROJEKTIN
     }
 
     @Override
@@ -39,6 +40,7 @@ public class RoomParent implements Screen {
 
     @Override
     public void render(float delta) {
+        batch.setProjectionMatrix(camera.combined);
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
