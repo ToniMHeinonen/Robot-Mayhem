@@ -34,6 +34,7 @@ public class Animating {
 
     //When you need to change to another animation, use this
     public void startAnimation(Animation<TextureRegion> animation) {
+        stateTime = 0.0f;
         currentFrame = animation.getKeyFrame(stateTime, true);
         width = currentFrame.getRegionWidth();
         height = currentFrame.getRegionHeight();
