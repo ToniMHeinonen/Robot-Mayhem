@@ -20,18 +20,26 @@ public class Animating {
     protected float X;
     protected float Y;
 
-    public void createAnimation(Texture image) {
+    //Create animations with this when at the start
+    public Animation<TextureRegion> createAnimation(Texture image) {
         stateTime = 0.0f;
 
         tmp = TextureRegion.split(image, image.getWidth() / frameCols,
                 image.getHeight() / frameRows);
         frames = toTextureArray(tmp);
         animation = new Animation(1 / 60f, frames);
+
+        return animation;
+    }
+
+    //When you need to change to another animation, use this
+    public void startAnimation(Animation<TextureRegion> animation) {
         currentFrame = animation.getKeyFrame(stateTime, true);
         width = currentFrame.getRegionWidth();
         height = currentFrame.getRegionHeight();
     }
 
+    //Don't modify this, it works perfectly
     public TextureRegion[] toTextureArray(TextureRegion[][] tr) {
         int fc = this.frameCols;
         int fr = this.frameRows;
@@ -47,7 +55,8 @@ public class Animating {
         return frames;
     }
 
+    //Draw the animation
     public void draw(SpriteBatch batch) {
-        batch.draw(currentFrame, X, Y, width*10, height*10);
+        batch.draw(currentFrame, X, Y, width, height);
     }
 }

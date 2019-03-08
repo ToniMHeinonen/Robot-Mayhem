@@ -3,6 +3,8 @@ package fi.tamk.fi;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class RoomGame extends RoomParent {
 
@@ -68,7 +70,8 @@ public class RoomGame extends RoomParent {
     Create class for player
      */
     public class GamePlayer extends Animating {
-        Texture img;
+        private Texture img;
+        private Animation<TextureRegion> moving;
 
         GamePlayer() {
             img = game.getGamePlayer();
@@ -77,13 +80,17 @@ public class RoomGame extends RoomParent {
             frameCols = 4;
             frameRows = 1;
             frameSpeed = 10;
-            createAnimation(img);
+
+            //Create necessary animations and start the correct one
+            moving = createAnimation(img);
+            startAnimation(moving);
         }
 
         public void update() {
+            //If moving, animate sprite
+            //Else, return to state 0
             if (bgSpd > 0f) {
                 frameSpeed = (int)maxSpd - (int)bgSpd;
-                System.out.println((int)bgSpd);
                 stateTime += Gdx.graphics.getDeltaTime() / frameSpeed;
             } else {
                 stateTime = 0f;
