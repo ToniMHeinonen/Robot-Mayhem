@@ -10,7 +10,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class MainGame extends Game {
-	SpriteBatch batch;
+	private SpriteBatch batch;
+	private Texture gamePlayer;
 
 	public static final float pixelWidth = 1920f;
 	public static final float pixelHeight = 1080f;
@@ -21,6 +22,8 @@ public class MainGame extends Game {
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, pixelWidth, pixelHeight);
+
+		loadTextures();
 
 		// Swith to first room
 		RoomSettings room = new RoomSettings(this);
@@ -37,6 +40,10 @@ public class MainGame extends Game {
 		batch.dispose();
 	}
 
+	public void loadTextures() {
+		gamePlayer = new Texture("player.png");
+	}
+
 	public SpriteBatch getBatch() {
 		return batch;
 	}
@@ -44,4 +51,8 @@ public class MainGame extends Game {
     public OrthographicCamera getCamera() {
         return camera;
     }
+
+	public Texture getGamePlayer() {
+		return gamePlayer;
+	}
 }

@@ -7,11 +7,15 @@ import com.badlogic.gdx.graphics.Texture;
 public class RoomGame extends RoomParent {
 
     private Texture imgBG;
+    private GamePlayer player;
     private int bgPos;
     private float bgSpd;
+    private final float maxSpd = 15f;
 
     RoomGame(MainGame game) {
         super(game);
+
+        player = new GamePlayer();
 
         //Wrapping enables looping
         imgBG = new Texture("bgPlaceholder.jpg");
@@ -24,6 +28,7 @@ public class RoomGame extends RoomParent {
 
         batch.begin();
         controlBackground();
+        player.update();
         batch.end();
     }
 
@@ -32,7 +37,7 @@ public class RoomGame extends RoomParent {
         if( Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) bgSpd += 0.5f;
 
         //Limit max speed
-        if (bgSpd > 15f) bgSpd = 15f;
+        if (bgSpd > maxSpd) bgSpd = maxSpd;
 
         //Add friction to speed
         if (bgSpd > 0f) {
@@ -57,5 +62,35 @@ public class RoomGame extends RoomParent {
 
         //Draw background, srcX handles image looping
         batch.draw(imgBG, 0,0, bgPos, 0, imgBG.getWidth(), imgBG.getHeight());
+    }
+
+    /*
+    Create class for player
+     */
+    public class GamePlayer extends Animating {
+        Texture img;
+
+        GamePlayer() {
+            img = game.getGamePlayer();
+            X = 100;
+            Y = game.pixelHeight/2;
+            frameCols = 4;
+            frameRows = 1;
+            frameSpeed = 10;
+            createAnimation(img);
+        }
+
+        public void update() {
+            if (bgSpd > 0f) {
+                frameSpeed = (int)maxSpd - (int)bgSpd;
+                System.out.println((int)bgSpd);
+                stateTime += Gdx.graphics.getDeltaTime() / frameSpeed;
+            } else {
+                stateTime = 0f;
+            }
+            currentFrame = animation.getKeyFrame(stateTime, true);
+
+            draw(batch);
+        }
     }
 }
