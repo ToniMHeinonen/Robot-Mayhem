@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -14,6 +15,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 
+import static com.badlogic.gdx.Input.Keys.X;
+import static com.badlogic.gdx.Input.Keys.Y;
 import static fi.tamk.fi.MainGame.pixelHeight;
 import static fi.tamk.fi.MainGame.pixelWidth;
 
@@ -22,72 +25,92 @@ import static javax.swing.text.html.HTML.Attribute.ROWS;
 
 // I comment at least on things that are unclear to me.
 // I comment out lines of code that aren't functional yet.
+
+// Modify picture used, x & y (placement), frame cols & frame rows, framespeed, update
+// create texture in maingame
+// game.getTexturename name;
+// update: pelkkä statetime += ja currentframe ja drawbatch
+
+// createAnimation (käytetään konstruktorissa), startAnimation
+
+// Tee: idlaus-animaatio ja animaation vaihto
+// omat classit vastustajalle ja pelaajalle
+
+// getterit ja setterit tekstuurin kanssa
 public class RoomFight extends RoomParent {
 
-    Body body;
-    public static World world;
-
-    float delta;
-
+    private Texture examplesheet;
     int frameSpeed;
+    TextureRegion[][] tmp;
+    TextureRegion[] exampleFrames;
+
+    int COLS = 2;
+    int ROWS = 1;
+    int width = 100;
+    int height = 100;
+
+    private Player player;
 
     RoomFight(MainGame game) {
 
         super(game);
-
-        world = new World(new Vector2(0, 0f), true);
-        body = world.createBody(createDynamicBody(true));
-        body.setUserData("player");
         examplesheet = new Texture("exampleanimation.png");
-        body.setUserData(examplesheet);
+        createAnimation(examplesheet);
 
-        TextureRegion[][] tmp = TextureRegion.split(
-
-                examplesheet,
-                examplesheet.getWidth() / COLS,
-                examplesheet.getHeight() / ROWS);
-
-        TextureRegion [] frames = transfromTo1D(tmp);
-        exampleAnimation = new Animation<TextureRegion>(1/10f, frames);
+        player = new Player();
     }
 
-    //startX = mainGame.worldWidth / game.TILES_AMOUNT_WIDTH * 2 - width/2;
-    //startY = mainGame.worldHeight / 2;
+    public class Player extends Animating {
+        private Texture img;
+        private Animation<TextureRegion> moving;
 
-    public BodyDef createDynamicBody(boolean notRotate) {
-        // Body Definition
-        BodyDef myBodyDef = new BodyDef();
-        // It's a body that moves
-        myBodyDef.type = BodyDef.BodyType.DynamicBody;
-        // Initial position is centered up
-        // This position is the CENTER of the shape!
-        myBodyDef.position.set(startX, startY);
-        myBodyDef.fixedRotation = notRotate;
-        return myBodyDef;
+        Player() {
+            img = game.getGamePlayer();
+            X = 100;
+            Y = game.pixelHeight/2;
+            frameCols = 4;
+            frameRows = 1;
+            frameSpeed = 10;
+
+            //Create necessary animations and start the correct one
+            moving = createAnimation(img);
+            startAnimation(moving);
+        }
+
+        public void update() {
+
+            stateTime += Gdx.graphics.getDeltaTime() / frameSpeed;
+            currentFrame = exampleAnimation.getKeyFrame(stateTime, true);
+            draw(batch);
+        }
     }
 
-    int COLS = 2;
-    int ROWS = 1;
+    public TextureRegion[] toTextureArray(TextureRegion[][] tr) {
+        int fc = this.COLS;
+        int fr = this.ROWS;
+        TextureRegion [] exampleFrames = new TextureRegion[fc * fr];
 
-    int index = 0;
-
-    TextureRegion [] exampleFrames = new TextureRegion[COLS * ROWS];
-    TextureRegion [][] tmp = new TextureRegion[COLS][ROWS];
-
-    private TextureRegion [] transfromTo1D(TextureRegion[][] tmp) {
-
-        for (int i = 0; i < ROWS; i++) {
-            for (int j = 0; j < COLS; j++) {
-
-                exampleFrames[index++] = tmp[i][j];
+        int index = 0;
+        for (int i = 0; i < fr; i++) {
+            for (int j = 0; j < fc; j++) {
+                exampleFrames[index++] = tr[i][j];
             }
         }
 
         return exampleFrames;
     }
 
+    public Animation<TextureRegion> createAnimation(Texture examplesheet) {
+
+        tmp = TextureRegion.split(examplesheet, examplesheet.getWidth() / COLS,
+                examplesheet.getHeight() / ROWS);
+        exampleFrames = toTextureArray(tmp);
+        exampleAnimation = new Animation(1 / 60f, exampleFrames);
+
+        return exampleAnimation;
+    }
+
     Animation<TextureRegion> exampleAnimation;
-    private Texture examplesheet;
 
     TextureRegion currentFrame;
     float stateTime = 0.0f;
@@ -98,75 +121,15 @@ public class RoomFight extends RoomParent {
         super.render(delta);
         stateTime += Gdx.graphics.getDeltaTime();
 
-        currentFrame = exampleAnimation.getKeyFrame(stateTime, true);
-
         batch.setProjectionMatrix(camera.combined);
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-
-        Texture badlogic = new Texture("badlogic.jpg");
-        batch.draw(badlogic, 0, 0, pixelWidth, pixelHeight);
-
-        update();
-
+        player.update();
         batch.end();
     }
 
-    public void update() {
-        frameSpeed = 10;
-        //Animation
-        stateTime += Gdx.graphics.getDeltaTime() / frameSpeed;
-        delta = Gdx.graphics.getDeltaTime();
-
-        for (int r = 1; r <= ROWS; r++) {
-            for (int c = 1; c <= COLS; c++) {
-
-                // Välillä tulee vain 1 frame, välillä molemmat.
-                // if ( (2 == 1 tai 2 == 2) TAI (2 == 2 tai 2 == 3)
-                // Koska r * c + 1 kasvaa 3 asti.
-                if ((ROWS * COLS) == (r * c) || (ROWS * COLS) == (r * c + 1)) {
-
-                    // Ei taida toimia.
-                    exampleAnimation.isAnimationFinished(stateTime);
-
-                    // Toimii välillä.
-                    currentFrame = exampleAnimation.getKeyFrame(stateTime, false);
-                }
-
-                // for testing
-                System.out.println(currentFrame);
-                System.out.print("This is ROWS * COLS: ");
-                System.out.println(ROWS * COLS);
-                System.out.print("This is c * r + 1: ");
-                System.out.println(c * r + 1);
-            }
-        }
-
-        if (body.getLinearVelocity().len() > 0.05) {
-
-            currentFrame = exampleAnimation.getKeyFrame(stateTime, true);
-        }
-
-        draw();
-    }
-
-    float startX = 3 * pixelWidth / 4;
-    float startY = pixelHeight / 2;
-
-    // System.out.println(body.getPosition().x + " " + body.getPosition().y);
-
-    int width = 100;
-    int height = 100;
-
-    public void draw() {
-
-            batch.draw(currentFrame,
-                    body.getPosition().x,
-                    body.getPosition().y,
-                    width,
-                    height);
-    }
+    public void draw(SpriteBatch batch) { batch.draw(currentFrame, X, Y, width, height); }
 }
