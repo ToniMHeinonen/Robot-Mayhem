@@ -87,7 +87,6 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton$ImageTextButtonStyle: {
 	default: {
 		font: font-big
 		up: button
-		down: button-down
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
