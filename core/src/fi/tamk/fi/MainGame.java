@@ -25,6 +25,10 @@ public class MainGame extends Game {
 	private Skin skin;
 	private Music backgroundMusic;
 
+	// Added for testing.
+	private Texture exampleSheet;
+	private Texture green;
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -38,6 +42,10 @@ public class MainGame extends Game {
 		// glassy-ui.json, glassy-ui.png
 		skin = new Skin( Gdx.files.internal("glassy-ui.json") );
 		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("bgmusic.mp3"));
+
+		// Added for testing.
+		exampleSheet = new Texture("exampleanimation.png");
+		green = new Texture("green.png");
 
 		loadTextures();
 
@@ -87,4 +95,8 @@ public class MainGame extends Game {
 	public Music getBackgroundMusic() {
 		return backgroundMusic;
 	}
+
+	// Added for testing.
+	public Texture getOrangeTexture() { return exampleSheet;}
+	public Texture getGreenTexture() { return green;}
 }

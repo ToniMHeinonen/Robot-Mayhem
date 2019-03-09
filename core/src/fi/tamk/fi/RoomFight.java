@@ -13,7 +13,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import static com.badlogic.gdx.Input.Keys.X;
 import static com.badlogic.gdx.Input.Keys.Y;
@@ -27,11 +30,7 @@ import static javax.swing.text.html.HTML.Attribute.ROWS;
 // I comment out lines of code that aren't functional yet.
 
 // Modify picture used, x & y (placement), frame cols & frame rows, framespeed, update
-// create texture in maingame
-// game.getTexturename name;
 // update: pelkkä statetime += ja currentframe ja drawbatch
-
-// createAnimation (käytetään konstruktorissa), startAnimation
 
 // Tee: idlaus-animaatio ja animaation vaihto
 // omat classit vastustajalle ja pelaajalle
@@ -86,6 +85,7 @@ public class RoomFight extends RoomParent {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);*/
 
+        player.createActionButton();
         batch.begin();
         player.update();
         batch.end();
@@ -98,6 +98,11 @@ public class RoomFight extends RoomParent {
         private Texture img;
         private Animation<TextureRegion> moving;
 
+        private Texture orange;
+        private Texture green;
+        private Animation<TextureRegion> orangemove;
+        private Animation<TextureRegion> greenmove;
+
         Player() {
             img = game.getGamePlayer();
             X = 100;
@@ -106,6 +111,32 @@ public class RoomFight extends RoomParent {
             //Create necessary animations and start the correct one
             moving = createAnimation(img, 4, 1);
             startAnimation(moving, 10);
+
+            orange = game.getOrangeTexture();
+            green = game.getGreenTexture();
+
+            greenmove = createAnimation(green, 2, 1);
+            startAnimation(greenmove, 10);
+        }
+
+        boolean isButtonClicked = false;
+
+        public  void createActionButton() {
+            final TextButton buttonSettings = new TextButton("Action!", skin);
+            buttonSettings.setWidth(300f);
+            buttonSettings.setHeight(100f);
+            buttonSettings.setPosition(game.pixelWidth /2 - buttonSettings.getWidth() /2,
+                    (game.pixelHeight/3) *2 - buttonSettings.getHeight() /2);
+            stage.addActor(buttonSettings);
+
+            buttonSettings.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    isButtonClicked = true;
+                    orangemove = createAnimation(orange, 2, 1);
+                    startAnimation(orangemove, 10);
+                }
+            });
         }
 
         public void update() {
@@ -116,6 +147,17 @@ public class RoomFight extends RoomParent {
             you have created so far.
 
             currentFrame = exampleAnimation.getKeyFrame(stateTime, true);*/
+
+            if (isButtonClicked) {
+                currentFrame = orangemove.getKeyFrame(stateTime, true);
+                if (greenmove.isAnimationFinished(stateTime)) {
+
+                    isButtonClicked = false;
+                }
+            } else {
+                currentFrame = greenmove.getKeyFrame(stateTime, true);
+            }
+
             draw(batch);
         }
     }
