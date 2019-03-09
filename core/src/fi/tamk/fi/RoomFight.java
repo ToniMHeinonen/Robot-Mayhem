@@ -39,25 +39,52 @@ import static javax.swing.text.html.HTML.Attribute.ROWS;
 // getterit ja setterit tekstuurin kanssa
 public class RoomFight extends RoomParent {
 
+    /*
+    You don't use this variables in this class plus you already have all of these in your player
+    class, since it is extending Animating class (aka inheriting it's variables).
+
     private Texture examplesheet;
     int frameSpeed;
     TextureRegion[][] tmp;
     TextureRegion[] exampleFrames;
-
     int COLS = 2;
     int ROWS = 1;
     int width = 100;
-    int height = 100;
+    int height = 100;*/
 
     private Player player;
 
     RoomFight(MainGame game) {
 
         super(game);
-        examplesheet = new Texture("exampleanimation.png");
-        createAnimation(examplesheet);
+        //Handle all your animations within the Player class
+        /*examplesheet = new Texture("exampleanimation.png");
+        createAnimation(examplesheet);*/
 
         player = new Player();
+    }
+
+    // I also moved this method up, to see more clearly that this method belongs to RoomFight class
+    @Override
+    public void render(float delta) {
+
+        super.render(delta);
+        /*
+        You already have this in Player class.
+
+        stateTime += Gdx.graphics.getDeltaTime();*/
+
+
+        /*
+        You don't need these, since RoomParent already does these in super.render(delta);
+
+        batch.setProjectionMatrix(camera.combined);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);*/
+
+        batch.begin();
+        player.update();
+        batch.end();
     }
 
     public class Player extends Animating {
@@ -77,10 +104,18 @@ public class RoomFight extends RoomParent {
         public void update() {
 
             stateTime += Gdx.graphics.getDeltaTime() / frameSpeed;
-            currentFrame = exampleAnimation.getKeyFrame(stateTime, true);
+            /*
+            Change the name "exampleAnimation" to "moving", since that is the only animation
+            you have created so far.
+
+            currentFrame = exampleAnimation.getKeyFrame(stateTime, true);*/
             draw(batch);
         }
     }
+
+    /*
+    Don't create these again, use them from your Player class, since you are extending animating
+    class, which already holds these methods.
 
     public TextureRegion[] toTextureArray(TextureRegion[][] tr) {
         int fc = this.COLS;
@@ -96,7 +131,6 @@ public class RoomFight extends RoomParent {
 
         return exampleFrames;
     }
-
     public Animation<TextureRegion> createAnimation(Texture examplesheet) {
 
         tmp = TextureRegion.split(examplesheet, examplesheet.getWidth() / COLS,
@@ -105,28 +139,19 @@ public class RoomFight extends RoomParent {
         exampleAnimation = new Animation(1 / 60f, exampleFrames);
 
         return exampleAnimation;
-    }
+    }*/
+
+    /*
+    You don't need these, also everything regarding animation should be in your Player class
 
     Animation<TextureRegion> exampleAnimation;
-
     TextureRegion currentFrame;
-    float stateTime = 0.0f;
+    float stateTime = 0.0f;*/
 
-    @Override
-    public void render(float delta) {
 
-        super.render(delta);
-        stateTime += Gdx.graphics.getDeltaTime();
+    /*
+    Don't use this, since Player class already handles drawing using the Animating class's
+    draw method.
 
-        batch.setProjectionMatrix(camera.combined);
-
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        batch.begin();
-        player.update();
-        batch.end();
-    }
-
-    public void draw(SpriteBatch batch) { batch.draw(currentFrame, X, Y, width, height); }
+    public void draw(SpriteBatch batch) { batch.draw(currentFrame, X, Y, width, height); }*/
 }
