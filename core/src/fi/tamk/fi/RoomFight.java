@@ -57,14 +57,18 @@ public class RoomFight extends RoomParent {
     RoomFight(MainGame game) {
 
         super(game);
-        //Handle all your animations within the Player class
-        /*examplesheet = new Texture("exampleanimation.png");
+        /*
+        Handle all your animations within the Player class. Create this "exampleanimation.png" in
+        MainGame class and use getters to retrieve it. If you don't know how, then just create it
+        in your player class.
+
+        examplesheet = new Texture("exampleanimation.png");
         createAnimation(examplesheet);*/
 
         player = new Player();
     }
 
-    // I also moved this method up, to see more clearly that this method belongs to RoomFight class
+    // I moved this method up, to see more clearly that this method belongs to RoomFight class
     @Override
     public void render(float delta) {
 
@@ -87,6 +91,9 @@ public class RoomFight extends RoomParent {
         batch.end();
     }
 
+    /*
+    Here starts the Player class, you should comment it out like this to make the code more clear
+     */
     public class Player extends Animating {
         private Texture img;
         private Animation<TextureRegion> moving;
