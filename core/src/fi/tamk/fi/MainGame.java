@@ -3,6 +3,7 @@ package fi.tamk.fi;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -22,6 +23,7 @@ public class MainGame extends Game {
 
 	private Stage stage;
 	private Skin skin;
+	private Music backgroundMusic;
 
 	@Override
 	public void create () {
@@ -35,6 +37,7 @@ public class MainGame extends Game {
 		// font-big-export.fnt, font-export.fnt, glassy-ui.atlas,
 		// glassy-ui.json, glassy-ui.png
 		skin = new Skin( Gdx.files.internal("glassy-ui.json") );
+		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("bgmusic.mp3"));
 
 		loadTextures();
 
@@ -54,6 +57,7 @@ public class MainGame extends Game {
 		gamePlayer.dispose();
 		stage.dispose();
 		skin.dispose();
+		backgroundMusic.dispose();
 	}
 
 	public void loadTextures() {
@@ -78,5 +82,9 @@ public class MainGame extends Game {
 
 	public Skin getSkin() {
 		return skin;
+	}
+
+	public Music getBackgroundMusic() {
+		return backgroundMusic;
 	}
 }
