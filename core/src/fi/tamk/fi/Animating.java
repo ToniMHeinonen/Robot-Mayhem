@@ -21,8 +21,9 @@ public class Animating {
     protected float Y;
 
     //Create animations with this when at the start
-    public Animation<TextureRegion> createAnimation(Texture image) {
-        stateTime = 0.0f;
+    public Animation<TextureRegion> createAnimation(Texture image, int cols, int rows) {
+        this.frameCols = cols;
+        this.frameRows = rows;
 
         tmp = TextureRegion.split(image, image.getWidth() / frameCols,
                 image.getHeight() / frameRows);
@@ -33,8 +34,9 @@ public class Animating {
     }
 
     //When you need to change to another animation, use this
-    public void startAnimation(Animation<TextureRegion> animation) {
+    public void startAnimation(Animation<TextureRegion> animation, int speed) {
         stateTime = 0.0f;
+        this.frameSpeed = speed;
         currentFrame = animation.getKeyFrame(stateTime, true);
         width = currentFrame.getRegionWidth();
         height = currentFrame.getRegionHeight();

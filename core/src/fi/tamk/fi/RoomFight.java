@@ -68,13 +68,10 @@ public class RoomFight extends RoomParent {
             img = game.getGamePlayer();
             X = 100;
             Y = game.pixelHeight/2;
-            frameCols = 4;
-            frameRows = 1;
-            frameSpeed = 10;
 
             //Create necessary animations and start the correct one
-            moving = createAnimation(img);
-            startAnimation(moving);
+            moving = createAnimation(img, 4, 1);
+            startAnimation(moving, 10);
         }
 
         public void update() {
