@@ -13,7 +13,6 @@ public class RoomParent implements Screen {
     protected SpriteBatch batch;
     protected MainGame game;
     protected OrthographicCamera camera;
-
     protected Stage stage;
     protected Skin skin;
 
@@ -21,17 +20,9 @@ public class RoomParent implements Screen {
         this.batch = game.getBatch();
         this.game = game;
         this.camera = game.getCamera();
-
-        stage = new Stage(new StretchViewport(game.pixelWidth, game.pixelHeight), batch);
-        Gdx.input.setInputProcessor(stage);
-        // Skin: https://github.com/czyzby/gdx-skins/tree/master/glassy
-        // Check "License" bottom of the page
-        // Files in \android\assets:
-        // font-big-export.fnt, font-export.fnt, glassy-ui.atlas,
-        // glassy-ui.json, glassy-ui.png
-        skin = new Skin( Gdx.files.internal("glassy-ui.json") );
-        // OLLI ET OO LADANNU TÄTÄ TIEDOSTOA GITTIIN, SE KAATAA PROJEKTIN
-        //  - Nyt pitäisi olla lisättynä
+        this.stage = game.getStage();
+        this.skin = game.getSkin();
+        Gdx.input.setInputProcessor(this.stage);
     }
 
     @Override
