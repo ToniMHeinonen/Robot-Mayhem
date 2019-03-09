@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import javax.xml.soap.Text;
+
 public class MainGame extends Game {
 	private SpriteBatch batch;
 	private Texture gamePlayer;
@@ -28,6 +30,8 @@ public class MainGame extends Game {
 	// Added for testing.
 	private Texture exampleSheet;
 	private Texture green;
+	private Texture yellow;
+	private Texture red;
 
 	@Override
 	public void create () {
@@ -46,6 +50,8 @@ public class MainGame extends Game {
 		// Added for testing.
 		exampleSheet = new Texture("exampleanimation.png");
 		green = new Texture("green.png");
+		yellow = new Texture("enemy.png");
+		red = new Texture("red.png");
 
 		loadTextures();
 
@@ -99,4 +105,6 @@ public class MainGame extends Game {
 	// Added for testing.
 	public Texture getOrangeTexture() { return exampleSheet;}
 	public Texture getGreenTexture() { return green;}
+	public Texture getYellowTexture() { return yellow;}
+	public Texture getRedTexture() { return red;}
 }
