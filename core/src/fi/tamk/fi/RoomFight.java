@@ -40,7 +40,7 @@ import static javax.swing.text.html.HTML.Attribute.ROWS;
 // getterit ja setterit tekstuurin kanssa
 public class RoomFight extends RoomParent {
 
-    /*
+    /* OLD COMMENT
     You don't use this variables in this class plus you already have all of these in your player
     class, since it is extending Animating class (aka inheriting it's variables).
 
@@ -59,7 +59,7 @@ public class RoomFight extends RoomParent {
     RoomFight(MainGame game) {
 
         super(game);
-        /*
+        /* OLD COMMENT
         Handle all your animations within the Player class. Create this "exampleanimation.png" in
         MainGame class and use getters to retrieve it. If you don't know how, then just create it
         in your player class.
@@ -71,18 +71,18 @@ public class RoomFight extends RoomParent {
         enemy = new Enemy();
     }
 
-    // I moved this method up, to see more clearly that this method belongs to RoomFight class
+    // OLD COMMENT I moved this method up, to see more clearly that this method belongs to RoomFight class
     @Override
     public void render(float delta) {
 
         super.render(delta);
-        /*
+        /* OLD COMMENT
         You already have this in Player class.
 
         stateTime += Gdx.graphics.getDeltaTime();*/
 
 
-        /*
+        /* OLD COMMENT
         You don't need these, since RoomParent already does these in super.render(delta);
 
         batch.setProjectionMatrix(camera.combined);
@@ -95,6 +95,12 @@ public class RoomFight extends RoomParent {
         batch.end();
     }
 
+    /*
+    Don't extend Player since then there can be a lot of conflicts, rather extend Animating class.
+    Then create the Enemy it's own update method and do animations related to enemy in there.
+    If they later start to have lots of similarities, we can create for example class Objects and
+    extend that and then I can modify Animating class so that it does not have to be extended.
+     */
     class Enemy extends Player {
 
         private Animation<TextureRegion> yellowmove;
@@ -114,11 +120,11 @@ public class RoomFight extends RoomParent {
             redmove = createAnimation(red, 2, 1);
             yellowmove = createAnimation(yellow, 2,1);
 
-            currentFrame = yellowmove.getKeyFrame(stateTime, true);
+            //currentFrame = yellowmove.getKeyFrame(stateTime, true); You don't need this
         }
     }
 
-    /*
+    /* OLD COMMENT
     Here starts the Player class, you should comment it out like this to make the code more clear
      */
     public class Player extends Animating {
@@ -132,11 +138,14 @@ public class RoomFight extends RoomParent {
         private Animation<TextureRegion> greenmove;
 
         Player() {
-            img = game.getGamePlayer();
+            img = game.getGamePlayer(); //You probably don't need this
+
             X = 100;
             Y = game.pixelHeight/2;
 
             //Create necessary animations and start the correct one
+            //Move to here greenmove = createAnimation(green, 2, 1);
+            //Move to here orangemove = createAnimation(orange, 2, 1);
             moving = createAnimation(img, 4, 1);
             startAnimation(moving, 10);
 
@@ -145,10 +154,18 @@ public class RoomFight extends RoomParent {
 
             greenmove = createAnimation(green, 2, 1);
             startAnimation(greenmove, 10);
+            /*
+            You can only start one animation at a time, so either delete startAnimation moving
+            or greenmove.
+             */
         }
 
         boolean isButtonClicked = false;
 
+        /*
+        Create all the buttons in the RoomFight class and make for example moveAction method in
+        Player class which starts the animation, then call the method from the button.
+         */
         public  void createActionButton() {
             final TextButton buttonSettings = new TextButton("Action!", skin);
             buttonSettings.setWidth(300f);
@@ -160,15 +177,34 @@ public class RoomFight extends RoomParent {
             buttonSettings.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y){
+                    /*
+                    You could rename this boolean to for example temporaryAnimation for better
+                    readability.
+                     */
                     isButtonClicked = true;
 
+                    /*
+                    You should create all the animations only in the constructor, then just call
+                    startAnimation here.
+                    */
                     orangemove = createAnimation(orange, 2, 1);
                     startAnimation(orangemove, 10);
 
-                    enemy.redmove = createAnimation(enemy.red, 2, 1);
+                    /*
+                    Make other button for enemy animations and create it in RoomFight class.
+                     */
+
+                    /*
+                    You have already created this in enemy constructor.
+
+                    enemy.redmove = createAnimation(enemy.red, 2, 1);*/
                     enemy.startAnimation(enemy.redmove, 10);
 
+                    /*
+                    You have already created this in enemy constructor.
+
                     enemy.yellowmove = createAnimation(enemy.yellow, 2, 1);
+                     */
                 }
             });
         }
@@ -176,12 +212,13 @@ public class RoomFight extends RoomParent {
         public void update() {
 
             stateTime += Gdx.graphics.getDeltaTime() / frameSpeed;
-            /*
+            /* OLD COMMENT
             Change the name "exampleAnimation" to "moving", since that is the only animation
             you have created so far.
 
             currentFrame = exampleAnimation.getKeyFrame(stateTime, true);*/
 
+            //Great!
             if (isButtonClicked) {
                 currentFrame = orangemove.getKeyFrame(stateTime, true);
                 enemy.currentFrame = enemy.redmove.getKeyFrame(stateTime, true);
@@ -200,7 +237,7 @@ public class RoomFight extends RoomParent {
         }
     }
 
-    /*
+    /* OLD COMMENT
     Don't create these again, use them from your Player class, since you are extending animating
     class, which already holds these methods.
 
@@ -228,7 +265,7 @@ public class RoomFight extends RoomParent {
         return exampleAnimation;
     }*/
 
-    /*
+    /* OLD COMMENT
     You don't need these, also everything regarding animation should be in your Player class
 
     Animation<TextureRegion> exampleAnimation;
@@ -236,7 +273,7 @@ public class RoomFight extends RoomParent {
     float stateTime = 0.0f;*/
 
 
-    /*
+    /* OLD COMMENT
     Don't use this, since Player class already handles drawing using the Animating class's
     draw method.
 
