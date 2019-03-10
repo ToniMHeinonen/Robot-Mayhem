@@ -27,6 +27,8 @@ public class RoomParent implements Screen {
         this.skin = game.getSkin();
         Gdx.input.setInputProcessor(this.stage);
         this.backgroundMusic = game.getBackgroundMusic();
+        //Change "MyPreferences" to more unique name since other games can use that name too, which
+        //means that these settings get overwritten
         prefs = Gdx.app.getPreferences("MyPreferences");
     }
 

@@ -7,6 +7,28 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class RoomSettings extends RoomParent {
 
+    /*
+    Volume control is not working correctly, it is now stuck at value -0.19999997 and pressing
+    plus and minus does nothing. Biggest problem that I see is that you don't initialize default
+    values to your settings.
+     */
+
+    /*
+    Otherwise your code should work, but there is one way to get this prefs hassle in control:
+    - Don't use prefs in RoomParent
+    - Create variables for musicVol, soundVol etc. in MainGame class
+    - Create getters and setters for the variables
+    - When the game starts, in MainGame create preferences and method called loadSettings and set
+      the variables in that method (for example musicVol = prefs.getFloat("MusicVolume", 1f) 1f is
+      the default value if it has not stored anything yet)
+    - When you start playing music in RoomTestailua, you could just use
+      backgroundMusic.setVolume(game.getMusicVol) and then backgroundmusic.play()
+    - In RoomSettings when you click button plus use method game.setMusicVol(game.getMusicVol + 0.2f
+      and when you exit the room (hide) save all the settings (make a method called saveSettings in
+      MainGame and run that)
+     */
+    //We can discuss about this more face to face if this seems too complex
+
     RoomSettings(MainGame game) {
         super(game);
     }
@@ -78,6 +100,8 @@ public class RoomSettings extends RoomParent {
             public void clicked(InputEvent event, float x, float y){
                 if (backgroundMusic.getVolume() < 1.0f) {
                     backgroundMusic.setVolume(backgroundMusic.getVolume() + 0.2f);
+                    //You are not adding anything to prefs, you probably forgot the code that you
+                    //have in createButtonMinus method
                     prefs.flush();
                 }
             }
@@ -117,6 +141,8 @@ public class RoomSettings extends RoomParent {
             public void clicked(InputEvent event, float x, float y){
                 RoomTestailua room = new RoomTestailua(game);
                 game.setScreen(room);
+                //Something is clearly off if you look at these numbers that this prints
+                System.out.println(backgroundMusic.getVolume());
             }
         });
     }
