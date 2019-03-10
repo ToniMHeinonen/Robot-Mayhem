@@ -98,13 +98,8 @@ public class RoomSettings extends RoomParent {
         buttonPlus.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (backgroundMusic.getVolume() < 1.0f) {
-                    backgroundMusic.setVolume(backgroundMusic.getVolume() + 0.2f);
-                    //You are not adding anything to prefs, you probably forgot the code that you
-                    //have in createButtonMinus method
-                    prefs.flush();
+                    game.setMusicVol(game.getMusicVol() + 0.2f);
                 }
-            }
         });
     }
 
@@ -119,11 +114,7 @@ public class RoomSettings extends RoomParent {
         buttonMinus.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (backgroundMusic.getVolume() > 0) {
-                    backgroundMusic.setVolume(backgroundMusic.getVolume() - 0.2f);
-                    prefs.putFloat("musicVolume", backgroundMusic.getVolume());
-                    prefs.flush();
-                }
+                    game.setMusicVol(game.getMusicVol() - 0.2f);
             }
         });
     }

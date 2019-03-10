@@ -8,15 +8,10 @@ public class RoomTestailua extends RoomParent {
 
     RoomTestailua(MainGame game) {
         super(game);
-        setVolume();
-    }
-
-    public void setVolume() {
-        backgroundMusic.setVolume(prefs.getFloat("musicVolume"));
-        prefs.flush();
     }
 
     public void playMusic() {
+        backgroundMusic.setVolume(game.getMusicVol());
         backgroundMusic.play();
     }
 

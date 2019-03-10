@@ -3,6 +3,7 @@ package fi.tamk.fi;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -26,6 +27,9 @@ public class MainGame extends Game {
 	private Stage stage;
 	private Skin skin;
 	private Music backgroundMusic;
+	private float musicVol;
+	private boolean containsMusicVol;
+	Preferences prefs;
 
 	// Added for testing.
 	private Texture exampleSheet;
@@ -46,6 +50,9 @@ public class MainGame extends Game {
 		// glassy-ui.json, glassy-ui.png
 		skin = new Skin( Gdx.files.internal("glassy-ui.json") );
 		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("bgmusic.mp3"));
+        prefs = Gdx.app.getPreferences("Robot_Mayhem_Preferences");
+        containsMusicVol();
+        loadSettings();
 
 		// Added for testing.
 		exampleSheet = new Texture("exampleanimation.png");
@@ -107,4 +114,37 @@ public class MainGame extends Game {
 	public Texture getGreenTexture() { return green;}
 	public Texture getYellowTexture() { return yellow;}
 	public Texture getRedTexture() { return red;}
+
+    public float getMusicVol() {
+        return musicVol;
+    }
+
+    public void setMusicVol(float musicVol) {
+	    if (musicVol > 0.0f && musicVol < 1.0f) {
+            this.musicVol = musicVol;
+        }
+    }
+
+    // Check if user already have musicvolume defined in preferences.
+    public boolean containsMusicVol() {
+	    if (prefs.contains("musicVolume")) {
+	        containsMusicVol = true;
+        } else {
+	        containsMusicVol = false;
+        }
+        return containsMusicVol;
+    }
+
+    public void loadSettings() {
+	    if (!containsMusicVol) {
+            musicVol = prefs.getFloat("musicVolume", 0.8f);
+        } else {
+	        musicVol = prefs.getFloat("musicVolume");
+        }
+    }
+
+    public void saveSettings() {
+	    prefs.putFloat("musicVolume", musicVol);
+	    prefs.flush();
+    }
 }

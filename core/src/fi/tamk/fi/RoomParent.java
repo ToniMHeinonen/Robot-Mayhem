@@ -17,7 +17,6 @@ public class RoomParent implements Screen {
     protected Stage stage;
     protected Skin skin;
     protected Music backgroundMusic;
-    public Preferences prefs;
 
     RoomParent(MainGame game) {
         this.batch = game.getBatch();
@@ -27,9 +26,6 @@ public class RoomParent implements Screen {
         this.skin = game.getSkin();
         Gdx.input.setInputProcessor(this.stage);
         this.backgroundMusic = game.getBackgroundMusic();
-        //Change "MyPreferences" to more unique name since other games can use that name too, which
-        //means that these settings get overwritten
-        prefs = Gdx.app.getPreferences("MyPreferences");
     }
 
     @Override
@@ -65,6 +61,7 @@ public class RoomParent implements Screen {
     @Override
     public void hide() {
         stage.clear();
+        game.saveSettings();
     }
 
     @Override
