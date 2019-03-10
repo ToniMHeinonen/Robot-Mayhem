@@ -1,10 +1,8 @@
 package fi.tamk.fi;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class RoomSettings extends RoomParent {
@@ -80,6 +78,7 @@ public class RoomSettings extends RoomParent {
             public void clicked(InputEvent event, float x, float y){
                 if (backgroundMusic.getVolume() < 1.0f) {
                     backgroundMusic.setVolume(backgroundMusic.getVolume() + 0.2f);
+                    prefs.flush();
                 }
             }
         });
@@ -98,6 +97,8 @@ public class RoomSettings extends RoomParent {
             public void clicked(InputEvent event, float x, float y){
                 if (backgroundMusic.getVolume() > 0) {
                     backgroundMusic.setVolume(backgroundMusic.getVolume() - 0.2f);
+                    prefs.putFloat("musicVolume", backgroundMusic.getVolume());
+                    prefs.flush();
                 }
             }
         });
