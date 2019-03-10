@@ -13,7 +13,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
+import javax.xml.soap.Text;
 
 import static com.badlogic.gdx.Input.Keys.X;
 import static com.badlogic.gdx.Input.Keys.Y;
@@ -27,11 +32,7 @@ import static javax.swing.text.html.HTML.Attribute.ROWS;
 // I comment out lines of code that aren't functional yet.
 
 // Modify picture used, x & y (placement), frame cols & frame rows, framespeed, update
-// create texture in maingame
-// game.getTexturename name;
 // update: pelkkä statetime += ja currentframe ja drawbatch
-
-// createAnimation (käytetään konstruktorissa), startAnimation
 
 // Tee: idlaus-animaatio ja animaation vaihto
 // omat classit vastustajalle ja pelaajalle
@@ -53,6 +54,7 @@ public class RoomFight extends RoomParent {
     int height = 100;*/
 
     private Player player;
+    private Enemy enemy;
 
     RoomFight(MainGame game) {
 
@@ -66,6 +68,7 @@ public class RoomFight extends RoomParent {
         createAnimation(examplesheet);*/
 
         player = new Player();
+        enemy = new Enemy();
     }
 
     // I moved this method up, to see more clearly that this method belongs to RoomFight class
@@ -86,9 +89,33 @@ public class RoomFight extends RoomParent {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);*/
 
+        player.createActionButton();
         batch.begin();
         player.update();
         batch.end();
+    }
+
+    class Enemy extends Player {
+
+        private Animation<TextureRegion> yellowmove;
+        private Animation<TextureRegion> redmove;
+
+        private Texture yellow;
+        private Texture red;
+
+        Enemy() {
+
+            X = game.pixelWidth - (player.X + player.width);
+            Y = game.pixelHeight/2;
+
+            red = game.getRedTexture();
+            yellow = game.getYellowTexture();
+
+            redmove = createAnimation(red, 2, 1);
+            yellowmove = createAnimation(yellow, 2,1);
+
+            currentFrame = yellowmove.getKeyFrame(stateTime, true);
+        }
     }
 
     /*
@@ -98,6 +125,12 @@ public class RoomFight extends RoomParent {
         private Texture img;
         private Animation<TextureRegion> moving;
 
+        private Texture orange;
+        private Texture green;
+
+        private Animation<TextureRegion> orangemove;
+        private Animation<TextureRegion> greenmove;
+
         Player() {
             img = game.getGamePlayer();
             X = 100;
@@ -106,6 +139,38 @@ public class RoomFight extends RoomParent {
             //Create necessary animations and start the correct one
             moving = createAnimation(img, 4, 1);
             startAnimation(moving, 10);
+
+            orange = game.getOrangeTexture();
+            green = game.getGreenTexture();
+
+            greenmove = createAnimation(green, 2, 1);
+            startAnimation(greenmove, 10);
+        }
+
+        boolean isButtonClicked = false;
+
+        public  void createActionButton() {
+            final TextButton buttonSettings = new TextButton("Action!", skin);
+            buttonSettings.setWidth(300f);
+            buttonSettings.setHeight(100f);
+            buttonSettings.setPosition(game.pixelWidth /2 - buttonSettings.getWidth() /2,
+                    (game.pixelHeight/3) *2 - buttonSettings.getHeight() /2);
+            stage.addActor(buttonSettings);
+
+            buttonSettings.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    isButtonClicked = true;
+
+                    orangemove = createAnimation(orange, 2, 1);
+                    startAnimation(orangemove, 10);
+
+                    enemy.redmove = createAnimation(enemy.red, 2, 1);
+                    enemy.startAnimation(enemy.redmove, 10);
+
+                    enemy.yellowmove = createAnimation(enemy.yellow, 2, 1);
+                }
+            });
         }
 
         public void update() {
@@ -116,7 +181,22 @@ public class RoomFight extends RoomParent {
             you have created so far.
 
             currentFrame = exampleAnimation.getKeyFrame(stateTime, true);*/
+
+            if (isButtonClicked) {
+                currentFrame = orangemove.getKeyFrame(stateTime, true);
+                enemy.currentFrame = enemy.redmove.getKeyFrame(stateTime, true);
+                if (greenmove.isAnimationFinished(stateTime) && enemy.yellowmove.isAnimationFinished(stateTime)) {
+
+                    isButtonClicked = false;
+                }
+            } else {
+                currentFrame = greenmove.getKeyFrame(stateTime, true);
+                enemy.startAnimation(enemy.yellowmove, 10);
+                enemy.currentFrame = enemy.yellowmove.getKeyFrame(stateTime, true);
+            }
+
             draw(batch);
+            enemy.draw(batch);
         }
     }
 
