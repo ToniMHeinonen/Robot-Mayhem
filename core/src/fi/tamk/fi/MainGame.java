@@ -28,7 +28,6 @@ public class MainGame extends Game {
 	private Skin skin;
 	private Music backgroundMusic;
 	private float musicVol;
-	private boolean containsMusicVol;
 	Preferences prefs;
 
 	// Added for testing.
@@ -50,8 +49,8 @@ public class MainGame extends Game {
 		// glassy-ui.json, glassy-ui.png
 		skin = new Skin( Gdx.files.internal("glassy-ui.json") );
 		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("bgmusic.mp3"));
-        prefs = Gdx.app.getPreferences("Robot_Mayhem_Preferences");
-        containsMusicVol();
+
+		prefs = Gdx.app.getPreferences("Robot_Mayhem_Preferences");
         loadSettings();
 
 		// Added for testing.
@@ -125,22 +124,8 @@ public class MainGame extends Game {
         }
     }
 
-    // Check if user already have musicvolume defined in preferences.
-    public boolean containsMusicVol() {
-	    if (prefs.contains("musicVolume")) {
-	        containsMusicVol = true;
-        } else {
-	        containsMusicVol = false;
-        }
-        return containsMusicVol;
-    }
-
     public void loadSettings() {
-	    if (!containsMusicVol) {
-            musicVol = prefs.getFloat("musicVolume", 0.8f);
-        } else {
-	        musicVol = prefs.getFloat("musicVolume");
-        }
+		musicVol = prefs.getFloat("musicVolume", 0.8f);
     }
 
     public void saveSettings() {
