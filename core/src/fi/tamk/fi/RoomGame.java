@@ -69,32 +69,35 @@ public class RoomGame extends RoomParent {
     /*
     Create class for player
      */
-    public class GamePlayer extends Animating {
+    public class GamePlayer {
         private Texture img;
         private Animation<TextureRegion> moving;
+        private Animating anim;
+        private float X;
+        private float Y;
 
         GamePlayer() {
             img = game.getGamePlayer();
+            anim = new Animating();
             X = 100;
             Y = game.pixelHeight/2;
 
             //Create necessary animations and start the correct one
-            moving = createAnimation(img, 4, 1);
-            startAnimation(moving, 10);
+            moving = anim.createAnimation(img, 4, 1);
+            anim.startAnimation(moving, 10);
         }
 
         public void update() {
             //If moving, animate sprite
             //Else, return to state 0
             if (bgSpd > 0f) {
-                frameSpeed = (int)maxSpd - (int)bgSpd;
-                stateTime += Gdx.graphics.getDeltaTime() / frameSpeed;
+                anim.setFrameSpeed((int)maxSpd - (int)bgSpd);
+                anim.animate();
             } else {
-                stateTime = 0f;
+                anim.setStateTime(0f);
             }
-            currentFrame = animation.getKeyFrame(stateTime, true);
 
-            draw(batch);
+            anim.draw(batch, X, Y);
         }
     }
 }

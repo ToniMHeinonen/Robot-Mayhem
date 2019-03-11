@@ -1,24 +1,23 @@
 package fi.tamk.fi;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Animating {
-    protected TextureRegion[][] tmp;
-    protected TextureRegion[] frames;
-    protected Animation<TextureRegion> animation;
-    protected TextureRegion currentFrame;
-    protected int frameCols;
-    protected int frameRows;
-    protected int frameSpeed;
-    protected float stateTime = 0.0f;
+    private TextureRegion[][] tmp;
+    private TextureRegion[] frames;
+    private Animation<TextureRegion> animation;
+    private TextureRegion currentFrame;
+    private int frameCols;
+    private int frameRows;
+    private int frameSpeed;
+    private float stateTime = 0.0f;
 
-    protected float width;
-    protected float height;
-    protected float X;
-    protected float Y;
+    private float width;
+    private float height;
 
     //Create animations with this when at the start
     public Animation<TextureRegion> createAnimation(Texture image, int cols, int rows) {
@@ -36,10 +35,16 @@ public class Animating {
     //When you need to change to another animation, use this
     public void startAnimation(Animation<TextureRegion> animation, int speed) {
         stateTime = 0.0f;
+        this.animation = animation;
         this.frameSpeed = speed;
         currentFrame = animation.getKeyFrame(stateTime, true);
         width = currentFrame.getRegionWidth();
         height = currentFrame.getRegionHeight();
+    }
+
+    public void animate() {
+        stateTime += Gdx.graphics.getDeltaTime() / frameSpeed;
+        currentFrame = animation.getKeyFrame(stateTime, true);
     }
 
     //Don't modify this, it works perfectly
@@ -59,7 +64,23 @@ public class Animating {
     }
 
     //Draw the animation
-    public void draw(SpriteBatch batch) {
-        batch.draw(currentFrame, X, Y, width, height);
+    public void draw(SpriteBatch batch, float x, float y) {
+        batch.draw(currentFrame, x, y, width, height);
+    }
+
+    public int getFrameSpeed() {
+        return frameSpeed;
+    }
+
+    public void setFrameSpeed(int frameSpeed) {
+        this.frameSpeed = frameSpeed;
+    }
+
+    public float getStateTime() {
+        return stateTime;
+    }
+
+    public void setStateTime(float stateTime) {
+        this.stateTime = stateTime;
     }
 }
