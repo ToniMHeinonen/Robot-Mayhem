@@ -31,27 +31,8 @@ import static javax.swing.text.html.HTML.Attribute.ROWS;
 // I comment at least on things that are unclear to me.
 // I comment out lines of code that aren't functional yet.
 
-// Modify picture used, x & y (placement), frame cols & frame rows, framespeed, update
-// update: pelkkä statetime += ja currentframe ja drawbatch
-
-// Tee: idlaus-animaatio ja animaation vaihto
-// omat classit vastustajalle ja pelaajalle
-
-// getterit ja setterit tekstuurin kanssa
+// Modify: picture used, x & y (placement), frame cols & frame rows, framespeed, update
 public class RoomFight extends RoomParent {
-
-    /* OLD COMMENT
-    You don't use this variables in this class plus you already have all of these in your player
-    class, since it is extending Animating class (aka inheriting it's variables).
-
-    private Texture examplesheet;
-    int frameSpeed;
-    TextureRegion[][] tmp;
-    TextureRegion[] exampleFrames;
-    int COLS = 2;
-    int ROWS = 1;
-    int width = 100;
-    int height = 100;*/
 
     private Player player;
     private Enemy enemy;
@@ -59,35 +40,15 @@ public class RoomFight extends RoomParent {
     RoomFight(MainGame game) {
 
         super(game);
-        /* OLD COMMENT
-        Handle all your animations within the Player class. Create this "exampleanimation.png" in
-        MainGame class and use getters to retrieve it. If you don't know how, then just create it
-        in your player class.
-
-        examplesheet = new Texture("exampleanimation.png");
-        createAnimation(examplesheet);*/
 
         player = new Player();
         enemy = new Enemy();
     }
 
-    // OLD COMMENT I moved this method up, to see more clearly that this method belongs to RoomFight class
     @Override
     public void render(float delta) {
 
         super.render(delta);
-        /* OLD COMMENT
-        You already have this in Player class.
-
-        stateTime += Gdx.graphics.getDeltaTime();*/
-
-
-        /* OLD COMMENT
-        You don't need these, since RoomParent already does these in super.render(delta);
-
-        batch.setProjectionMatrix(camera.combined);
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);*/
 
         player.createActionButton();
         batch.begin();
@@ -101,7 +62,7 @@ public class RoomFight extends RoomParent {
     If they later start to have lots of similarities, we can create for example class Objects and
     extend that and then I can modify Animating class so that it does not have to be extended.
      */
-    class Enemy extends Player {
+    class Enemy extends Animating {
 
         private Animation<TextureRegion> yellowmove;
         private Animation<TextureRegion> redmove;
@@ -119,7 +80,7 @@ public class RoomFight extends RoomParent {
 
             redmove = createAnimation(red, 2, 1);
             yellowmove = createAnimation(yellow, 2,1);
-
+            startAnimation(yellowmove, 50);
             //currentFrame = yellowmove.getKeyFrame(stateTime, true); You don't need this
         }
     }
@@ -146,14 +107,18 @@ public class RoomFight extends RoomParent {
             //Create necessary animations and start the correct one
             //Move to here greenmove = createAnimation(green, 2, 1);
             //Move to here orangemove = createAnimation(orange, 2, 1);
+
+            /* Commented out as this is not used yet
             moving = createAnimation(img, 4, 1);
-            startAnimation(moving, 10);
+             */
 
             orange = game.getOrangeTexture();
             green = game.getGreenTexture();
 
+            orangemove = createAnimation(orange, 2, 1);
+
             greenmove = createAnimation(green, 2, 1);
-            startAnimation(greenmove, 10);
+            startAnimation(greenmove, 50);
             /*
             You can only start one animation at a time, so either delete startAnimation moving
             or greenmove.
@@ -187,8 +152,7 @@ public class RoomFight extends RoomParent {
                     You should create all the animations only in the constructor, then just call
                     startAnimation here.
                     */
-                    orangemove = createAnimation(orange, 2, 1);
-                    startAnimation(orangemove, 10);
+                    startAnimation(orangemove, 50);
 
                     /*
                     Make other button for enemy animations and create it in RoomFight class.
@@ -198,7 +162,7 @@ public class RoomFight extends RoomParent {
                     You have already created this in enemy constructor.
 
                     enemy.redmove = createAnimation(enemy.red, 2, 1);*/
-                    enemy.startAnimation(enemy.redmove, 10);
+                    enemy.startAnimation(enemy.yellowmove, 50);
 
                     /*
                     You have already created this in enemy constructor.
@@ -209,17 +173,76 @@ public class RoomFight extends RoomParent {
             });
         }
 
+        // boolean isItRed = false; Useless. :(
         public void update() {
 
             stateTime += Gdx.graphics.getDeltaTime() / frameSpeed;
-            /* OLD COMMENT
-            Change the name "exampleAnimation" to "moving", since that is the only animation
-            you have created so far.
-
-            currentFrame = exampleAnimation.getKeyFrame(stateTime, true);*/
 
             //Great!
+
+            // Works otherwise but red won't change back. Tried to make it work for a couple of hours.
             if (isButtonClicked) {
+                currentFrame = orangemove.getKeyFrame(stateTime, true);
+                enemy.currentFrame = enemy.yellowmove.getKeyFrame(stateTime, true);
+
+                if (orangemove.isAnimationFinished(stateTime)) {
+
+                    currentFrame = greenmove.getKeyFrame(stateTime, true);
+
+                    enemy.startAnimation(enemy.redmove, 50);
+                    enemy.currentFrame = enemy.redmove.getKeyFrame(stateTime, true);
+                }
+
+            } else if (enemy.redmove.isAnimationFinished(stateTime)) {
+
+                currentFrame = greenmove.getKeyFrame(stateTime, true);
+                enemy.startAnimation(enemy.yellowmove, 50);
+                enemy.currentFrame = enemy.yellowmove.getKeyFrame(stateTime, true);
+            } else {
+
+                currentFrame = greenmove.getKeyFrame(stateTime, true);
+                enemy.startAnimation(enemy.yellowmove, 50);
+                enemy.currentFrame = enemy.yellowmove.getKeyFrame(stateTime, true);
+            }
+
+            draw(batch);
+            enemy.draw(batch);
+
+            draw(batch);
+            enemy.draw(batch);
+        }
+
+        // Old code and notes about 'em:
+        /*
+        if (isButtonClicked) {
+                currentFrame = orangemove.getKeyFrame(stateTime, true);
+                enemy.currentFrame = enemy.yellowmove.getKeyFrame(stateTime, true);
+
+                if (orangemove.isAnimationFinished(stateTime)) {
+
+                    currentFrame = greenmove.getKeyFrame(stateTime, true);
+
+                    enemy.startAnimation(enemy.redmove, 50);
+                    enemy.currentFrame = enemy.redmove.getKeyFrame(stateTime, true);
+                }
+
+            } else if (enemy.redmove.isAnimationFinished(stateTime)) {
+
+                currentFrame = greenmove.getKeyFrame(stateTime, true);
+                enemy.startAnimation(enemy.yellowmove, 50);
+                enemy.currentFrame = enemy.yellowmove.getKeyFrame(stateTime, true);
+
+                isButtonClicked = false;
+            } else {
+
+                currentFrame = greenmove.getKeyFrame(stateTime, true);
+                enemy.startAnimation(enemy.yellowmove, 50);
+                enemy.currentFrame = enemy.yellowmove.getKeyFrame(stateTime, true);
+            }
+         */
+
+        // Old code as a reference for myself.
+        /* if (isButtonClicked) {
                 currentFrame = orangemove.getKeyFrame(stateTime, true);
                 enemy.currentFrame = enemy.redmove.getKeyFrame(stateTime, true);
                 if (greenmove.isAnimationFinished(stateTime) && enemy.yellowmove.isAnimationFinished(stateTime)) {
@@ -233,49 +256,36 @@ public class RoomFight extends RoomParent {
             }
 
             draw(batch);
-            enemy.draw(batch);
-        }
+            enemy.draw(batch);*/
+
+        // Fuck this is getting confusing... I'll have to simplify.
+            /* G = green, Y = yellow
+            && O = orange, R = red
+
+            1. G & Y (default)
+
+            2. Button clicked. {
+
+                3. O & Y
+
+            (isButtonClicked == true &&) O finished: 4
+                4. G & R
+                make isButtonClicked = false
+               }
+
+            R finished (&& isButtonClicked == false):
+            5. G & Y
+
+------------------------------------------------------------- */
+
+            /*Old code does:
+
+             (1. G & Y as defaults)
+             2. Button is clicked. {
+
+                3. O & R
+               }
+             4. G & Y
+             */
     }
-
-    /* OLD COMMENT
-    Don't create these again, use them from your Player class, since you are extending animating
-    class, which already holds these methods.
-
-    public TextureRegion[] toTextureArray(TextureRegion[][] tr) {
-        int fc = this.COLS;
-        int fr = this.ROWS;
-        TextureRegion [] exampleFrames = new TextureRegion[fc * fr];
-
-        int index = 0;
-        for (int i = 0; i < fr; i++) {
-            for (int j = 0; j < fc; j++) {
-                exampleFrames[index++] = tr[i][j];
-            }
-        }
-
-        return exampleFrames;
-    }
-    public Animation<TextureRegion> createAnimation(Texture examplesheet) {
-
-        tmp = TextureRegion.split(examplesheet, examplesheet.getWidth() / COLS,
-                examplesheet.getHeight() / ROWS);
-        exampleFrames = toTextureArray(tmp);
-        exampleAnimation = new Animation(1 / 60f, exampleFrames);
-
-        return exampleAnimation;
-    }*/
-
-    /* OLD COMMENT
-    You don't need these, also everything regarding animation should be in your Player class
-
-    Animation<TextureRegion> exampleAnimation;
-    TextureRegion currentFrame;
-    float stateTime = 0.0f;*/
-
-
-    /* OLD COMMENT
-    Don't use this, since Player class already handles drawing using the Animating class's
-    draw method.
-
-    public void draw(SpriteBatch batch) { batch.draw(currentFrame, X, Y, width, height); }*/
 }
