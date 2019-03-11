@@ -28,7 +28,7 @@ public class MainGame extends Game {
 	private Skin skin;
 	private Music backgroundMusic;
 	private float musicVol;
-	Preferences prefs;
+	Preferences settings;
 
 	// Added for testing.
 	private Texture exampleSheet;
@@ -44,7 +44,7 @@ public class MainGame extends Game {
 
 		createSkinAndStage();
 		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("bgmusic.mp3"));
-		prefs = Gdx.app.getPreferences("Robot_Mayhem_Settings");
+		settings = Gdx.app.getPreferences("Robot_Mayhem_Settings");
         loadSettings();
 
 		// Added for testing.
@@ -119,12 +119,12 @@ public class MainGame extends Game {
     }
 
     public void loadSettings() {
-		musicVol = prefs.getFloat("musicVolume", 0.8f);
+		musicVol = settings.getFloat("musicVolume", 0.8f);
     }
 
     public void saveSettings() {
-	    prefs.putFloat("musicVolume", musicVol);
-	    prefs.flush();
+	    settings.putFloat("musicVolume", musicVol);
+	    settings.flush();
     }
 
     public void createSkinAndStage() {
