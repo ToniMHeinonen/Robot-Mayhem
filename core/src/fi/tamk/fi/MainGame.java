@@ -41,16 +41,10 @@ public class MainGame extends Game {
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, pixelWidth, pixelHeight);
-		stage = new Stage(new FitViewport(pixelWidth, pixelHeight), batch);
-		// Skin: https://github.com/czyzby/gdx-skins/tree/master/glassy
-		// Check "License" bottom of the page
-		// Files in \android\assets:
-		// font-big-export.fnt, font-export.fnt, glassy-ui.atlas,
-		// glassy-ui.json, glassy-ui.png
-		skin = new Skin( Gdx.files.internal("glassy-ui.json") );
-		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("bgmusic.mp3"));
 
-		prefs = Gdx.app.getPreferences("Robot_Mayhem_Preferences");
+		createSkinAndStage();
+		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("bgmusic.mp3"));
+		prefs = Gdx.app.getPreferences("Robot_Mayhem_Settings");
         loadSettings();
 
 		// Added for testing.
@@ -131,5 +125,15 @@ public class MainGame extends Game {
     public void saveSettings() {
 	    prefs.putFloat("musicVolume", musicVol);
 	    prefs.flush();
+    }
+
+    public void createSkinAndStage() {
+        stage = new Stage(new FitViewport(pixelWidth, pixelHeight), batch);
+        // Skin: https://github.com/czyzby/gdx-skins/tree/master/glassy
+        // Check "License" bottom of the page
+        // Files in \android\assets:
+        // font-big-export.fnt, font-export.fnt, glassy-ui.atlas,
+        // glassy-ui.json, glassy-ui.png
+        skin = new Skin( Gdx.files.internal("glassy-ui.json") );
     }
 }
