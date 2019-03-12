@@ -33,14 +33,14 @@ import static javax.swing.text.html.HTML.Attribute.ROWS;
 // I comment out lines of code that aren't functional yet.
 public class RoomFight extends RoomParent {
 
-    private GameObject player;
-    private GameObject enemy;
+    private Player player;
+    private Enemy enemy;
 
     RoomFight(MainGame game) {
         super(game);
 
-        player = new GameObject(game);
-        enemy = new GameObject(game);
+        player = new Player(game);
+        enemy = new Enemy(game);
     }
 
     @Override
