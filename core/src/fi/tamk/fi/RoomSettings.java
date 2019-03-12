@@ -1,15 +1,26 @@
 package fi.tamk.fi;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class RoomSettings extends RoomParent {
+    private BitmapFont fontTest;
+    private TextButton.TextButtonStyle styleTest;
 
     RoomSettings(MainGame game) {
         super(game);
         System.out.println(game.getMusicVol());
+        fontTest = new BitmapFont(Gdx.files.internal("font_test.fnt"),
+                Gdx.files.internal("font_test.png"),
+                false);
+        styleTest = new TextButton.TextButtonStyle();
+        styleTest.font = fontTest;
+        styleTest.up = skin.getDrawable("button");
+        styleTest.down = skin.getDrawable("button-down");
     }
 
     @Override
@@ -101,7 +112,7 @@ public class RoomSettings extends RoomParent {
     }
 
     public void createButtonTestailua() {
-        final TextButton buttonGlobal = new TextButton("RoomTestailua", skin);
+        final TextButton buttonGlobal = new TextButton("RoomTestailua", styleTest);
         buttonGlobal.setWidth(300f);
         buttonGlobal.setHeight(100f);
         buttonGlobal.setPosition(game.pixelWidth /2 - buttonGlobal.getWidth() /2,
