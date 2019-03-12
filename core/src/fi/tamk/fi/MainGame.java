@@ -136,4 +136,10 @@ public class MainGame extends Game {
         // glassy-ui.json, glassy-ui.png
         skin = new Skin( Gdx.files.internal("glassy-ui.json") );
     }
+
+	int stepCount;
+    public void receiveSteps(int stepCount) {
+		System.out.println("Steps: " + stepCount);
+		this.stepCount = stepCount;
+	}
 }

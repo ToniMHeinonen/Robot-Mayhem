@@ -10,16 +10,19 @@ public class RoomGame extends RoomParent {
 
     private Texture imgBG;
     private GamePlayer player;
-    private int bgPos;
-    private float bgSpd;
+    private int bgPos; // Background's position used by wrapping
+    private float bgSpd; // Cur spd that the background is moving
+    private float bgAddSpd = 0.5f; // Amount to add every step
     private final float maxSpd = 15f;
+    private int curSteps;
 
     RoomGame(MainGame game) {
         super(game);
+        curSteps = game.stepCount;
 
         player = new GamePlayer();
 
-        //Wrapping enables looping
+        // Wrapping enables looping
         imgBG = new Texture("bgPlaceholder.jpg");
         imgBG.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
     }
@@ -35,15 +38,21 @@ public class RoomGame extends RoomParent {
     }
 
     public void controlBackground() {
-        //USE THIS TO TEST THE MOVEMENT
-        if( Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) bgSpd += 0.5f;
+        // USE THIS TO TEST THE MOVEMENT
+        if( Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) bgSpd += bgAddSpd;
 
-        //Limit max speed
+        // Move every step
+        if (curSteps != game.stepCount) {
+            curSteps = game.stepCount;
+            bgSpd += bgAddSpd;
+        }
+
+        // Limit max speed
         if (bgSpd > maxSpd) bgSpd = maxSpd;
 
-        //Add friction to speed
+        // Add friction to speed
         if (bgSpd > 0f) {
-            //4 different values for different speeds
+            // 4 different values for different speeds
             if (bgSpd > 7.5f) bgSpd -= 0.01f;
             else if (bgSpd > 5f) bgSpd -= 0.008f;
             else if (bgSpd > 2.5f) bgSpd -= 0.007f;
@@ -52,17 +61,19 @@ public class RoomGame extends RoomParent {
             bgSpd = 0f;
         }
 
-		/*If bgPos + next speed addition goes over image width,
-		  then reset counter, because of the int limit (2147483647)*/
+		/*
+		If bgPos + next speed addition goes over image width,
+		then reset counter, because of the int limit (2147483647)
+		*/
         if (bgPos + bgSpd > imgBG.getWidth()) {
             int spdToInt = (int) bgSpd;
             int var = bgPos + spdToInt - imgBG.getWidth();
             bgPos = var;
         } else {
-            bgPos += Math.ceil(bgSpd); //Ceil since Int cuts decimals
+            bgPos += Math.ceil(bgSpd); // Ceil since Int cuts decimals
         }
 
-        //Draw background, srcX handles image looping
+        // Draw background, srcX handles image looping
         batch.draw(imgBG, 0,0, bgPos, 0, imgBG.getWidth(), imgBG.getHeight());
     }
 
@@ -82,14 +93,14 @@ public class RoomGame extends RoomParent {
             X = 100;
             Y = game.pixelHeight/2;
 
-            //Create necessary animations and start the correct one
+            // Create necessary animations and start the correct one
             moving = anim.createAnimation(img, 4, 1);
             anim.startAnimation(moving, 10);
         }
 
         public void update() {
-            //If moving, animate sprite
-            //Else, return to state 0
+            // If moving, animate sprite
+            // Else, return to state 0
             if (bgSpd > 0f) {
                 anim.setFrameSpeed((int)maxSpd - (int)bgSpd);
                 anim.animate();
