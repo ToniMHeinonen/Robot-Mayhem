@@ -1,5 +1,6 @@
 package fi.tamk.fi;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
@@ -30,18 +31,16 @@ import static javax.swing.text.html.HTML.Attribute.ROWS;
 
 // I comment at least on things that are unclear to me.
 // I comment out lines of code that aren't functional yet.
-
-// Modify: picture used, x & y (placement), frame cols & frame rows, framespeed, update
 public class RoomFight extends RoomParent {
 
-    private Player player;
-    private Enemy enemy;
+    private GameObject player;
+    private GameObject enemy;
 
     RoomFight(MainGame game) {
         super(game);
 
-        player = new Player();
-        enemy = new Enemy();
+        player = new GameObject(game);
+        enemy = new GameObject(game);
     }
 
     @Override
@@ -50,8 +49,8 @@ public class RoomFight extends RoomParent {
 
         createActionButton();
         batch.begin();
-        player.update();
-        enemy.update();
+        //player.update();
+        //enemy.update();
         batch.end();
     }
 
@@ -66,7 +65,7 @@ public class RoomFight extends RoomParent {
         buttonSettings.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                player.attack();
+                //player.attack();
             }
         });
     }
@@ -79,10 +78,9 @@ public class RoomFight extends RoomParent {
     /*
     CREATE PLAYER
      */
-    public class Player {
+    private class Player extends GameObject{
         private float X;
         private float Y;
-        private Animating anim;
 
         private Texture orange;
         private Texture green;
@@ -91,7 +89,12 @@ public class RoomFight extends RoomParent {
         private Animation<TextureRegion> greenmove;
         boolean tempAnimation = false;
 
-        Player() {
+        private Animating anim;
+
+        Player(MainGame game) {
+
+            super(game);
+
             X = 100;
             Y = game.pixelHeight / 2;
             anim = new Animating();
@@ -101,33 +104,16 @@ public class RoomFight extends RoomParent {
 
             orangemove = anim.createAnimation(orange, 2, 1);
             greenmove = anim.createAnimation(green, 2, 1);
-            anim.startAnimation(greenmove, 50);
-        }
-
-        public void update() {
-            anim.animate();
-
-            if (tempAnimation) {
-                if (orangemove.isAnimationFinished(anim.getStateTime())) {
-                    anim.startAnimation(greenmove, 50);
-                    tempAnimation = false;
-                    enemy.counterAttack();
-                }
-            }
-
-            anim.draw(batch, X, Y);
-        }
-
-        public void attack() {
-            tempAnimation = true;
             anim.startAnimation(orangemove, 50);
+
+            //update();
         }
     }
 
     /*
     CREATE ENEMY
      */
-    public class Enemy {
+    private class Enemy extends GameObject{
         private float X;
         private float Y;
         private Animating anim;
@@ -139,7 +125,8 @@ public class RoomFight extends RoomParent {
         private Texture yellow;
         private Texture red;
 
-        Enemy() {
+        Enemy(MainGame game) {
+            super(game);
 
             X = game.pixelWidth - 200f;
             Y = game.pixelHeight/2;
@@ -152,99 +139,5 @@ public class RoomFight extends RoomParent {
             yellowmove = anim.createAnimation(yellow, 2,1);
             anim.startAnimation(yellowmove, 50);
         }
-
-        public void update() {
-            anim.animate();
-
-            if (tempAnimation) {
-                if (redmove.isAnimationFinished(anim.getStateTime())) {
-                    anim.startAnimation(yellowmove, 50);
-                    tempAnimation = false;
-                }
-            }
-
-            anim.draw(batch, X, Y);
-        }
-
-        public void counterAttack() {
-            tempAnimation = true;
-            anim.startAnimation(redmove, 50);
-        }
     }
-
-        // Old code and notes about 'em:
-        /*
-        if (isButtonClicked) {
-                currentFrame = orangemove.getKeyFrame(stateTime, true);
-                enemy.currentFrame = enemy.yellowmove.getKeyFrame(stateTime, true);
-
-                if (orangemove.isAnimationFinished(stateTime)) {
-
-                    currentFrame = greenmove.getKeyFrame(stateTime, true);
-
-                    enemy.startAnimation(enemy.redmove, 50);
-                    enemy.currentFrame = enemy.redmove.getKeyFrame(stateTime, true);
-                }
-
-            } else if (enemy.redmove.isAnimationFinished(stateTime)) {
-
-                currentFrame = greenmove.getKeyFrame(stateTime, true);
-                enemy.startAnimation(enemy.yellowmove, 50);
-                enemy.currentFrame = enemy.yellowmove.getKeyFrame(stateTime, true);
-
-                isButtonClicked = false;
-            } else {
-
-                currentFrame = greenmove.getKeyFrame(stateTime, true);
-                enemy.startAnimation(enemy.yellowmove, 50);
-                enemy.currentFrame = enemy.yellowmove.getKeyFrame(stateTime, true);
-            }
-         */
-
-        // Old code as a reference for myself.
-        /* if (isButtonClicked) {
-                currentFrame = orangemove.getKeyFrame(stateTime, true);
-                enemy.currentFrame = enemy.redmove.getKeyFrame(stateTime, true);
-                if (greenmove.isAnimationFinished(stateTime) && enemy.yellowmove.isAnimationFinished(stateTime)) {
-
-                    isButtonClicked = false;
-                }
-            } else {
-                currentFrame = greenmove.getKeyFrame(stateTime, true);
-                enemy.startAnimation(enemy.yellowmove, 10);
-                enemy.currentFrame = enemy.yellowmove.getKeyFrame(stateTime, true);
-            }
-
-            draw(batch);
-            enemy.draw(batch);*/
-
-        // Fuck this is getting confusing... I'll have to simplify.
-            /* G = green, Y = yellow
-            && O = orange, R = red
-
-            1. G & Y (default)
-
-            2. Button clicked. {
-
-                3. O & Y
-
-            (isButtonClicked == true &&) O finished: 4
-                4. G & R
-                make isButtonClicked = false
-               }
-
-            R finished (&& isButtonClicked == false):
-            5. G & Y
-
-------------------------------------------------------------- */
-
-            /*Old code does:
-
-             (1. G & Y as defaults)
-             2. Button is clicked. {
-
-                3. O & R
-               }
-             4. G & Y
-             */
 }
