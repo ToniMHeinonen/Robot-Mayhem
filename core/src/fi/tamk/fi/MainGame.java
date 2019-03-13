@@ -18,7 +18,6 @@ import javax.xml.soap.Text;
 
 public class MainGame extends Game {
 	private SpriteBatch batch;
-	private Texture gamePlayer;
 
 	public static final float pixelWidth = 1920f;
 	public static final float pixelHeight = 1080f;
@@ -27,10 +26,17 @@ public class MainGame extends Game {
 	private Stage stage;
 	private Skin skin;
 	private Music backgroundMusic;
-	private float musicVol;
-	Preferences settings;
 
-	// Added for testing.
+	//Settings
+	Preferences settings;
+	private float musicVol;
+
+	//Stats
+	Preferences stats;
+	int stepCount;
+
+	// Textures for testing.
+	private Texture gamePlayer;
 	private Texture exampleSheet;
 	private Texture green;
 	private Texture yellow;
@@ -44,14 +50,8 @@ public class MainGame extends Game {
 
 		createSkinAndStage();
 		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("bgmusic.mp3"));
-		settings = Gdx.app.getPreferences("Robot_Mayhem_Settings");
         loadSettings();
-
-		// Added for testing.
-		exampleSheet = new Texture("exampleanimation.png");
-		green = new Texture("green.png");
-		yellow = new Texture("enemy.png");
-		red = new Texture("red.png");
+        loadStats();
 
 		loadTextures();
 
@@ -72,9 +72,15 @@ public class MainGame extends Game {
 		stage.dispose();
 		skin.dispose();
 		backgroundMusic.dispose();
+		saveStats();
 	}
 
 	public void loadTextures() {
+		// Added for testing.
+		exampleSheet = new Texture("exampleanimation.png");
+		green = new Texture("green.png");
+		yellow = new Texture("enemy.png");
+		red = new Texture("red.png");
 		gamePlayer = new Texture("player.png");
 	}
 
@@ -119,6 +125,7 @@ public class MainGame extends Game {
     }
 
     public void loadSettings() {
+		settings = Gdx.app.getPreferences("Robot_Mayhem_Settings");
 		musicVol = settings.getFloat("musicVolume", 0.8f);
     }
 
@@ -126,6 +133,16 @@ public class MainGame extends Game {
 	    settings.putFloat("musicVolume", musicVol);
 	    settings.flush();
     }
+
+	public void loadStats() {
+		stats = Gdx.app.getPreferences("Robot_Mayhem_Stats");
+		stepCount = stats.getInteger("stepCount", 0);
+	}
+
+	public void saveStats() {
+		stats.putInteger("stepCount", stepCount);
+		stats.flush();
+	}
 
     public void createSkinAndStage() {
         stage = new Stage(new FitViewport(pixelWidth, pixelHeight), batch);
@@ -137,9 +154,7 @@ public class MainGame extends Game {
         skin = new Skin( Gdx.files.internal("glassy-ui.json") );
     }
 
-	int stepCount;
     public void receiveSteps(int stepCount) {
-		System.out.println("Steps: " + stepCount);
-		this.stepCount = stepCount;
+		this.stepCount++;
 	}
 }
