@@ -8,6 +8,9 @@ public class RoomTestailua extends RoomParent {
 
     RoomTestailua(MainGame game) {
         super(game);
+        stage.clear();
+        createButtonSettings();
+        playMusic();
     }
 
     public void playMusic() {
@@ -35,7 +38,5 @@ public class RoomTestailua extends RoomParent {
     @Override
     public void render(float delta) {
         super.render(delta);
-        createButtonSettings();
-        playMusic();
     }
 }

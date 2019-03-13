@@ -14,6 +14,22 @@ public class RoomSettings extends RoomParent {
     RoomSettings(MainGame game) {
         super(game);
         System.out.println(game.getMusicVol());
+        stage.clear();
+        createNewFont();
+        createButtonFight();
+        createButtonGame();
+        createButtonMusic();
+        createButtonPlus();
+        createButtonMinus();
+        createButtonTestailua();
+    }
+
+    @Override
+    public void render(float delta) {
+        super.render(delta);
+    }
+
+    public void createNewFont() {
         fontTest = new BitmapFont(Gdx.files.internal("font_test.fnt"),
                 Gdx.files.internal("font_test.png"),
                 false);
@@ -21,17 +37,6 @@ public class RoomSettings extends RoomParent {
         styleTest.font = fontTest;
         styleTest.up = skin.getDrawable("button");
         styleTest.down = skin.getDrawable("button-down");
-    }
-
-    @Override
-    public void render(float delta) {
-        super.render(delta);
-        createButtonFight();
-        createButtonGame();
-        createButtonMusic();
-        createButtonPlus();
-        createButtonMinus();
-        createButtonTestailua();
     }
 
     public void createButtonFight() {
@@ -47,6 +52,7 @@ public class RoomSettings extends RoomParent {
             public void clicked(InputEvent event, float x, float y){
                 RoomFight roomFight = new RoomFight(game);
                 game.setScreen(roomFight);
+                stage.clear();
             }
         });
     }
@@ -64,6 +70,7 @@ public class RoomSettings extends RoomParent {
             public void clicked(InputEvent event, float x, float y){
                 RoomGame room = new RoomGame(game);
                 game.setScreen(room);
+                stage.clear();
             }
         });
     }
