@@ -9,9 +9,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.I18NBundle;
 
 public class RoomParent implements Screen {
     protected SpriteBatch batch;
+    protected I18NBundle myBundle;
     protected MainGame game;
     protected OrthographicCamera camera;
     protected Stage stage;
@@ -20,6 +22,7 @@ public class RoomParent implements Screen {
 
     RoomParent(MainGame game) {
         this.batch = game.getBatch();
+        this.myBundle = game.getMyBundle();
         this.game = game;
         this.camera = game.getCamera();
         this.stage = game.getStage();

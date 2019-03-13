@@ -178,4 +178,8 @@ public class MainGame extends Game {
 	public float getMusicVol() {
 		return musicVol;
 	}
+
+	public I18NBundle getMyBundle() {
+		return myBundle;
+	}
 }
