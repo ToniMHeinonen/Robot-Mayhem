@@ -12,12 +12,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+
+import java.util.Locale;
 
 import javax.xml.soap.Text;
 
 public class MainGame extends Game {
 	private SpriteBatch batch;
+	private I18NBundle myBundle;
 
 	public static final float pixelWidth = 1920f;
 	public static final float pixelHeight = 1080f;
@@ -47,6 +51,7 @@ public class MainGame extends Game {
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, pixelWidth, pixelHeight);
+		createBundle();
 
 		createSkinAndStage();
 		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("bgmusic.mp3"));
@@ -84,28 +89,16 @@ public class MainGame extends Game {
 		gamePlayer = new Texture("player.png");
 	}
 
-	public SpriteBatch getBatch() {
-		return batch;
-	}
+	public void createBundle() {
+		Locale locale = Locale.getDefault();
+		//Locale locale = new Locale("fi", "FI"); USE THIS TO TEST FINNISH VERSION
+		myBundle = I18NBundle.createBundle(Gdx.files.internal("MyBundle"),
+				locale,"ISO-8859-1");
 
-	public OrthographicCamera getCamera() {
-		return camera;
-	}
-
-	public Texture getGamePlayer() {
-		return gamePlayer;
-	}
-
-	public Stage getStage() {
-		return stage;
-	}
-
-	public Skin getSkin() {
-		return skin;
-	}
-
-	public Music getBackgroundMusic() {
-		return backgroundMusic;
+		//EXAMPLE CODE
+		System.out.println(myBundle.get("test"));
+		String str = myBundle.get("test");
+		System.out.println(str);
 	}
 
 	// Added for testing.
@@ -113,16 +106,6 @@ public class MainGame extends Game {
 	public Texture getGreenTexture() { return green;}
 	public Texture getYellowTexture() { return yellow;}
 	public Texture getRedTexture() { return red;}
-
-    public float getMusicVol() {
-        return musicVol;
-    }
-
-    public void setMusicVol(float musicVol) {
-	    if (musicVol > 0.0f && musicVol < 1.0f) {
-            this.musicVol = musicVol;
-        }
-    }
 
     public void loadSettings() {
 		settings = Gdx.app.getPreferences("Robot_Mayhem_Settings");
@@ -156,5 +139,43 @@ public class MainGame extends Game {
 
     public void receiveSteps(int stepCount) {
 		this.stepCount++;
+	}
+
+	public void setMusicVol(float musicVol) {
+		if (musicVol > 0.0f && musicVol < 1.0f) {
+			this.musicVol = musicVol;
+		}
+	}
+
+	/*
+	GETTERS
+	 */
+
+	public SpriteBatch getBatch() {
+		return batch;
+	}
+
+	public OrthographicCamera getCamera() {
+		return camera;
+	}
+
+	public Texture getGamePlayer() {
+		return gamePlayer;
+	}
+
+	public Stage getStage() {
+		return stage;
+	}
+
+	public Skin getSkin() {
+		return skin;
+	}
+
+	public Music getBackgroundMusic() {
+		return backgroundMusic;
+	}
+
+	public float getMusicVol() {
+		return musicVol;
 	}
 }
