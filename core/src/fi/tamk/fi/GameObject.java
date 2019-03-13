@@ -10,11 +10,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class GameObject extends Animating {
 
     protected MainGame game;
-    private Texture orange;
-    private Animation<TextureRegion> orangemove;
+    protected Texture action;
+    protected Animation<TextureRegion> actionMove;
 
-    private Texture green;
-    private Animation<TextureRegion> greenmove;
+    protected Texture idle;
+    protected Animation<TextureRegion> idleMove;
 
     private SpriteBatch batch;
 
@@ -24,17 +24,13 @@ public class GameObject extends Animating {
     public int X;
     public int Y;
 
-    GameObject(MainGame game) {
+    public GameObject(MainGame game, Animating anim, Texture action, Animation<TextureRegion> actionMove, Texture idle, Animation<TextureRegion> idleMove) {
 
         super();
         batch = game.getBatch();
-        orange = game.getOrangeTexture();
-        //orangemove = anim.createAnimation(orange, 2, 1);
-        //anim.startAnimation(orangemove, 50);
-    }
-
-    public void render(float delta) {
-        game.render();
+        action = game.getOrangeTexture();
+        actionMove = anim.createAnimation(action, 2, 1);
+        anim.startAnimation(actionMove, 50);
     }
 
     /*public void counterAttack() {

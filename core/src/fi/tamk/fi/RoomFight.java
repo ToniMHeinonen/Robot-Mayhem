@@ -36,11 +36,19 @@ public class RoomFight extends RoomParent {
     private Player player;
     private Enemy enemy;
 
+    private Texture action;
+    private Texture idle;
+
+    private Animation<TextureRegion> actionMove;
+    private Animation<TextureRegion> idleMove;
+
+    private Animating anim;
+
     RoomFight(MainGame game) {
         super(game);
 
-        player = new Player(game);
-        enemy = new Enemy(game);
+        player = new Player(game, anim, action, actionMove, idle, idleMove);
+        //enemy = new Enemy(game);
     }
 
     @Override
@@ -91,9 +99,9 @@ public class RoomFight extends RoomParent {
 
         private Animating anim;
 
-        Player(MainGame game) {
+        public Player(MainGame game, Animating anim, Texture action, Animation<TextureRegion> actionMove, Texture idle, Animation<TextureRegion> idleMove) {
 
-            super(game);
+            super(game, anim, action, actionMove, idle, idleMove);
 
             X = 100;
             Y = game.pixelHeight / 2;
@@ -118,26 +126,30 @@ public class RoomFight extends RoomParent {
         private float Y;
         private Animating anim;
 
-        private Animation<TextureRegion> yellowmove;
-        private Animation<TextureRegion> redmove;
+        private Animation<TextureRegion> idleMove;
+        private Animation<TextureRegion> actionMove;
         boolean tempAnimation = false;
 
-        private Texture yellow;
-        private Texture red;
+        private Texture action;
+        private Texture idle;
 
         Enemy(MainGame game) {
-            super(game);
+            super(game, enemy.anim, enemy.action, enemy.actionMove, enemy.idle, enemy.idleMove);
 
             X = game.pixelWidth - 200f;
             Y = game.pixelHeight/2;
             anim = new Animating();
 
-            red = game.getRedTexture();
-            yellow = game.getYellowTexture();
+            action = game.getRedTexture();
+            idle = game.getYellowTexture();
 
-            redmove = anim.createAnimation(red, 2, 1);
-            yellowmove = anim.createAnimation(yellow, 2,1);
-            anim.startAnimation(yellowmove, 50);
+            actionMove = anim.createAnimation(action, 2, 1);
+            idleMove = anim.createAnimation(idle, 2,1);
+            anim.startAnimation(idleMove, 50);
+        }
+
+        public void render(float delta) {
+            game.render();
         }
     }
 }
