@@ -36,19 +36,11 @@ public class RoomFight extends RoomParent {
     private Player player;
     private Enemy enemy;
 
-    private Texture action;
-    private Texture idle;
-
-    private Animation<TextureRegion> actionMove;
-    private Animation<TextureRegion> idleMove;
-
-    private Animating anim;
-
     RoomFight(MainGame game) {
         super(game);
 
-        player = new Player(game, anim, action, actionMove, idle, idleMove);
-        //enemy = new Enemy(game);
+        player = new Player();
+        enemy = new Enemy();
     }
 
     @Override
@@ -57,8 +49,8 @@ public class RoomFight extends RoomParent {
 
         createActionButton();
         batch.begin();
-        //player.update();
-        //enemy.update();
+        player.update();
+        enemy.update();
         batch.end();
     }
 
@@ -66,14 +58,14 @@ public class RoomFight extends RoomParent {
         final TextButton buttonSettings = new TextButton("Action!", skin);
         buttonSettings.setWidth(300f);
         buttonSettings.setHeight(100f);
-        buttonSettings.setPosition(game.pixelWidth /2 - buttonSettings.getWidth() /2,
-                (game.pixelHeight/3) *2 - buttonSettings.getHeight() /2);
+        buttonSettings.setPosition(game.pixelWidth / 2 - buttonSettings.getWidth() / 2,
+                (game.pixelHeight / 3) * 2 - buttonSettings.getHeight() / 2);
         stage.addActor(buttonSettings);
 
-        buttonSettings.addListener(new ClickListener(){
+        buttonSettings.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y){
-                //player.attack();
+            public void clicked(InputEvent event, float x, float y) {
+                player.attack();
             }
         });
     }
@@ -86,9 +78,10 @@ public class RoomFight extends RoomParent {
     /*
     CREATE PLAYER
      */
-    private class Player extends GameObject{
+    public class Player {
         private float X;
         private float Y;
+        private Animating anim;
 
         private Texture orange;
         private Texture green;
@@ -97,12 +90,7 @@ public class RoomFight extends RoomParent {
         private Animation<TextureRegion> greenmove;
         boolean tempAnimation = false;
 
-        private Animating anim;
-
-        public Player(MainGame game, Animating anim, Texture action, Animation<TextureRegion> actionMove, Texture idle, Animation<TextureRegion> idleMove) {
-
-            super(game, anim, action, actionMove, idle, idleMove);
-
+        Player() {
             X = 100;
             Y = game.pixelHeight / 2;
             anim = new Animating();
@@ -112,44 +100,74 @@ public class RoomFight extends RoomParent {
 
             orangemove = anim.createAnimation(orange, 2, 1);
             greenmove = anim.createAnimation(green, 2, 1);
-            anim.startAnimation(orangemove, 50);
+            anim.startAnimation(greenmove, 50);
+        }
 
-            //update();
+        public void update() {
+            anim.animate();
+
+            if (tempAnimation) {
+                if (orangemove.isAnimationFinished(anim.getStateTime())) {
+                    anim.startAnimation(greenmove, 50);
+                    tempAnimation = false;
+                    enemy.counterAttack();
+                }
+            }
+
+            anim.draw(batch, X, Y);
+        }
+
+        public void attack() {
+            tempAnimation = true;
+            anim.startAnimation(orangemove, 50);
         }
     }
 
     /*
     CREATE ENEMY
      */
-    private class Enemy extends GameObject{
+    public class Enemy {
         private float X;
         private float Y;
         private Animating anim;
 
-        private Animation<TextureRegion> idleMove;
-        private Animation<TextureRegion> actionMove;
+        private Animation<TextureRegion> yellowmove;
+        private Animation<TextureRegion> redmove;
         boolean tempAnimation = false;
 
-        private Texture action;
-        private Texture idle;
+        private Texture yellow;
+        private Texture red;
 
-        Enemy(MainGame game) {
-            super(game, enemy.anim, enemy.action, enemy.actionMove, enemy.idle, enemy.idleMove);
+        Enemy() {
 
             X = game.pixelWidth - 200f;
-            Y = game.pixelHeight/2;
+            Y = game.pixelHeight / 2;
             anim = new Animating();
 
-            action = game.getRedTexture();
-            idle = game.getYellowTexture();
+            red = game.getRedTexture();
+            yellow = game.getYellowTexture();
 
-            actionMove = anim.createAnimation(action, 2, 1);
-            idleMove = anim.createAnimation(idle, 2,1);
-            anim.startAnimation(idleMove, 50);
+            redmove = anim.createAnimation(red, 2, 1);
+            yellowmove = anim.createAnimation(yellow, 2, 1);
+            anim.startAnimation(yellowmove, 50);
         }
 
-        public void render(float delta) {
-            game.render();
+        public void update() {
+            anim.animate();
+
+            if (tempAnimation) {
+                if (redmove.isAnimationFinished(anim.getStateTime())) {
+                    anim.startAnimation(yellowmove, 50);
+                    tempAnimation = false;
+                }
+            }
+
+            anim.draw(batch, X, Y);
+        }
+
+        public void counterAttack() {
+            tempAnimation = true;
+            anim.startAnimation(redmove, 50);
         }
     }
 }
