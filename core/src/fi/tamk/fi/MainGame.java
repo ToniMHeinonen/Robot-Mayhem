@@ -57,7 +57,7 @@ public class MainGame extends Game {
 		createBundle();
 
 		createSkinAndStage();
-		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("fansu_1.mp3"));
+		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("music/fansu_1.mp3"));
         loadSettings();
         loadStats();
 
@@ -103,15 +103,14 @@ public class MainGame extends Game {
     }
 
 	public void loadTextures() {
-		// Added for testing.
-		imgBgHall = new Texture("bg_hall_blank.png");
-		imgBgBoss = new Texture("bg_hall_boss_blank.png");
-		imgTopBar = new Texture("topbar.png");
-		exampleSheet = new Texture("exampleanimation.png");
-		green = new Texture("green.png");
-		yellow = new Texture("enemy.png");
-		red = new Texture("red.png");
-		gamePlayer = new Texture("player.png");
+		imgBgHall = new Texture("texture/bg_hall_blank.png");
+		imgBgBoss = new Texture("texture/bg_hall_boss_blank.png");
+		imgTopBar = new Texture("texture/topbar.png");
+		exampleSheet = new Texture("texture/exampleanimation.png");
+		green = new Texture("texture/green.png");
+		yellow = new Texture("texture/enemy.png");
+		red = new Texture("texture/red.png");
+		gamePlayer = new Texture("texture/player.png");
 	}
 
 	public void createBundle() {
