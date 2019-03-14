@@ -5,28 +5,30 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class RoomGame extends RoomParent {
 
-    private Texture imgBG;
-    private Texture imgTopBar;
-    private GamePlayer player;
+    private Player player;
     private int bgPos; // Background's position used by wrapping
     private float bgSpd; // Cur spd that the background is moving
     private float bgAddSpd = 0.5f; // Amount to add every step
     private final float maxSpd = 15f;
     private int curSteps;
 
-    RoomGame(MainGame game) {
+    RoomGame(final MainGame game) {
         super(game);
         curSteps = game.stepCount;
 
-        player = new GamePlayer();
+        player = new Player();
 
         // Wrapping enables looping
-        imgTopBar = game.getImgTopBar();
         imgBG = game.getImgBgHall();
         imgBG.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+
+        createMenuButton();
     }
 
     @Override
@@ -38,11 +40,8 @@ public class RoomGame extends RoomParent {
         drawTopBar();
         player.update();
         batch.end();
-    }
-
-    public void drawTopBar() {
-        batch.draw(imgTopBar, 0,game.pixelHeight - imgTopBar.getHeight(),
-                imgTopBar.getWidth(), imgTopBar.getHeight());
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
     }
 
     public void controlBackground() {
@@ -88,14 +87,14 @@ public class RoomGame extends RoomParent {
     /*
     Create class for player
      */
-    public class GamePlayer {
+    private class Player {
         private Texture img;
         private Animation<TextureRegion> moving;
         private Animating anim;
         private float X;
         private float Y;
 
-        GamePlayer() {
+        Player() {
             img = game.getGamePlayer();
             anim = new Animating();
             X = 100;

@@ -42,6 +42,8 @@ public class RoomFight extends RoomParent {
 
         player = new Player();
         enemy = new Enemy();
+
+        createMenuButton();
     }
 
     @Override
@@ -50,6 +52,7 @@ public class RoomFight extends RoomParent {
 
         batch.begin();
         batch.draw(imgBg, 0,0, imgBg.getWidth(), imgBg.getHeight());
+        drawTopBar();
         player.update();
         enemy.update();
         batch.end();
@@ -75,14 +78,9 @@ public class RoomFight extends RoomParent {
     }
 
     /*
-    Now you could try to make a new class for Player and Enemy to extend. That class could have the
-    variables and methods that are same for these classes, this would decrease duplication.
-     */
-
-    /*
     CREATE PLAYER
      */
-    public class Player {
+    private class Player {
         private float X;
         private float Y;
         private Animating anim;
@@ -130,7 +128,7 @@ public class RoomFight extends RoomParent {
     /*
     CREATE ENEMY
      */
-    public class Enemy {
+    private class Enemy {
         private float X;
         private float Y;
         private Animating anim;
