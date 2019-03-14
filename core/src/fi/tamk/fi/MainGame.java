@@ -31,13 +31,6 @@ public class MainGame extends Game {
 	private Skin skin;
 	private Music backgroundMusic;
 
-	/* Delete these
-	//Rooms
-    RoomGame roomGame;
-    RoomTestailua roomTestailua;
-    // RoomFight roomFight;
-    RoomSettings roomSettings;*/
-
 	//Settings
 	Preferences settings;
 	private float musicVol;
@@ -67,9 +60,8 @@ public class MainGame extends Game {
 
 		loadTextures();
 
-        //createRooms(); Delete this method and variables
-		// Swith to first room
-		//setScreen(roomSettings); Use switchToRoomSettings method here
+		// Switch to first room
+		switchToRoomSettings();
 	}
 
 	@Override
@@ -88,29 +80,23 @@ public class MainGame extends Game {
 	}
 
 	public void switchToRoomTestailua() {
-	    setScreen(roomTestailua);
+	    RoomTestailua room = new RoomTestailua(this);
+	    setScreen(room);
     }
 
     public void switchToRoomSettings() {
-	    /*
-	    Do these methods like this:
-
-	    RoomSettings room = new RoomSettings();
-	    setScreen(room);
-	     */
-
-		setScreen(roomSettings);
+		RoomSettings room = new RoomSettings(this);
+		setScreen(room);
     }
 
     public void switchToRoomGame() {
-        setScreen(roomGame);
+	    RoomGame room = new RoomGame(this);
+        setScreen(room);
     }
 
-    public void createRooms() {
-	    roomGame = new RoomGame(this);
-	    roomTestailua = new RoomTestailua(this);
-	    // roomFight = new RoomFight(this);
-	    roomSettings = new RoomSettings(this);
+    public void switchToRoomFight() {
+	    RoomFight room = new RoomFight(this);
+	    setScreen(room);
     }
 
 	public void loadTextures() {

@@ -49,21 +49,20 @@ public class RoomSettings extends RoomParent {
         buttonFight.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                RoomFight roomFight = new RoomFight(game);
-                game.setScreen(roomFight);
+                game.switchToRoomFight();
             }
         });
     }
 
     public void createButtonGame() {
-        final TextButton buttonFight = new TextButton("RoomGame", skin);
-        buttonFight.setWidth(300f);
-        buttonFight.setHeight(100f);
-        buttonFight.setPosition(game.pixelWidth /2 - buttonFight.getWidth() /2,
-                game.pixelHeight/3 - buttonFight.getHeight() /2);
-        stage.addActor(buttonFight);
+        final TextButton buttonGame = new TextButton("RoomGame", skin);
+        buttonGame.setWidth(300f);
+        buttonGame.setHeight(100f);
+        buttonGame.setPosition(game.pixelWidth /2 - buttonGame.getWidth() /2,
+                game.pixelHeight/3 - buttonGame.getHeight() /2);
+        stage.addActor(buttonGame);
 
-        buttonFight.addListener(new ClickListener(){
+        buttonGame.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
                 game.switchToRoomGame();
