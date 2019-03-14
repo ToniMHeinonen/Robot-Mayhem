@@ -10,7 +10,7 @@ public class RoomGame extends RoomParent {
 
     private Texture imgBG;
     private Texture imgTopBar;
-    private GamePlayer player;
+    private Player player;
     private int bgPos; // Background's position used by wrapping
     private float bgSpd; // Cur spd that the background is moving
     private float bgAddSpd = 0.5f; // Amount to add every step
@@ -21,7 +21,7 @@ public class RoomGame extends RoomParent {
         super(game);
         curSteps = game.stepCount;
 
-        player = new GamePlayer();
+        player = new Player();
 
         // Wrapping enables looping
         imgTopBar = game.getImgTopBar();
@@ -88,14 +88,14 @@ public class RoomGame extends RoomParent {
     /*
     Create class for player
      */
-    public class GamePlayer {
+    private class Player {
         private Texture img;
         private Animation<TextureRegion> moving;
         private Animating anim;
         private float X;
         private float Y;
 
-        GamePlayer() {
+        Player() {
             img = game.getGamePlayer();
             anim = new Animating();
             X = 100;
