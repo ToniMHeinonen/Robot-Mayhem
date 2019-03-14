@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class RoomGame extends RoomParent {
 
     private Texture imgBG;
+    private Texture imgTopBar;
     private GamePlayer player;
     private int bgPos; // Background's position used by wrapping
     private float bgSpd; // Cur spd that the background is moving
@@ -23,7 +24,8 @@ public class RoomGame extends RoomParent {
         player = new GamePlayer();
 
         // Wrapping enables looping
-        imgBG = new Texture("bgPlaceholder.jpg");
+        imgTopBar = game.getImgTopBar();
+        imgBG = game.getImgBgHall();
         imgBG.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
     }
 
@@ -33,8 +35,14 @@ public class RoomGame extends RoomParent {
 
         batch.begin();
         controlBackground();
+        drawTopBar();
         player.update();
         batch.end();
+    }
+
+    public void drawTopBar() {
+        batch.draw(imgTopBar, 0,game.pixelHeight - imgTopBar.getHeight(),
+                imgTopBar.getWidth(), imgTopBar.getHeight());
     }
 
     public void controlBackground() {
@@ -91,7 +99,7 @@ public class RoomGame extends RoomParent {
             img = game.getGamePlayer();
             anim = new Animating();
             X = 100;
-            Y = game.pixelHeight/2;
+            Y = 200;
 
             // Create necessary animations and start the correct one
             moving = anim.createAnimation(img, 4, 1);

@@ -33,11 +33,14 @@ import static javax.swing.text.html.HTML.Attribute.ROWS;
 // I comment out lines of code that aren't functional yet.
 public class RoomFight extends RoomParent {
 
+    private Texture imgBg;
     private Player player;
     private Enemy enemy;
 
     RoomFight(MainGame game) {
         super(game);
+        imgBg = game.getImgBgBoss();
+        createActionButton();
 
         player = new Player();
         enemy = new Enemy();
@@ -47,11 +50,14 @@ public class RoomFight extends RoomParent {
     public void render(float delta) {
         super.render(delta);
 
-        createActionButton();
         batch.begin();
+        batch.draw(imgBg, 0,0, imgBg.getWidth(), imgBg.getHeight());
         player.update();
         enemy.update();
         batch.end();
+
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
     }
 
     public void createActionButton() {
@@ -92,7 +98,7 @@ public class RoomFight extends RoomParent {
 
         Player() {
             X = 100;
-            Y = game.pixelHeight / 2;
+            Y = 200f;
             anim = new Animating();
 
             orange = game.getOrangeTexture();
@@ -140,8 +146,8 @@ public class RoomFight extends RoomParent {
 
         Enemy() {
 
-            X = game.pixelWidth - 200f;
-            Y = game.pixelHeight / 2;
+            X = game.pixelWidth - 300;
+            Y = 200f;
             anim = new Animating();
 
             red = game.getRedTexture();

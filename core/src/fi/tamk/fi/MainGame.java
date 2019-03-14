@@ -39,7 +39,10 @@ public class MainGame extends Game {
 	Preferences stats;
 	int stepCount;
 
-	// Textures for testing.
+	// Textures
+	private Texture imgBgHall;
+	private Texture imgBgBoss;
+	private Texture imgTopBar;
 	private Texture gamePlayer;
 	private Texture exampleSheet;
 	private Texture green;
@@ -101,6 +104,9 @@ public class MainGame extends Game {
 
 	public void loadTextures() {
 		// Added for testing.
+		imgBgHall = new Texture("bg_hall_blank.png");
+		imgBgBoss = new Texture("bg_hall_boss_blank.png");
+		imgTopBar = new Texture("topbar.png");
 		exampleSheet = new Texture("exampleanimation.png");
 		green = new Texture("green.png");
 		yellow = new Texture("enemy.png");
@@ -200,5 +206,17 @@ public class MainGame extends Game {
 
 	public I18NBundle getMyBundle() {
 		return myBundle;
+	}
+
+	public Texture getImgBgHall() {
+		return imgBgHall;
+	}
+
+	public Texture getImgBgBoss() {
+		return imgBgBoss;
+	}
+
+	public Texture getImgTopBar() {
+		return imgTopBar;
 	}
 }
