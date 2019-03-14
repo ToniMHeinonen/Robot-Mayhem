@@ -29,6 +29,7 @@ public class RoomParent implements Screen {
         this.skin = game.getSkin();
         Gdx.input.setInputProcessor(this.stage);
         this.backgroundMusic = game.getBackgroundMusic();
+        stage.clear();
     }
 
     @Override

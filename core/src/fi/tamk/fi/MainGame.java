@@ -31,6 +31,12 @@ public class MainGame extends Game {
 	private Skin skin;
 	private Music backgroundMusic;
 
+	//Rooms
+    RoomGame roomGame;
+    RoomTestailua roomTestailua;
+    // RoomFight roomFight;
+    RoomSettings roomSettings;
+
 	//Settings
 	Preferences settings;
 	private float musicVol;
@@ -60,9 +66,9 @@ public class MainGame extends Game {
 
 		loadTextures();
 
+        createRooms();
 		// Swith to first room
-		RoomSettings room = new RoomSettings(this);
-		setScreen(room);
+		setScreen(roomSettings);
 	}
 
 	@Override
@@ -79,6 +85,25 @@ public class MainGame extends Game {
 		backgroundMusic.dispose();
 		saveStats();
 	}
+
+	public void switchToRoomTestailua() {
+	    setScreen(roomTestailua);
+    }
+
+    public void switchToRoomSettings() {
+	    setScreen(roomSettings);
+    }
+
+    public void switchToRoomGame() {
+        setScreen(roomGame);
+    }
+
+    public void createRooms() {
+	    roomGame = new RoomGame(this);
+	    roomTestailua = new RoomTestailua(this);
+	    // roomFight = new RoomFight(this);
+	    roomSettings = new RoomSettings(this);
+    }
 
 	public void loadTextures() {
 		// Added for testing.

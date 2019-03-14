@@ -14,7 +14,6 @@ public class RoomSettings extends RoomParent {
     RoomSettings(MainGame game) {
         super(game);
         System.out.println(game.getMusicVol());
-        stage.clear();
         createNewFont();
         createButtonFight();
         createButtonGame();
@@ -52,7 +51,6 @@ public class RoomSettings extends RoomParent {
             public void clicked(InputEvent event, float x, float y){
                 RoomFight roomFight = new RoomFight(game);
                 game.setScreen(roomFight);
-                stage.clear();
             }
         });
     }
@@ -68,9 +66,7 @@ public class RoomSettings extends RoomParent {
         buttonFight.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                RoomGame room = new RoomGame(game);
-                game.setScreen(room);
-                stage.clear();
+                game.switchToRoomGame();
             }
         });
     }
@@ -119,18 +115,17 @@ public class RoomSettings extends RoomParent {
     }
 
     public void createButtonTestailua() {
-        final TextButton buttonGlobal = new TextButton("RoomTestailua", styleTest);
-        buttonGlobal.setWidth(300f);
-        buttonGlobal.setHeight(100f);
-        buttonGlobal.setPosition(game.pixelWidth /2 - buttonGlobal.getWidth() /2,
-                game.pixelHeight/3 * 2.5f - buttonGlobal.getHeight() /2);
-        stage.addActor(buttonGlobal);
+        final TextButton buttonTestailua = new TextButton("RoomTestailua", styleTest);
+        buttonTestailua.setWidth(300f);
+        buttonTestailua.setHeight(100f);
+        buttonTestailua.setPosition(game.pixelWidth /2 - buttonTestailua.getWidth() /2,
+                game.pixelHeight/3 * 2.5f - buttonTestailua.getHeight() /2);
+        stage.addActor(buttonTestailua);
 
-        buttonGlobal.addListener(new ClickListener(){
+        buttonTestailua.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                RoomTestailua room = new RoomTestailua(game);
-                game.setScreen(room);
+                game.switchToRoomTestailua();
             }
         });
     }
