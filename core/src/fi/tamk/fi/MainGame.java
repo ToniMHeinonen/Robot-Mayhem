@@ -5,6 +5,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -21,6 +22,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import java.util.Locale;
 
 import javax.xml.soap.Text;
+
+import static com.badlogic.gdx.graphics.Color.GRAY;
+import static com.badlogic.gdx.graphics.Color.rgb888ToColor;
 
 public class MainGame extends Game {
 	private SpriteBatch batch;
@@ -51,6 +55,8 @@ public class MainGame extends Game {
 	private Texture green;
 	private Texture yellow;
 	private Texture red;
+
+	//boolean haveWeChangedTheRoom;
 
 	//Image button (temporary)
 	private BitmapFont font;
@@ -92,22 +98,30 @@ public class MainGame extends Game {
 		saveStats();
 	}
 
+	boolean haveWeChangedTheRoom = false;
+
+	public void transition() { haveWeChangedTheRoom = true; }
+
 	public void switchToRoomTestailua() {
+		transition();
 	    RoomTestailua room = new RoomTestailua(this);
 	    setScreen(room);
     }
 
     public void switchToRoomSettings() {
+		transition();
 		RoomSettings room = new RoomSettings(this);
 		setScreen(room);
     }
 
     public void switchToRoomGame() {
+		transition();
 	    RoomGame room = new RoomGame(this);
         setScreen(room);
     }
 
     public void switchToRoomFight() {
+		transition();
 	    RoomFight room = new RoomFight(this);
 	    setScreen(room);
     }
