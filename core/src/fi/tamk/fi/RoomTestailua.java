@@ -8,7 +8,6 @@ public class RoomTestailua extends RoomParent {
 
     RoomTestailua(MainGame game) {
         super(game);
-        stage.clear();
         createButtonSettings();
         playMusic();
     }
@@ -29,8 +28,7 @@ public class RoomTestailua extends RoomParent {
         buttonSettings.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                RoomSettings roomSettings = new RoomSettings(game);
-                game.setScreen(roomSettings);
+                game.switchToRoomSettings();
             }
         });
     }
