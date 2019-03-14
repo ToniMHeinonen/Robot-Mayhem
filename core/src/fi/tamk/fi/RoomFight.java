@@ -29,8 +29,6 @@ import static fi.tamk.fi.MainGame.pixelWidth;
 import static javax.swing.text.html.HTML.Attribute.COLS;
 import static javax.swing.text.html.HTML.Attribute.ROWS;
 
-// I comment at least on things that are unclear to me.
-// I comment out lines of code that aren't functional yet.
 public class RoomFight extends RoomParent {
 
     private Texture imgBg;
