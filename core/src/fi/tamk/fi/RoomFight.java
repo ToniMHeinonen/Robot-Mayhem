@@ -44,6 +44,8 @@ public class RoomFight extends RoomParent {
 
         player = new Player();
         enemy = new Enemy();
+
+        createMenuButton();
     }
 
     @Override
@@ -52,6 +54,7 @@ public class RoomFight extends RoomParent {
 
         batch.begin();
         batch.draw(imgBg, 0,0, imgBg.getWidth(), imgBg.getHeight());
+        drawTopBar();
         player.update();
         enemy.update();
         batch.end();

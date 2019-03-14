@@ -8,10 +8,13 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -49,6 +52,12 @@ public class MainGame extends Game {
 	private Texture yellow;
 	private Texture red;
 
+	//Image button (temporary)
+	private BitmapFont font;
+	private TextureAtlas buttonsAtlas; //** image of buttons **//
+	private Skin buttonSkin; //** images are used as skins of the button **//
+	private TextButton.TextButtonStyle style;
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -57,6 +66,7 @@ public class MainGame extends Game {
 		createBundle();
 
 		createSkinAndStage();
+		createButtonFiles();
 		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("music/fansu_1.mp3"));
         loadSettings();
         loadStats();
@@ -101,6 +111,19 @@ public class MainGame extends Game {
 	    RoomFight room = new RoomFight(this);
 	    setScreen(room);
     }
+
+    public void createButtonFiles() {
+		buttonsAtlas = new TextureAtlas("test/button.pack"); //**button atlas image **//
+		buttonSkin = new Skin();
+		buttonSkin.addRegions(buttonsAtlas); //** skins for on and off **//
+		font = new BitmapFont(Gdx.files.internal("test/new.fnt"), false); //** font **//
+
+		style = new TextButton.TextButtonStyle(); //** Button properties **//
+		style.up = buttonSkin.getDrawable("buttonOff");
+		style.down = buttonSkin.getDrawable("buttonOn");
+
+		style.font = font;
+	}
 
 	public void loadTextures() {
 		imgBgHall = new Texture("texture/bg_hall_blank.png");
@@ -217,5 +240,9 @@ public class MainGame extends Game {
 
 	public Texture getImgTopBar() {
 		return imgTopBar;
+	}
+
+	public TextButton.TextButtonStyle getStyle() {
+		return style;
 	}
 }

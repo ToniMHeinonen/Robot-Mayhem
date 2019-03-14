@@ -5,11 +5,12 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class RoomGame extends RoomParent {
 
-    private Texture imgBG;
-    private Texture imgTopBar;
     private Player player;
     private int bgPos; // Background's position used by wrapping
     private float bgSpd; // Cur spd that the background is moving
@@ -17,16 +18,17 @@ public class RoomGame extends RoomParent {
     private final float maxSpd = 15f;
     private int curSteps;
 
-    RoomGame(MainGame game) {
+    RoomGame(final MainGame game) {
         super(game);
         curSteps = game.stepCount;
 
         player = new Player();
 
         // Wrapping enables looping
-        imgTopBar = game.getImgTopBar();
         imgBG = game.getImgBgHall();
         imgBG.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+
+        createMenuButton();
     }
 
     @Override
@@ -38,11 +40,8 @@ public class RoomGame extends RoomParent {
         drawTopBar();
         player.update();
         batch.end();
-    }
-
-    public void drawTopBar() {
-        batch.draw(imgTopBar, 0,game.pixelHeight - imgTopBar.getHeight(),
-                imgTopBar.getWidth(), imgTopBar.getHeight());
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
     }
 
     public void controlBackground() {
