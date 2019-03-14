@@ -9,12 +9,12 @@ public class RoomTestailua extends RoomParent {
     RoomTestailua(MainGame game) {
         super(game);
         createButtonSettings();
-        playMusic();
+        // playMusic();
     }
 
     public void playMusic() {
-        backgroundMusic.setVolume(game.getMusicVol());
-        backgroundMusic.play();
+        // backgroundMusic.setVolume(game.getMusicVol());
+        // backgroundMusic.play();
     }
 
     public void createButtonSettings() {

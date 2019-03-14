@@ -21,6 +21,7 @@ public class RoomSettings extends RoomParent {
         createButtonPlus();
         createButtonMinus();
         createButtonTestailua();
+        backgroundMusic.play();
     }
 
     @Override

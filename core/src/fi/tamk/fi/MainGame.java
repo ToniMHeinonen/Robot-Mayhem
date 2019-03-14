@@ -54,7 +54,7 @@ public class MainGame extends Game {
 		createBundle();
 
 		createSkinAndStage();
-		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("bgmusic.mp3"));
+		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("fansu_1.mp3"));
         loadSettings();
         loadStats();
 
