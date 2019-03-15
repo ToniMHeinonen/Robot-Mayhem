@@ -4,9 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class RoomGame extends RoomParent {
@@ -17,6 +20,9 @@ public class RoomGame extends RoomParent {
     private float bgAddSpd = 0.5f; // Amount to add every step
     private final float maxSpd = 15f;
     private int curSteps;
+
+    // Testing
+    int testSteps = 0;
 
     RoomGame(final MainGame game) {
         super(game);
@@ -29,6 +35,7 @@ public class RoomGame extends RoomParent {
         imgBG.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 
         createMenuButton();
+        createProgressBar();
     }
 
     @Override
@@ -38,15 +45,28 @@ public class RoomGame extends RoomParent {
         batch.begin();
         controlBackground();
         drawTopBar();
+        controlProgBar();
         player.update();
         batch.end();
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
 
+    public void controlProgBar() {
+        // For desktop
+        progressBar.setValue(testSteps);
+
+        // For android
+        // progressBar.setValue(curSteps);
+    }
+
     public void controlBackground() {
         // USE THIS TO TEST THE MOVEMENT
-        if( Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) bgSpd += bgAddSpd;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            bgSpd += bgAddSpd;
+            // testSteps are for testing in desktop
+            testSteps++;
+        }
 
         // Move every step
         if (curSteps != game.stepCount) {

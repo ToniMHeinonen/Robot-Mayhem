@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.I18NBundle;
@@ -58,6 +59,11 @@ public class MainGame extends Game {
 
 	//boolean haveWeChangedTheRoom;
 
+	//Progressbar
+    private TextureAtlas progBarAtlas;
+    private Skin progBarSkin;
+    private ProgressBar.ProgressBarStyle progBarStyle;
+
 	//Image button (temporary)
 	private BitmapFont font;
 	private TextureAtlas buttonsAtlas; //** image of buttons **//
@@ -73,6 +79,7 @@ public class MainGame extends Game {
 
 		createSkinAndStage();
 		createButtonFiles();
+		createProgressBarFiles();
 		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("music/fansu_1.mp3"));
         loadSettings();
         loadStats();
@@ -138,6 +145,16 @@ public class MainGame extends Game {
 
 		style.font = font;
 	}
+
+	public void createProgressBarFiles() {
+	    progBarAtlas = new TextureAtlas("progressbar/testpack.pack");
+	    progBarSkin = new Skin();
+	    progBarSkin.addRegions(progBarAtlas);
+
+	    progBarStyle = new ProgressBar.ProgressBarStyle();
+	    progBarStyle.knob = progBarSkin.getDrawable("test_robot");
+	    progBarStyle.background = progBarSkin.getDrawable("test_bg");
+    }
 
 	public void loadTextures() {
 		imgBgHall = new Texture("texture/bg_hall_blank.png");
@@ -259,4 +276,8 @@ public class MainGame extends Game {
 	public TextButton.TextButtonStyle getStyle() {
 		return style;
 	}
+
+    public ProgressBar.ProgressBarStyle getProgBarStyle() {
+        return progBarStyle;
+    }
 }

@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.I18NBundle;
@@ -25,6 +26,7 @@ public class RoomParent implements Screen {
     protected Stage stage;
     protected Skin skin;
     protected Music backgroundMusic;
+    protected ProgressBar progressBar;
     private boolean haveWeChangedTheRoom;
 
     protected TextButton button; //Temporary solution
@@ -108,6 +110,17 @@ public class RoomParent implements Screen {
         });
 
         stage.addActor(button);
+    }
+
+    public void createProgressBar() {
+        progressBar = new ProgressBar(0, 20, 1, false, game.getProgBarStyle());
+        progressBar.setWidth(400);
+        progressBar.setHeight(140);
+        progressBar.setBounds(game.pixelWidth / 2 - progressBar.getWidth() / 2,
+                game.pixelHeight - progressBar.getHeight(),
+                progressBar.getWidth(),
+                progressBar.getHeight());
+        stage.addActor(progressBar);
     }
 
     @Override
