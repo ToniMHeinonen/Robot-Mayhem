@@ -1,0 +1,19 @@
+
+testpack.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+test_bg
+  rotate: false
+  xy: 1, 1
+  size: 400, 57
+  orig: 400, 57
+  offset: 0, 0
+  index: -1
+test_robot
+  rotate: false
+  xy: 403, 1
+  size: 49, 57
+  orig: 49, 57
+  offset: 0, 0
+  index: -1
