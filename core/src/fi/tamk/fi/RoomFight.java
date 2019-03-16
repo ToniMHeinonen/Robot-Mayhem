@@ -59,7 +59,7 @@ public class RoomFight extends RoomParent {
 
         if (!game.haveWeChangedTheRoom) {
 
-            defaultColor();
+            //defaultColor(); This is not needed, since RoomParent already does this
 
             batch.begin();
             batch.draw(imgBg, 0,0, imgBg.getWidth(), imgBg.getHeight());

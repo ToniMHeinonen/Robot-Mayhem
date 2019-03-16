@@ -52,7 +52,7 @@ public class RoomGame extends RoomParent {
 
         if (!game.haveWeChangedTheRoom) {
 
-            defaultColor();
+            //defaultColor(); This is not needed, since RoomParent already does this
 
             batch.begin();
             controlBackground();
