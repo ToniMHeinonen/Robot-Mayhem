@@ -46,6 +46,7 @@ public class RoomGame extends RoomParent {
         controlBackground();
         drawTopBar();
         controlProgBar();
+        drawProgBarEnemy();
         player.update();
         batch.end();
         stage.act(Gdx.graphics.getDeltaTime());

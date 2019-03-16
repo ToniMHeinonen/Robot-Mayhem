@@ -56,6 +56,7 @@ public class MainGame extends Game {
 	private Texture green;
 	private Texture yellow;
 	private Texture red;
+    private Texture progBarEnemy;
 
 	//boolean haveWeChangedTheRoom;
 
@@ -165,6 +166,7 @@ public class MainGame extends Game {
 		yellow = new Texture("texture/enemy.png");
 		red = new Texture("texture/red.png");
 		gamePlayer = new Texture("texture/player.png");
+		progBarEnemy = new Texture("texture/progbar_enemy.png");
 	}
 
 	public void createBundle() {
@@ -272,6 +274,10 @@ public class MainGame extends Game {
 	public Texture getImgTopBar() {
 		return imgTopBar;
 	}
+
+	public Texture getProgBarEnemy() {
+	    return progBarEnemy;
+    }
 
 	public TextButton.TextButtonStyle getStyle() {
 		return style;

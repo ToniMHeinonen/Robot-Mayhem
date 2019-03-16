@@ -27,6 +27,7 @@ public class RoomParent implements Screen {
     protected Skin skin;
     protected Music backgroundMusic;
     protected ProgressBar progressBar;
+    protected Texture progBarEnemy;
     private boolean haveWeChangedTheRoom;
 
     protected TextButton button; //Temporary solution
@@ -40,6 +41,7 @@ public class RoomParent implements Screen {
         this.skin = game.getSkin();
         Gdx.input.setInputProcessor(this.stage);
         this.backgroundMusic = game.getBackgroundMusic();
+        progBarEnemy = game.getProgBarEnemy();
         stage.clear();
 
         imgTopBar = game.getImgTopBar();
@@ -121,6 +123,13 @@ public class RoomParent implements Screen {
                 progressBar.getWidth(),
                 progressBar.getHeight());
         stage.addActor(progressBar);
+    }
+
+    public void drawProgBarEnemy() {
+        batch.draw(progBarEnemy, progressBar.getX() + progressBar.getWidth() - 10,
+                progressBar.getY() + progressBar.getHeight() / 3.5f,
+                progBarEnemy.getWidth(),
+                progBarEnemy.getHeight());
     }
 
     @Override
