@@ -89,11 +89,6 @@ public class RoomParent implements Screen {
 
         if (transitionCounter <= 0) {
 
-            /* Actually, you don't even need this since every time you switch to another room,
-            timer resets since it creates everything in RoomParent again
-
-            transitionCounter++;
-             */
             game.haveWeChangedTheRoom = false;
         }
     }

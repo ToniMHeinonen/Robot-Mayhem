@@ -33,16 +33,7 @@ public class RoomFight extends RoomParent {
     public void render(float delta) {
         super.render(delta);
 
-        /* You can remove this, since it already runs in RoomParent
-        if (game.haveWeChangedTheRoom) {
-
-            transitionColor();
-            transitionUpdate();
-        }*/
-
         if (!game.haveWeChangedTheRoom) {
-
-            //defaultColor(); This is not needed, since RoomParent already does this
 
             batch.begin();
             batch.draw(imgBg, 0,0, imgBg.getWidth(), imgBg.getHeight());
