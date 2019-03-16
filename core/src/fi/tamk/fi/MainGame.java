@@ -57,6 +57,12 @@ public class MainGame extends Game {
 	private Texture yellow;
 	private Texture red;
     private Texture progBarEnemy;
+    private Texture playerIdle;
+    private Texture playerAttack;
+    private Texture playerDefend;
+    private Texture playerItem;
+    private Texture playerEscape;
+    private Texture playerHack;
 
 	//boolean haveWeChangedTheRoom;
 
@@ -169,6 +175,12 @@ public class MainGame extends Game {
 		red = new Texture("texture/red.png");
 		gamePlayer = new Texture("texture/player.png");
 		progBarEnemy = new Texture("texture/progbar_enemy.png");
+        playerIdle = new Texture("texture/playerIdle.png");
+        playerAttack = new Texture("texture/playerAttack.png");
+        playerDefend = new Texture("texture/playerDefend.png");
+        playerItem = new Texture("texture/playerItem.png");
+        playerEscape = new Texture("texture/playerEscape.png");
+        playerHack = new Texture("texture/playerHack.png");
 	}
 
 	public void createBundle() {
@@ -287,5 +299,29 @@ public class MainGame extends Game {
 
     public ProgressBar.ProgressBarStyle getProgBarStyle() {
         return progBarStyle;
+    }
+
+    public Texture getPlayerAttack() {
+        return playerAttack;
+    }
+
+    public Texture getPlayerDefend() {
+        return playerDefend;
+    }
+
+    public Texture getPlayerItem() {
+        return playerItem;
+    }
+
+    public Texture getPlayerEscape() {
+        return playerEscape;
+    }
+
+    public Texture getPlayerHack() {
+        return playerHack;
+    }
+
+    public Texture getPlayerIdle() {
+        return playerIdle;
     }
 }

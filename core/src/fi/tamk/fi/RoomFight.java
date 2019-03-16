@@ -38,12 +38,10 @@ public class RoomFight extends RoomParent {
     RoomFight(MainGame game) {
         super(game);
         imgBg = game.getImgBgBoss();
-        createActionButton();
+        createButtons();
 
         player = new Player();
         enemy = new Enemy();
-
-        createMenuButton();
     }
 
     @Override
@@ -73,8 +71,15 @@ public class RoomFight extends RoomParent {
         }
     }
 
-    public void createActionButton() {
-        final TextButton buttonSettings = new TextButton("Action!", skin);
+    private void createButtons() {
+        createAttackButton();
+
+
+        createMenuButton();
+    }
+
+    public void createAttackButton() {
+        final TextButton buttonSettings = new TextButton("Attack", skin);
         buttonSettings.setWidth(300f);
         buttonSettings.setHeight(100f);
         buttonSettings.setPosition(game.pixelWidth / 2 - buttonSettings.getWidth() / 2,
@@ -97,11 +102,12 @@ public class RoomFight extends RoomParent {
         private float Y;
         private Animating anim;
 
-        private Texture orange;
-        private Texture green;
-
-        private Animation<TextureRegion> orangemove;
-        private Animation<TextureRegion> greenmove;
+        private Animation<TextureRegion> idle;
+        private Animation<TextureRegion> attack;
+        private Animation<TextureRegion> defend;
+        private Animation<TextureRegion> escape;
+        private Animation<TextureRegion> item;
+        private Animation<TextureRegion> hack;
         boolean tempAnimation = false;
 
         Player() {
@@ -109,20 +115,22 @@ public class RoomFight extends RoomParent {
             Y = 200f;
             anim = new Animating();
 
-            orange = game.getOrangeTexture();
-            green = game.getGreenTexture();
+            idle = anim.createAnimation(game.getPlayerIdle(), 3, 1);
+            attack = anim.createAnimation(game.getPlayerAttack(), 3, 1);
+            defend = anim.createAnimation(game.getPlayerDefend(), 3, 1);
+            escape = anim.createAnimation(game.getPlayerEscape(), 3, 1);
+            item = anim.createAnimation(game.getPlayerItem(), 3, 1);
+            hack = anim.createAnimation(game.getPlayerHack(), 3, 1);
 
-            orangemove = anim.createAnimation(orange, 2, 1);
-            greenmove = anim.createAnimation(green, 2, 1);
-            anim.startAnimation(greenmove, 50);
+            anim.startAnimation(idle, 30);
         }
 
         public void update() {
             anim.animate();
 
             if (tempAnimation) {
-                if (orangemove.isAnimationFinished(anim.getStateTime())) {
-                    anim.startAnimation(greenmove, 50);
+                if (attack.isAnimationFinished(anim.getStateTime())) {
+                    anim.startAnimation(idle, 50);
                     tempAnimation = false;
                     enemy.counterAttack();
                 }
@@ -133,7 +141,7 @@ public class RoomFight extends RoomParent {
 
         public void attack() {
             tempAnimation = true;
-            anim.startAnimation(orangemove, 50);
+            anim.startAnimation(attack, 50);
         }
     }
 
