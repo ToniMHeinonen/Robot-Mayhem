@@ -50,15 +50,28 @@ public class RoomFight extends RoomParent {
     public void render(float delta) {
         super.render(delta);
 
-        batch.begin();
-        batch.draw(imgBg, 0,0, imgBg.getWidth(), imgBg.getHeight());
-        drawTopBar();
-        player.update();
-        enemy.update();
-        batch.end();
+        if (game.haveWeChangedTheRoom) {
 
-        stage.act(Gdx.graphics.getDeltaTime());
-        stage.draw();
+            Gdx.gl.glClearColor(0, 0, 0, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+            transitionUpdate();
+        }
+
+        if (!game.haveWeChangedTheRoom) {
+            Gdx.gl.glClearColor(1, 1, 1, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+            batch.begin();
+            batch.draw(imgBg, 0,0, imgBg.getWidth(), imgBg.getHeight());
+            drawTopBar();
+            player.update();
+            enemy.update();
+            batch.end();
+
+            stage.act(Gdx.graphics.getDeltaTime());
+            stage.draw();
+        }
     }
 
     public void createActionButton() {

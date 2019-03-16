@@ -81,7 +81,7 @@ public class RoomParent implements Screen {
         transitionCounter--;
 
         if (transitionCounter <= 0) {
-            
+
             transitionCounter++;
             game.haveWeChangedTheRoom = false;
         }
