@@ -28,7 +28,7 @@ public class RoomParent implements Screen {
     protected Music backgroundMusic;
     protected ProgressBar progressBar;
     protected Texture progBarEnemy;
-    private boolean haveWeChangedTheRoom;
+    private int transitionCounter = 20;
 
     protected TextButton button; //Temporary solution
 
@@ -51,8 +51,6 @@ public class RoomParent implements Screen {
     public void show() {
 
     }
-
-    int transitionCounter = 20;
 
     @Override
     public void render(float delta) {
@@ -92,7 +90,11 @@ public class RoomParent implements Screen {
 
         if (transitionCounter <= 0) {
 
+            /* Actually, you don't even need this since every time you switch to another room,
+            timer resets since it creates everything in RoomParent again
+
             transitionCounter++;
+             */
             game.haveWeChangedTheRoom = false;
         }
     }
@@ -107,14 +109,10 @@ public class RoomParent implements Screen {
         button.setPosition(game.pixelWidth - button.getWidth()/2 - 100, game.pixelHeight - 120);
         button.addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.log("my app", "Pressed"); //** Usually used to start Game, etc. **//
-
                 return true;
-
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.log("my app", "Rggggggeleased");
                 game.switchToRoomSettings();
             }
         });

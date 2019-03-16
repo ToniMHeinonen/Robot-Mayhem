@@ -43,11 +43,12 @@ public class RoomGame extends RoomParent {
     public void render(float delta) {
         super.render(delta);
 
+        /* You can remove this, since it already runs in RoomParent
         if (game.haveWeChangedTheRoom) {
 
             transitionColor();
             transitionUpdate();
-        }
+        }*/
 
         if (!game.haveWeChangedTheRoom) {
 
