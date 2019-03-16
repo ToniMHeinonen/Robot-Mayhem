@@ -79,16 +79,11 @@ public class RoomParent implements Screen {
     public void transitionUpdate() {
 
         transitionCounter--;
-        System.out.println(transitionCounter);
 
         if (transitionCounter <= 0) {
-
-            Gdx.gl.glClearColor(1, 1, 1, 1);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            
             transitionCounter++;
-
             game.haveWeChangedTheRoom = false;
-            System.out.println("It should be false.");
         }
     }
 
