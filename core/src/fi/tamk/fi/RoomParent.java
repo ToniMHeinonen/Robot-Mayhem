@@ -18,8 +18,7 @@ import com.badlogic.gdx.utils.I18NBundle;
 
 public class RoomParent implements Screen {
     protected SpriteBatch batch;
-    protected Texture imgBG;
-    protected Texture imgTopBar;
+    protected Texture imgBG, imgTopBar;
     protected I18NBundle myBundle;
     protected MainGame game;
     protected OrthographicCamera camera;

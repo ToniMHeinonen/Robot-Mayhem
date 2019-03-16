@@ -11,13 +11,10 @@ public class Animating {
     private TextureRegion[] frames;
     private Animation<TextureRegion> animation;
     private TextureRegion currentFrame;
-    private int frameCols;
-    private int frameRows;
-    private int frameSpeed;
+    private int frameCols, frameRows, frameSpeed;
     private float stateTime = 0.0f;
 
-    private float width;
-    private float height;
+    private float width, height;
 
     //Create animations with this when at the start
     public Animation<TextureRegion> createAnimation(Texture image, int cols, int rows) {

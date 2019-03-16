@@ -48,23 +48,8 @@ public class MainGame extends Game {
 	int stepCount;
 
 	// Textures
-	private Texture imgBgHall;
-	private Texture imgBgBoss;
-	private Texture imgTopBar;
-	private Texture gamePlayer;
-	private Texture exampleSheet;
-	private Texture green;
-	private Texture yellow;
-	private Texture red;
-    private Texture progBarEnemy;
-    private Texture playerIdle;
-    private Texture playerAttack;
-    private Texture playerDefend;
-    private Texture playerItem;
-    private Texture playerEscape;
-    private Texture playerHack;
-
-	//boolean haveWeChangedTheRoom;
+	private Texture imgBgHall, imgBgBoss, imgTopBar, gamePlayer, progBarEnemy, playerIdle,
+			playerAttack, playerDefend, playerItem, playerEscape, playerHack, yellow, red;
 
 	//Progressbar
     private TextureAtlas progBarAtlas;
@@ -169,8 +154,6 @@ public class MainGame extends Game {
 		imgBgHall = new Texture("texture/bg_hall_blank.png");
 		imgBgBoss = new Texture("texture/bg_hall_boss_blank.png");
 		imgTopBar = new Texture("texture/topbar.png");
-		exampleSheet = new Texture("texture/exampleanimation.png");
-		green = new Texture("texture/green.png");
 		yellow = new Texture("texture/enemy.png");
 		red = new Texture("texture/red.png");
 		gamePlayer = new Texture("texture/player.png");
@@ -194,12 +177,6 @@ public class MainGame extends Game {
 		String str = myBundle.get("test");
 		System.out.println(str);
 	}
-
-	// Added for testing.
-	public Texture getOrangeTexture() { return exampleSheet;}
-	public Texture getGreenTexture() { return green;}
-	public Texture getYellowTexture() { return yellow;}
-	public Texture getRedTexture() { return red;}
 
     public void loadSettings() {
 		settings = Gdx.app.getPreferences("Robot_Mayhem_Settings");
@@ -324,4 +301,8 @@ public class MainGame extends Game {
     public Texture getPlayerIdle() {
         return playerIdle;
     }
+
+	public Texture getYellowTexture() { return yellow;}
+
+	public Texture getRedTexture() { return red;}
 }
