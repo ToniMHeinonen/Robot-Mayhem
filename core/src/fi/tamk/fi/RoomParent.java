@@ -61,19 +61,29 @@ public class RoomParent implements Screen {
 
         if (game.haveWeChangedTheRoom) {
 
-            Gdx.gl.glClearColor(0, 0, 0, 1);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+            transitionColor();
             transitionUpdate();
         }
 
         if (!game.haveWeChangedTheRoom) {
-            Gdx.gl.glClearColor(1, 1, 1, 1);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+            defaultColor();
 
             stage.act(Gdx.graphics.getDeltaTime());
             stage.draw();
         }
+    }
+
+    public void transitionColor() {
+
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    }
+
+    public void defaultColor() {
+
+        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
     public void transitionUpdate() {
