@@ -122,12 +122,14 @@ public class MainGame extends Game {
 		setScreen(room);
     }
 
+    // Transition doesn't work here yet.
     public void switchToRoomGame() {
 		transition();
 	    RoomGame room = new RoomGame(this);
         setScreen(room);
     }
 
+	// Transition doesn't work here yet.
     public void switchToRoomFight() {
 		transition();
 	    RoomFight room = new RoomFight(this);

@@ -52,41 +52,44 @@ public class RoomParent implements Screen {
 
     }
 
+    int transitionCounter = 20;
+
     @Override
     public void render(float delta) {
 
         batch.setProjectionMatrix(camera.combined);
 
-        // Will not change color yet.
         if (game.haveWeChangedTheRoom) {
 
+            Gdx.gl.glClearColor(0, 0, 0, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+            transitionUpdate();
+        }
+
+        if (!game.haveWeChangedTheRoom) {
             Gdx.gl.glClearColor(1, 1, 1, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-            Thread thread = new Thread();
-            thread.start();
-
-            System.out.println("Thread");
-
-            try {
-                Thread.sleep(1);
-            } catch(Exception e) { }
-
-            haveWeChangedTheRoom = false;
-
-            /*if (!haveWeChangedTheRoom) {
-
-                Gdx.gl.glClearColor(0, 0, 1, 1);
-                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            }*/
-
-        } else {
-            Gdx.gl.glClearColor(0, 0, 0, 1);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            stage.act(Gdx.graphics.getDeltaTime());
+            stage.draw();
         }
+    }
 
-        stage.act(Gdx.graphics.getDeltaTime());
-        stage.draw();
+    public void transitionUpdate() {
+
+        transitionCounter--;
+        System.out.println(transitionCounter);
+
+        if (transitionCounter <= 0) {
+
+            Gdx.gl.glClearColor(1, 1, 1, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            transitionCounter++;
+
+            game.haveWeChangedTheRoom = false;
+            System.out.println("It should be false.");
+        }
     }
 
     public void drawTopBar() {
