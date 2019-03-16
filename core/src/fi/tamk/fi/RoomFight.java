@@ -1,39 +1,23 @@
 package fi.tamk.fi;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import javax.xml.soap.Text;
-
-import static com.badlogic.gdx.Input.Keys.X;
-import static com.badlogic.gdx.Input.Keys.Y;
-import static fi.tamk.fi.MainGame.pixelHeight;
-import static fi.tamk.fi.MainGame.pixelWidth;
-
-import static javax.swing.text.html.HTML.Attribute.COLS;
-import static javax.swing.text.html.HTML.Attribute.ROWS;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class RoomFight extends RoomParent {
 
     private Texture imgBg;
     private Player player;
     private Enemy enemy;
+    private String[] btnTexts = new String[] {"Attack", "Defend", "Escape", "Item", "Hack"};
+    private int btnCounter;
 
     RoomFight(MainGame game) {
         super(game);
@@ -42,6 +26,7 @@ public class RoomFight extends RoomParent {
 
         player = new Player();
         enemy = new Enemy();
+        createMenuButton();
     }
 
     @Override
@@ -72,26 +57,24 @@ public class RoomFight extends RoomParent {
     }
 
     private void createButtons() {
-        createAttackButton();
+        float space = 150f;
+        for (int i = 0; i < btnTexts.length; i++) {
+            btnCounter = i;
+            final TextButton btn = new TextButton(btnTexts[i], skin);
+            btn.setWidth(300);
+            btn.setHeight(100);
+            btn.setPosition(game.pixelWidth / 2 - btn.getWidth() / 2,
+                    game.pixelHeight - 300f - space*i);
+            stage.addActor(btn);
 
-
-        createMenuButton();
-    }
-
-    public void createAttackButton() {
-        final TextButton buttonSettings = new TextButton("Attack", skin);
-        buttonSettings.setWidth(300f);
-        buttonSettings.setHeight(100f);
-        buttonSettings.setPosition(game.pixelWidth / 2 - buttonSettings.getWidth() / 2,
-                (game.pixelHeight / 3) * 2 - buttonSettings.getHeight() / 2);
-        stage.addActor(buttonSettings);
-
-        buttonSettings.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                player.attack();
-            }
-        });
+            btn.addListener(new ClickListener() {
+                int i = btnCounter;
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if (player.readyToAct) player.doAction(i);
+                }
+            });
+        }
     }
 
     /*
@@ -102,13 +85,13 @@ public class RoomFight extends RoomParent {
         private float Y;
         private Animating anim;
 
-        private Animation<TextureRegion> idle;
-        private Animation<TextureRegion> attack;
-        private Animation<TextureRegion> defend;
-        private Animation<TextureRegion> escape;
-        private Animation<TextureRegion> item;
-        private Animation<TextureRegion> hack;
+        private Animation<TextureRegion> curAnimation, idle, attack, defend, escape, item, hack;
+
         boolean tempAnimation = false;
+        boolean readyToAct = true;
+
+        private ArrayList<Animation<TextureRegion>> animList;
+        private Integer[] speeds;
 
         Player() {
             X = 100;
@@ -122,6 +105,10 @@ public class RoomFight extends RoomParent {
             item = anim.createAnimation(game.getPlayerItem(), 3, 1);
             hack = anim.createAnimation(game.getPlayerHack(), 3, 1);
 
+            animList = new ArrayList<Animation<TextureRegion>>();
+            Collections.addAll(animList, attack, defend, escape, item, hack);
+            speeds = new Integer[] {30, 30, 30, 30, 30};
+
             anim.startAnimation(idle, 30);
         }
 
@@ -129,8 +116,8 @@ public class RoomFight extends RoomParent {
             anim.animate();
 
             if (tempAnimation) {
-                if (attack.isAnimationFinished(anim.getStateTime())) {
-                    anim.startAnimation(idle, 50);
+                if (curAnimation.isAnimationFinished(anim.getStateTime())) {
+                    anim.startAnimation(idle, 30);
                     tempAnimation = false;
                     enemy.counterAttack();
                 }
@@ -139,9 +126,11 @@ public class RoomFight extends RoomParent {
             anim.draw(batch, X, Y);
         }
 
-        public void attack() {
+        public void doAction(int index) {
             tempAnimation = true;
-            anim.startAnimation(attack, 50);
+            readyToAct = false;
+            curAnimation = animList.get(index);
+            anim.startAnimation(curAnimation, speeds[index]);
         }
     }
 
@@ -181,6 +170,7 @@ public class RoomFight extends RoomParent {
                 if (redmove.isAnimationFinished(anim.getStateTime())) {
                     anim.startAnimation(yellowmove, 50);
                     tempAnimation = false;
+                    player.readyToAct = true;
                 }
             }
 
