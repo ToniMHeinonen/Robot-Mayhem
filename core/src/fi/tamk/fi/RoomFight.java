@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import java.util.ArrayList;
 import java.util.Collections;
 
+// Enums gives simple constants, which decrease the change for coding mistakes
 enum State {
     AWAITING,
     ACTION,
@@ -141,6 +142,8 @@ public class RoomFight extends RoomParent {
             updateStart();
 
             if (state == State.ACTION) {
+                // If temporary animation currently on, wait for it to finish,
+                // else give turn to enemy
                 if (tempAnimation) {
                     if (curAnimation.isAnimationFinished(anim.getStateTime())) {
                         startIdle();
@@ -150,7 +153,7 @@ public class RoomFight extends RoomParent {
                     state = State.ENEMY;
                 }
             } else if (state == State.AWAITING) {
-                if (anim.getAnimation() != idle) anim.startAnimation(idle, 30);
+                if (anim.getAnimation() != idle) startIdle();
             }
 
             updateEnd();
@@ -213,6 +216,7 @@ public class RoomFight extends RoomParent {
 
         public void attack() {
             if (state == State.ENEMY) {
+                // Wait for timer to go down, then select action
                 if (actionTimer > 0) {
                     actionTimer--;
                 } else if (!tempAnimation) {
