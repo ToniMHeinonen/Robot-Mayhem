@@ -4,12 +4,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
+enum State {
+    AWAITING,
+    ACTION,
+    ENEMY,
+    HACK
+}
 
 public class RoomFight extends RoomParent {
 
@@ -18,6 +26,7 @@ public class RoomFight extends RoomParent {
     private Enemy enemy;
     private String[] btnTexts = new String[] {"Attack", "Defend", "Escape", "Item", "Hack"};
     private int btnCounter;
+    private State state = State.AWAITING;
 
     RoomFight(MainGame game) {
         super(game);
@@ -62,32 +71,57 @@ public class RoomFight extends RoomParent {
                 int i = btnCounter;
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if (player.readyToAct) player.doAction(i);
+                    if (state == State.AWAITING) {
+                        state = State.ACTION;
+                        player.doAction(i);
+                    }
                 }
             });
         }
     }
 
     /*
+    CREATE PARENT FIGHTER
+     */
+    private class Fighters {
+        protected float X;
+        protected float Y;
+        protected int hp;
+        protected Animating anim = new Animating();
+
+        protected boolean tempAnimation = false;
+
+        protected int idleSpd;
+        protected Animation<TextureRegion> curAnimation, idle;
+        protected ArrayList<Animation<TextureRegion>> animList;
+        protected Integer[] speeds;
+
+        public void updateStart() {
+            anim.animate();
+        }
+
+        public void updateEnd() {
+            anim.draw(batch, X, Y);
+        }
+
+        public void startIdle() {
+            anim.startAnimation(idle, 30);
+            tempAnimation = false;
+        }
+    }
+
+    /*
     CREATE PLAYER
      */
-    private class Player {
-        private float X;
-        private float Y;
-        private Animating anim;
+    private class Player extends Fighters {
 
-        private Animation<TextureRegion> curAnimation, idle, attack, defend, escape, item, hack;
-
-        boolean tempAnimation = false;
-        boolean readyToAct = true;
-
-        private ArrayList<Animation<TextureRegion>> animList;
-        private Integer[] speeds;
+        private Animation<TextureRegion> attack, defend, escape, item, hack;
 
         Player() {
-            X = 100;
+            X = 100f;
             Y = 200f;
-            anim = new Animating();
+            hp = 10;
+            idleSpd = 30;
 
             idle = anim.createAnimation(game.getPlayerIdle(), 3, 1);
             attack = anim.createAnimation(game.getPlayerAttack(), 3, 1);
@@ -100,27 +134,34 @@ public class RoomFight extends RoomParent {
             Collections.addAll(animList, attack, defend, escape, item, hack);
             speeds = new Integer[] {30, 30, 30, 30, 30};
 
-            anim.startAnimation(idle, 30);
+            anim.startAnimation(idle, idleSpd);
         }
 
         public void update() {
-            anim.animate();
+            updateStart();
 
-            if (tempAnimation) {
-                if (curAnimation.isAnimationFinished(anim.getStateTime())) {
-                    anim.startAnimation(idle, 30);
-                    tempAnimation = false;
-                    enemy.counterAttack();
+            if (state == State.ACTION) {
+                if (tempAnimation) {
+                    if (curAnimation.isAnimationFinished(anim.getStateTime())) {
+                        startIdle();
+                        state = State.ENEMY;
+                    }
+                } else {
+                    state = State.ENEMY;
                 }
+            } else if (state == State.AWAITING) {
+                if (anim.getAnimation() != idle) anim.startAnimation(idle, 30);
             }
 
-            anim.draw(batch, X, Y);
+            updateEnd();
         }
 
         public void doAction(int index) {
-            tempAnimation = true;
-            readyToAct = false;
             curAnimation = animList.get(index);
+            //If defend, then it's not temporary
+            if (curAnimation != defend) {
+                tempAnimation = true;
+            }
             anim.startAnimation(curAnimation, speeds[index]);
         }
     }
@@ -128,49 +169,59 @@ public class RoomFight extends RoomParent {
     /*
     CREATE ENEMY
      */
-    private class Enemy {
-        private float X;
-        private float Y;
-        private Animating anim;
+    private class Enemy extends Fighters {
 
-        private Animation<TextureRegion> yellowmove;
-        private Animation<TextureRegion> redmove;
-        boolean tempAnimation = false;
+        private Animation<TextureRegion> attack1, attack2, attack3;
 
-        private Texture yellow;
-        private Texture red;
+        private int actionDelay = 30;
+        private int actionTimer = actionDelay;
 
         Enemy() {
 
-            X = game.pixelWidth - 300;
+            X = game.pixelWidth - 100f - game.getEnemyIdle().getWidth()/3;
             Y = 200f;
-            anim = new Animating();
+            hp = 5;
+            idleSpd = 30;
 
-            red = game.getRedTexture();
-            yellow = game.getYellowTexture();
+            idle = anim.createAnimation(game.getEnemyIdle(), 3, 1);
+            attack1 = anim.createAnimation(game.getEnemyAttack1(), 3, 1);
+            attack2 = anim.createAnimation(game.getEnemyAttack2(), 3, 1);
+            attack3 = anim.createAnimation(game.getEnemyAttack3(), 3, 1);
 
-            redmove = anim.createAnimation(red, 2, 1);
-            yellowmove = anim.createAnimation(yellow, 2, 1);
-            anim.startAnimation(yellowmove, 50);
+            animList = new ArrayList<Animation<TextureRegion>>();
+            Collections.addAll(animList, attack1, attack2, attack3);
+            speeds = new Integer[] {30, 30, 30,};
+
+            anim.startAnimation(idle, idleSpd);
         }
 
         public void update() {
-            anim.animate();
+            updateStart();
+
+            attack();
 
             if (tempAnimation) {
-                if (redmove.isAnimationFinished(anim.getStateTime())) {
-                    anim.startAnimation(yellowmove, 50);
-                    tempAnimation = false;
-                    player.readyToAct = true;
+                if (curAnimation.isAnimationFinished(anim.getStateTime())) {
+                    startIdle();
+                    actionTimer = actionDelay;
+                    state = State.AWAITING;
                 }
             }
 
-            anim.draw(batch, X, Y);
+            updateEnd();
         }
 
-        public void counterAttack() {
-            tempAnimation = true;
-            anim.startAnimation(redmove, 50);
+        public void attack() {
+            if (state == State.ENEMY) {
+                if (actionTimer > 0) {
+                    actionTimer--;
+                } else if (!tempAnimation) {
+                    tempAnimation = true;
+                    int randomAction = MathUtils.random(0, animList.size()-1);
+                    curAnimation = animList.get(randomAction);
+                    anim.startAnimation(curAnimation, speeds[randomAction]);
+                }
+            }
         }
     }
 }

@@ -80,4 +80,8 @@ public class Animating {
     public void setStateTime(float stateTime) {
         this.stateTime = stateTime;
     }
+
+    public Animation<TextureRegion> getAnimation() {
+        return animation;
+    }
 }

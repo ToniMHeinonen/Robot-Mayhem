@@ -49,7 +49,8 @@ public class MainGame extends Game {
 
 	// Textures
 	private Texture imgBgHall, imgBgBoss, imgTopBar, gamePlayer, progBarEnemy, playerIdle,
-			playerAttack, playerDefend, playerItem, playerEscape, playerHack, yellow, red;
+			playerAttack, playerDefend, playerItem, playerEscape, playerHack, yellow, red,
+			enemyIdle, enemyAttack1, enemyAttack2, enemyAttack3;
 
 	//Progressbar
     private TextureAtlas progBarAtlas;
@@ -164,6 +165,10 @@ public class MainGame extends Game {
         playerItem = new Texture("texture/playerItem.png");
         playerEscape = new Texture("texture/playerEscape.png");
         playerHack = new Texture("texture/playerHack.png");
+		enemyIdle = new Texture("texture/enemyIdle.png");
+		enemyAttack1 = new Texture("texture/enemyAttack1.png");
+		enemyAttack2 = new Texture("texture/enemyAttack2.png");
+		enemyAttack3 = new Texture("texture/enemyAttack3.png");
 	}
 
 	public void createBundle() {
@@ -305,4 +310,20 @@ public class MainGame extends Game {
 	public Texture getYellowTexture() { return yellow;}
 
 	public Texture getRedTexture() { return red;}
+
+	public Texture getEnemyIdle() {
+		return enemyIdle;
+	}
+
+	public Texture getEnemyAttack1() {
+		return enemyAttack1;
+	}
+
+	public Texture getEnemyAttack2() {
+		return enemyAttack2;
+	}
+
+	public Texture getEnemyAttack3() {
+		return enemyAttack3;
+	}
 }
