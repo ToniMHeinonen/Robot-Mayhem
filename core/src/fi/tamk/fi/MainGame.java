@@ -51,7 +51,7 @@ public class MainGame extends Game {
 	// Textures
 	private Texture imgBgHall, imgBgBoss, imgTopBar, gamePlayer, progBarEnemy, playerIdle,
 			playerAttack, playerDefend, playerItem, playerEscape, playerHack, playerDeath,
-			enemyIdle, enemyAttack1, enemyAttack2, enemyAttack3, enemyHack;
+			enemyIdle, enemyAttack1, enemyAttack2, enemyAttack3, enemyHack, escapeBg;
 
 	//Stepmeter in RoomGame
     private BitmapFont fontSteps;
@@ -181,6 +181,7 @@ public class MainGame extends Game {
 		enemyAttack2 = new Texture("texture/enemy/enemyAttack2.png");
 		enemyAttack3 = new Texture("texture/enemy/enemyAttack3.png");
 		enemyHack = new Texture("texture/enemy/enemyHack.png");
+		escapeBg = new Texture("texture/escapeBackground.png");
 	}
 
 	public void createBundle() {
@@ -349,5 +350,9 @@ public class MainGame extends Game {
 
 	public Texture getPlayerDeath() {
 		return playerDeath;
+	}
+
+	public Texture getEscapeBg() {
+		return escapeBg;
 	}
 }

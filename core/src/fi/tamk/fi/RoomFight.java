@@ -6,40 +6,43 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-// Enums gives simple constants, which decrease the change for coding mistakes
+// Enums give simple constants, which decreases the chance for coding mistakes
 enum State {
     AWAITING,
     ACTION,
     ENEMY_WAITING,
     ENEMY_ACTION,
     HACK,
-    DEAD
+    DEAD,
+    ESCAPE
 }
 
 public class RoomFight extends RoomParent {
 
-    private Texture imgBg;
+    private Texture imgBg, escapeBg;
     private Player player;
     private Enemy enemy;
-    private String[] btnTexts = new String[] {"Attack", "Defend", "Escape", "Item"};
+    private String[] btnTexts = new String[] {"Attack", "Defend", "Item"};
     private int btnCounter;
     private int deathTimer = 240;
     private State state = State.AWAITING;
+    private boolean escapePopup;
 
     RoomFight(MainGame game) {
         super(game);
         imgBg = game.getImgBgBoss();
+        escapeBg = game.getEscapeBg();
         createButtons();
 
         player = new Player();
         enemy = new Enemy();
-        createMenuButton();
         backgroundMusic.pause();
         bossMusic.play();
     }
@@ -55,11 +58,11 @@ public class RoomFight extends RoomParent {
             drawTopBar();
             player.update();
             enemy.update();
+            escaping();
             batch.end();
 
             stage.act(Gdx.graphics.getDeltaTime());
             stage.draw();
-
             death();
         }
     }
@@ -71,6 +74,12 @@ public class RoomFight extends RoomParent {
     }
 
     private void createButtons() {
+        createMenuButton();
+        createEscapeButton();
+        createActionButtons();
+    }
+
+    private void createActionButtons() {
         float space = 150f;
         for (int i = 0; i < btnTexts.length; i++) {
             btnCounter = i;
@@ -104,6 +113,67 @@ public class RoomFight extends RoomParent {
         }
     }
 
+    private void escaping() {
+        if (escapePopup) {
+            batch.draw(escapeBg, game.pixelWidth/2 - escapeBg.getWidth()/2,
+                    game.pixelHeight/2 - escapeBg.getHeight()/2,
+                    escapeBg.getWidth(), escapeBg.getHeight());
+            // Temporary font and position, just for testing
+            fontSteps.draw(batch, "Do you want to escape?",
+                    game.pixelWidth/2 - 400, game.pixelHeight/2 + 150);
+        }
+    }
+
+    public void createEscapeButton() {
+        final TextButton btn = new TextButton("Escape", skin);
+        btn.setWidth(300);
+        btn.setHeight(100);
+        btn.setPosition(100f, game.pixelHeight - 100f);
+        stage.addActor(btn);
+
+        btn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (!escapePopup) {
+                    escapePopup = true;
+                    stage.clear();
+                    createYesNo();
+                }
+            }
+        });
+    }
+
+    private void createYesNo() {
+        final TextButton btn = new TextButton("Yes", skin);
+        btn.setWidth(300);
+        btn.setHeight(100);
+        btn.setPosition(game.pixelWidth/2 - btn.getWidth()/2, game.pixelHeight/2 - 50);
+        stage.addActor(btn);
+
+        btn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                state = State.ESCAPE;
+                stage.clear();
+            }
+        });
+
+        final TextButton btn2 = new TextButton("No", skin);
+        btn2.setWidth(300);
+        btn2.setHeight(100);
+        btn2.setPosition(game.pixelWidth/2 - btn2.getWidth()/2, game.pixelHeight/2 - 175);
+        stage.addActor(btn2);
+
+        btn2.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                escapePopup = false;
+                stage.clear();
+                createButtons();
+            }
+        });
+    }
+
     /*
     CREATE PARENT FIGHTER
      */
@@ -117,7 +187,7 @@ public class RoomFight extends RoomParent {
 
         protected boolean tempAnimation = false;
 
-        protected int idleSpd, hackSpd, deathSpd;
+        protected int idleSpd, hackSpd, deathSpd, escapeSpd;
         protected Animation<TextureRegion> curAnimation, idle, hack;
         protected ArrayList<Animation<TextureRegion>> animList;
         protected Integer[] speeds;
@@ -162,6 +232,7 @@ public class RoomFight extends RoomParent {
             idleSpd = 30;
             hackSpd = 30;
             deathSpd = 30;
+            escapeSpd = 10;
 
             idle = anim.createAnimation(game.getPlayerIdle(), 3, 1);
             attack = anim.createAnimation(game.getPlayerAttack(), 3, 1);
@@ -172,7 +243,7 @@ public class RoomFight extends RoomParent {
             death = anim.createAnimation(game.getPlayerDeath(), 3, 1);
 
             animList = new ArrayList<Animation<TextureRegion>>();
-            Collections.addAll(animList, attack, defend, escape, item);
+            Collections.addAll(animList, attack, defend, item);
             speeds = new Integer[] {30, 30, 30, 30, 30};
 
             anim.startAnimation(idle, idleSpd);
@@ -202,7 +273,9 @@ public class RoomFight extends RoomParent {
             } else if (state == State.HACK) {
                 if (anim.getAnimation() != hack) startHack();
             } else if (state == State.DEAD) {
-                if (anim.getAnimation() != death) startDeath();
+                if (anim.getAnimation() != death) anim.startAnimation(death, deathSpd);
+            } else if (state == State.ESCAPE) {
+                runAway();
             }
 
             updateEnd();
@@ -229,9 +302,14 @@ public class RoomFight extends RoomParent {
             }
         }
 
-        public void startDeath() {
-            anim.startAnimation(death, deathSpd);
-            tempAnimation = false;
+        private void runAway() {
+            if (anim.getAnimation() != escape) anim.startAnimation(escape, escapeSpd);
+
+            if (X > - 400) {
+                X -= Gdx.graphics.getDeltaTime() * 150f;
+            } else {
+                game.switchToRoomGame();
+            }
         }
     }
 
@@ -245,7 +323,7 @@ public class RoomFight extends RoomParent {
         private int actionDelay = 30;
         private int actionTimer = actionDelay;
 
-        private double[] dmgPercents;
+        private double[] dmgMultiplier;
 
         Enemy() {
 
@@ -256,7 +334,7 @@ public class RoomFight extends RoomParent {
             idleSpd = 30;
             hackSpd = 30;
 
-            dmgPercents = new double[] {1, 1.5, 2};
+            dmgMultiplier = new double[] {1, 1.5, 2};
 
             idle = anim.createAnimation(game.getEnemyIdle(), 3, 1);
             attack1 = anim.createAnimation(game.getEnemyAttack1(), 3, 1);
@@ -299,7 +377,7 @@ public class RoomFight extends RoomParent {
                         tempAnimation = true;
                         int random = MathUtils.random(0, animList.size() - 1);
                         curAnimation = animList.get(random);
-                        dmgAmount = damage * dmgPercents[random];
+                        dmgAmount = damage * dmgMultiplier[random];
                         anim.startAnimation(curAnimation, speeds[random]);
                     } else {
                         state = State.HACK;
