@@ -1,0 +1,47 @@
+
+testbuttons.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+button_attack
+  rotate: false
+  xy: 1, 123
+  size: 240, 120
+  orig: 240, 120
+  offset: 0, 0
+  index: -1
+button_attack_clicked
+  rotate: false
+  xy: 1, 1
+  size: 240, 120
+  orig: 240, 120
+  offset: 0, 0
+  index: -1
+button_attack_off
+  rotate: false
+  xy: 243, 123
+  size: 240, 120
+  orig: 240, 120
+  offset: 0, 0
+  index: -1
+button_shield
+  rotate: false
+  xy: 243, 1
+  size: 240, 120
+  orig: 240, 120
+  offset: 0, 0
+  index: -1
+button_shield_clicked
+  rotate: false
+  xy: 485, 123
+  size: 240, 120
+  orig: 240, 120
+  offset: 0, 0
+  index: -1
+button_shield_off
+  rotate: false
+  xy: 485, 1
+  size: 240, 120
+  orig: 240, 120
+  offset: 0, 0
+  index: -1
