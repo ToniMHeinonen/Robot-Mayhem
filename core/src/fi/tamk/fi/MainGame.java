@@ -50,8 +50,8 @@ public class MainGame extends Game {
 
 	// Textures
 	private Texture imgBgHall, imgBgBoss, imgTopBar, gamePlayer, progBarEnemy, playerIdle,
-			playerAttack, playerDefend, playerItem, playerEscape, playerHack, yellow, red,
-			enemyIdle, enemyAttack1, enemyAttack2, enemyAttack3;
+			playerAttack, playerDefend, playerItem, playerEscape, playerHack, playerDeath,
+			enemyIdle, enemyAttack1, enemyAttack2, enemyAttack3, enemyHack;
 
 	//Stepmeter in RoomGame
     private BitmapFont fontSteps;
@@ -167,20 +167,20 @@ public class MainGame extends Game {
 		imgBgHall = new Texture("texture/bg_hall_blank.png");
 		imgBgBoss = new Texture("texture/bg_hall_boss_blank.png");
 		imgTopBar = new Texture("texture/topbar.png");
-		yellow = new Texture("texture/enemy.png");
-		red = new Texture("texture/red.png");
-		gamePlayer = new Texture("texture/player.png");
+		gamePlayer = new Texture("texture/player/player.png");
 		progBarEnemy = new Texture("texture/progbar_enemy.png");
-        playerIdle = new Texture("texture/playerIdle.png");
-        playerAttack = new Texture("texture/playerAttack.png");
-        playerDefend = new Texture("texture/playerDefend.png");
-        playerItem = new Texture("texture/playerItem.png");
-        playerEscape = new Texture("texture/playerEscape.png");
-        playerHack = new Texture("texture/playerHack.png");
-		enemyIdle = new Texture("texture/enemyIdle.png");
-		enemyAttack1 = new Texture("texture/enemyAttack1.png");
-		enemyAttack2 = new Texture("texture/enemyAttack2.png");
-		enemyAttack3 = new Texture("texture/enemyAttack3.png");
+        playerIdle = new Texture("texture/player/playerIdle.png");
+        playerAttack = new Texture("texture/player/playerAttack.png");
+        playerDefend = new Texture("texture/player/playerDefend.png");
+        playerItem = new Texture("texture/player/playerItem.png");
+        playerEscape = new Texture("texture/player/playerEscape.png");
+        playerHack = new Texture("texture/player/playerHack.png");
+		playerDeath = new Texture("texture/player/playerDeath.png");
+		enemyIdle = new Texture("texture/enemy/enemyIdle.png");
+		enemyAttack1 = new Texture("texture/enemy/enemyAttack1.png");
+		enemyAttack2 = new Texture("texture/enemy/enemyAttack2.png");
+		enemyAttack3 = new Texture("texture/enemy/enemyAttack3.png");
+		enemyHack = new Texture("texture/enemy/enemyHack.png");
 	}
 
 	public void createBundle() {
@@ -323,10 +323,6 @@ public class MainGame extends Game {
         return playerIdle;
     }
 
-	public Texture getYellowTexture() { return yellow;}
-
-	public Texture getRedTexture() { return red;}
-
 	public Texture getEnemyIdle() {
 		return enemyIdle;
 	}
@@ -346,4 +342,12 @@ public class MainGame extends Game {
 	public BitmapFont getFontSteps() {
 	    return fontSteps;
     }
+
+	public Texture getEnemyHack() {
+		return enemyHack;
+	}
+
+	public Texture getPlayerDeath() {
+		return playerDeath;
+	}
 }

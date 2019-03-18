@@ -16,8 +16,10 @@ import java.util.Collections;
 enum State {
     AWAITING,
     ACTION,
-    ENEMY,
-    HACK
+    ENEMY_WAITING,
+    ENEMY_ACTION,
+    HACK,
+    DEAD
 }
 
 public class RoomFight extends RoomParent {
@@ -25,8 +27,9 @@ public class RoomFight extends RoomParent {
     private Texture imgBg;
     private Player player;
     private Enemy enemy;
-    private String[] btnTexts = new String[] {"Attack", "Defend", "Escape", "Item", "Hack"};
+    private String[] btnTexts = new String[] {"Attack", "Defend", "Escape", "Item"};
     private int btnCounter;
+    private int deathTimer = 240;
     private State state = State.AWAITING;
 
     RoomFight(MainGame game) {
@@ -56,6 +59,8 @@ public class RoomFight extends RoomParent {
 
             stage.act(Gdx.graphics.getDeltaTime());
             stage.draw();
+
+            death();
         }
     }
 
@@ -89,19 +94,31 @@ public class RoomFight extends RoomParent {
         }
     }
 
+    private void death() {
+        if (state == State.DEAD) {
+            deathTimer--;
+
+            if (deathTimer <= 0) {
+                game.switchToRoomGame();
+            }
+        }
+    }
+
     /*
     CREATE PARENT FIGHTER
      */
     private class Fighters {
         protected float X;
         protected float Y;
-        protected int hp;
+        protected double hp;
+        protected double damage;
+        protected double dmgAmount;
         protected Animating anim = new Animating();
 
         protected boolean tempAnimation = false;
 
-        protected int idleSpd;
-        protected Animation<TextureRegion> curAnimation, idle;
+        protected int idleSpd, hackSpd, deathSpd;
+        protected Animation<TextureRegion> curAnimation, idle, hack;
         protected ArrayList<Animation<TextureRegion>> animList;
         protected Integer[] speeds;
 
@@ -114,8 +131,17 @@ public class RoomFight extends RoomParent {
         }
 
         public void startIdle() {
-            anim.startAnimation(idle, 30);
+            anim.startAnimation(idle, idleSpd);
             tempAnimation = false;
+        }
+
+        public void startHack() {
+            anim.startAnimation(hack, hackSpd);
+            tempAnimation = false;
+        }
+
+        public void takeHit(double damage) {
+            hp -= damage;
         }
     }
 
@@ -124,13 +150,18 @@ public class RoomFight extends RoomParent {
      */
     private class Player extends Fighters {
 
-        private Animation<TextureRegion> attack, defend, escape, item, hack;
+        private Animation<TextureRegion> attack, defend, escape, item, death;
+
+        private boolean causeDamage;
 
         Player() {
             X = 100f;
             Y = 200f;
             hp = 10;
+            damage = 2.5;
             idleSpd = 30;
+            hackSpd = 30;
+            deathSpd = 30;
 
             idle = anim.createAnimation(game.getPlayerIdle(), 3, 1);
             attack = anim.createAnimation(game.getPlayerAttack(), 3, 1);
@@ -138,9 +169,10 @@ public class RoomFight extends RoomParent {
             escape = anim.createAnimation(game.getPlayerEscape(), 3, 1);
             item = anim.createAnimation(game.getPlayerItem(), 3, 1);
             hack = anim.createAnimation(game.getPlayerHack(), 3, 1);
+            death = anim.createAnimation(game.getPlayerDeath(), 3, 1);
 
             animList = new ArrayList<Animation<TextureRegion>>();
-            Collections.addAll(animList, attack, defend, escape, item, hack);
+            Collections.addAll(animList, attack, defend, escape, item);
             speeds = new Integer[] {30, 30, 30, 30, 30};
 
             anim.startAnimation(idle, idleSpd);
@@ -149,19 +181,28 @@ public class RoomFight extends RoomParent {
         public void update() {
             updateStart();
 
+            checkHp();
+
             if (state == State.ACTION) {
                 // If temporary animation currently on, wait for it to finish,
                 // else give turn to enemy
                 if (tempAnimation) {
                     if (curAnimation.isAnimationFinished(anim.getStateTime())) {
+                        if (causeDamage) {
+                            enemy.takeHit(damage);
+                        }
                         startIdle();
-                        state = State.ENEMY;
+                        state = State.ENEMY_WAITING;
                     }
                 } else {
-                    state = State.ENEMY;
+                    state = State.ENEMY_WAITING;
                 }
             } else if (state == State.AWAITING) {
                 if (anim.getAnimation() != idle) startIdle();
+            } else if (state == State.HACK) {
+                if (anim.getAnimation() != hack) startHack();
+            } else if (state == State.DEAD) {
+                if (anim.getAnimation() != death) startDeath();
             }
 
             updateEnd();
@@ -169,11 +210,28 @@ public class RoomFight extends RoomParent {
 
         public void doAction(int index) {
             curAnimation = animList.get(index);
+            tempAnimation = true;
+
             //If defend, then it's not temporary
-            if (curAnimation != defend) {
-                tempAnimation = true;
+            if (curAnimation == attack){
+                causeDamage = true;
+                dmgAmount = damage;
+            } else if (curAnimation == defend) {
+                tempAnimation = false;
             }
+
             anim.startAnimation(curAnimation, speeds[index]);
+        }
+
+        private void checkHp() {
+            if (hp <= 0) {
+                state = State.DEAD;
+            }
+        }
+
+        public void startDeath() {
+            anim.startAnimation(death, deathSpd);
+            tempAnimation = false;
         }
     }
 
@@ -187,17 +245,24 @@ public class RoomFight extends RoomParent {
         private int actionDelay = 30;
         private int actionTimer = actionDelay;
 
+        private double[] dmgPercents;
+
         Enemy() {
 
             X = game.pixelWidth - 100f - game.getEnemyIdle().getWidth()/3;
             Y = 200f;
             hp = 5;
+            damage = 1;
             idleSpd = 30;
+            hackSpd = 30;
+
+            dmgPercents = new double[] {1, 1.5, 2};
 
             idle = anim.createAnimation(game.getEnemyIdle(), 3, 1);
             attack1 = anim.createAnimation(game.getEnemyAttack1(), 3, 1);
             attack2 = anim.createAnimation(game.getEnemyAttack2(), 3, 1);
             attack3 = anim.createAnimation(game.getEnemyAttack3(), 3, 1);
+            hack = anim.createAnimation(game.getEnemyHack(), 3, 1);
 
             animList = new ArrayList<Animation<TextureRegion>>();
             Collections.addAll(animList, attack1, attack2, attack3);
@@ -215,6 +280,7 @@ public class RoomFight extends RoomParent {
                 if (curAnimation.isAnimationFinished(anim.getStateTime())) {
                     startIdle();
                     actionTimer = actionDelay;
+                    player.takeHit(dmgAmount);
                     state = State.AWAITING;
                 }
             }
@@ -223,15 +289,22 @@ public class RoomFight extends RoomParent {
         }
 
         public void attack() {
-            if (state == State.ENEMY) {
+            if (state == State.ENEMY_WAITING) {
                 // Wait for timer to go down, then select action
                 if (actionTimer > 0) {
                     actionTimer--;
-                } else if (!tempAnimation) {
-                    tempAnimation = true;
-                    int randomAction = MathUtils.random(0, animList.size()-1);
-                    curAnimation = animList.get(randomAction);
-                    anim.startAnimation(curAnimation, speeds[randomAction]);
+                } else {
+                    if (hp > 0) {
+                        state = State.ENEMY_ACTION;
+                        tempAnimation = true;
+                        int random = MathUtils.random(0, animList.size() - 1);
+                        curAnimation = animList.get(random);
+                        dmgAmount = damage * dmgPercents[random];
+                        anim.startAnimation(curAnimation, speeds[random]);
+                    } else {
+                        state = State.HACK;
+                        anim.startAnimation(hack, hackSpd);
+                    }
                 }
             }
         }
