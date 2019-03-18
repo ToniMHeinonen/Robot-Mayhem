@@ -132,6 +132,12 @@ public class MainGame extends Game {
 	    setScreen(room);
     }
 
+    public void switchToHacking() {
+		transition();
+		Hacking room = new Hacking(this);
+		setScreen(room);
+	}
+
     public void createStepsFont() {
         fontSteps = new BitmapFont(Gdx.files.internal("stepfont/stepfont.fnt"),
                 Gdx.files.internal("stepfont/stepfont.png"),

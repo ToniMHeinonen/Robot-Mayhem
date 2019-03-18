@@ -21,6 +21,10 @@ public class RoomSettings extends RoomParent {
         createButtonPlus();
         createButtonMinus();
         createButtonTestailua();
+
+        // Added for testing purposes.
+        createButtonHacking();
+
         backgroundMusic.setVolume(game.getMusicVol());
         backgroundMusic.play();
     }
@@ -127,6 +131,26 @@ public class RoomSettings extends RoomParent {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 game.switchToRoomTestailua();
+            }
+        });
+    }
+
+    // Added for testing purposes.
+    // Do not press unless you want a NullPointerException.
+    public void createButtonHacking() {
+
+        final TextButton buttonHacking = new TextButton("Hacking", skin);
+        buttonHacking.setWidth(300f);
+        buttonHacking.setHeight(100f);
+        buttonHacking.setPosition(game.pixelWidth /3 - buttonHacking.getWidth(),
+                (game.pixelHeight/3) *2 - buttonHacking.getHeight() /2);
+
+        stage.addActor(buttonHacking);
+
+        buttonHacking.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                game.switchToHacking();
             }
         });
     }
