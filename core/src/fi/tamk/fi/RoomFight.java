@@ -154,6 +154,7 @@ public class RoomFight extends RoomParent {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 state = State.ESCAPE;
+                escapePopup = false;
                 stage.clear();
             }
         });
