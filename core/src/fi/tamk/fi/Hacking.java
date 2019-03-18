@@ -3,6 +3,8 @@ package fi.tamk.fi;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -10,8 +12,13 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -24,6 +31,8 @@ import java.security.Key;
 
 import sun.applet.Main;
 
+import static com.badlogic.gdx.Input.Keys.M;
+
 public class Hacking extends RoomParent{
 
     MainGame game;
@@ -33,6 +42,9 @@ public class Hacking extends RoomParent{
     Skin testSkin;
 
     private World world;
+
+    private Box2DDebugRenderer debugRenderer;
+
     Body shieldBody;
 
     Texture texture = new Texture(Gdx.files.internal("badlogic.jpg"));
@@ -41,16 +53,6 @@ public class Hacking extends RoomParent{
     protected float width = 1000;
     protected float height = 1000;
     private float shieldRadius;
-
-    public static Array<Body> shields;
-
-    public void create() {
-
-        world = new World(new Vector2(0, -0f), true);
-        shieldBody = world.createBody(getDefinitionOfBody());
-        shieldBody.createFixture(getFixtureDefinition());
-        shieldBody.setUserData("shield");
-    }
 
     protected BodyDef getDefinitionOfBody() {
 
@@ -90,15 +92,64 @@ public class Hacking extends RoomParent{
         createConstants();
     }
 
+    public void create() {
+
+        batch = new SpriteBatch();
+
+        world = new World(new Vector2(0, -0f), true);
+        shieldBody = world.createBody(getDefinitionOfBody());
+        shieldBody.createFixture(getFixtureDefinition());
+        shieldBody.setUserData(texture);
+
+        shieldBody.applyLinearImpulse(new Vector2(0.1f, 0.1f),
+                shieldBody.getWorldCenter(),
+                true);
+
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, 200, 200);
+
+        debugRenderer = new Box2DDebugRenderer();
+
+        world.setContactListener(new ContactListener() {
+            @Override
+            public void beginContact(Contact contact) { }
+
+            @Override
+            public void endContact(Contact contact) { }
+
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold) { }
+
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse) { }
+        });
+    }
+
     public void createConstants() {
         testButtonAtlas = new TextureAtlas("testbuttons/testbuttons.pack");
         testSkin = new Skin(testButtonAtlas);
     }
 
-    public void render(float delta) {
+    Array<Body> shields = new Array<Body>();
 
-        super.render(delta);
+    // Doesn't work. :(
+    public void pleaseWork() {
+
+        batch.setProjectionMatrix(camera.combined);
+
+        Gdx.gl.glClearColor(0, 1, 1, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        createShield();
+
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+
+            createShield();
+        }
+
         world.getBodies(shields);
+
+        debugRenderer.render(world, camera.combined);
 
         batch.begin();
 
@@ -108,7 +159,7 @@ public class Hacking extends RoomParent{
 
                 if (body.getUserData() == texture) {
 
-                    System.out.println("This part doesn not work yet.");
+                    System.out.println("This part works!");
                 }
 
                 float radius = ((CircleShape) body.getFixtureList().get(0).getShape()).getRadius();
@@ -133,5 +184,46 @@ public class Hacking extends RoomParent{
             }
         }
         batch.end();
+    }
+
+    public void render(float delta) {
+
+        super.render(delta);
+        create();
+        pleaseWork();
+    }
+
+    public void createShield() {
+        BodyDef myBodyDef = new BodyDef();
+
+        // It's a body that moves
+        myBodyDef.type = BodyDef.BodyType.DynamicBody;
+
+        FixtureDef shieldFixtureDef = new FixtureDef();
+
+        // Mass per square meter (kg^m2)
+        shieldFixtureDef.density = 9;
+
+        // How bouncy object? Very bouncy [0,1]
+        shieldFixtureDef.restitution = 1.0f;
+
+        // How slipper object? [0,1]
+        shieldFixtureDef.friction = 0.5f;
+
+        // Create circle shape.�
+        CircleShape circleshape = new CircleShape();
+        circleshape.setRadius(1f);
+
+        // Add the shape to the fixture
+        shieldFixtureDef.shape = circleshape;
+
+        Body shield = world.createBody(myBodyDef);
+
+        shield.createFixture(getFixtureDefinition());
+        shield.setUserData(texture);
+
+        shield.applyLinearImpulse(new Vector2(0.1f, 0.1f),
+                shield.getWorldCenter(),
+                true);
     }
 }
