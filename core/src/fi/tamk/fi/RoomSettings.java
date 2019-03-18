@@ -21,6 +21,7 @@ public class RoomSettings extends RoomParent {
         createButtonPlus();
         createButtonMinus();
         createButtonTestailua();
+        backgroundMusic.setVolume(game.getMusicVol());
         backgroundMusic.play();
     }
 

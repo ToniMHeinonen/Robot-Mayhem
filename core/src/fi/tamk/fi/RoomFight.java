@@ -37,6 +37,8 @@ public class RoomFight extends RoomParent {
         player = new Player();
         enemy = new Enemy();
         createMenuButton();
+        backgroundMusic.pause();
+        bossMusic.play();
     }
 
     @Override
@@ -55,6 +57,12 @@ public class RoomFight extends RoomParent {
             stage.act(Gdx.graphics.getDeltaTime());
             stage.draw();
         }
+    }
+
+    @Override
+    public void hide() {
+        backgroundMusic.play();
+        bossMusic.stop();
     }
 
     private void createButtons() {

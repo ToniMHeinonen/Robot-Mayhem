@@ -38,6 +38,7 @@ public class MainGame extends Game {
 	private Stage stage;
 	private Skin skin;
 	private Music backgroundMusic;
+	private Music bossMusic;
 
 	//Settings
 	Preferences settings;
@@ -74,6 +75,7 @@ public class MainGame extends Game {
 		createButtonFiles();
 		createProgressBarFiles();
 		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("music/fansu_1.mp3"));
+		bossMusic = Gdx.audio.newMusic(Gdx.files.internal("music/bossmusic.mp3"));
         loadSettings();
         loadStats();
 
@@ -254,6 +256,10 @@ public class MainGame extends Game {
 	public float getMusicVol() {
 		return musicVol;
 	}
+
+	public Music getBossMusic() {
+	    return bossMusic;
+    }
 
 	public I18NBundle getMyBundle() {
 		return myBundle;

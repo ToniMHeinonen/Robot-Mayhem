@@ -25,6 +25,7 @@ public class RoomParent implements Screen {
     protected Stage stage;
     protected Skin skin;
     protected Music backgroundMusic;
+    protected Music bossMusic;
     protected ProgressBar progressBar;
     protected Texture progBarEnemy;
     private int transitionCounter = 20;
@@ -41,6 +42,7 @@ public class RoomParent implements Screen {
         Gdx.input.setInputProcessor(this.stage);
         this.backgroundMusic = game.getBackgroundMusic();
         progBarEnemy = game.getProgBarEnemy();
+        this.bossMusic = game.getBossMusic();
         stage.clear();
 
         imgTopBar = game.getImgTopBar();
