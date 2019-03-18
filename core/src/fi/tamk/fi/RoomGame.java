@@ -21,6 +21,8 @@ public class RoomGame extends RoomParent {
     private float bgAddSpd = 0.5f; // Amount to add every step
     private final float maxSpd = 15f;
     private int curSteps;
+    private String currentSteps;
+    private String goalSteps;
 
     // Testing
     int testSteps = 0;
@@ -50,11 +52,19 @@ public class RoomGame extends RoomParent {
             drawTopBar();
             controlProgBar();
             drawProgBarEnemy();
+            drawSteps();
             player.update();
             batch.end();
             stage.act(Gdx.graphics.getDeltaTime());
             stage.draw();
         }
+    }
+
+    public void drawSteps() {
+        currentSteps = String.valueOf((int) progressBar.getValue());
+        goalSteps = String.valueOf((int) progressBar.getMaxValue());
+        fontSteps.draw(batch, currentSteps + "/" + goalSteps,
+                50, game.pixelHeight - fontSteps.getXHeight() - 10);
     }
 
     public void controlProgBar() {

@@ -7,6 +7,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -28,6 +29,7 @@ public class RoomParent implements Screen {
     protected Music bossMusic;
     protected ProgressBar progressBar;
     protected Texture progBarEnemy;
+    protected BitmapFont fontSteps;
     private int transitionCounter = 20;
 
     protected TextButton button; //Temporary solution
@@ -43,6 +45,7 @@ public class RoomParent implements Screen {
         this.backgroundMusic = game.getBackgroundMusic();
         progBarEnemy = game.getProgBarEnemy();
         this.bossMusic = game.getBossMusic();
+        this.fontSteps = game.getFontSteps();
         stage.clear();
 
         imgTopBar = game.getImgTopBar();

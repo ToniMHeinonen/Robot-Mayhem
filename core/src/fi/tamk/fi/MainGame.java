@@ -53,6 +53,9 @@ public class MainGame extends Game {
 			playerAttack, playerDefend, playerItem, playerEscape, playerHack, yellow, red,
 			enemyIdle, enemyAttack1, enemyAttack2, enemyAttack3;
 
+	//Stepmeter in RoomGame
+    private BitmapFont fontSteps;
+
 	//Progressbar
     private TextureAtlas progBarAtlas;
     private Skin progBarSkin;
@@ -74,6 +77,7 @@ public class MainGame extends Game {
 		createSkinAndStage();
 		createButtonFiles();
 		createProgressBarFiles();
+		createStepsFont();
 		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("music/fansu_1.mp3"));
 		bossMusic = Gdx.audio.newMusic(Gdx.files.internal("music/bossmusic.mp3"));
         loadSettings();
@@ -128,6 +132,12 @@ public class MainGame extends Game {
 		transition();
 	    RoomFight room = new RoomFight(this);
 	    setScreen(room);
+    }
+
+    public void createStepsFont() {
+        fontSteps = new BitmapFont(Gdx.files.internal("stepfont/stepfont.fnt"),
+                Gdx.files.internal("stepfont/stepfont.png"),
+                false);
     }
 
     public void createButtonFiles() {
@@ -332,4 +342,8 @@ public class MainGame extends Game {
 	public Texture getEnemyAttack3() {
 		return enemyAttack3;
 	}
+
+	public BitmapFont getFontSteps() {
+	    return fontSteps;
+    }
 }
