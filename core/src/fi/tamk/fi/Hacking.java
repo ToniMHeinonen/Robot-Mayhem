@@ -203,7 +203,9 @@ public class Hacking extends RoomParent{
         Just to make everything clear, you do know that anything that is in the render() method
         gets called 60 times in a second? So if you only want to for example create something once,
         then don't put it in here. Contructor runs only once when you switch to this room.
-         */
+
+         My comment: I do know that, but the code wasn't working, so I got desperate and decided
+         that this was an acceptable temporary solution. */
     }
 
     public void createShield() {
