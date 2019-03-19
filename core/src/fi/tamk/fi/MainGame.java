@@ -31,8 +31,8 @@ public class MainGame extends Game {
 	private SpriteBatch batch;
 	private I18NBundle myBundle;
 
-	public static final float pixelWidth = 1920f;
-	public static final float pixelHeight = 1080f;
+	public final float pixelWidth = 1920f;
+	public final float pixelHeight = 1080f;
 	private OrthographicCamera camera;
 
 	private Stage stage;
@@ -41,16 +41,16 @@ public class MainGame extends Game {
 	private Music bossMusic;
 
 	//Settings
-	Preferences settings;
+	private Preferences settings;
 	private float musicVol;
 
 	//Stats
-	Preferences stats;
+	private Preferences stats;
 	int stepCount;
 
 	// Textures
 	private Texture imgBgHall, imgBgBoss, imgTopBar, gamePlayer, progBarEnemy, playerIdle,
-			playerAttack, playerDefend, playerItem, playerEscape, playerHack, playerDeath,
+			playerItem, playerEscape, playerHack, playerDeath,
 			enemyIdle, enemyAttack1, enemyAttack2, enemyAttack3, enemyHack, escapeBg;
 
 	//Stepmeter in RoomGame
@@ -140,13 +140,13 @@ public class MainGame extends Game {
 		setScreen(room);
 	}
 
-    public void createStepsFont() {
+    private void createStepsFont() {
         fontSteps = new BitmapFont(Gdx.files.internal("stepfont/stepfont.fnt"),
                 Gdx.files.internal("stepfont/stepfont.png"),
                 false);
     }
 
-    public void createButtonFiles() {
+    private void createButtonFiles() {
 		buttonsAtlas = new TextureAtlas("test/button.pack"); //**button atlas image **//
 		buttonSkin = new Skin();
 		buttonSkin.addRegions(buttonsAtlas); //** skins for on and off **//
@@ -159,7 +159,7 @@ public class MainGame extends Game {
 		style.font = font;
 	}
 
-	public void createProgressBarFiles() {
+	private void createProgressBarFiles() {
 	    progBarAtlas = new TextureAtlas("progressbar/testpack.pack");
 	    progBarSkin = new Skin();
 	    progBarSkin.addRegions(progBarAtlas);
@@ -169,15 +169,13 @@ public class MainGame extends Game {
 	    progBarStyle.background = progBarSkin.getDrawable("test_bg");
     }
 
-	public void loadTextures() {
+	private void loadTextures() {
 		imgBgHall = new Texture("texture/bg_hall_blank.png");
 		imgBgBoss = new Texture("texture/bg_hall_boss_blank.png");
 		imgTopBar = new Texture("texture/topbar.png");
 		gamePlayer = new Texture("texture/player/player.png");
 		progBarEnemy = new Texture("texture/progbar_enemy.png");
         playerIdle = new Texture("texture/player/playerIdle.png");
-        playerAttack = new Texture("texture/player/playerAttack.png");
-        playerDefend = new Texture("texture/player/playerDefend.png");
         playerItem = new Texture("texture/player/playerItem.png");
         playerEscape = new Texture("texture/player/playerEscape.png");
         playerHack = new Texture("texture/player/playerHack.png");
@@ -190,7 +188,7 @@ public class MainGame extends Game {
 		escapeBg = new Texture("texture/escapeBackground.png");
 	}
 
-	public void createBundle() {
+	private void createBundle() {
 		Locale locale = Locale.getDefault();
 		//Locale locale = new Locale("fi", "FI"); USE THIS TO TEST FINNISH VERSION
 		myBundle = I18NBundle.createBundle(Gdx.files.internal("MyBundle"),
@@ -222,7 +220,7 @@ public class MainGame extends Game {
 		stats.flush();
 	}
 
-    public void createSkinAndStage() {
+    private void createSkinAndStage() {
         stage = new Stage(new FitViewport(pixelWidth, pixelHeight), batch);
         // Skin: https://github.com/czyzby/gdx-skins/tree/master/glassy
         // Check "License" bottom of the page
@@ -304,14 +302,6 @@ public class MainGame extends Game {
 
     public ProgressBar.ProgressBarStyle getProgBarStyle() {
         return progBarStyle;
-    }
-
-    public Texture getPlayerAttack() {
-        return playerAttack;
-    }
-
-    public Texture getPlayerDefend() {
-        return playerDefend;
     }
 
     public Texture getPlayerItem() {

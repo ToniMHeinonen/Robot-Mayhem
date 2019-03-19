@@ -258,8 +258,9 @@ public class RoomFight extends RoomParent {
 
             // Create animations (probably should be created in MainGame though)
             idle = anim.createAnimation(game.getPlayerIdle(), 3, 1);
-            attack = anim.createAnimation(game.getPlayerAttack(), 3, 1);
-            defend = anim.createAnimation(game.getPlayerDefend(), 3, 1);
+            attack = (Animation<TextureRegion>) mapAttack.get(Skills.getAnimation());
+            defend = (Animation<TextureRegion>) mapDefend.get(Skills.getAnimation());
+            //defend = anim.createAnimation((Texture) mapDefend.get(Skills.getSheet()), 3, 1);
             escape = anim.createAnimation(game.getPlayerEscape(), 3, 1);
             item = anim.createAnimation(game.getPlayerItem(), 3, 1);
             hack = anim.createAnimation(game.getPlayerHack(), 3, 1);
@@ -329,7 +330,7 @@ public class RoomFight extends RoomParent {
                     state = State.AWAITING;
                 } else {
                     anim.startAnimation(curAnimation, speeds[index]);
-                    cooldowns.put("defend", (Integer) mapDefend.get(Skills.getMaxCooldown()));
+                    cooldowns.put("defend", (Integer) mapDefend.get(Skills.getCooldown()));
                 }
             } else if (curAnimation == item) {
                 tempAnimation = true;
