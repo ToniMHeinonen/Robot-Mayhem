@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -30,18 +31,16 @@ public class RoomTestailua extends RoomParent {
     TextureAtlas testButtonAtlas;
     Skin testSkin;
 
+    ImageButton buttonAttack;
+    ImageButton buttonShield;
     ImageButton.ImageButtonStyle styleAttack;
     ImageButton.ImageButtonStyle styleShield;
-    ImageButton.ImageButtonStyle styleTooltipAttack;
-    ImageButton.ImageButtonStyle styleTooltipShield;
+
+    TextureRegion tooltipShield;
+    TextureRegion tooltipAttack;
 
     int animationCounter = 50;
     boolean inAnimation = false;
-
-    ImageButton tooltipAttackButton;
-    ImageButton tooltipShieldButton;
-    ImageButton buttonAttack;
-    ImageButton buttonShield;
 
     boolean pressLongAttack;
     boolean pressLongShield;
@@ -52,7 +51,6 @@ public class RoomTestailua extends RoomParent {
         super(game);
         createButtonSettings();
         createConstants();
-        createTooltips();
         // playMusic();
     }
 
@@ -96,13 +94,8 @@ public class RoomTestailua extends RoomParent {
         styleAttack = new ImageButton.ImageButtonStyle();
         styleShield = new ImageButton.ImageButtonStyle();
 
-        styleTooltipAttack = new ImageButton.ImageButtonStyle();
-        styleTooltipAttack.down = testSkin.getDrawable("attack_tooltip");
-        styleTooltipAttack.up = testSkin.getDrawable("attack_tooltip");
-
-        styleTooltipShield = new ImageButton.ImageButtonStyle();
-        styleTooltipShield.down = testSkin.getDrawable("shield_tooltip");
-        styleTooltipShield.up = testSkin.getDrawable("shield_tooltip");
+        tooltipShield = new TextureRegion(testButtonAtlas.findRegion("shield_tooltip"));
+        tooltipAttack = new TextureRegion(testButtonAtlas.findRegion("attack_tooltip"));
     }
 
     public void attackButton() {
@@ -161,35 +154,18 @@ public class RoomTestailua extends RoomParent {
         stage.addActor(buttonShield);
     }
 
-    // Create tooltips and set them invisible.
-    public void createTooltips() {
-        tooltipAttackButton = new ImageButton(styleTooltipAttack);
-        tooltipAttackButton.setPosition(game.pixelWidth/3,
-                game.pixelHeight/4 + tooltipAttackButton.getHeight() * 1.5f);
-        tooltipAttackButton.setVisible(false);
-        stage.addActor(tooltipAttackButton);
-
-        tooltipShieldButton = new ImageButton(styleTooltipShield);
-        tooltipShieldButton.setPosition(game.pixelWidth/2,
-                game.pixelHeight/4 + tooltipShieldButton.getHeight() * 1.5f);
-        tooltipShieldButton.setVisible(false);
-        stage.addActor(tooltipShieldButton);
-    }
-
-    // Check if user has "longpressed" buttons and set them visible for a while.
+    // Check if user has "longpressed" buttons and draw tooltips.
     public void checkTooltip() {
         if (pressLongAttack) {
-            tooltipAttackButton.setVisible(true);
             tooltipTimer--;
-        } else {
-            tooltipAttackButton.setVisible(false);
+            batch.draw(tooltipAttack, buttonAttack.getX(),
+                    game.pixelHeight/4 + buttonAttack.getHeight());
         }
 
         if (pressLongShield) {
-            tooltipShieldButton.setVisible(true);
             tooltipTimer--;
-        } else {
-            tooltipShieldButton.setVisible(false);
+            batch.draw(tooltipShield,buttonShield.getX(),
+                    game.pixelHeight/4 + buttonShield.getHeight());
         }
 
         if (tooltipTimer <= 0) {
@@ -204,7 +180,9 @@ public class RoomTestailua extends RoomParent {
         super.render(delta);
         attackButton();
         shieldButton();
-        checkTooltip();
         animationUpdate();
+        batch.begin();
+        checkTooltip();
+        batch.end();
     }
 }
