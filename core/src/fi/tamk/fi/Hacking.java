@@ -66,7 +66,8 @@ public class Hacking extends RoomParent{
         // It's a body that moves
         shieldBody.type = BodyDef.BodyType.DynamicBody;
 
-        shieldBody.position.set(500, 500);
+        // Doesn't do shit.
+        shieldBody.position.set(40000, 10000);
         return shieldBody;
     }
 
@@ -84,7 +85,7 @@ public class Hacking extends RoomParent{
 
 
         CircleShape circleshape = new CircleShape();
-        circleshape.setRadius(5f);
+        circleshape.setRadius(50f);
 
         playerFixtureDef.shape = circleshape;
         return playerFixtureDef;
@@ -105,9 +106,10 @@ public class Hacking extends RoomParent{
         world = new World(new Vector2(0, -0f), true);
         shieldBody = world.createBody(getDefinitionOfBody());
         shieldBody.createFixture(getFixtureDefinition());
+        shieldBody.getPosition();
         shieldBody.setUserData(texture);
 
-        shieldBody.applyLinearImpulse(new Vector2(0.1f, 0.1f),
+        shieldBody.applyLinearImpulse(new Vector2(0.0f, 0.0f),
                 shieldBody.getWorldCenter(),
                 true);
 
@@ -146,7 +148,7 @@ public class Hacking extends RoomParent{
         Gdx.gl.glClearColor(0, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        createShield();
+        //createShield();
 
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
 
@@ -165,28 +167,26 @@ public class Hacking extends RoomParent{
 
                 if (body.getUserData() == texture) {
 
-                    System.out.println("This part works!");
+                    float radius = ((CircleShape) body.getFixtureList().get(0).getShape()).getRadius();
+                    Texture texture = (Texture) body.getUserData();
+
+                    batch.draw(texture,
+                            body.getPosition().x + radius,
+                            body.getPosition().y + radius,
+                            radius,
+                            radius,
+                            radius * 2,
+                            radius * 2,
+                            1.0f,
+                            1.0f,
+                            body.getTransform().getRotation() * MathUtils.radiansToDegrees,
+                            0,
+                            0,
+                            texture.getWidth(),
+                            texture.getHeight(),
+                            false,
+                            false);
                 }
-
-                float radius = ((CircleShape) body.getFixtureList().get(0).getShape()).getRadius();
-                Texture texture = (Texture) body.getUserData();
-
-                batch.draw(texture,
-                        body.getPosition().x - radius,
-                        body.getPosition().y - radius,
-                        radius,
-                        radius,
-                        radius * 2,
-                        radius * 2,
-                        1.0f,
-                        1.0f,
-                        body.getTransform().getRotation() * MathUtils.radiansToDegrees,
-                        0,
-                        0,
-                        texture.getWidth(),
-                        texture.getHeight(),
-                        false,
-                        false);
             }
         }
         batch.end();
@@ -238,7 +238,7 @@ public class Hacking extends RoomParent{
         shield.createFixture(getFixtureDefinition());
         shield.setUserData(texture);
 
-        shield.applyLinearImpulse(new Vector2(0.1f, 0.1f),
+        shield.applyLinearImpulse(new Vector2(0.0f, 0.0f),
                 shield.getWorldCenter(),
                 true);
     }
