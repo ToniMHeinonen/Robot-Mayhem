@@ -6,12 +6,13 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 // Enums give simple constants, which decreases the chance for coding mistakes
 enum State {
@@ -230,8 +231,10 @@ public class RoomFight extends RoomParent {
     private class Player extends Fighters {
 
         private Animation<TextureRegion> attack, defend, escape, item, death;
+        private HashMap<String,Object> mapAttack, mapDefend;
 
         private boolean causeDamage;
+        private HashMap<String,Integer> cooldowns;
 
         Player() {
             X = 100f;
@@ -242,6 +245,12 @@ public class RoomFight extends RoomParent {
             hackSpd = 30;
             deathSpd = 30;
             escapeSpd = 10;
+
+            mapAttack = Skills.getSkill("attack");
+            mapDefend = Skills.getSkill("defend");
+            cooldowns = new HashMap<String, Integer>();
+            cooldowns.put("attack", 0);
+            cooldowns.put("defend", 0);
 
             idle = anim.createAnimation(game.getPlayerIdle(), 3, 1);
             attack = anim.createAnimation(game.getPlayerAttack(), 3, 1);
@@ -256,6 +265,10 @@ public class RoomFight extends RoomParent {
             speeds = new Integer[] {30, 30, 30, 30, 30};
 
             anim.startAnimation(idle, idleSpd);
+
+            /*
+            Skill cooldown decreasing is not ready.
+             */
         }
 
         public void update() {
@@ -269,7 +282,7 @@ public class RoomFight extends RoomParent {
                 if (tempAnimation) {
                     if (curAnimation.isAnimationFinished(anim.getStateTime())) {
                         if (causeDamage) {
-                            enemy.takeHit(damage);
+                            enemy.takeHit(dmgAmount);
                             causeDamage = false;
                         }
                         startIdle();
@@ -293,17 +306,25 @@ public class RoomFight extends RoomParent {
 
         public void doAction(int index) {
             curAnimation = animList.get(index);
-            tempAnimation = true;
 
             //If defend, then it's not temporary
             if (curAnimation == attack){
                 causeDamage = true;
-                dmgAmount = damage;
+                tempAnimation = true;
+                /*
+                Explanation: Object can't be cast to Double, so the object has to be first cast to
+                String and then get the value of String. This is so stupid...
+                 */
+                dmgAmount = Double.valueOf(mapAttack.get(Skills.getDamage()).toString());
+                anim.startAnimation(curAnimation, speeds[index]);
             } else if (curAnimation == defend) {
-                tempAnimation = false;
+                if (cooldowns.get("defend") > 0) {
+                    state = State.AWAITING;
+                } else {
+                    anim.startAnimation(curAnimation, speeds[index]);
+                    cooldowns.put("defend", (Integer) mapDefend.get(Skills.getMaxCooldown()));
+                }
             }
-
-            anim.startAnimation(curAnimation, speeds[index]);
         }
 
         private void checkHp() {
@@ -324,6 +345,12 @@ public class RoomFight extends RoomParent {
                 X -= Gdx.graphics.getDeltaTime() * 150f;
             } else {
                 game.switchToRoomGame();
+            }
+        }
+
+        private void decreaseCooldowns() {
+            for (Map.Entry<String, Integer> entry : cooldowns.entrySet()) {
+                System.out.println(entry.getKey() + " = " + String.valueOf(entry.getValue()));
             }
         }
     }
@@ -388,7 +415,6 @@ public class RoomFight extends RoomParent {
                 if (actionTimer > 0) {
                     actionTimer--;
                 } else {
-                    System.out.println("attack else");
                     state = State.ENEMY_ACTION;
                     tempAnimation = true;
                     int random = MathUtils.random(0, animList.size() - 1);
@@ -403,13 +429,11 @@ public class RoomFight extends RoomParent {
             if (hp <= 0) {
                 state = State.HACK;
                 if (anim.getAnimation() != hack) anim.startAnimation(hack, hackSpd);
-                System.out.println("check hp");
             }
         }
 
         public void takeHit(double damage) {
             hp -= damage;
-            System.out.println("took hit");
         }
     }
 }

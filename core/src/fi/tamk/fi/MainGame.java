@@ -73,6 +73,8 @@ public class MainGame extends Game {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, pixelWidth, pixelHeight);
 		createBundle();
+		// Create skills when the game launches
+		Skills.createSkills();
 
 		createSkinAndStage();
 		createButtonFiles();
