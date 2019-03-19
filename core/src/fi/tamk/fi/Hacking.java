@@ -95,6 +95,7 @@ public class Hacking extends RoomParent{
         super(game);
 
         createConstants();
+        create();
     }
 
     public void create() {
@@ -227,7 +228,7 @@ public class Hacking extends RoomParent{
 
         // Create circle shape.�
         CircleShape circleshape = new CircleShape();
-        circleshape.setRadius(1f);
+        circleshape.setRadius(100f);
 
         // Add the shape to the fixture
         shieldFixtureDef.shape = circleshape;
