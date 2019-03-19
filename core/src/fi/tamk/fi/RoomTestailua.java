@@ -96,7 +96,6 @@ public class RoomTestailua extends RoomParent {
             btn.addListener(new ActorGestureListener() {
                 int i = buttonCounter;
                 public boolean longPress(Actor actor, float x, float y) {
-                    pressLongShield = true;
                     return true;
                 }
                 public void tap(InputEvent event, float x, float y, int count, int button) {
