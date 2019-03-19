@@ -54,6 +54,11 @@ public class Hacking extends RoomParent{
     protected float height = 1000;
     private float shieldRadius;
 
+    /*
+    I commented one thing that I saw was wrong, otherwise I don't remember that well how the
+    bodies and worlds works, so if you get really stuck with this,m then I will have a better look
+     */
+
     protected BodyDef getDefinitionOfBody() {
 
         BodyDef shieldBody = new BodyDef();
@@ -189,8 +194,16 @@ public class Hacking extends RoomParent{
     public void render(float delta) {
 
         super.render(delta);
-        create();
+        /* This causes it to create new world 60 times in a second, you should move this to the
+         constructor
+        create(); */
         pleaseWork();
+
+        /*
+        Just to make everything clear, you do know that anything that is in the render() method
+        gets called 60 times in a second? So if you only want to for example create something once,
+        then don't put it in here. Contructor runs only once when you switch to this room.
+         */
     }
 
     public void createShield() {
