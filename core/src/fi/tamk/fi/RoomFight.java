@@ -16,6 +16,7 @@ import java.util.Map;
 
 // Enums give simple constants, which decreases the chance for coding mistakes
 enum State {
+    START_TURN,
     AWAITING,
     ACTION,
     ENEMY_WAITING,
@@ -31,9 +32,9 @@ public class RoomFight extends RoomParent {
     private Player player;
     private Enemy enemy;
     private String[] btnTexts = new String[] {"Attack", "Defend", "Item"};
-    private int btnCounter;
+    private int btnCounter; // Used for button classes to get the correct value
     private int deathTimer = 240;
-    private State state = State.AWAITING;
+    private State state = State.START_TURN;
     private boolean escapePopup;
 
     RoomFight(MainGame game) {
@@ -202,10 +203,12 @@ public class RoomFight extends RoomParent {
         protected ArrayList<Animation<TextureRegion>> animList;
         protected Integer[] speeds;
 
+        // Do this at the start of update method
         public void updateStart() {
             anim.animate();
         }
 
+        // Do this at the end of update method
         public void updateEnd() {
             anim.draw(batch, X, Y);
         }
@@ -246,12 +249,14 @@ public class RoomFight extends RoomParent {
             deathSpd = 30;
             escapeSpd = 10;
 
+            // Create maps for skills and cooldowns
             mapAttack = Skills.getSkill("attack");
             mapDefend = Skills.getSkill("defend");
             cooldowns = new HashMap<String, Integer>();
             cooldowns.put("attack", 0);
             cooldowns.put("defend", 0);
 
+            // Create animations (probably should be created in MainGame though)
             idle = anim.createAnimation(game.getPlayerIdle(), 3, 1);
             attack = anim.createAnimation(game.getPlayerAttack(), 3, 1);
             defend = anim.createAnimation(game.getPlayerDefend(), 3, 1);
@@ -260,23 +265,22 @@ public class RoomFight extends RoomParent {
             hack = anim.createAnimation(game.getPlayerHack(), 3, 1);
             death = anim.createAnimation(game.getPlayerDeath(), 3, 1);
 
+            // Fill needed arrays for doAction() method
             animList = new ArrayList<Animation<TextureRegion>>();
             Collections.addAll(animList, attack, defend, item);
-            speeds = new Integer[] {30, 30, 30, 30, 30};
+            speeds = new Integer[] {30, 5, 30};
 
             anim.startAnimation(idle, idleSpd);
-
-            /*
-            Skill cooldown decreasing is not ready.
-             */
         }
 
         public void update() {
             updateStart();
 
-            checkHp();
-
-            if (state == State.ACTION) {
+            if (state == State.START_TURN) {
+                checkHp();
+                decreaseCooldowns();
+                state = State.AWAITING;
+            } else if (state == State.ACTION) {
                 // If temporary animation currently on, wait for it to finish,
                 // else give turn to enemy
                 if (tempAnimation) {
@@ -304,6 +308,9 @@ public class RoomFight extends RoomParent {
             updateEnd();
         }
 
+        /*
+        Iterate through the actions to find the selected action.
+         */
         public void doAction(int index) {
             curAnimation = animList.get(index);
 
@@ -324,20 +331,34 @@ public class RoomFight extends RoomParent {
                     anim.startAnimation(curAnimation, speeds[index]);
                     cooldowns.put("defend", (Integer) mapDefend.get(Skills.getMaxCooldown()));
                 }
+            } else if (curAnimation == item) {
+                tempAnimation = true;
+                anim.startAnimation(curAnimation, speeds[index]);
             }
         }
 
+        /*
+        Check Hp at the start of every round.
+         */
         private void checkHp() {
             if (hp <= 0) {
                 state = State.DEAD;
             }
         }
 
+        /*
+        Take hit, expect if defending, then return the damage back to the enemy.
+         */
         public void takeHit(double damage) {
             if (curAnimation == defend) enemy.takeHit(damage);
             else hp -= damage;
+
+            if (hp < 0) hp = 0;
         }
 
+        /*
+        Run away if escape is chosen
+         */
         private void runAway() {
             if (anim.getAnimation() != escape) anim.startAnimation(escape, escapeSpd);
 
@@ -348,9 +369,16 @@ public class RoomFight extends RoomParent {
             }
         }
 
+        /*
+        At the start of each round, decrease cooldown timers.
+         */
         private void decreaseCooldowns() {
             for (Map.Entry<String, Integer> entry : cooldowns.entrySet()) {
-                System.out.println(entry.getKey() + " = " + String.valueOf(entry.getValue()));
+                //System.out.println(entry.getKey() + " = " + String.valueOf(entry.getValue()));
+                int value = entry.getValue();
+                if (value > 0) {
+                    cooldowns.put(entry.getKey(), entry.getValue() - 1);
+                }
             }
         }
     }
@@ -402,13 +430,16 @@ public class RoomFight extends RoomParent {
                     startIdle();
                     actionTimer = actionDelay;
                     player.takeHit(dmgAmount);
-                    state = State.AWAITING;
+                    state = State.START_TURN;
                 }
             }
 
             updateEnd();
         }
 
+        /*
+        Attack if state is ENEMY_WAITING.
+         */
         private void attack() {
             if (state == State.ENEMY_WAITING) {
                 // Wait for timer to go down, then select action
@@ -425,6 +456,9 @@ public class RoomFight extends RoomParent {
             }
         }
 
+        /*
+        Check hp before anything else in render.
+         */
         private void checkHp() {
             if (hp <= 0) {
                 state = State.HACK;
@@ -434,6 +468,7 @@ public class RoomFight extends RoomParent {
 
         public void takeHit(double damage) {
             hp -= damage;
+            if (hp < 0) hp = 0;
         }
     }
 }
