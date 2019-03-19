@@ -45,3 +45,17 @@ button_shield_off
   orig: 240, 120
   offset: 0, 0
   index: -1
+attack_tooltip
+  rotate: false
+  xy: 727, 143
+  size: 200, 100
+  orig: 200, 100
+  offset: 0, 0
+  index: -1
+shield_tooltip
+  rotate: false
+  xy: 727, 41
+  size: 200, 100
+  orig: 200, 100
+  offset: 0, 0
+  index: -1
