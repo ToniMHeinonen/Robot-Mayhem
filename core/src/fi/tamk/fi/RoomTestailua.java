@@ -12,6 +12,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+/*
+Try to make the long press shorter, for example half a second.
+
+We need to discuss if we want every button to grey out when something is pressed.Original plan was
+to only grey out the button which is pressed and when button is released it returns to normal.
+
+Can you figure out a way to draw all the buttons using just one method? You can check for an example
+from the RoomFight class (you need to use arrays).
+
+Is there any way to do the long press check without using booleans?
+
+This code is pretty long for just 2 buttons, is there any way to make it shorter?
+ */
+
 public class RoomTestailua extends RoomParent {
     TextureAtlas testButtonAtlas;
     Skin testSkin;
