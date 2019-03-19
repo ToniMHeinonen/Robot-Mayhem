@@ -277,9 +277,9 @@ public class RoomFight extends RoomParent {
 
         public void update() {
             updateStart();
+            checkHp();
 
             if (state == State.START_TURN) {
-                checkHp();
                 decreaseCooldowns();
                 state = State.AWAITING;
             } else if (state == State.ACTION) {
