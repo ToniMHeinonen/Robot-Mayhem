@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 /*
 Try to make the long press shorter, for example half a second.
@@ -36,6 +37,11 @@ public class RoomTestailua extends RoomParent {
     ImageButton.ImageButtonStyle styleAttack;
     ImageButton.ImageButtonStyle styleShield;
 
+    String[] buttonDrawablesOn = new String[] {"button_attack", "button_shield"};
+    String[] buttonDrawablesOff = new String[] {"button_attack_off", "button_shield_off"};
+    ImageButton.ImageButtonStyle[] buttonStyles;
+    int buttonCounter;
+
     TextureRegion tooltipShield;
     TextureRegion tooltipAttack;
 
@@ -51,6 +57,7 @@ public class RoomTestailua extends RoomParent {
         super(game);
         createButtonSettings();
         createConstants();
+        createButtons();
         // playMusic();
     }
 
@@ -77,6 +84,33 @@ public class RoomTestailua extends RoomParent {
 
     // Testing buttons starts here
 
+    public void createButtons() {
+        float space = 300f;
+        for (int i = 0; i < buttonDrawablesOn.length; i++) {
+            buttonCounter = i;
+            buttonStyles[i].up = testSkin.getDrawable(buttonDrawablesOn[i]);
+            final ImageButton btn = new ImageButton(buttonStyles[i]);
+            btn.setPosition(100 + space*i, 100);
+            stage.addActor(btn);
+
+            btn.addListener(new ActorGestureListener() {
+                int i = buttonCounter;
+                public boolean longPress(Actor actor, float x, float y) {
+                    pressLongShield = true;
+                    return true;
+                }
+                public void tap(InputEvent event, float x, float y, int count, int button) {
+                    doAction(i);
+                    System.out.println("attack");
+                }
+            });
+        }
+    }
+
+    public void doAction(int index) {
+        buttonStyles[index].up = testSkin.getDrawable(buttonDrawablesOff[index]);
+    }
+
     public void animationUpdate() {
         if (inAnimation) {
             animationCounter--;
@@ -96,62 +130,8 @@ public class RoomTestailua extends RoomParent {
 
         tooltipShield = new TextureRegion(testButtonAtlas.findRegion("shield_tooltip"));
         tooltipAttack = new TextureRegion(testButtonAtlas.findRegion("attack_tooltip"));
-    }
 
-    public void attackButton() {
-        styleAttack.up = testSkin.getDrawable("button_attack");
-        // Maybe not necessary..?
-        // styleAttack.down = testSkin.getDrawable("button_attack_clicked");
-
-        buttonAttack = new ImageButton(styleAttack);
-        buttonAttack.setPosition(game.pixelWidth/3, game.pixelHeight/4);
-
-        // Button is available to click only if there is no animation going on.
-        if (!inAnimation) {
-            buttonAttack.addListener(new ActorGestureListener() {
-                public boolean longPress(Actor actor, float x, float y) {
-                    pressLongAttack = true;
-                    return true;
-                }
-                public void tap(InputEvent event, float x, float y, int count, int button) {
-                    inAnimation = true;
-                    System.out.println("attack");
-                }
-            });
-        } else {
-            // If there is animation going on, button is "greyed out" and unavailable to click.
-            styleAttack.up = testSkin.getDrawable("button_attack_off");
-        }
-
-        stage.addActor(buttonAttack);
-    }
-
-    public void shieldButton() {
-        styleShield.up = testSkin.getDrawable("button_shield");
-        // Maybe not necessary..?
-        // styleShield.down = testSkin.getDrawable("button_shield_clicked");
-
-        buttonShield = new ImageButton(styleShield);
-        buttonShield.setPosition(game.pixelWidth/2, game.pixelHeight/4);
-
-        // Button is available to click only if there is no animation going on.
-        if (!inAnimation) {
-            buttonShield.addListener(new ActorGestureListener() {
-                public boolean longPress(Actor actor, float x, float y) {
-                    pressLongShield = true;
-                    return true;
-                }
-                public void tap(InputEvent event, float x, float y, int count, int button) {
-                    inAnimation = true;
-                    System.out.println("shield");
-                }
-            });
-        } else {
-            // If there is animation going on, button is "greyed out" and unavailable to click.
-            styleShield.up = testSkin.getDrawable("button_shield_off");
-        }
-
-        stage.addActor(buttonShield);
+        buttonStyles = new ImageButton.ImageButtonStyle[] {styleAttack, styleShield};
     }
 
     // Check if user has "longpressed" buttons and draw tooltips.
@@ -178,8 +158,6 @@ public class RoomTestailua extends RoomParent {
     @Override
     public void render(float delta) {
         super.render(delta);
-        attackButton();
-        shieldButton();
         animationUpdate();
         batch.begin();
         checkTooltip();
