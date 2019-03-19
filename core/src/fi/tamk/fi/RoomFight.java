@@ -56,6 +56,7 @@ public class RoomFight extends RoomParent {
             batch.begin();
             batch.draw(imgBg, 0,0, imgBg.getWidth(), imgBg.getHeight());
             drawTopBar();
+            drawHP();
             player.update();
             enemy.update();
             escaping();
@@ -122,6 +123,13 @@ public class RoomFight extends RoomParent {
             fontSteps.draw(batch, "Do you want to escape?",
                     game.pixelWidth/2 - 400, game.pixelHeight/2 + 150);
         }
+    }
+
+    private void drawHP() {
+        fontSteps.draw(batch, "Player " + String.valueOf(player.getHp()),
+                400, game.pixelHeight - 50);
+        fontSteps.draw(batch, "Enemy " + String.valueOf(enemy.getHp()),
+                1000, game.pixelHeight - 50);
     }
 
     public void createEscapeButton() {
@@ -211,8 +219,8 @@ public class RoomFight extends RoomParent {
             tempAnimation = false;
         }
 
-        public void takeHit(double damage) {
-            hp -= damage;
+        public double getHp() {
+            return hp;
         }
     }
 
@@ -262,6 +270,7 @@ public class RoomFight extends RoomParent {
                     if (curAnimation.isAnimationFinished(anim.getStateTime())) {
                         if (causeDamage) {
                             enemy.takeHit(damage);
+                            causeDamage = false;
                         }
                         startIdle();
                         state = State.ENEMY_WAITING;
@@ -301,6 +310,11 @@ public class RoomFight extends RoomParent {
             if (hp <= 0) {
                 state = State.DEAD;
             }
+        }
+
+        public void takeHit(double damage) {
+            if (curAnimation == defend) enemy.takeHit(damage);
+            else hp -= damage;
         }
 
         private void runAway() {
@@ -353,6 +367,7 @@ public class RoomFight extends RoomParent {
         public void update() {
             updateStart();
 
+            checkHp();
             attack();
 
             if (tempAnimation) {
@@ -367,25 +382,34 @@ public class RoomFight extends RoomParent {
             updateEnd();
         }
 
-        public void attack() {
+        private void attack() {
             if (state == State.ENEMY_WAITING) {
                 // Wait for timer to go down, then select action
                 if (actionTimer > 0) {
                     actionTimer--;
                 } else {
-                    if (hp > 0) {
-                        state = State.ENEMY_ACTION;
-                        tempAnimation = true;
-                        int random = MathUtils.random(0, animList.size() - 1);
-                        curAnimation = animList.get(random);
-                        dmgAmount = damage * dmgMultiplier[random];
-                        anim.startAnimation(curAnimation, speeds[random]);
-                    } else {
-                        state = State.HACK;
-                        anim.startAnimation(hack, hackSpd);
-                    }
+                    System.out.println("attack else");
+                    state = State.ENEMY_ACTION;
+                    tempAnimation = true;
+                    int random = MathUtils.random(0, animList.size() - 1);
+                    curAnimation = animList.get(random);
+                    dmgAmount = damage * dmgMultiplier[random];
+                    anim.startAnimation(curAnimation, speeds[random]);
                 }
             }
+        }
+
+        private void checkHp() {
+            if (hp <= 0) {
+                state = State.HACK;
+                if (anim.getAnimation() != hack) anim.startAnimation(hack, hackSpd);
+                System.out.println("check hp");
+            }
+        }
+
+        public void takeHit(double damage) {
+            hp -= damage;
+            System.out.println("took hit");
         }
     }
 }
