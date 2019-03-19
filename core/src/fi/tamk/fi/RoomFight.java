@@ -14,19 +14,20 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-// Enums give simple constants, which decreases the chance for coding mistakes
-enum State {
-    START_TURN,
-    AWAITING,
-    ACTION,
-    ENEMY_WAITING,
-    ENEMY_ACTION,
-    HACK,
-    DEAD,
-    ESCAPE
-}
 
 public class RoomFight extends RoomParent {
+
+    // Enums give simple constants, which decreases the chance for coding mistakes
+    enum State {
+        START_TURN,
+        AWAITING,
+        ACTION,
+        ENEMY_WAITING,
+        ENEMY_ACTION,
+        HACK,
+        DEAD,
+        ESCAPE
+    }
 
     private Texture imgBg, escapeBg;
     private Player player;
@@ -134,7 +135,7 @@ public class RoomFight extends RoomParent {
                 1000, game.pixelHeight - 50);
     }
 
-    public void createEscapeButton() {
+    private void createEscapeButton() {
         final TextButton btn = new TextButton("Escape", skin);
         btn.setWidth(300);
         btn.setHeight(100);
@@ -398,7 +399,7 @@ public class RoomFight extends RoomParent {
 
         Enemy() {
 
-            X = game.pixelWidth - 100f - game.getEnemyIdle().getWidth()/3;
+            X = game.pixelWidth - 100f - game.getEnemyIdle().getWidth()/3.0f;
             Y = 200f;
             hp = 5;
             damage = 1;
