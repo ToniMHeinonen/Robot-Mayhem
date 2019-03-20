@@ -1,19 +1,19 @@
 
-testpack.png
+progressbar.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-test_bg
+tripmeter
   rotate: false
   xy: 1, 1
-  size: 400, 57
-  orig: 400, 57
+  size: 1200, 120
+  orig: 1200, 120
   offset: 0, 0
   index: -1
-test_robot
+tripmarker
   rotate: false
-  xy: 403, 1
-  size: 49, 57
-  orig: 49, 57
+  xy: 1203, 1
+  size: 70, 120
+  orig: 70, 120
   offset: 0, 0
   index: -1

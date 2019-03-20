@@ -28,7 +28,6 @@ public class RoomParent implements Screen {
     protected Music backgroundMusic;
     protected Music bossMusic;
     protected ProgressBar progressBar;
-    protected Texture progBarEnemy;
     protected BitmapFont fontSteps;
     private int transitionCounter = 20;
 
@@ -43,7 +42,6 @@ public class RoomParent implements Screen {
         this.skin = game.getSkin();
         Gdx.input.setInputProcessor(this.stage);
         this.backgroundMusic = game.getBackgroundMusic();
-        progBarEnemy = game.getProgBarEnemy();
         this.bossMusic = game.getBossMusic();
         this.fontSteps = game.getFontSteps();
         stage.clear();
@@ -121,20 +119,11 @@ public class RoomParent implements Screen {
 
     public void createProgressBar() {
         progressBar = new ProgressBar(0, 20, 1, false, game.getProgBarStyle());
-        progressBar.setWidth(400);
-        progressBar.setHeight(140);
-        progressBar.setBounds(game.pixelWidth / 2 - progressBar.getWidth() / 2,
-                game.pixelHeight - progressBar.getHeight(),
-                progressBar.getWidth(),
-                progressBar.getHeight());
+        progressBar.setWidth(game.getProgBarStyle().background.getMinWidth());
+        progressBar.setHeight(game.getProgBarStyle().background.getMinHeight());
+        progressBar.setPosition(game.pixelWidth / 2 - progressBar.getWidth() / 2,
+                game.pixelHeight - progressBar.getHeight());
         stage.addActor(progressBar);
-    }
-
-    public void drawProgBarEnemy() {
-        batch.draw(progBarEnemy, progressBar.getX() + progressBar.getWidth() - 10,
-                progressBar.getY() + progressBar.getHeight() / 3.5f,
-                progBarEnemy.getWidth(),
-                progBarEnemy.getHeight());
     }
 
     @Override
