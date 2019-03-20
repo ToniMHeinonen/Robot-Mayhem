@@ -51,7 +51,6 @@ public class RoomGame extends RoomParent {
             controlBackground();
             drawTopBar();
             controlProgBar();
-            drawProgBarEnemy();
             drawSteps();
             player.update();
             batch.end();

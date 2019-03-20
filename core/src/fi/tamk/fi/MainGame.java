@@ -49,7 +49,7 @@ public class MainGame extends Game {
 	int stepCount;
 
 	// Textures
-	private Texture imgBgHall, imgBgBoss, imgTopBar, gamePlayer, progBarEnemy, playerIdle,
+	private Texture imgBgHall, imgBgBoss, imgTopBar, gamePlayer, playerIdle,
 			playerItem, playerEscape, playerHack, playerDeath,
 			enemyIdle, enemyAttack1, enemyAttack2, enemyAttack3, enemyHack, escapeBg;
 
@@ -161,13 +161,13 @@ public class MainGame extends Game {
 	}
 
 	private void createProgressBarFiles() {
-	    progBarAtlas = new TextureAtlas("progressbar/testpack.pack");
+	    progBarAtlas = new TextureAtlas("progressbar/progressbar.pack");
 	    progBarSkin = new Skin();
 	    progBarSkin.addRegions(progBarAtlas);
 
 	    progBarStyle = new ProgressBar.ProgressBarStyle();
-	    progBarStyle.knob = progBarSkin.getDrawable("test_robot");
-	    progBarStyle.background = progBarSkin.getDrawable("test_bg");
+	    progBarStyle.knob = progBarSkin.getDrawable("tripmarker");
+	    progBarStyle.background = progBarSkin.getDrawable("tripmeter");
     }
 
 	private void loadTextures() {
@@ -175,7 +175,6 @@ public class MainGame extends Game {
 		imgBgBoss = new Texture("texture/bg_hall_boss_blank.png");
 		imgTopBar = new Texture("texture/topbar.png");
 		gamePlayer = new Texture("texture/player/player.png");
-		progBarEnemy = new Texture("texture/progbar_enemy.png");
         playerIdle = new Texture("texture/player/playerIdle.png");
         playerItem = new Texture("texture/player/playerItem.png");
         playerEscape = new Texture("texture/player/playerEscape.png");
@@ -292,10 +291,6 @@ public class MainGame extends Game {
 	public Texture getImgTopBar() {
 		return imgTopBar;
 	}
-
-	public Texture getProgBarEnemy() {
-	    return progBarEnemy;
-    }
 
 	public TextButton.TextButtonStyle getStyle() {
 		return style;
