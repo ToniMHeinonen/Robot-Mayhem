@@ -1,0 +1,19 @@
+
+progressbar.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+tripmeter
+  rotate: false
+  xy: 1, 1
+  size: 1200, 120
+  orig: 1200, 120
+  offset: 0, 0
+  index: -1
+tripmarker
+  rotate: false
+  xy: 1203, 1
+  size: 70, 120
+  orig: 70, 120
+  offset: 0, 0
+  index: -1
