@@ -60,8 +60,8 @@ public class Hacking extends RoomParent{
     bodies and worlds works, so if you get really stuck with this,m then I will have a better look
      */
 
-    int x = 1000;
-    int y = 500;
+    int x = 0;
+    int y = 0;
 
     protected BodyDef getDefinitionOfBody() {
 
@@ -73,8 +73,7 @@ public class Hacking extends RoomParent{
         shieldBody.position.set(x, y);
 
         System.out.println(x + " " + y);
-        x += 100;
-        y += 100;
+
         return shieldBody;
     }
 
@@ -111,14 +110,14 @@ public class Hacking extends RoomParent{
         batch = new SpriteBatch();
 
         world = new World(new Vector2(0, -0f), true);
-        shieldBody = world.createBody(getDefinitionOfBody());
+        /*shieldBody = world.createBody(getDefinitionOfBody());
         shieldBody.createFixture(getFixtureDefinition());
         shieldBody.getPosition();
         shieldBody.setUserData(texture);
 
         shieldBody.applyLinearImpulse(new Vector2(0.0f, 0.0f),
                 shieldBody.getWorldCenter(),
-                true);
+                true);*/
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1920, 1080);
@@ -157,10 +156,10 @@ public class Hacking extends RoomParent{
 
         //createShield();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        //if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
 
             createShield();
-        }
+        //}
 
         world.getBodies(shields);
 
@@ -193,6 +192,7 @@ public class Hacking extends RoomParent{
                             texture.getHeight(),
                             false,
                             false);
+
                 }
             }
         }
@@ -206,7 +206,7 @@ public class Hacking extends RoomParent{
          constructor
         create(); */
         pleaseWork();
-
+        moveShield();
         /*
         Just to make everything clear, you do know that anything that is in the render() method
         gets called 60 times in a second? So if you only want to for example create something once,
@@ -217,7 +217,17 @@ public class Hacking extends RoomParent{
     }
 
     public void createShield() {
-        BodyDef myBodyDef = new BodyDef();
+
+        shieldBody = world.createBody(getDefinitionOfBody());
+        shieldBody.createFixture(getFixtureDefinition());
+        shieldBody.getPosition();
+        shieldBody.setUserData(texture);
+
+        shieldBody.applyLinearImpulse(new Vector2(0.0f, 0.0f),
+                shieldBody.getWorldCenter(),
+                true);
+
+        /*BodyDef myBodyDef = new BodyDef();
 
         // It's a body that moves
         myBodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -247,6 +257,11 @@ public class Hacking extends RoomParent{
 
         shield.applyLinearImpulse(new Vector2(0.0f, 0.0f),
                 shield.getWorldCenter(),
-                true);
+                true);*/
+    }
+
+    public void moveShield() {
+
+        shieldBody.getPosition().set(x += 1, y += 1);
     }
 }
