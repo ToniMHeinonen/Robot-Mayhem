@@ -145,10 +145,12 @@ public class RoomFight extends RoomParent {
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (!escapePopup) {
-                    escapePopup = true;
-                    stage.clear();
-                    createYesNo();
+                if (state == State.AWAITING) {
+                    if (!escapePopup) {
+                        escapePopup = true;
+                        stage.clear();
+                        createYesNo();
+                    }
                 }
             }
         });
