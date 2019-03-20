@@ -273,8 +273,8 @@ public class Hacking extends RoomParent{
             shieldBody.getPosition().set(x = (float) Math.sqrt(Math.pow(y, 2) + Math.pow(shieldRadius, 2)),
                     y);
 
-            x += (float) Math.sqrt(Math.pow(y, 2) + Math.pow(shieldRadius, 2));
             y++;
+            x += (float) Math.sqrt(Math.pow(y, 2) + Math.pow(shieldRadius, 2));
         }
 
         if ((-shieldRadius < shieldBody.getPosition().y && shieldBody.getPosition().y > shieldRadius)
@@ -285,8 +285,8 @@ public class Hacking extends RoomParent{
             shieldBody.getPosition().set(x = (float) Math.sqrt(Math.pow(y, 2) + Math.pow(shieldRadius, 2)),
                     y);
 
-            x += (float) Math.sqrt(Math.pow(y, 2) + Math.pow(shieldRadius, 2));
             y--;
+            x += (float) Math.sqrt(Math.pow(y, 2) + Math.pow(shieldRadius, 2));
         }
 
         /*if (midPointReached == true && shieldBody.getPosition().x <= shieldRadius) {
