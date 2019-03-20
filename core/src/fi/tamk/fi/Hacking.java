@@ -47,7 +47,8 @@ public class Hacking extends RoomParent{
 
     Body shieldBody;
 
-    Texture texture = new Texture(Gdx.files.internal("badlogic.jpg"));
+    Texture testEnemy = new Texture(Gdx.files.internal("badlogic.jpg"));
+    Texture texture = new Texture(Gdx.files.internal("test.png"));
 
     private int aliveTimer = 560;
     protected float width = 1000;
@@ -59,6 +60,9 @@ public class Hacking extends RoomParent{
     bodies and worlds works, so if you get really stuck with this,m then I will have a better look
      */
 
+    int x = 1000;
+    int y = 500;
+
     protected BodyDef getDefinitionOfBody() {
 
         BodyDef shieldBody = new BodyDef();
@@ -66,8 +70,11 @@ public class Hacking extends RoomParent{
         // It's a body that moves
         shieldBody.type = BodyDef.BodyType.DynamicBody;
 
-        // Doesn't do shit.
-        shieldBody.position.set(40000, 10000);
+        shieldBody.position.set(x, y);
+
+        System.out.println(x + " " + y);
+        x += 100;
+        y += 100;
         return shieldBody;
     }
 
@@ -114,7 +121,7 @@ public class Hacking extends RoomParent{
                 true);
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 200, 200);
+        camera.setToOrtho(false, 1920, 1080);
 
         debugRenderer = new Box2DDebugRenderer();
 
@@ -162,7 +169,7 @@ public class Hacking extends RoomParent{
         batch.begin();
 
         for (Body body : shields) {
-            System.out.println(body.getUserData());
+            //System.out.println(body.getUserData());
             if(body.getUserData() != null) {
 
                 if (body.getUserData() == texture) {
@@ -171,8 +178,8 @@ public class Hacking extends RoomParent{
                     Texture texture = (Texture) body.getUserData();
 
                     batch.draw(texture,
-                            body.getPosition().x + radius,
-                            body.getPosition().y + radius,
+                            body.getPosition().x - radius,
+                            body.getPosition().y - radius,
                             radius,
                             radius,
                             radius * 2,
