@@ -277,8 +277,8 @@ public class Hacking extends RoomParent{
             y++;
         }
 
-        if ((0 < shieldBody.getPosition().y && shieldBody.getPosition().y > shieldRadius)
-                || (midPointReached == true && 0 < shieldBody.getPosition().y)) {
+        if ((-shieldRadius < shieldBody.getPosition().y && shieldBody.getPosition().y > shieldRadius)
+                || midPointReached == true) {
 
             midPointReached = true;
 
