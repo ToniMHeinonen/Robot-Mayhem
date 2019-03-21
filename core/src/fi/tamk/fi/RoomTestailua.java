@@ -11,6 +11,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
 
+/*
+Wow, now this code is looking really great! Though now you will have to explain to me how it works,
+since I don't understand all the things that you have used :D.
+
+One more thing though, have you figured out a way for the button to go gray when finger is touching
+it and when the finger lets go, then it returns back to normal? If you can make that work, it would
+look much more UX friendly.
+ */
+
 public class RoomTestailua extends RoomParent {
     TextureAtlas testButtonAtlas;
     Skin testSkin;
