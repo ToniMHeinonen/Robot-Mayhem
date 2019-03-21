@@ -165,7 +165,7 @@ public class Hacking extends RoomParent{
 
         //if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
 
-            createShield();
+        createShield();
         //}
 
         world.getBodies(shields);
