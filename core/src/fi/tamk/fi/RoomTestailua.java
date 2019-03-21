@@ -18,6 +18,7 @@ since I don't understand all the things that you have used :D.
 One more thing though, have you figured out a way for the button to go gray when finger is touching
 it and when the finger lets go, then it returns back to normal? If you can make that work, it would
 look much more UX friendly.
+    - Now it should work like that.. maybe :D
  */
 
 public class RoomTestailua extends RoomParent {
@@ -36,9 +37,7 @@ public class RoomTestailua extends RoomParent {
     ImageButton.ImageButtonStyle[] tooltipStyles;
 
     int buttonCounter;
-    int styleCounter;
     float space = 300f;
-    float buttonDelay = 1;
     float tooltipDelay = 2;
 
     RoomTestailua(MainGame game) {
@@ -106,23 +105,15 @@ public class RoomTestailua extends RoomParent {
                     return true;
                 }
                 public void tap(InputEvent event, float x, float y, int count, int button) {
-                    pressButton(i);
                     System.out.println("tap");
+                    buttonStyles[i].down = testSkin.getDrawable(buttonDrawablesOff[i]);
+                }
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    System.out.println("touchup");
+                    buttonStyles[i].up = testSkin.getDrawable(buttonDrawablesOn[i]);
                 }
             });
         }
-    }
-
-    // Set button to greyed out for a second(buttonDelay).
-    public void pressButton(int index) {
-        buttonStyles[index].up = testSkin.getDrawable(buttonDrawablesOff[index]);
-        styleCounter = index;
-        Timer.schedule(new Timer.Task(){
-            @Override
-            public void run() {
-                buttonStyles[styleCounter].up = testSkin.getDrawable(buttonDrawablesOn[styleCounter]);
-            }
-        }, buttonDelay);
     }
 
     // Show tooltip for 2 seconds(tooltipDelay) and then remove it from the stage.
