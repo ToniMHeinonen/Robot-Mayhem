@@ -22,8 +22,10 @@ public class RoomFight extends RoomParent {
         START_TURN,
         AWAITING,
         ACTION,
+        ENEMY_HIT,
         ENEMY_WAITING,
         ENEMY_ACTION,
+        PLAYER_HIT,
         HACK,
         DEAD,
         ESCAPE
