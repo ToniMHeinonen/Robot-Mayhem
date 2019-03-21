@@ -62,6 +62,8 @@ public class Hacking extends RoomParent{
     bodies and worlds works, so if you get really stuck with this,m then I will have a better look
      */
 
+    /* Not sure how to change these (x & y) for the creation of a new shield. Tried modifying
+    methods but it ended up making the hacking room completely blank so I undid it all.*/
     float x = 400;
     float y = 200;
 
@@ -153,7 +155,8 @@ public class Hacking extends RoomParent{
 
     Array<Body> shields = new Array<Body>();
 
-    // Doesn't work. :(
+    // int plsChill = 0; possibly useless
+
     public void pleaseWork() {
 
         batch.setProjectionMatrix(camera.combined);
@@ -161,12 +164,8 @@ public class Hacking extends RoomParent{
         Gdx.gl.glClearColor(0, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //createShield();
-
-        //if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-
         createShield();
-        //}
+        createShield();
 
         world.getBodies(shields);
 
@@ -180,27 +179,27 @@ public class Hacking extends RoomParent{
 
                 if (body.getUserData() == texture) {
 
-                    float radius = ((CircleShape) body.getFixtureList().get(0).getShape()).getRadius();
-                    Texture texture = (Texture) body.getUserData();
+                        float radius = ((CircleShape) body.getFixtureList().get(0).getShape()).getRadius();
+                        Texture texture = (Texture) body.getUserData();
 
-                    batch.draw(texture,
-                            body.getPosition().x - radius,
-                            body.getPosition().y - radius,
-                            radius,
-                            radius,
-                            radius * 2,
-                            radius * 2,
-                            1.0f,
-                            1.0f,
-                            body.getTransform().getRotation() * MathUtils.radiansToDegrees,
-                            0,
-                            0,
-                            texture.getWidth(),
-                            texture.getHeight(),
-                            false,
-                            false);
-                    bodiesToBeDestroyed.add(body);
-                    checkBodiesToRemove();
+                        batch.draw(texture,
+                                body.getPosition().x - radius,
+                                body.getPosition().y - radius,
+                                radius,
+                                radius,
+                                radius * 2,
+                                radius * 2,
+                                1.0f,
+                                1.0f,
+                                body.getTransform().getRotation() * MathUtils.radiansToDegrees,
+                                0,
+                                0,
+                                texture.getWidth(),
+                                texture.getHeight(),
+                                false,
+                                false);
+                        bodiesToBeDestroyed.add(body);
+                        checkBodiesToRemove();
                 }
             }
         }
@@ -286,11 +285,10 @@ public class Hacking extends RoomParent{
 
             //shieldBody.getPosition().set(x = (float) Math.sqrt(Math.pow(y, 2) + Math.pow(shieldRadius, 2)), y);
 
-            // Not sure why using radians do not work. Or my earlier lines of code.
             shieldBody.getPosition().set( x = (float) (shieldBody.getPosition().x + shieldRadius * cos(a)),
                     y = (float) (shieldBody.getPosition().y  + shieldRadius * sin(a)));
 
-                a++;
+            a++;
         }
     }
 }
