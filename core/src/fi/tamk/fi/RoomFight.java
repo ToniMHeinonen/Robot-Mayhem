@@ -23,10 +23,8 @@ public class RoomFight extends RoomParent {
         START_TURN,
         AWAITING,
         ACTION,
-        ENEMY_HIT,
         ENEMY_WAITING,
         ENEMY_ACTION,
-        PLAYER_HIT,
         HACK,
         DEAD,
         ESCAPE
@@ -245,6 +243,9 @@ public class RoomFight extends RoomParent {
         protected int whiteTimer = flashTime;
 
         protected float positionOffset;
+        protected boolean positionIncorrect;
+        protected int positionTime = 20; // How long to stay still after hit
+        protected int positionTimer = positionTime;
 
         protected boolean tempAnimation = false;
 
@@ -280,13 +281,30 @@ public class RoomFight extends RoomParent {
         public void flashAndMove() {
             flashWhite = true;
             if (hp > 0) {
-                positionOffset = 100f;
+                positionIncorrect = true;
+                if (X < game.pixelWidth/2) {
+                    // Player
+                    positionOffset = -100f;
+                } else {
+                    // Enemy
+                    positionOffset = 100f;
+                }
             }
         }
 
         public void returnPosition() {
-            if (Math.abs(positionOffset) > 0) {
-                positionOffset--;
+            if (positionIncorrect) {
+                if (positionTimer> 0) {
+                    positionTimer--;
+                } else {
+                    if (positionOffset > 0) {
+                        positionOffset--;
+                    } else if (positionOffset < 0) {
+                        positionOffset++;
+                    } else {
+                        positionIncorrect = false;
+                    }
+                }
             }
         }
 
@@ -356,34 +374,36 @@ public class RoomFight extends RoomParent {
 
         public void update() {
             updateStart();
-            checkHp();
+            if (!positionIncorrect) {
+                checkHp();
 
-            if (state == State.START_TURN) {
-                decreaseCooldowns();
-                state = State.AWAITING;
-            } else if (state == State.ACTION) {
-                // If temporary animation currently on, wait for it to finish,
-                // else give turn to enemy
-                if (tempAnimation) {
-                    if (curAnimation.isAnimationFinished(anim.getStateTime())) {
-                        if (causeDamage) {
-                            enemy.takeHit(dmgAmount);
-                            causeDamage = false;
+                if (state == State.START_TURN) {
+                    decreaseCooldowns();
+                    state = State.AWAITING;
+                } else if (state == State.ACTION) {
+                    // If temporary animation currently on, wait for it to finish,
+                    // else give turn to enemy
+                    if (tempAnimation) {
+                        if (curAnimation.isAnimationFinished(anim.getStateTime())) {
+                            if (causeDamage) {
+                                enemy.takeHit(dmgAmount);
+                                causeDamage = false;
+                            }
+                            startIdle();
+                            state = State.ENEMY_WAITING;
                         }
-                        startIdle();
+                    } else {
                         state = State.ENEMY_WAITING;
                     }
-                } else {
-                    state = State.ENEMY_WAITING;
+                } else if (state == State.AWAITING) {
+                    if (anim.getAnimation() != idle) startIdle();
+                } else if (state == State.HACK) {
+                    if (anim.getAnimation() != hack) startHack();
+                } else if (state == State.DEAD) {
+                    if (anim.getAnimation() != death) anim.startAnimation(death, deathSpd);
+                } else if (state == State.ESCAPE) {
+                    runAway();
                 }
-            } else if (state == State.AWAITING) {
-                if (anim.getAnimation() != idle) startIdle();
-            } else if (state == State.HACK) {
-                if (anim.getAnimation() != hack) startHack();
-            } else if (state == State.DEAD) {
-                if (anim.getAnimation() != death) anim.startAnimation(death, deathSpd);
-            } else if (state == State.ESCAPE) {
-                runAway();
             }
 
             updateEnd();
@@ -497,15 +517,17 @@ public class RoomFight extends RoomParent {
         public void update() {
             updateStart();
 
-            checkHp();
-            attack();
+            if (!positionIncorrect) {
+                checkHp();
+                attack();
 
-            if (tempAnimation) {
-                if (curAnimation.isAnimationFinished(anim.getStateTime())) {
-                    startIdle();
-                    actionTimer = actionDelay;
-                    player.takeHit(dmgAmount);
-                    state = State.START_TURN;
+                if (tempAnimation) {
+                    if (curAnimation.isAnimationFinished(anim.getStateTime())) {
+                        startIdle();
+                        actionTimer = actionDelay;
+                        player.takeHit(dmgAmount);
+                        state = State.START_TURN;
+                    }
                 }
             }
 
