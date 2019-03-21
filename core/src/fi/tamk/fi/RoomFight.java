@@ -393,28 +393,21 @@ public class RoomFight extends RoomParent {
     private class Enemy extends Fighters {
 
         private Animation<TextureRegion> attack1, attack2, attack3;
+        private HashMap<String,Object> mapBoss;
 
         private int actionDelay = 30;
         private int actionTimer = actionDelay;
-
-        private double[] dmgMultiplier;
+        private double[] damages;
 
         Enemy() {
 
             X = game.pixelWidth - 100f - game.getEnemyIdle().getWidth()/3.0f;
             Y = 200f;
             hp = 5;
-            damage = 1;
             idleSpd = 30;
             hackSpd = 30;
 
-            dmgMultiplier = new double[] {1, 1.5, 2};
-
-            idle = anim.createAnimation(game.getEnemyIdle(), 3, 1);
-            attack1 = anim.createAnimation(game.getEnemyAttack1(), 3, 1);
-            attack2 = anim.createAnimation(game.getEnemyAttack2(), 3, 1);
-            attack3 = anim.createAnimation(game.getEnemyAttack3(), 3, 1);
-            hack = anim.createAnimation(game.getEnemyHack(), 3, 1);
+            retrieveBoss();
 
             animList = new ArrayList<Animation<TextureRegion>>();
             Collections.addAll(animList, attack1, attack2, attack3);
@@ -441,6 +434,22 @@ public class RoomFight extends RoomParent {
             updateEnd();
         }
 
+        private void retrieveBoss() {
+            mapBoss = Bosses.getBoss("roombot");
+
+            idle = (Animation<TextureRegion>) mapBoss.get(Bosses.getIdle());
+            attack1 = (Animation<TextureRegion>) mapBoss.get(Bosses.getSkill() + "1");
+            attack2 = (Animation<TextureRegion>) mapBoss.get(Bosses.getSkill() + "2");
+            attack3 = (Animation<TextureRegion>) mapBoss.get(Bosses.getSkill() + "3");
+            hack = (Animation<TextureRegion>) mapBoss.get(Bosses.getHack());
+
+            double dmg1 = Double.valueOf(mapBoss.get(Bosses.getDamage() + "1").toString());
+            double dmg2 = Double.valueOf(mapBoss.get(Bosses.getDamage() + "2").toString());
+            double dmg3 = Double.valueOf(mapBoss.get(Bosses.getDamage() + "3").toString());
+
+            damages = new double[] {dmg1, dmg2, dmg3};
+        }
+
         /*
         Attack if state is ENEMY_WAITING.
          */
@@ -454,7 +463,7 @@ public class RoomFight extends RoomParent {
                     tempAnimation = true;
                     int random = MathUtils.random(0, animList.size() - 1);
                     curAnimation = animList.get(random);
-                    dmgAmount = damage * dmgMultiplier[random];
+                    dmgAmount = damages[random];
                     anim.startAnimation(curAnimation, speeds[random]);
                 }
             }
