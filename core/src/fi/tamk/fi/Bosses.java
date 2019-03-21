@@ -73,8 +73,6 @@ public class Bosses {
 
         mapRoombot = new HashMap<String, Object>();
         mapRoombot = addToMap(mapRoombot);
-
-        disposeTextures();
     }
 
     private static void bossTest() {
@@ -98,8 +96,6 @@ public class Bosses {
 
         mapTest = new HashMap<String, Object>();
         mapTest = addToMap(mapTest);
-
-        disposeTextures();
     }
 
     private static HashMap<String, Object> addToMap(HashMap<String, Object> map) {
@@ -116,14 +112,6 @@ public class Bosses {
         map.put(dialogEnd, curDialogEnd);
 
         return map;
-    }
-
-    private static void disposeTextures() {
-        t_idle.dispose();
-        t_hack.dispose();
-        t_skill1.dispose();
-        t_skill2.dispose();
-        t_skill3.dispose();
     }
 
     public static String getName() {

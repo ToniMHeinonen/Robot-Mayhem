@@ -69,13 +69,6 @@ public class Skills {
         a_attack = anim.createAnimation(t_attack, 3, 1);
         t_defend = new Texture("texture/player/playerDefend.png");
         a_defend = anim.createAnimation(t_defend, 3, 1);
-
-        disposeTextures();
-    }
-
-    private static void disposeTextures() {
-        t_attack.dispose();
-        t_defend.dispose();
     }
 
     public static String getName() {
