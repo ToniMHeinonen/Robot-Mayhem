@@ -50,8 +50,7 @@ public class MainGame extends Game {
 
 	// Textures
 	private Texture imgBgHall, imgBgBoss, imgTopBar, gamePlayer, playerIdle,
-			playerItem, playerEscape, playerHack, playerDeath,
-			enemyIdle, enemyAttack1, enemyAttack2, enemyAttack3, enemyHack, escapeBg;
+			playerItem, playerEscape, playerHack, playerDeath, escapeBg;
 
 	//Stepmeter in RoomGame
     private BitmapFont fontSteps;
@@ -180,11 +179,6 @@ public class MainGame extends Game {
         playerEscape = new Texture("texture/player/playerEscape.png");
         playerHack = new Texture("texture/player/playerHack.png");
 		playerDeath = new Texture("texture/player/playerDeath.png");
-		enemyIdle = new Texture("texture/enemy/enemyIdle.png");
-		enemyAttack1 = new Texture("texture/enemy/enemyAttack1.png");
-		enemyAttack2 = new Texture("texture/enemy/enemyAttack2.png");
-		enemyAttack3 = new Texture("texture/enemy/enemyAttack3.png");
-		enemyHack = new Texture("texture/enemy/enemyHack.png");
 		escapeBg = new Texture("texture/escapeBackground.png");
 	}
 
@@ -316,29 +310,9 @@ public class MainGame extends Game {
         return playerIdle;
     }
 
-	public Texture getEnemyIdle() {
-		return enemyIdle;
-	}
-
-	public Texture getEnemyAttack1() {
-		return enemyAttack1;
-	}
-
-	public Texture getEnemyAttack2() {
-		return enemyAttack2;
-	}
-
-	public Texture getEnemyAttack3() {
-		return enemyAttack3;
-	}
-
 	public BitmapFont getFontSteps() {
 	    return fontSteps;
     }
-
-	public Texture getEnemyHack() {
-		return enemyHack;
-	}
 
 	public Texture getPlayerDeath() {
 		return playerDeath;
