@@ -32,8 +32,8 @@ import java.security.Key;
 import sun.applet.Main;
 
 import static com.badlogic.gdx.Input.Keys.M;
-import static com.badlogic.gdx.math.MathUtils.cos;
-import static com.badlogic.gdx.math.MathUtils.sin;
+import static java.lang.Math.cos;
+import static java.lang.StrictMath.sin;
 
 public class Hacking extends RoomParent{
 
@@ -265,54 +265,28 @@ public class Hacking extends RoomParent{
     }
 
     boolean midPointReached = false;
-    int changer = 0;
 
     public void moveShield() {
 
-        if (shieldBody.getPosition().y <= shieldRadius && midPointReached == false) {
+        if (shieldBody.getPosition().y <= shieldRadius + shieldBody.getPosition().y && midPointReached == false) {
 
-            shieldBody.getPosition().set(x = (float) Math.sqrt(Math.pow(y, 2) + Math.pow(shieldRadius, 2)),
-                    y);
+            //shieldBody.getPosition().set(x = (float) Math.sqrt(Math.pow(y, 2) + Math.pow(shieldRadius, 2)), y);
+            shieldBody.getPosition().set( x = (float) (shieldBody.getPosition().x + shieldRadius + sin(a)),
+                    y = (float) (shieldBody.getPosition().y  + shieldRadius + cos(a)));
 
-            //if (changer == 0) {
-
-                y++;
-                x += (float) Math.sqrt(Math.pow(y, 2) + Math.pow(shieldRadius, 2));
-                changer++;
-            //}
-
-            /*if (changer == 1) {
-
-                x++;
-                y += (float) Math.sqrt(Math.pow(x, 2) + Math.pow(shieldRadius, 2));
-                changer--;
-            }*/
+            a++;
         }
 
-        if ((-shieldRadius < shieldBody.getPosition().y && shieldBody.getPosition().y > shieldRadius)
+        if ((shieldBody.getPosition().y > shieldRadius + shieldBody.getPosition().y)
                 || midPointReached == true) {
 
             midPointReached = true;
 
-            shieldBody.getPosition().set(x = (float) Math.sqrt(Math.pow(y, 2) + Math.pow(shieldRadius, 2)),
-                    y);
+            shieldBody.getPosition().set( x = (float) (shieldBody.getPosition().x + shieldRadius + sin(a)),
+                    y = (float) (shieldBody.getPosition().y  + shieldRadius + cos(a)));
 
-            /*if (changer == 0) {
+            a++;
 
-                y--;
-                x += (float) Math.sqrt(Math.pow(y, 2) + Math.pow(shieldRadius, 2));
-                changer++;
-            }*/
-
-            //if (changer == 1){
-
-                x++;
-                y -= (float) Math.sqrt(Math.pow(x, 2) + Math.pow(shieldRadius, 2));
-                changer--;
-            //}
-
-            /*y--;
-            x += (float) Math.sqrt(Math.pow(y, 2) + Math.pow(shieldRadius, 2));*/
         }
 
         /*if (midPointReached == true && shieldBody.getPosition().x <= shieldRadius) {
