@@ -20,9 +20,9 @@ public class Skills {
     private static HashMap<String,Object> mapAttack;
     private static HashMap<String,Object> mapDefend;
 
-    private static Texture playerAttack, playerDefend;
+    private static Texture t_attack, t_defend;
     private static Animating anim = new Animating();
-    private static Animation<TextureRegion> attack, defend;
+    private static Animation<TextureRegion> a_attack, a_defend;
 
     /*
     Create skills when the game starts.
@@ -53,22 +53,29 @@ public class Skills {
         mapAttack.put(name, "attack");
         mapAttack.put(damage, 2.5);
         mapAttack.put(cooldown, 0);
-        mapAttack.put(animation, attack);
+        mapAttack.put(animation, a_attack);
     }
 
     private static void skillDefend() {
         mapDefend = new HashMap<String, Object>();
         mapDefend.put(name, "defend");
-        mapDefend.put(damage, 2.5);
+        mapDefend.put(damage, 0);
         mapDefend.put(cooldown, 3);
-        mapDefend.put(animation, defend);
+        mapDefend.put(animation, a_defend);
     }
 
     private static void createTexturesAndAnimations() {
-        playerAttack = new Texture("texture/player/playerAttack.png");
-        attack = anim.createAnimation(playerAttack, 3, 1);
-        playerDefend = new Texture("texture/player/playerDefend.png");
-        defend = anim.createAnimation(playerDefend, 3, 1);
+        t_attack = new Texture("texture/player/playerAttack.png");
+        a_attack = anim.createAnimation(t_attack, 3, 1);
+        t_defend = new Texture("texture/player/playerDefend.png");
+        a_defend = anim.createAnimation(t_defend, 3, 1);
+
+        disposeTextures();
+    }
+
+    private static void disposeTextures() {
+        t_attack.dispose();
+        t_defend.dispose();
     }
 
     public static String getName() {

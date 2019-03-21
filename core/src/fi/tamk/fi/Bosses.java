@@ -16,6 +16,8 @@ public class Bosses {
     private static String idle = "idle";
     private static String hack = "hack";
     private static String skill = "skill";
+    private static String dialogStart = "dialogstart";
+    private static String dialogEnd = "dialogend";
 
     private static HashMap<String, HashMap<String,Object>> mapBosses;
     private static HashMap<String,Object> mapRoombot, mapTest;
@@ -24,7 +26,7 @@ public class Bosses {
     private static Animation<TextureRegion> a_idle, a_hack, a_skill1, a_skill2, a_skill3;
     private static Animating anim = new Animating();
 
-    private static String curName;
+    private static String curName, curDialogStart, curDialogEnd;
     private static double curDmg1, curDmg2, curDmg3;
 
     /*
@@ -55,6 +57,8 @@ public class Bosses {
         curDmg1 = 1;
         curDmg2 = 1.5;
         curDmg3 = 2;
+        curDialogStart = "Vroom Vroom!";
+        curDialogEnd = "Vroom poks!";
 
         t_idle = new Texture("texture/enemy/enemyIdle.png");
         a_idle = anim.createAnimation(t_idle, 3, 1);
@@ -78,6 +82,8 @@ public class Bosses {
         curDmg1 = 1;
         curDmg2 = 1.5;
         curDmg3 = 2;
+        curDialogStart = "Test start!";
+        curDialogEnd = "Test end!";
 
         t_idle = new Texture("texture/enemy/enemyIdle.png");
         a_idle = anim.createAnimation(t_idle, 3, 1);
@@ -101,11 +107,13 @@ public class Bosses {
         map.put(idle, a_idle);
         map.put(hack, a_hack);
         map.put(skill + "1", a_skill1);
-        map.put(damage + "1", curDmg1);
         map.put(skill + "2", a_skill2);
-        map.put(damage + "2", curDmg2);
         map.put(skill + "3", a_skill3);
+        map.put(damage + "1", curDmg1);
+        map.put(damage + "2", curDmg2);
         map.put(damage + "3", curDmg3);
+        map.put(dialogStart, curDialogStart);
+        map.put(dialogEnd, curDialogEnd);
 
         return map;
     }
@@ -136,5 +144,13 @@ public class Bosses {
 
     public static String getHack() {
         return hack;
+    }
+
+    public static String getDialogStart() {
+        return dialogStart;
+    }
+
+    public static String getDialogEnd() {
+        return dialogEnd;
     }
 }
