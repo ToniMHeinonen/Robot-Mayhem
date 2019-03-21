@@ -2,7 +2,6 @@ package fi.tamk.fi;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -13,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Timer;
 
 /*
 Try to make the long press shorter, for example half a second.
@@ -32,21 +32,20 @@ public class RoomTestailua extends RoomParent {
     TextureAtlas testButtonAtlas;
     Skin testSkin;
 
-    ImageButton buttonAttack;
-    ImageButton buttonShield;
     ImageButton.ImageButtonStyle styleAttack;
     ImageButton.ImageButtonStyle styleShield;
     TextureRegion tooltipShield;
     TextureRegion tooltipAttack;
 
-    String[] buttonDrawablesOn = new String[] {"button_attack", "button_shield"};
-    String[] buttonDrawablesOff = new String[] {"button_attack_off", "button_shield_off"};
+    String[] buttonDrawablesOn;
+    String[] buttonDrawablesOff;
     ImageButton.ImageButtonStyle[] buttonStyles;
     TextureRegion tooltips[];
 
     int buttonCounter;
-
+    int styleCounter;
     float space = 300f;
+    float buttonDelay = 1;
 
     RoomTestailua(MainGame game) {
         super(game);
@@ -79,6 +78,22 @@ public class RoomTestailua extends RoomParent {
 
     // Testing buttons starts here
 
+    public void createConstants() {
+        testButtonAtlas = new TextureAtlas("testbuttons/testbuttons.pack");
+        testSkin = new Skin(testButtonAtlas);
+
+        styleAttack = new ImageButton.ImageButtonStyle();
+        styleShield = new ImageButton.ImageButtonStyle();
+        buttonStyles = new ImageButton.ImageButtonStyle[] {styleAttack, styleShield};
+
+        tooltipAttack = new TextureRegion(testButtonAtlas.findRegion("attack_tooltip"));
+        tooltipShield = new TextureRegion(testButtonAtlas.findRegion("shield_tooltip"));
+        tooltips = new TextureRegion[] {tooltipAttack, tooltipShield};
+
+        buttonDrawablesOn = new String[] {"button_attack", "button_shield"};
+        buttonDrawablesOff = new String[] {"button_attack_off", "button_shield_off"};
+    }
+
     public void createButtons() {
         for (int i = 0; i < buttonDrawablesOn.length; i++) {
             buttonCounter = i;
@@ -96,32 +111,27 @@ public class RoomTestailua extends RoomParent {
                     return true;
                 }
                 public void tap(InputEvent event, float x, float y, int count, int button) {
-                    doAction(i);
+                    pressButton(i);
                     System.out.println("tap");
                 }
             });
         }
     }
 
-    public void doAction(int index) {
+    // Set button to greyed out for a second(buttonDelay).
+    public void pressButton(int index) {
         buttonStyles[index].up = testSkin.getDrawable(buttonDrawablesOff[index]);
+        styleCounter = index;
+        Timer.schedule(new Timer.Task(){
+            @Override
+            public void run() {
+                buttonStyles[styleCounter].up = testSkin.getDrawable(buttonDrawablesOn[styleCounter]);
+            }
+        }, buttonDelay);
     }
 
     public void showTooltip(int index) {
         //batch.draw(tooltips[index], 100 + space*index, 100*2);
-    }
-
-    public void createConstants() {
-        testButtonAtlas = new TextureAtlas("testbuttons/testbuttons.pack");
-        testSkin = new Skin(testButtonAtlas);
-
-        styleAttack = new ImageButton.ImageButtonStyle();
-        styleShield = new ImageButton.ImageButtonStyle();
-        buttonStyles = new ImageButton.ImageButtonStyle[] {styleAttack, styleShield};
-
-        tooltipAttack = new TextureRegion(testButtonAtlas.findRegion("attack_tooltip"));
-        tooltipShield = new TextureRegion(testButtonAtlas.findRegion("shield_tooltip"));
-        tooltips = new TextureRegion[] {tooltipAttack, tooltipShield};
     }
 
     @Override

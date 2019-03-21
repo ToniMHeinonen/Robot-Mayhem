@@ -401,7 +401,7 @@ public class RoomFight extends RoomParent {
 
         Enemy() {
 
-            X = game.pixelWidth - 100f - game.getEnemyIdle().getWidth()/3.0f;
+            //X = game.pixelWidth - 100f - game.getEnemyIdle().getWidth()/3.0f;
             Y = 200f;
             hp = 5;
             idleSpd = 30;
