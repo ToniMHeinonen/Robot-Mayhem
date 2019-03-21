@@ -36,22 +36,17 @@ public class RoomTestailua extends RoomParent {
     ImageButton buttonShield;
     ImageButton.ImageButtonStyle styleAttack;
     ImageButton.ImageButtonStyle styleShield;
+    TextureRegion tooltipShield;
+    TextureRegion tooltipAttack;
 
     String[] buttonDrawablesOn = new String[] {"button_attack", "button_shield"};
     String[] buttonDrawablesOff = new String[] {"button_attack_off", "button_shield_off"};
     ImageButton.ImageButtonStyle[] buttonStyles;
+    TextureRegion tooltips[];
+
     int buttonCounter;
 
-    TextureRegion tooltipShield;
-    TextureRegion tooltipAttack;
-
-    int animationCounter = 50;
-    boolean inAnimation = false;
-
-    boolean pressLongAttack;
-    boolean pressLongShield;
-
-    int tooltipTimer = 50;
+    float space = 300f;
 
     RoomTestailua(MainGame game) {
         super(game);
@@ -85,22 +80,24 @@ public class RoomTestailua extends RoomParent {
     // Testing buttons starts here
 
     public void createButtons() {
-        float space = 300f;
         for (int i = 0; i < buttonDrawablesOn.length; i++) {
             buttonCounter = i;
             buttonStyles[i].up = testSkin.getDrawable(buttonDrawablesOn[i]);
-            final ImageButton btn = new ImageButton(buttonStyles[i]);
-            btn.setPosition(100 + space*i, 100);
-            stage.addActor(btn);
+            final ImageButton imgBtn = new ImageButton(buttonStyles[i]);
+            imgBtn.setPosition(100 + space*i, 100);
+            stage.addActor(imgBtn);
 
-            btn.addListener(new ActorGestureListener() {
+            // Default-values: halfTapSquareSize=20, tapCountInterval=0.4f, longPressDuration=1.1f, maxFlingDelay=0.15f.
+            imgBtn.addListener(new ActorGestureListener(20,0.4f,0.5f,0.15f) {
                 int i = buttonCounter;
                 public boolean longPress(Actor actor, float x, float y) {
+                    System.out.println("longpress");
+                    showTooltip(i);
                     return true;
                 }
                 public void tap(InputEvent event, float x, float y, int count, int button) {
                     doAction(i);
-                    System.out.println("attack");
+                    System.out.println("tap");
                 }
             });
         }
@@ -110,14 +107,8 @@ public class RoomTestailua extends RoomParent {
         buttonStyles[index].up = testSkin.getDrawable(buttonDrawablesOff[index]);
     }
 
-    public void animationUpdate() {
-        if (inAnimation) {
-            animationCounter--;
-        }
-        if (animationCounter <= 0) {
-            inAnimation = false;
-            animationCounter = 50;
-        }
+    public void showTooltip(int index) {
+        //batch.draw(tooltips[index], 100 + space*index, 100*2);
     }
 
     public void createConstants() {
@@ -126,40 +117,15 @@ public class RoomTestailua extends RoomParent {
 
         styleAttack = new ImageButton.ImageButtonStyle();
         styleShield = new ImageButton.ImageButtonStyle();
-
-        tooltipShield = new TextureRegion(testButtonAtlas.findRegion("shield_tooltip"));
-        tooltipAttack = new TextureRegion(testButtonAtlas.findRegion("attack_tooltip"));
-
         buttonStyles = new ImageButton.ImageButtonStyle[] {styleAttack, styleShield};
-    }
 
-    // Check if user has "longpressed" buttons and draw tooltips.
-    public void checkTooltip() {
-        if (pressLongAttack) {
-            tooltipTimer--;
-            batch.draw(tooltipAttack, buttonAttack.getX(),
-                    game.pixelHeight/4 + buttonAttack.getHeight());
-        }
-
-        if (pressLongShield) {
-            tooltipTimer--;
-            batch.draw(tooltipShield,buttonShield.getX(),
-                    game.pixelHeight/4 + buttonShield.getHeight());
-        }
-
-        if (tooltipTimer <= 0) {
-            pressLongAttack = false;
-            pressLongShield = false;
-            tooltipTimer = 50;
-        }
+        tooltipAttack = new TextureRegion(testButtonAtlas.findRegion("attack_tooltip"));
+        tooltipShield = new TextureRegion(testButtonAtlas.findRegion("shield_tooltip"));
+        tooltips = new TextureRegion[] {tooltipAttack, tooltipShield};
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
-        animationUpdate();
-        batch.begin();
-        checkTooltip();
-        batch.end();
     }
 }
