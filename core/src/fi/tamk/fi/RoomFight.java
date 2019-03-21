@@ -227,6 +227,8 @@ public class RoomFight extends RoomParent {
         });
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
     /*
     CREATE PARENT FIGHTER
      */
@@ -242,6 +244,8 @@ public class RoomFight extends RoomParent {
         protected int flashTime = 15;
         protected int whiteTimer = flashTime;
 
+        protected float positionOffset;
+
         protected boolean tempAnimation = false;
 
         protected int idleSpd, hackSpd, deathSpd, escapeSpd;
@@ -252,13 +256,14 @@ public class RoomFight extends RoomParent {
         // Do this at the start of update method
         public void updateStart() {
             controlFlashing();
+            returnPosition();
             anim.animate();
         }
 
         // Do this at the end of update method
         public void updateEnd() {
             if (flashWhite) batch.setShader(shFlashWhite);
-            anim.draw(batch, X, Y);
+            anim.draw(batch, X + positionOffset, Y);
             batch.setShader(null);
         }
 
@@ -270,6 +275,19 @@ public class RoomFight extends RoomParent {
         public void startHack() {
             anim.startAnimation(hack, hackSpd);
             tempAnimation = false;
+        }
+
+        public void flashAndMove() {
+            flashWhite = true;
+            if (hp > 0) {
+                positionOffset = 100f;
+            }
+        }
+
+        public void returnPosition() {
+            if (Math.abs(positionOffset) > 0) {
+                positionOffset--;
+            }
         }
 
         public void controlFlashing() {
@@ -287,6 +305,8 @@ public class RoomFight extends RoomParent {
             return hp;
         }
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
     CREATE PLAYER
@@ -412,7 +432,10 @@ public class RoomFight extends RoomParent {
          */
         public void takeHit(double damage) {
             if (curAnimation == defend) enemy.takeHit(damage);
-            else hp -= damage; flashWhite = true;
+            else {
+                hp -= damage;
+                flashAndMove();
+            }
 
             if (hp < 0) hp = 0;
         }
@@ -443,6 +466,8 @@ public class RoomFight extends RoomParent {
             }
         }
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
     CREATE ENEMY
@@ -546,7 +571,7 @@ public class RoomFight extends RoomParent {
 
         public void takeHit(double damage) {
             hp -= damage;
-            flashWhite = true;
+            flashAndMove();
             if (hp < 0) hp = 0;
         }
     }
