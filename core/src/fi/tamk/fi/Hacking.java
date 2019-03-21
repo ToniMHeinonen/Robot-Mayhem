@@ -273,8 +273,8 @@ public class Hacking extends RoomParent{
             //shieldBody.getPosition().set(x = (float) Math.sqrt(Math.pow(y, 2) + Math.pow(shieldRadius, 2)), y);
 
             // Not sure why using radians do not work. Or my earlier lines of code.
-            shieldBody.getPosition().set( x = (float) (shieldBody.getPosition().x + shieldRadius + sin(a)),
-                    y = (float) (shieldBody.getPosition().y  + shieldRadius + cos(a)));
+            shieldBody.getPosition().set( x = (float) (shieldBody.getPosition().x + shieldRadius * cos(a)),
+                    y = (float) (shieldBody.getPosition().y  + shieldRadius * sin(a)));
 
             a++;
 
