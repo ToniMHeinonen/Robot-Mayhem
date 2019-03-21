@@ -71,6 +71,11 @@ public class Skills {
         a_defend = anim.createAnimation(t_defend, 3, 1);
     }
 
+    private static void dispose() {
+        t_attack.dispose();
+        t_defend.dispose();
+    }
+
     public static String getName() {
         return name;
     }

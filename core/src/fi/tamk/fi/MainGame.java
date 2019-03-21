@@ -103,6 +103,8 @@ public class MainGame extends Game {
 		stage.dispose();
 		skin.dispose();
 		backgroundMusic.dispose();
+		Bosses.dispose();
+		Skills.dispose();
 		saveStats();
 	}
 

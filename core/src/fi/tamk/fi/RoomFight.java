@@ -392,7 +392,7 @@ public class RoomFight extends RoomParent {
      */
     private class Enemy extends Fighters {
 
-        private Animation<TextureRegion> attack1, attack2, attack3;
+        private Animation<TextureRegion> skill1, skill2, skill3;
         private HashMap<String,Object> mapBoss;
 
         private int actionDelay = 30;
@@ -400,18 +400,14 @@ public class RoomFight extends RoomParent {
         private double[] damages;
 
         Enemy() {
-
-            //X = game.pixelWidth - 100f - game.getEnemyIdle().getWidth()/3.0f;
-            Y = 200f;
-            hp = 5;
-            idleSpd = 30;
-            hackSpd = 30;
-
             retrieveBoss();
 
+            X = game.pixelWidth - 100f - idle.getKeyFrame(0f).getRegionWidth();
+            Y = 200f;
+            hp = 5;
+
             animList = new ArrayList<Animation<TextureRegion>>();
-            Collections.addAll(animList, attack1, attack2, attack3);
-            speeds = new Integer[] {30, 30, 30,};
+            Collections.addAll(animList, skill1, skill2, skill3);
 
             anim.startAnimation(idle, idleSpd);
         }
@@ -437,17 +433,29 @@ public class RoomFight extends RoomParent {
         private void retrieveBoss() {
             mapBoss = Bosses.getBoss("roombot");
 
+            // Retrieve animations
             idle = (Animation<TextureRegion>) mapBoss.get(Bosses.getIdle());
-            attack1 = (Animation<TextureRegion>) mapBoss.get(Bosses.getSkill() + "1");
-            attack2 = (Animation<TextureRegion>) mapBoss.get(Bosses.getSkill() + "2");
-            attack3 = (Animation<TextureRegion>) mapBoss.get(Bosses.getSkill() + "3");
+            skill1 = (Animation<TextureRegion>) mapBoss.get(Bosses.getSkill() + "1");
+            skill2 = (Animation<TextureRegion>) mapBoss.get(Bosses.getSkill() + "2");
+            skill3 = (Animation<TextureRegion>) mapBoss.get(Bosses.getSkill() + "3");
             hack = (Animation<TextureRegion>) mapBoss.get(Bosses.getHack());
 
+            // Retrieve damages
             double dmg1 = Double.valueOf(mapBoss.get(Bosses.getDamage() + "1").toString());
             double dmg2 = Double.valueOf(mapBoss.get(Bosses.getDamage() + "2").toString());
             double dmg3 = Double.valueOf(mapBoss.get(Bosses.getDamage() + "3").toString());
 
             damages = new double[] {dmg1, dmg2, dmg3};
+
+            // Retrieve animation speeds
+            String spd = Bosses.getSpeed();
+            idleSpd = (Integer) mapBoss.get(spd + Bosses.getIdle());
+            int skill1Spd = (Integer) mapBoss.get(spd + Bosses.getSkill() + "1");
+            int skill2Spd = (Integer) mapBoss.get(spd + Bosses.getSkill() + "2");
+            int skill3Spd = (Integer) mapBoss.get(spd + Bosses.getSkill() + "3");
+            hackSpd = (Integer) mapBoss.get(spd + Bosses.getHack());
+
+            speeds = new Integer[] {skill1Spd, skill2Spd, skill3Spd};
         }
 
         /*
