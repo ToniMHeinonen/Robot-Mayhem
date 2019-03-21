@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -39,12 +40,14 @@ public class RoomFight extends RoomParent {
     private int deathTimer = 240;
     private State state = State.START_TURN;
     private boolean escapePopup;
+    private ShaderProgram shFlashWhite;
 
     RoomFight(MainGame game) {
         super(game);
         imgBg = game.getImgBgBoss();
         escapeBg = game.getEscapeBg();
         createButtons();
+        createShader();
 
         player = new Player();
         enemy = new Enemy();
@@ -71,6 +74,40 @@ public class RoomFight extends RoomParent {
             stage.draw();
             death();
         }
+    }
+
+    public void createShader() {
+        String vertexShader =
+                "attribute vec4 a_position; \n" +
+                        "attribute vec4 a_color;\n" +
+                        "attribute vec2 a_texCoord0; \n" +
+
+                        "uniform mat4 u_projTrans; \n" +
+
+                        "varying vec4 v_color; \n" +
+                        "varying vec2 v_texCoords; \n" +
+
+                        "void main() { \n" +
+                        "v_color = a_color; \n" +
+                        "v_texCoords = a_texCoord0; \n" +
+                        "gl_Position = u_projTrans * a_position; \n" +
+                        "};";
+
+        String fragmentShader = "#ifdef GL_ES\n" +
+                "precision mediump float;\n" +
+                "#endif\n" + "varying vec4 v_color;\n" +
+                "varying vec2 v_texCoords;\n" +
+                "uniform sampler2D u_texture;\n" +
+                "uniform float grayscale;\n" +
+                "void main()\n" +
+                "{\n" +
+                "vec4 texColor = texture2D(u_texture, v_texCoords);\n" +
+                "float gray = dot(texColor.rgb, vec3(5, 5, 5));\n" +
+                "texColor.rgb = mix(vec3(gray), texColor.rgb, grayscale);\n" +
+                " gl_FragColor = v_color * texColor;\n" +
+                "}";
+
+        shFlashWhite = new ShaderProgram(vertexShader, fragmentShader);
     }
 
     @Override
@@ -201,6 +238,10 @@ public class RoomFight extends RoomParent {
         protected double dmgAmount;
         protected Animating anim = new Animating();
 
+        protected boolean flashWhite;
+        protected int flashTime = 15;
+        protected int whiteTimer = flashTime;
+
         protected boolean tempAnimation = false;
 
         protected int idleSpd, hackSpd, deathSpd, escapeSpd;
@@ -210,12 +251,15 @@ public class RoomFight extends RoomParent {
 
         // Do this at the start of update method
         public void updateStart() {
+            controlFlashing();
             anim.animate();
         }
 
         // Do this at the end of update method
         public void updateEnd() {
+            if (flashWhite) batch.setShader(shFlashWhite);
             anim.draw(batch, X, Y);
+            batch.setShader(null);
         }
 
         public void startIdle() {
@@ -226,6 +270,17 @@ public class RoomFight extends RoomParent {
         public void startHack() {
             anim.startAnimation(hack, hackSpd);
             tempAnimation = false;
+        }
+
+        public void controlFlashing() {
+            if (flashWhite) {
+                if (whiteTimer > 0) {
+                    whiteTimer--;
+                } else {
+                    flashWhite = false;
+                    whiteTimer = flashTime;
+                }
+            }
         }
 
         public double getHp() {
@@ -357,7 +412,7 @@ public class RoomFight extends RoomParent {
          */
         public void takeHit(double damage) {
             if (curAnimation == defend) enemy.takeHit(damage);
-            else hp -= damage;
+            else hp -= damage; flashWhite = true;
 
             if (hp < 0) hp = 0;
         }
@@ -491,6 +546,7 @@ public class RoomFight extends RoomParent {
 
         public void takeHit(double damage) {
             hp -= damage;
+            flashWhite = true;
             if (hp < 0) hp = 0;
         }
     }
