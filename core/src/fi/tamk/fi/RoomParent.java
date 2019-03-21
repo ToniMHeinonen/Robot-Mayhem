@@ -28,6 +28,7 @@ public class RoomParent implements Screen {
     protected Music backgroundMusic;
     protected Music bossMusic;
     protected ProgressBar progressBar;
+    protected ProgressBar.ProgressBarStyle progressBarStyle;
     protected BitmapFont fontSteps;
     private int transitionCounter = 20;
 
@@ -44,6 +45,7 @@ public class RoomParent implements Screen {
         this.backgroundMusic = game.getBackgroundMusic();
         this.bossMusic = game.getBossMusic();
         this.fontSteps = game.getFontSteps();
+        this.progressBarStyle = game.getProgBarStyle();
         stage.clear();
 
         imgTopBar = game.getImgTopBar();
@@ -119,8 +121,10 @@ public class RoomParent implements Screen {
 
     public void createProgressBar() {
         progressBar = new ProgressBar(0, 20, 1, false, game.getProgBarStyle());
-        progressBar.setWidth(game.getProgBarStyle().background.getMinWidth());
-        progressBar.setHeight(game.getProgBarStyle().background.getMinHeight());
+        progressBar.setWidth(progressBarStyle.background.getMinWidth());
+        progressBar.setHeight(progressBarStyle.background.getMinHeight());
+        progressBarStyle.background.setLeftWidth(22f);
+        progressBarStyle.background.setRightWidth(25f);
         progressBar.setPosition(game.pixelWidth / 2 - progressBar.getWidth() / 2,
                 game.pixelHeight - progressBar.getHeight());
         stage.addActor(progressBar);
