@@ -55,15 +55,15 @@ public class Hacking extends RoomParent{
     //private int aliveTimer = 560;
     protected float width = 1000;
     protected float height = 1000;
-    private float shieldRadius = 500;
+    private float shieldRadius = 400;
 
     /*
     I commented one thing that I saw was wrong, otherwise I don't remember that well how the
     bodies and worlds works, so if you get really stuck with this,m then I will have a better look
      */
 
-    float x = 100;
-    float y = 0;
+    float x = 400;
+    float y = 200;
 
     float a = 0;
 
@@ -196,7 +196,6 @@ public class Hacking extends RoomParent{
                             texture.getHeight(),
                             false,
                             false);
-
                 }
             }
         }
@@ -264,11 +263,11 @@ public class Hacking extends RoomParent{
                 true);*/
     }
 
-    boolean midPointReached = false;
+    // boolean midPointReached = false; <-- possibly useless
 
     public void moveShield() {
 
-        if (shieldBody.getPosition().y <= shieldRadius + shieldBody.getPosition().y && midPointReached == false) {
+        if (shieldBody.getPosition().y <= shieldRadius + shieldBody.getPosition().y) {
 
             //shieldBody.getPosition().set(x = (float) Math.sqrt(Math.pow(y, 2) + Math.pow(shieldRadius, 2)), y);
 
@@ -276,37 +275,7 @@ public class Hacking extends RoomParent{
             shieldBody.getPosition().set( x = (float) (shieldBody.getPosition().x + shieldRadius * cos(a)),
                     y = (float) (shieldBody.getPosition().y  + shieldRadius * sin(a)));
 
-            a++;
-
-            /* One of my original tries:
-
-            y++;
-            x = (float) Math.sqrt(Math.pow(y, 2) + Math.pow(shieldRadius, 2));*/
-
+                a++;
         }
-
-        if ((shieldBody.getPosition().y > shieldRadius + shieldBody.getPosition().y)
-                || midPointReached == true) {
-
-            midPointReached = true;
-
-            shieldBody.getPosition().set( x = (float) (shieldBody.getPosition().x + shieldRadius + sin(a)),
-                    y = (float) (shieldBody.getPosition().y  + shieldRadius + cos(a)));
-
-            a++;
-
-        }
-
-        /*if (midPointReached == true && shieldBody.getPosition().x <= shieldRadius) {
-
-            shieldBody.getPosition().set(x = (float) Math.sqrt(Math.pow(y, 2) + Math.pow(shieldRadius, 2)),
-                    y);
-            x--;
-        }*/
-
-        /*shieldBody.getPosition().set( x = midpoint's x + shieldRadius + sin(a), y = midpoint's y + shieldRadius + cos(a));
-        a++;
-
-        System.out.println(a);*/
     }
 }
