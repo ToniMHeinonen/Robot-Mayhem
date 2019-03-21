@@ -67,6 +67,8 @@ public class Hacking extends RoomParent{
 
     float a = 0;
 
+    private Array<Body> bodiesToBeDestroyed;
+
     protected BodyDef getDefinitionOfBody() {
 
         BodyDef shieldBody = new BodyDef();
@@ -105,6 +107,7 @@ public class Hacking extends RoomParent{
 
         super(game);
 
+        bodiesToBeDestroyed = new Array<Body>();
         createConstants();
         create();
     }
@@ -196,10 +199,22 @@ public class Hacking extends RoomParent{
                             texture.getHeight(),
                             false,
                             false);
+                    bodiesToBeDestroyed.add(body);
+                    checkBodiesToRemove();
                 }
             }
         }
         batch.end();
+    }
+
+    private void checkBodiesToRemove() {
+        // Destroy needed bodies
+        for (int i = 0; i < bodiesToBeDestroyed.size; i++) {
+            Body body = bodiesToBeDestroyed.get(i);
+            world.destroyBody(body);
+            bodiesToBeDestroyed.removeIndex(i);
+            i--;
+        }
     }
 
     public void render(float delta) {
