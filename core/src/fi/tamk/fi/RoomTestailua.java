@@ -1,9 +1,7 @@
 package fi.tamk.fi;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
+
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -11,22 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Timer;
-
-/*
-Try to make the long press shorter, for example half a second.
-
-We need to discuss if we want every button to grey out when something is pressed.Original plan was
-to only grey out the button which is pressed and when button is released it returns to normal.
-
-Can you figure out a way to draw all the buttons using just one method? You can check for an example
-from the RoomFight class (you need to use arrays).
-
-Is there any way to do the long press check without using booleans?
-
-This code is pretty long for just 2 buttons, is there any way to make it shorter?
- */
 
 public class RoomTestailua extends RoomParent {
     TextureAtlas testButtonAtlas;
@@ -34,18 +17,20 @@ public class RoomTestailua extends RoomParent {
 
     ImageButton.ImageButtonStyle styleAttack;
     ImageButton.ImageButtonStyle styleShield;
-    TextureRegion tooltipShield;
-    TextureRegion tooltipAttack;
+    ImageButton.ImageButtonStyle styleTooltipAttack;
+    ImageButton.ImageButtonStyle styleTooltipShield;
 
     String[] buttonDrawablesOn;
     String[] buttonDrawablesOff;
+    String[] tooltips;
     ImageButton.ImageButtonStyle[] buttonStyles;
-    TextureRegion tooltips[];
+    ImageButton.ImageButtonStyle[] tooltipStyles;
 
     int buttonCounter;
     int styleCounter;
     float space = 300f;
     float buttonDelay = 1;
+    float tooltipDelay = 2;
 
     RoomTestailua(MainGame game) {
         super(game);
@@ -86,10 +71,11 @@ public class RoomTestailua extends RoomParent {
         styleShield = new ImageButton.ImageButtonStyle();
         buttonStyles = new ImageButton.ImageButtonStyle[] {styleAttack, styleShield};
 
-        tooltipAttack = new TextureRegion(testButtonAtlas.findRegion("attack_tooltip"));
-        tooltipShield = new TextureRegion(testButtonAtlas.findRegion("shield_tooltip"));
-        tooltips = new TextureRegion[] {tooltipAttack, tooltipShield};
+        styleTooltipAttack = new ImageButton.ImageButtonStyle();
+        styleTooltipShield = new ImageButton.ImageButtonStyle();
+        tooltipStyles = new ImageButton.ImageButtonStyle[] {styleTooltipAttack, styleTooltipShield};
 
+        tooltips = new String[] {"attack_tooltip", "shield_tooltip"};
         buttonDrawablesOn = new String[] {"button_attack", "button_shield"};
         buttonDrawablesOff = new String[] {"button_attack_off", "button_shield_off"};
     }
@@ -130,8 +116,18 @@ public class RoomTestailua extends RoomParent {
         }, buttonDelay);
     }
 
+    // Show tooltip for 2 seconds(tooltipDelay) and then remove it from the stage.
     public void showTooltip(int index) {
-        //batch.draw(tooltips[index], 100 + space*index, 100*2);
+        tooltipStyles[index].up = testSkin.getDrawable(tooltips[index]);
+        final ImageButton ttBtn = new ImageButton(tooltipStyles[index]);
+        ttBtn.setPosition(100 + space*index, 100*3);
+        stage.addActor(ttBtn);
+        Timer.schedule(new Timer.Task(){
+            @Override
+            public void run() {
+                ttBtn.remove();
+            }
+        }, tooltipDelay);
     }
 
     @Override
