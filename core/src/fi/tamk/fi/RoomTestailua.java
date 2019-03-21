@@ -19,6 +19,9 @@ One more thing though, have you figured out a way for the button to go gray when
 it and when the finger lets go, then it returns back to normal? If you can make that work, it would
 look much more UX friendly.
     - Now it should work like that.. maybe :D
+
+EDIT: There is something wrong with the buttons, if I hold the button before tapping it first
+it does not grey out, but once I have tapped it at least once it then greys out even when holding.
  */
 
 public class RoomTestailua extends RoomParent {
