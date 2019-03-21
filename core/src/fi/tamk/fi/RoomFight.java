@@ -30,7 +30,10 @@ public class RoomFight extends RoomParent {
         ESCAPE
     }
 
-    private Texture imgBg, escapeBg;
+    private Texture imgBg, escapeBg, healthBar;
+    private Animation<TextureRegion> playerHealthBar, enemyHealthBar;
+    private Animating animHealthPlayer = new Animating();
+    private Animating animHealthEnemy = new Animating();
     private Player player;
     private Enemy enemy;
     private String[] btnTexts = new String[] {"Attack", "Defend", "Item"};
@@ -44,6 +47,8 @@ public class RoomFight extends RoomParent {
         super(game);
         imgBg = game.getImgBgBoss();
         escapeBg = game.getEscapeBg();
+
+        createHealthBars();
         createButtons();
         createShader();
 
@@ -114,6 +119,16 @@ public class RoomFight extends RoomParent {
         bossMusic.stop();
     }
 
+    private void createHealthBars() {
+        healthBar = game.getHealthBar();
+        playerHealthBar = animHealthPlayer.createAnimation(healthBar, 1, 6);
+        enemyHealthBar = animHealthEnemy.createAnimation(healthBar, 1, 6);
+        animHealthPlayer.startAnimation(playerHealthBar, 0);
+        animHealthEnemy.startAnimation(enemyHealthBar, 0);
+        animHealthPlayer.setStateTime(playerHealthBar.getAnimationDuration());
+        animHealthEnemy.setStateTime(enemyHealthBar.getAnimationDuration());
+    }
+
     private void createButtons() {
         createMenuButton();
         createEscapeButton();
@@ -166,10 +181,12 @@ public class RoomFight extends RoomParent {
     }
 
     private void drawHP() {
-        fontSteps.draw(batch, "Player " + String.valueOf(player.getHp()),
+        /*fontSteps.draw(batch, "Player " + String.valueOf(player.getHp()),
                 400, game.pixelHeight - 50);
         fontSteps.draw(batch, "Enemy " + String.valueOf(enemy.getHp()),
-                1000, game.pixelHeight - 50);
+                1000, game.pixelHeight - 50);*/
+        animHealthPlayer.draw(batch, 400, game.pixelHeight - 100);
+        animHealthEnemy.draw(batch, 1000, game.pixelHeight - 100);
     }
 
     private void createEscapeButton() {

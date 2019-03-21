@@ -79,6 +79,7 @@ public class Animating {
 
     public void setStateTime(float stateTime) {
         this.stateTime = stateTime;
+        currentFrame = animation.getKeyFrame(stateTime, false);
     }
 
     public Animation<TextureRegion> getAnimation() {
