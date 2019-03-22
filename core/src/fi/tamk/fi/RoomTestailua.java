@@ -42,13 +42,15 @@ public class RoomTestailua extends RoomParent {
     Window.WindowStyle windowStyle;
     Label playerLabel;
     Label enemyLabel;
+    String[] allTexts;
 
     RoomTestailua(MainGame game) {
         super(game);
         createButtonSettings();
         createConstants();
         createButtons();
-        createPlayerDialog();
+        createDialogs(0);
+        // createPlayerDialog();
         // playMusic();
     }
 
@@ -73,8 +75,6 @@ public class RoomTestailua extends RoomParent {
         });
     }
 
-    // Testing buttons starts here
-
     public void createConstants() {
         testButtonAtlas = new TextureAtlas("testbuttons/testbuttons.pack");
         testSkin = new Skin(testButtonAtlas);
@@ -93,15 +93,34 @@ public class RoomTestailua extends RoomParent {
 
         windowStyle = new Window.WindowStyle(fontSteps, fontColor, testSkin.getDrawable("dialog_bg"));
         labelStyle = new Label.LabelStyle(fontSteps, fontColor);
+        allTexts = new String[] {"player says blablabla", "enemy says blablabla"};
     }
 
+    public void createDialogs(int i) {
+            float spaceBetween = 800;
+            Label label = new Label(allTexts[i], labelStyle);
+            label.setWrap(true);
+            final Dialog dialog = new Dialog("", windowStyle);
+            dialog.getContentTable().add(label).prefWidth(400);
+            dialog.setPosition(200 + spaceBetween*i, 200);
+            dialog.setSize(500,300);
+            stage.addActor(dialog);
+            dialog.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    dialog.remove();
+                }
+            });
+    }
+
+    /*
     public void createEnemyDialog() {
         enemyLabel = new Label("enemy says blablabla", labelStyle);
         enemyLabel.setWrap(true);
         enemyDialog = new Dialog("", windowStyle);
-        enemyDialog.getContentTable().add(enemyLabel).prefWidth(300);
+        enemyDialog.getContentTable().add(enemyLabel).prefWidth(400);
         enemyDialog.setPosition(1000,200);
-        enemyDialog.setSize(500,600);
+        enemyDialog.setSize(500,300);
         stage.addActor(enemyDialog);
         enemyDialog.addListener(new ClickListener(){
             @Override
@@ -117,7 +136,7 @@ public class RoomTestailua extends RoomParent {
         playerLabel.setWrap(true);
         playerDialog.getContentTable().add(playerLabel).prefWidth(400);
         playerDialog.setPosition(200, 200);
-        playerDialog.setSize(500,600);
+        playerDialog.setSize(500,300);
         stage.addActor(playerDialog);
         playerDialog.addListener(new ClickListener(){
             @Override
@@ -127,6 +146,7 @@ public class RoomTestailua extends RoomParent {
             }
         });
     }
+    */
 
     public void createButtons() {
         for (int i = 0; i < buttonDrawablesOn.length; i++) {
