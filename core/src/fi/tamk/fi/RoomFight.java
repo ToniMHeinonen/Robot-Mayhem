@@ -108,7 +108,7 @@ public class RoomFight extends RoomParent {
 
     private void createHealthBars() {
         hpBarLeft = game.getHpBarLeft();
-        hpBarRight = game.getHpBarRight()
+        hpBarRight = game.getHpBarRight();
         playerHealthBar = animHealthPlayer.createAnimation(hpBarLeft, 1, 11);
         enemyHealthBar = animHealthEnemy.createAnimation(hpBarRight, 1, 11);
         animHealthPlayer.startAnimation(playerHealthBar, 0);
