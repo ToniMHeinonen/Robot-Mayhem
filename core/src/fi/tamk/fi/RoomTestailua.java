@@ -36,12 +36,8 @@ public class RoomTestailua extends RoomParent {
     float tooltipDelay = 2;
 
     com.badlogic.gdx.graphics.Color fontColor = com.badlogic.gdx.graphics.Color.BLACK;
-    Dialog playerDialog;
-    Dialog enemyDialog;
     Label.LabelStyle labelStyle;
     Window.WindowStyle windowStyle;
-    Label playerLabel;
-    Label enemyLabel;
     String[] allTexts;
 
     RoomTestailua(MainGame game) {
@@ -49,9 +45,11 @@ public class RoomTestailua extends RoomParent {
         createButtonSettings();
         createConstants();
         createButtons();
-        createDialogs(0);
         // createPlayerDialog();
         // playMusic();
+
+        //createDialogs(0, 200, 200);
+        createDialogs("player says fsfds fsdfdsfs", 200, 200);
     }
 
     public void playMusic() {
@@ -96,13 +94,39 @@ public class RoomTestailua extends RoomParent {
         allTexts = new String[] {"player says blablabla", "enemy says blablabla"};
     }
 
-    public void createDialogs(int i) {
+    // Below two different kind of method creating a dialog.
+    // Don't know which one is more flexible?
+
+    // In this one you can set text and dialogposition when creating this method.
+    public void createDialogs(String text, int x, int y) {
+        Label label = new Label(text, labelStyle);
+        label.setWrap(true);
+        final Dialog dialog = new Dialog("", windowStyle);
+        dialog.getContentTable().add(label).prefWidth(400);
+        dialog.setPosition(x, y);
+        // Is the dialogsize always the same?
+        // If it is, I can just use
+        // dialog.getBackground().getMinHeight()
+        // dialog.getBackground().getMinWidth()
+        dialog.setSize(label.getWidth() + 50,label.getHeight()*4f);
+        stage.addActor(dialog);
+        dialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                dialog.remove();
+            }
+        });
+    }
+
+    // In this one all texts are stored in array and you can choose which one you want use.
+    /*
+    public void createDialogs(int i, int x, int y) {
             float spaceBetween = 800;
             Label label = new Label(allTexts[i], labelStyle);
             label.setWrap(true);
             final Dialog dialog = new Dialog("", windowStyle);
             dialog.getContentTable().add(label).prefWidth(400);
-            dialog.setPosition(200 + spaceBetween*i, 200);
+            dialog.setPosition(x, y);
             dialog.setSize(500,300);
             stage.addActor(dialog);
             dialog.addListener(new ClickListener(){
@@ -111,40 +135,6 @@ public class RoomTestailua extends RoomParent {
                     dialog.remove();
                 }
             });
-    }
-
-    /*
-    public void createEnemyDialog() {
-        enemyLabel = new Label("enemy says blablabla", labelStyle);
-        enemyLabel.setWrap(true);
-        enemyDialog = new Dialog("", windowStyle);
-        enemyDialog.getContentTable().add(enemyLabel).prefWidth(400);
-        enemyDialog.setPosition(1000,200);
-        enemyDialog.setSize(500,300);
-        stage.addActor(enemyDialog);
-        enemyDialog.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                enemyDialog.remove();
-            }
-        });
-    }
-
-    public void createPlayerDialog() {
-        playerDialog = new Dialog("", windowStyle);
-        playerLabel = new Label("player says blablabla", labelStyle);
-        playerLabel.setWrap(true);
-        playerDialog.getContentTable().add(playerLabel).prefWidth(400);
-        playerDialog.setPosition(200, 200);
-        playerDialog.setSize(500,300);
-        stage.addActor(playerDialog);
-        playerDialog.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                playerDialog.remove();
-                createEnemyDialog();
-            }
-        });
     }
     */
 
