@@ -49,13 +49,13 @@ public class Hacking extends RoomParent{
 
     Body shieldBody;
 
-    Texture testEnemy = new Texture(Gdx.files.internal("badlogic.jpg"));
+    Texture test = new Texture(Gdx.files.internal("badlogic.jpg"));
     Texture texture = new Texture(Gdx.files.internal("test.png"));
 
     //private int aliveTimer = 560;
     protected float width = 1000;
     protected float height = 1000;
-    private float shieldRadius = 400;
+    private float shieldRadius = 200;
 
     /*
     I commented one thing that I saw was wrong, otherwise I don't remember that well how the
@@ -135,7 +135,10 @@ public class Hacking extends RoomParent{
 
         world.setContactListener(new ContactListener() {
             @Override
-            public void beginContact(Contact contact) { }
+            public void beginContact(Contact contact) {
+
+                System.out.println("Contact detected!");
+            }
 
             @Override
             public void endContact(Contact contact) { }
@@ -165,6 +168,7 @@ public class Hacking extends RoomParent{
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         createShield();
+        createTest();
 
         world.getBodies(shields);
 
@@ -199,6 +203,26 @@ public class Hacking extends RoomParent{
                                 false);
                         bodiesToBeDestroyed.add(body);
                         checkBodiesToRemove();
+                }
+
+                if (body.getUserData() == test) {
+
+                    batch.draw(texture,
+                            body.getPosition().x,
+                            body.getPosition().y,
+                            x,
+                            y,
+                            x,
+                            y,
+                            1.0f,
+                            1.0f,
+                            body.getTransform().getRotation() * MathUtils.radiansToDegrees,
+                            0,
+                            0,
+                            texture.getWidth(),
+                            texture.getHeight(),
+                            false,
+                            false);
                 }
             }
         }
@@ -259,6 +283,20 @@ public class Hacking extends RoomParent{
 
         shieldBody.applyLinearImpulse(new Vector2(0.0f, 0.0f),
                 shieldBody.getWorldCenter(),
+                true);
+    }
+
+    public void createTest() {
+
+        Body testBody;
+
+        testBody = world.createBody(getDefinitionOfBody());
+        testBody.createFixture(getFixtureDefinition());
+        testBody.getPosition();
+        testBody.setUserData(test);
+
+        testBody.applyLinearImpulse(new Vector2(0.0f, 0.0f),
+                testBody.getWorldCenter(),
                 true);
     }
 
