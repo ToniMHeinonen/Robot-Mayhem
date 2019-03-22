@@ -363,7 +363,7 @@ public class RoomFight extends RoomParent {
         Player() {
             X = 100f;
             Y = 200f;
-            maxHp = 10;
+            maxHp = game.getPlayerMaxHp();
             hp = maxHp;
             damage = 2.5;
             idleSpd = 30;

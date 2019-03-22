@@ -45,8 +45,10 @@ public class MainGame extends Game {
 	private float musicVol;
 
 	//Stats
+	private int saveTimerAmount = 3600;
+	private int saveTimer = saveTimerAmount;
 	private Preferences stats;
-	private int stepCount, stepBank, stepAllCount, playerHp;
+	private int stepCount, stepBank, stepAllCount, playerMaxHp;
 	private String skill1, skill2;
 	private boolean firstPlayTime;
 
@@ -96,6 +98,7 @@ public class MainGame extends Game {
 	@Override
 	public void render () {
 		super.render();
+		controlSaveTimer();
 	}
 
 	@Override
@@ -209,13 +212,19 @@ public class MainGame extends Game {
 	    settings.flush();
     }
 
+    public void controlSaveTimer() {
+		if (saveTimer > 0) saveTimer--;
+		else saveTimer = saveTimerAmount; saveStats();
+	}
+
 	public void loadStats() {
 		stats = Gdx.app.getPreferences("Robot_Mayhem_Stats");
 		stepCount = stats.getInteger("stepCount", 0);
 		stepAllCount = stats.getInteger("stepAllCount", 0);
 		stepBank = stats.getInteger("stepBank", 0);
-		skill1 = stats.getString("skill1", null);
-		skill2 = stats.getString("skill2", null);
+		playerMaxHp = stats.getInteger("playerMaxHp", 10);
+		skill1 = stats.getString("skill1", "");
+		skill2 = stats.getString("skill2", "");
 		firstPlayTime = stats.getBoolean("firstPlayTime", true);
 	}
 
@@ -223,6 +232,7 @@ public class MainGame extends Game {
 		stats.putInteger("stepCount", stepCount);
 		stats.putInteger("stepAllCount", stepAllCount);
 		stats.putInteger("stepBank", stepBank);
+		stats.putInteger("playerMaxHp", playerMaxHp);
 		stats.putString("skill1", skill1);
 		stats.putString("skill2", skill2);
 		stats.putBoolean("firstPlayTime", firstPlayTime);
@@ -353,12 +363,12 @@ public class MainGame extends Game {
 		return stepAllCount;
 	}
 
-	public int getPlayerHp() {
-		return playerHp;
+	public int getPlayerMaxHp() {
+		return playerMaxHp;
 	}
 
-	public void setPlayerHp(int playerHp) {
-		this.playerHp = playerHp;
+	public void setPlayerMaxHp(int playerHp) {
+		this.playerMaxHp = playerHp;
 	}
 
 	public String getSkill1() {
