@@ -3,58 +3,65 @@ testbuttons.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+dialog_bg
+  rotate: false
+  xy: 1, 245
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
 button_attack
   rotate: false
-  xy: 1, 123
+  xy: 203, 325
   size: 240, 120
   orig: 240, 120
   offset: 0, 0
   index: -1
 button_attack_clicked
   rotate: false
-  xy: 1, 1
+  xy: 445, 325
   size: 240, 120
   orig: 240, 120
   offset: 0, 0
   index: -1
 button_attack_off
   rotate: false
-  xy: 243, 123
+  xy: 687, 325
   size: 240, 120
   orig: 240, 120
   offset: 0, 0
   index: -1
 button_shield
   rotate: false
-  xy: 243, 1
+  xy: 1, 123
   size: 240, 120
   orig: 240, 120
   offset: 0, 0
   index: -1
 button_shield_clicked
   rotate: false
-  xy: 485, 123
+  xy: 1, 1
   size: 240, 120
   orig: 240, 120
   offset: 0, 0
   index: -1
 button_shield_off
   rotate: false
-  xy: 485, 1
+  xy: 243, 203
   size: 240, 120
   orig: 240, 120
   offset: 0, 0
   index: -1
 attack_tooltip
   rotate: false
-  xy: 727, 143
+  xy: 243, 101
   size: 200, 100
   orig: 200, 100
   offset: 0, 0
   index: -1
 shield_tooltip
   rotate: false
-  xy: 727, 41
+  xy: 485, 223
   size: 200, 100
   orig: 200, 100
   offset: 0, 0

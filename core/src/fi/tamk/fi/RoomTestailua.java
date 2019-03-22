@@ -4,26 +4,17 @@ package fi.tamk.fi;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
 
-/*
-Wow, now this code is looking really great! Though now you will have to explain to me how it works,
-since I don't understand all the things that you have used :D.
-
-One more thing though, have you figured out a way for the button to go gray when finger is touching
-it and when the finger lets go, then it returns back to normal? If you can make that work, it would
-look much more UX friendly.
-    - Now it should work like that.. maybe :D
-
-EDIT: There is something wrong with the buttons, if I hold the button before tapping it first
-it does not grey out, but once I have tapped it at least once it then greys out even when holding.
-    - Forgot one line when creating button, now it should work.
- */
+import java.awt.Color;
 
 public class RoomTestailua extends RoomParent {
     TextureAtlas testButtonAtlas;
@@ -44,11 +35,22 @@ public class RoomTestailua extends RoomParent {
     float space = 300f;
     float tooltipDelay = 2;
 
+    com.badlogic.gdx.graphics.Color fontColor = com.badlogic.gdx.graphics.Color.BLACK;
+    Dialog playerDialog;
+    Dialog enemyDialog;
+    Label.LabelStyle labelStyle;
+    Window.WindowStyle windowStyle;
+    Label playerLabel;
+    Label enemyLabel;
+    String[] allTexts;
+
     RoomTestailua(MainGame game) {
         super(game);
         createButtonSettings();
         createConstants();
         createButtons();
+        createDialogs(0);
+        // createPlayerDialog();
         // playMusic();
     }
 
@@ -73,8 +75,6 @@ public class RoomTestailua extends RoomParent {
         });
     }
 
-    // Testing buttons starts here
-
     public void createConstants() {
         testButtonAtlas = new TextureAtlas("testbuttons/testbuttons.pack");
         testSkin = new Skin(testButtonAtlas);
@@ -90,7 +90,63 @@ public class RoomTestailua extends RoomParent {
         tooltips = new String[] {"attack_tooltip", "shield_tooltip"};
         buttonDrawablesOn = new String[] {"button_attack", "button_shield"};
         buttonDrawablesOff = new String[] {"button_attack_off", "button_shield_off"};
+
+        windowStyle = new Window.WindowStyle(fontSteps, fontColor, testSkin.getDrawable("dialog_bg"));
+        labelStyle = new Label.LabelStyle(fontSteps, fontColor);
+        allTexts = new String[] {"player says blablabla", "enemy says blablabla"};
     }
+
+    public void createDialogs(int i) {
+            float spaceBetween = 800;
+            Label label = new Label(allTexts[i], labelStyle);
+            label.setWrap(true);
+            final Dialog dialog = new Dialog("", windowStyle);
+            dialog.getContentTable().add(label).prefWidth(400);
+            dialog.setPosition(200 + spaceBetween*i, 200);
+            dialog.setSize(500,300);
+            stage.addActor(dialog);
+            dialog.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    dialog.remove();
+                }
+            });
+    }
+
+    /*
+    public void createEnemyDialog() {
+        enemyLabel = new Label("enemy says blablabla", labelStyle);
+        enemyLabel.setWrap(true);
+        enemyDialog = new Dialog("", windowStyle);
+        enemyDialog.getContentTable().add(enemyLabel).prefWidth(400);
+        enemyDialog.setPosition(1000,200);
+        enemyDialog.setSize(500,300);
+        stage.addActor(enemyDialog);
+        enemyDialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                enemyDialog.remove();
+            }
+        });
+    }
+
+    public void createPlayerDialog() {
+        playerDialog = new Dialog("", windowStyle);
+        playerLabel = new Label("player says blablabla", labelStyle);
+        playerLabel.setWrap(true);
+        playerDialog.getContentTable().add(playerLabel).prefWidth(400);
+        playerDialog.setPosition(200, 200);
+        playerDialog.setSize(500,300);
+        stage.addActor(playerDialog);
+        playerDialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                playerDialog.remove();
+                createEnemyDialog();
+            }
+        });
+    }
+    */
 
     public void createButtons() {
         for (int i = 0; i < buttonDrawablesOn.length; i++) {
