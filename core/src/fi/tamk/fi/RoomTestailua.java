@@ -22,6 +22,7 @@ look much more UX friendly.
 
 EDIT: There is something wrong with the buttons, if I hold the button before tapping it first
 it does not grey out, but once I have tapped it at least once it then greys out even when holding.
+    - Forgot one line when creating button, now it should work.
  */
 
 public class RoomTestailua extends RoomParent {
@@ -95,6 +96,7 @@ public class RoomTestailua extends RoomParent {
         for (int i = 0; i < buttonDrawablesOn.length; i++) {
             buttonCounter = i;
             buttonStyles[i].up = testSkin.getDrawable(buttonDrawablesOn[i]);
+            buttonStyles[i].down = testSkin.getDrawable(buttonDrawablesOff[i]);
             final ImageButton imgBtn = new ImageButton(buttonStyles[i]);
             imgBtn.setPosition(100 + space*i, 100);
             stage.addActor(imgBtn);
