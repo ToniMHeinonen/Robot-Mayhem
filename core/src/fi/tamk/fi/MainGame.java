@@ -46,7 +46,9 @@ public class MainGame extends Game {
 
 	//Stats
 	private Preferences stats;
-	int stepCount;
+	private int stepCount, stepBank, stepAllCount, playerHp;
+	private String skill1, skill2;
+	private boolean firstPlayTime;
 
 	// Textures
 	private Texture imgBgHall, imgBgBoss, imgTopBar, gamePlayer, playerIdle,
@@ -210,10 +212,20 @@ public class MainGame extends Game {
 	public void loadStats() {
 		stats = Gdx.app.getPreferences("Robot_Mayhem_Stats");
 		stepCount = stats.getInteger("stepCount", 0);
+		stepAllCount = stats.getInteger("stepAllCount", 0);
+		stepBank = stats.getInteger("stepBank", 0);
+		skill1 = stats.getString("skill1", null);
+		skill2 = stats.getString("skill2", null);
+		firstPlayTime = stats.getBoolean("firstPlayTime", true);
 	}
 
 	public void saveStats() {
 		stats.putInteger("stepCount", stepCount);
+		stats.putInteger("stepAllCount", stepAllCount);
+		stats.putInteger("stepBank", stepBank);
+		stats.putString("skill1", skill1);
+		stats.putString("skill2", skill2);
+		stats.putBoolean("firstPlayTime", firstPlayTime);
 		stats.flush();
 	}
 
@@ -327,5 +339,45 @@ public class MainGame extends Game {
 
 	public Texture getHealthBar() {
 		return healthBar;
+	}
+
+	public int getStepCount() {
+		return stepCount;
+	}
+
+	public int getStepBank() {
+		return stepBank;
+	}
+
+	public int getStepAllCount() {
+		return stepAllCount;
+	}
+
+	public int getPlayerHp() {
+		return playerHp;
+	}
+
+	public void setPlayerHp(int playerHp) {
+		this.playerHp = playerHp;
+	}
+
+	public String getSkill1() {
+		return skill1;
+	}
+
+	public void setSkill1(String skill1) {
+		this.skill1 = skill1;
+	}
+
+	public String getSkill2() {
+		return skill2;
+	}
+
+	public void setSkill2(String skill2) {
+		this.skill2 = skill2;
+	}
+
+	public boolean isFirstPlayTime() {
+		return firstPlayTime;
 	}
 }

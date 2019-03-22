@@ -29,7 +29,7 @@ public class RoomGame extends RoomParent {
 
     RoomGame(final MainGame game) {
         super(game);
-        curSteps = game.stepCount;
+        curSteps = game.getStepCount();
 
         player = new Player();
 
@@ -83,8 +83,8 @@ public class RoomGame extends RoomParent {
         }
 
         // Move every step
-        if (curSteps != game.stepCount) {
-            curSteps = game.stepCount;
+        if (curSteps != game.getStepCount()) {
+            curSteps = game.getStepCount();
             bgSpd += bgAddSpd;
         }
 

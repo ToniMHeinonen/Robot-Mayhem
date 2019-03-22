@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -80,37 +81,23 @@ public class RoomFight extends RoomParent {
     }
 
     public void createShader() {
-        String vertexShader =
-                "attribute vec4 a_position; \n" +
-                        "attribute vec4 a_color;\n" +
-                        "attribute vec2 a_texCoord0; \n" +
+        String vertexShader = "attribute vec4 a_position; \n" + "attribute vec4 a_color;\n" +
+                "attribute vec2 a_texCoord0; \n" + "uniform mat4 u_projTrans; \n" +
+                "varying vec4 v_color; \n" + "varying vec2 v_texCoords; \n" +
+                "void main() { \n" + "v_color = a_color; \n" + "v_texCoords = a_texCoord0; \n" +
+                "gl_Position = u_projTrans * a_position; \n" + "};";
 
-                        "uniform mat4 u_projTrans; \n" +
-
-                        "varying vec4 v_color; \n" +
-                        "varying vec2 v_texCoords; \n" +
-
-                        "void main() { \n" +
-                        "v_color = a_color; \n" +
-                        "v_texCoords = a_texCoord0; \n" +
-                        "gl_Position = u_projTrans * a_position; \n" +
-                        "};";
-
-        String fragmentShader = "#ifdef GL_ES\n" +
-                "precision mediump float;\n" +
-                "#endif\n" + "varying vec4 v_color;\n" +
-                "varying vec2 v_texCoords;\n" +
-                "uniform sampler2D u_texture;\n" +
-                "uniform float grayscale;\n" +
-                "void main()\n" +
-                "{\n" +
-                "vec4 texColor = texture2D(u_texture, v_texCoords);\n" +
+        String fragmentShader = "#ifdef GL_ES\n" + "precision mediump float;\n" +
+                "#endif\n" + "varying vec4 v_color;\n" + "varying vec2 v_texCoords;\n" +
+                "uniform sampler2D u_texture;\n" + "uniform float grayscale;\n" + "void main()\n" +
+                "{\n" + "vec4 texColor = texture2D(u_texture, v_texCoords);\n" +
                 "float gray = dot(texColor.rgb, vec3(5, 5, 5));\n" +
                 "texColor.rgb = mix(vec3(gray), texColor.rgb, grayscale);\n" +
-                " gl_FragColor = v_color * texColor;\n" +
-                "}";
+                " gl_FragColor = v_color * texColor;\n" + "}";
 
         shFlashWhite = new ShaderProgram(vertexShader, fragmentShader);
+        shFlashWhite.pedantic = false; // Without this, the game crashes on android
+
     }
 
     @Override
@@ -185,6 +172,20 @@ public class RoomFight extends RoomParent {
                 400, game.pixelHeight - 50);
         fontSteps.draw(batch, "Enemy " + String.valueOf(enemy.getHp()),
                 1000, game.pixelHeight - 50);*/
+        double div, spot;
+        int frame;
+        // Get correct frame from player
+        div = player.getMaxHp() / (playerHealthBar.getKeyFrames().length-1);
+        spot = player.getHp() / div;
+        frame = (int) Math.ceil(spot);
+        animHealthPlayer.setStateTime(playerHealthBar.getFrameDuration() * frame);
+
+        // Get correct frame from enemy
+        div = enemy.getMaxHp() / (enemyHealthBar.getKeyFrames().length-1);
+        spot = enemy.getHp() / div;
+        frame = (int) Math.ceil(spot);
+        animHealthEnemy.setStateTime(enemyHealthBar.getFrameDuration() * frame);
+
         animHealthPlayer.draw(batch, 400, game.pixelHeight - 100);
         animHealthEnemy.draw(batch, 1000, game.pixelHeight - 100);
     }
@@ -250,6 +251,7 @@ public class RoomFight extends RoomParent {
     private class Fighters {
         protected float X;
         protected float Y;
+        protected double maxHp;
         protected double hp;
         protected double damage;
         protected double dmgAmount;
@@ -339,6 +341,10 @@ public class RoomFight extends RoomParent {
         public double getHp() {
             return hp;
         }
+
+        public double getMaxHp() {
+            return maxHp;
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -357,7 +363,8 @@ public class RoomFight extends RoomParent {
         Player() {
             X = 100f;
             Y = 200f;
-            hp = 10;
+            maxHp = 10;
+            hp = maxHp;
             damage = 2.5;
             idleSpd = 30;
             hackSpd = 30;
@@ -523,7 +530,8 @@ public class RoomFight extends RoomParent {
 
             X = game.pixelWidth - 100f - idle.getKeyFrame(0f).getRegionWidth();
             Y = 200f;
-            hp = 5;
+            maxHp = 5;
+            hp = maxHp;
 
             animList = new ArrayList<Animation<TextureRegion>>();
             Collections.addAll(animList, skill1, skill2, skill3);
