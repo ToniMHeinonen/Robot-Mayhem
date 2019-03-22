@@ -165,7 +165,6 @@ public class Hacking extends RoomParent{
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         createShield();
-        createShield();
 
         world.getBodies(shields);
 
@@ -216,6 +215,8 @@ public class Hacking extends RoomParent{
         }
     }
 
+    int asdf = 0;
+    boolean ghjkl = false;
     public void render(float delta) {
 
         super.render(delta);
@@ -223,7 +224,23 @@ public class Hacking extends RoomParent{
          constructor
         create(); */
         pleaseWork();
-        moveShield();
+        //moveShield();
+
+        // Slows circling slightly.
+        if (asdf >= 0 && asdf < 1 && ghjkl == false) {
+            moveShield();
+            //System.out.println(asdf);
+            asdf++;
+        } else {
+
+            ghjkl = true;
+            //System.out.println(asdf);
+            asdf--;
+            if (asdf == 0) {
+
+                ghjkl = false;
+            }
+        }
         /*
         Just to make everything clear, you do know that anything that is in the render() method
         gets called 60 times in a second? So if you only want to for example create something once,
@@ -243,38 +260,6 @@ public class Hacking extends RoomParent{
         shieldBody.applyLinearImpulse(new Vector2(0.0f, 0.0f),
                 shieldBody.getWorldCenter(),
                 true);
-
-        /*BodyDef myBodyDef = new BodyDef();
-
-        // It's a body that moves
-        myBodyDef.type = BodyDef.BodyType.DynamicBody;
-
-        FixtureDef shieldFixtureDef = new FixtureDef();
-
-        // Mass per square meter (kg^m2)
-        shieldFixtureDef.density = 9;
-
-        // How bouncy object? Very bouncy [0,1]
-        shieldFixtureDef.restitution = 1.0f;
-
-        // How slipper object? [0,1]
-        shieldFixtureDef.friction = 0.5f;
-
-        // Create circle shape.�
-        CircleShape circleshape = new CircleShape();
-        circleshape.setRadius(100f);
-
-        // Add the shape to the fixture
-        shieldFixtureDef.shape = circleshape;
-
-        Body shield = world.createBody(myBodyDef);
-
-        shield.createFixture(getFixtureDefinition());
-        shield.setUserData(texture);
-
-        shield.applyLinearImpulse(new Vector2(0.0f, 0.0f),
-                shield.getWorldCenter(),
-                true);*/
     }
 
     // boolean midPointReached = false; <-- possibly useless
@@ -283,12 +268,20 @@ public class Hacking extends RoomParent{
 
         if (shieldBody.getPosition().y <= shieldRadius + shieldBody.getPosition().y) {
 
-            //shieldBody.getPosition().set(x = (float) Math.sqrt(Math.pow(y, 2) + Math.pow(shieldRadius, 2)), y);
+            /*shieldBody.getPosition().set(x = (float) Math.sqrt(Math.pow(y, 2) + Math.pow(shieldRadius, 2)), y);
 
-            shieldBody.getPosition().set( x = (float) (shieldBody.getPosition().x + shieldRadius * cos(a)),
-                    y = (float) (shieldBody.getPosition().y  + shieldRadius * sin(a)));
+            y++;
+            x = (float) (Math.sqrt(Math.pow(y, 2) + Math.pow(shieldRadius, 2)));*/
 
-            a++;
+            //for (int counter = 0; counter < 10; counter++){
+
+                shieldBody.getPosition().set(x = (float) (shieldBody.getPosition().x + shieldRadius * cos(a)),
+                        y = (float) (shieldBody.getPosition().y + shieldRadius * sin(a)));
+
+                a++;
+                //System.out.println(a);
+            //}
+
         }
     }
 }
