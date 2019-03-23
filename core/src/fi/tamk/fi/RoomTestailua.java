@@ -10,6 +10,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Timer;
 
+/*
+I have an idea for you, which decreases the need for attackOn and attackOff variables. Scroll down
+and have a look. You can apply this to all the buttons and modes (if there is going to be a mode
+called for example "button_attack_disabled")
+ */
+
 public class RoomTestailua extends RoomParent {
     private Skin testSkin;
 
@@ -52,6 +58,7 @@ public class RoomTestailua extends RoomParent {
     }
 
     public void createConstants() {
+        // Make variable called "attack" and array called "btn"
         attackOn = testSkin.getDrawable("button_attack");
         attackOff = testSkin.getDrawable("button_attack_off");
         shieldOn = testSkin.getDrawable("button_shield");
@@ -66,6 +73,8 @@ public class RoomTestailua extends RoomParent {
     public void createButtons() {
         for (int i = 0; i < btnOn.length; i++) {
             buttonCounter = i;
+            // replace this with:
+            // final ImageButton imgButton = new ImageButton(btn[i], btn[i] + "_off");
             final ImageButton imgButton = new ImageButton(btnOn[i], btnOff[i]);
             imgButton.setPosition(100 + space * i, 100);
             stage.addActor(imgButton);
