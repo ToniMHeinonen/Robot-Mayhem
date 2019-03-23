@@ -12,32 +12,24 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Timer;
 
 import java.awt.Color;
 
 public class RoomTestailua extends RoomParent {
-    ImageButton.ImageButtonStyle styleAttack;
-    ImageButton.ImageButtonStyle styleShield;
-    ImageButton.ImageButtonStyle styleTooltipAttack;
-    ImageButton.ImageButtonStyle styleTooltipShield;
+    private Drawable[] btnOn, btnOff, tooltips;
+    private Drawable attackOn, attackOff, shieldOn, shielfOff, tooltipAttack, tooltipShield;
 
-    String[] buttonDrawablesOn;
-    String[] buttonDrawablesOff;
-    String[] tooltips;
-    ImageButton.ImageButtonStyle[] buttonStyles;
-    ImageButton.ImageButtonStyle[] tooltipStyles;
-
-    int buttonCounter;
-    float space = 300f;
-    float tooltipDelay = 2;
+    private int buttonCounter;
+    private float space = 300f;
+    private float tooltipDelay = 2;
 
     RoomTestailua(MainGame game) {
         super(game);
         createButtonSettings();
         createConstants();
         createButtons();
-        // createPlayerDialog();
         // playMusic();
         createDialog("player says fsfds fsdfdsfs", 200, 200);
     }
@@ -64,31 +56,24 @@ public class RoomTestailua extends RoomParent {
     }
 
     public void createConstants() {
-
-        styleAttack = new ImageButton.ImageButtonStyle();
-        styleShield = new ImageButton.ImageButtonStyle();
-        buttonStyles = new ImageButton.ImageButtonStyle[] {styleAttack, styleShield};
-
-        styleTooltipAttack = new ImageButton.ImageButtonStyle();
-        styleTooltipShield = new ImageButton.ImageButtonStyle();
-        tooltipStyles = new ImageButton.ImageButtonStyle[] {styleTooltipAttack, styleTooltipShield};
-
-        tooltips = new String[] {"attack_tooltip", "shield_tooltip"};
-        buttonDrawablesOn = new String[] {"button_attack", "button_shield"};
-        buttonDrawablesOff = new String[] {"button_attack_off", "button_shield_off"};
+        attackOn = testSkin.getDrawable("button_attack");
+        attackOff = testSkin.getDrawable("button_attack_off");
+        shieldOn = testSkin.getDrawable("button_shield");
+        shielfOff = testSkin.getDrawable("button_shield_off");
+        tooltipAttack = testSkin.getDrawable("attack_tooltip");
+        tooltipShield = testSkin.getDrawable("shield_tooltip");
+        btnOn = new Drawable[] {attackOn, shieldOn,};
+        btnOff = new Drawable[] {attackOff, shielfOff};
+        tooltips = new Drawable[] {tooltipAttack, tooltipShield};
     }
 
     public void createButtons() {
-        for (int i = 0; i < buttonDrawablesOn.length; i++) {
+        for (int i = 0; i < btnOn.length; i++) {
             buttonCounter = i;
-            buttonStyles[i].up = testSkin.getDrawable(buttonDrawablesOn[i]);
-            buttonStyles[i].down = testSkin.getDrawable(buttonDrawablesOff[i]);
-            final ImageButton imgBtn = new ImageButton(buttonStyles[i]);
-            imgBtn.setPosition(100 + space*i, 100);
-            stage.addActor(imgBtn);
-
-            // Default-values: halfTapSquareSize=20, tapCountInterval=0.4f, longPressDuration=1.1f, maxFlingDelay=0.15f.
-            imgBtn.addListener(new ActorGestureListener(20,0.4f,0.5f,0.15f) {
+            final ImageButton imgButton = new ImageButton(btnOn[i], btnOff[i]);
+            imgButton.setPosition(100 + space * i, 100);
+            stage.addActor(imgButton);
+            imgButton.addListener(new ActorGestureListener(20,0.4f,0.5f,0.15f) {
                 int i = buttonCounter;
                 public boolean longPress(Actor actor, float x, float y) {
                     System.out.println("longpress");
@@ -97,11 +82,9 @@ public class RoomTestailua extends RoomParent {
                 }
                 public void tap(InputEvent event, float x, float y, int count, int button) {
                     System.out.println("tap");
-                    buttonStyles[i].down = testSkin.getDrawable(buttonDrawablesOff[i]);
                 }
                 public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                     System.out.println("touchup");
-                    buttonStyles[i].up = testSkin.getDrawable(buttonDrawablesOn[i]);
                 }
             });
         }
@@ -109,8 +92,7 @@ public class RoomTestailua extends RoomParent {
 
     // Show tooltip for 2 seconds(tooltipDelay) and then remove it from the stage.
     public void showTooltip(int index) {
-        tooltipStyles[index].up = testSkin.getDrawable(tooltips[index]);
-        final ImageButton ttBtn = new ImageButton(tooltipStyles[index]);
+        final ImageButton ttBtn = new ImageButton(tooltips[index]);
         ttBtn.setPosition(100 + space*index, 100*3);
         stage.addActor(ttBtn);
         Timer.schedule(new Timer.Task(){
