@@ -10,24 +10,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Timer;
 
-/*
-I have an idea for you, which decreases the need for attackOn and attackOff variables. Scroll down
-and have a look. You can apply this to all the buttons and modes (if there is going to be a mode
-called for example "button_attack_disabled")
- */
-
-/*
-EDIT: Sorry my bad I thought that you did it another way, so the way to correct this is to do
-String arrays instead of drawable, I will show you what I mean. I will comment out my modifications,
-so you can compare your way and my way.
- */
-
 public class RoomTestailua extends RoomParent {
     private Skin testSkin;
 
     //EDIT 1: private String[] btn;
-    private Drawable[] btnOn, btnOff, tooltips;
-    private Drawable attackOn, attackOff, shieldOn, shielfOff, tooltipAttack, tooltipShield;
+    private Drawable[] tooltips;
+    private Drawable tooltipAttack, tooltipDefend, tooltipItem;
+
+    private String[] btn;
 
     private int buttonCounter;
     private float space = 300f;
@@ -65,34 +55,19 @@ public class RoomTestailua extends RoomParent {
     }
 
     public void createConstants() {
-        //EDIT 2: You don't need these variables at all
-        attackOn = testSkin.getDrawable("button_attack");
-        attackOff = testSkin.getDrawable("button_attack_off");
-        shieldOn = testSkin.getDrawable("button_shield");
-        shielfOff = testSkin.getDrawable("button_shield_off");
-        tooltipAttack = testSkin.getDrawable("attack_tooltip");
-        tooltipShield = testSkin.getDrawable("shield_tooltip");
-        //EDIT 3: btn = new String[] {"button_attack", "button_shield"};
-        btnOn = new Drawable[] {attackOn, shieldOn,};
-        btnOff = new Drawable[] {attackOff, shielfOff};
-        tooltips = new Drawable[] {tooltipAttack, tooltipShield};
+        tooltipAttack = testSkin.getDrawable("tooltip_attack");
+        tooltipDefend = testSkin.getDrawable("tooltip_defend");
+        tooltipItem = testSkin.getDrawable("tooltip_item");
+        tooltips = new Drawable[] {tooltipAttack, tooltipDefend, tooltipItem};
+        btn = new String[] {"button_attack", "button_defend", "button_item"};
     }
 
     public void createButtons() {
-        for (int i = 0; i < btnOn.length; i++) {
+        for (int i = 0; i < btn.length; i++) {
             buttonCounter = i;
-            // EDIT 4: Replace this with:
-            // final ImageButton imgButton = new ImageButton(testSkin.getDrawable(btn[i]),
-            // testSkin.getDrawable(btn[i] + "_off"));
-
-            /*
-            OR you can make variables for the buttons and pass them on, like this:
-
             Drawable on = testSkin.getDrawable(btn[i]);
             Drawable off = testSkin.getDrawable(btn[i] + "_off");
             final ImageButton imgButton = new ImageButton(on, off);
-             */
-            final ImageButton imgButton = new ImageButton(btnOn[i], btnOff[i]);
             imgButton.setPosition(100 + space * i, 100);
             stage.addActor(imgButton);
             imgButton.addListener(new ActorGestureListener(20,0.4f,0.5f,0.15f) {
