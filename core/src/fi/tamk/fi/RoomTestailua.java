@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Timer;
 
 public class RoomTestailua extends RoomParent {
+    private Skin testSkin;
+
     private Drawable[] btnOn, btnOff, tooltips;
     private Drawable attackOn, attackOff, shieldOn, shielfOff, tooltipAttack, tooltipShield;
 
@@ -20,6 +22,7 @@ public class RoomTestailua extends RoomParent {
 
     RoomTestailua(MainGame game) {
         super(game);
+        testSkin = game.getTestSkin();
         createButtonSettings();
         createConstants();
         createButtons();
