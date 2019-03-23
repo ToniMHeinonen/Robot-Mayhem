@@ -159,8 +159,6 @@ public class Hacking extends RoomParent{
 
     Array<Body> shields = new Array<Body>();
 
-    // int plsChill = 0; possibly useless
-
     public void pleaseWork() {
 
         batch.setProjectionMatrix(camera.combined);
@@ -187,29 +185,29 @@ public class Hacking extends RoomParent{
                         float radius = ((CircleShape) body.getFixtureList().get(0).getShape()).getRadius();
                         Texture texture = (Texture) body.getUserData();
 
-                        batch.draw(texture,
-                                body.getPosition().x - radius,
-                                body.getPosition().y - radius,
-                                radius,
-                                radius,
-                                radius * 2,
-                                radius * 2,
-                                1.0f,
-                                1.0f,
-                                body.getTransform().getRotation() * MathUtils.radiansToDegrees,
-                                0,
-                                0,
-                                texture.getWidth(),
-                                texture.getHeight(),
-                                false,
-                                false);
+                            batch.draw(texture,
+                                    body.getPosition().x - radius,
+                                    body.getPosition().y - radius,
+                                    radius,
+                                    radius,
+                                    radius * 2,
+                                    radius * 2,
+                                    1.0f,
+                                    1.0f,
+                                    body.getTransform().getRotation() * MathUtils.radiansToDegrees,
+                                    0,
+                                    0,
+                                    texture.getWidth(),
+                                    texture.getHeight(),
+                                    false,
+                                    false);
                         /* Don't remove the body
                         bodiesToBeDestroyed.add(body);*/
                         /* I moved this to a better spot in render
                         checkBodiesToRemove();*/
                 }
 
-                if (body.getUserData() == test) {
+                /*if (body.getUserData() == test) {
 
                     batch.draw(texture,
                             body.getPosition().x,
@@ -227,7 +225,7 @@ public class Hacking extends RoomParent{
                             texture.getHeight(),
                             false,
                             false);
-                }
+                }*/
             }
         }
         batch.end();
@@ -243,28 +241,29 @@ public class Hacking extends RoomParent{
         }
     }
 
-    int asdf = 0;
-    boolean ghjkl = false;
+    // used as a counter and in method slower(int howSlowToGo) as a means to slow down
+    int speed = 0;
+
+    /* When 1 slows down instantly and is at its slowest.
+       When 0 stops moving.
+       Higher than 1 slows down after speed has reached it.
+     */
+    int slowDown = 1;
+
     public void render(float delta) {
 
         super.render(delta);
         pleaseWork();
         //moveShield();
 
-        // Slows circling slightly.
-        if (asdf >= 0 && asdf < 1 && ghjkl == false) {
+        // How fast should the moving slow down? slowDown is for this.
+        if (speed >= 0 && speed < slowDown){
+
             moveShield();
-            //System.out.println(asdf);
-            asdf++;
+            speed++;
         } else {
 
-            ghjkl = true;
-            //System.out.println(asdf);
-            asdf--;
-            if (asdf == 0) {
-
-                ghjkl = false;
-            }
+            speed--;
         }
         checkBodiesToRemove();
     }
@@ -295,26 +294,28 @@ public class Hacking extends RoomParent{
                 true);
     }
 
-    // boolean midPointReached = false; <-- possibly useless
-
     public void moveShield() {
 
         if (shieldBody.getPosition().y <= shieldRadius + shieldBody.getPosition().y) {
 
-            /*shieldBody.getPosition().set(x = (float) Math.sqrt(Math.pow(y, 2) + Math.pow(shieldRadius, 2)), y);
+            shieldBody.setTransform(x, y, a);
+            y = (float) (shieldBody.getPosition().y + shieldRadius * sin(a));
+            x = (float) (shieldBody.getPosition().x + shieldRadius * cos(a));
 
-            y++;
-            x = (float) (Math.sqrt(Math.pow(y, 2) + Math.pow(shieldRadius, 2)));*/
+            a++;
 
-            //for (int counter = 0; counter < 10; counter++){
+            // The higher the number the slower shield will move.
+            slower(16);
 
-                shieldBody.setTransform(x = (float) (shieldBody.getPosition().x + shieldRadius * cos(a)),
-                        y = (float) (shieldBody.getPosition().y + shieldRadius * sin(a)), 0);
+            //System.out.println(x + " " + y + " " + a + " " + speed);
+        }
+    }
 
-                a++;
-                //System.out.println(a);
-            //}
+    public void slower(int howSlowToGo) {
 
+        for (int counter = 0; counter < howSlowToGo; counter++) {
+
+            speed++;
         }
     }
 }
