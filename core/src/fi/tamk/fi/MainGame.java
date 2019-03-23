@@ -14,9 +14,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -70,6 +72,13 @@ public class MainGame extends Game {
 	private Skin buttonSkin; //** images are used as skins of the button **//
 	private TextButton.TextButtonStyle style;
 
+	//Dialog
+	private TextureAtlas testButtonAtlas;
+	private Skin testSkin;
+	private Label.LabelStyle labelStyle;
+	private Window.WindowStyle windowStyle;
+	private com.badlogic.gdx.graphics.Color fontColor = com.badlogic.gdx.graphics.Color.BLACK;
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -84,6 +93,7 @@ public class MainGame extends Game {
 		createButtonFiles();
 		createProgressBarFiles();
 		createStepsFont();
+		createDialogConstants();
 		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("music/fansu_1.mp3"));
 		bossMusic = Gdx.audio.newMusic(Gdx.files.internal("music/bossmusic.mp3"));
         loadSettings();
@@ -145,6 +155,13 @@ public class MainGame extends Game {
 		transition();
 		Hacking room = new Hacking(this);
 		setScreen(room);
+	}
+
+	private void createDialogConstants() {
+		testButtonAtlas = new TextureAtlas("testbuttons/testbuttons.pack");
+		testSkin = new Skin(testButtonAtlas);
+		windowStyle = new Window.WindowStyle(fontSteps, fontColor, testSkin.getDrawable("dialog_bg"));
+		labelStyle = new Label.LabelStyle(fontSteps, fontColor);
 	}
 
     private void createStepsFont() {
@@ -399,5 +416,25 @@ public class MainGame extends Game {
 
 	public boolean isFirstPlayTime() {
 		return firstPlayTime;
+	}
+
+	public TextureAtlas getTestButtonAtlas() {
+		return testButtonAtlas;
+	}
+
+	public Skin getTestSkin() {
+		return testSkin;
+	}
+
+	public Label.LabelStyle getLabelStyle() {
+		return labelStyle;
+	}
+
+	public Window.WindowStyle getWindowStyle() {
+		return windowStyle;
+	}
+
+	public Color getFontColor() {
+		return fontColor;
 	}
 }

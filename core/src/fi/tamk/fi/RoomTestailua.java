@@ -17,9 +17,6 @@ import com.badlogic.gdx.utils.Timer;
 import java.awt.Color;
 
 public class RoomTestailua extends RoomParent {
-    TextureAtlas testButtonAtlas;
-    Skin testSkin;
-
     ImageButton.ImageButtonStyle styleAttack;
     ImageButton.ImageButtonStyle styleShield;
     ImageButton.ImageButtonStyle styleTooltipAttack;
@@ -35,10 +32,6 @@ public class RoomTestailua extends RoomParent {
     float space = 300f;
     float tooltipDelay = 2;
 
-    com.badlogic.gdx.graphics.Color fontColor = com.badlogic.gdx.graphics.Color.BLACK;
-    Label.LabelStyle labelStyle;
-    Window.WindowStyle windowStyle;
-
     RoomTestailua(MainGame game) {
         super(game);
         createButtonSettings();
@@ -46,7 +39,7 @@ public class RoomTestailua extends RoomParent {
         createButtons();
         // createPlayerDialog();
         // playMusic();
-        createDialogs("player says fsfds fsdfdsfs", 200, 200);
+        createDialog("player says fsfds fsdfdsfs", 200, 200);
     }
 
     public void playMusic() {
@@ -71,8 +64,6 @@ public class RoomTestailua extends RoomParent {
     }
 
     public void createConstants() {
-        testButtonAtlas = new TextureAtlas("testbuttons/testbuttons.pack");
-        testSkin = new Skin(testButtonAtlas);
 
         styleAttack = new ImageButton.ImageButtonStyle();
         styleShield = new ImageButton.ImageButtonStyle();
@@ -85,27 +76,6 @@ public class RoomTestailua extends RoomParent {
         tooltips = new String[] {"attack_tooltip", "shield_tooltip"};
         buttonDrawablesOn = new String[] {"button_attack", "button_shield"};
         buttonDrawablesOff = new String[] {"button_attack_off", "button_shield_off"};
-
-        windowStyle = new Window.WindowStyle(fontSteps, fontColor, testSkin.getDrawable("dialog_bg"));
-        labelStyle = new Label.LabelStyle(fontSteps, fontColor);
-    }
-
-    public void createDialogs(String text, int x, int y) {
-        Label label = new Label(text, labelStyle);
-        label.setWrap(true);
-        final Dialog dialog = new Dialog("", windowStyle);
-        dialog.getContentTable().add(label).prefWidth(400);
-        dialog.setPosition(x, y);
-        // dialog.getBackground().getMinHeight()
-        // dialog.getBackground().getMinWidth()
-        dialog.setSize(label.getWidth() + 50,label.getHeight()*4f);
-        stage.addActor(dialog);
-        dialog.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                dialog.remove();
-            }
-        });
     }
 
     public void createButtons() {
