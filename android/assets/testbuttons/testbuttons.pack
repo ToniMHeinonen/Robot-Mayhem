@@ -1,0 +1,96 @@
+
+testbuttons.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+dialog_bg
+  rotate: false
+  xy: 1, 267
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+button_attack
+  rotate: false
+  xy: 203, 347
+  size: 240, 120
+  orig: 240, 120
+  offset: 0, 0
+  index: -1
+button_attack_clicked
+  rotate: false
+  xy: 445, 347
+  size: 240, 120
+  orig: 240, 120
+  offset: 0, 0
+  index: -1
+button_attack_off
+  rotate: false
+  xy: 687, 347
+  size: 240, 120
+  orig: 240, 120
+  offset: 0, 0
+  index: -1
+button_defend
+  rotate: false
+  xy: 1, 145
+  size: 240, 120
+  orig: 240, 120
+  offset: 0, 0
+  index: -1
+button_defend_clicked
+  rotate: false
+  xy: 1, 23
+  size: 240, 120
+  orig: 240, 120
+  offset: 0, 0
+  index: -1
+button_defend_off
+  rotate: false
+  xy: 243, 225
+  size: 240, 120
+  orig: 240, 120
+  offset: 0, 0
+  index: -1
+button_item
+  rotate: false
+  xy: 243, 103
+  size: 240, 120
+  orig: 240, 120
+  offset: 0, 0
+  index: -1
+button_item_clicked
+  rotate: false
+  xy: 485, 225
+  size: 240, 120
+  orig: 240, 120
+  offset: 0, 0
+  index: -1
+button_item_off
+  rotate: false
+  xy: 485, 103
+  size: 240, 120
+  orig: 240, 120
+  offset: 0, 0
+  index: -1
+tooltip_attack
+  rotate: false
+  xy: 727, 245
+  size: 200, 100
+  orig: 200, 100
+  offset: 0, 0
+  index: -1
+tooltip_defend
+  rotate: false
+  xy: 727, 143
+  size: 200, 100
+  orig: 200, 100
+  offset: 0, 0
+  index: -1
+tooltip_item
+  rotate: false
+  xy: 243, 1
+  size: 200, 100
+  orig: 200, 100
+  offset: 0, 0
+  index: -1
