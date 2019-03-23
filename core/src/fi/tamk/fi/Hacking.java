@@ -35,6 +35,9 @@ import static com.badlogic.gdx.Input.Keys.M;
 import static java.lang.Math.cos;
 import static java.lang.StrictMath.sin;
 
+// A body for contact detection testing isn't working yet. Going to work on that to
+// get the shooting to work.
+
 public class Hacking extends RoomParent{
 
     MainGame game;
@@ -55,7 +58,7 @@ public class Hacking extends RoomParent{
     //private int aliveTimer = 560;
     protected float width = 1000;
     protected float height = 1000;
-    private float shieldRadius = 200;
+    private float shieldRadius = 300;
 
     /*
     I commented one thing that I saw was wrong, otherwise I don't remember that well how the
@@ -201,11 +204,11 @@ public class Hacking extends RoomParent{
                                 texture.getHeight(),
                                 false,
                                 false);
-                        bodiesToBeDestroyed.add(body);
-                        checkBodiesToRemove();
                 }
+                bodiesToBeDestroyed.add(body);
+                checkBodiesToRemove();
 
-                if (body.getUserData() == test) {
+                /*if (body.getUserData() == test) {
 
                     batch.draw(texture,
                             body.getPosition().x,
@@ -223,7 +226,7 @@ public class Hacking extends RoomParent{
                             texture.getHeight(),
                             false,
                             false);
-                }
+                }*/
             }
         }
         batch.end();
