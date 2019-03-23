@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -124,14 +123,13 @@ public class RoomFight extends RoomParent {
     }
 
     private void createActionButtons() {
-        float space = 150f;
+        float space = 400f;
         for (int i = 0; i < btnTexts.length; i++) {
             btnCounter = i;
             final TextButton btn = new TextButton(btnTexts[i], skin);
             btn.setWidth(300);
             btn.setHeight(100);
-            btn.setPosition(game.pixelWidth / 2 - btn.getWidth() / 2,
-                    game.pixelHeight - 300f - space*i);
+            btn.setPosition(100f + i*space, 100f);
             stage.addActor(btn);
 
             btn.addListener(new ClickListener() {
@@ -363,7 +361,7 @@ public class RoomFight extends RoomParent {
 
         Player() {
             X = 100f;
-            Y = 200f;
+            Y = 300f;
             maxHp = game.getPlayerMaxHp();
             hp = maxHp;
             damage = 2.5;
@@ -530,7 +528,7 @@ public class RoomFight extends RoomParent {
             retrieveBoss();
 
             X = game.pixelWidth - 100f - idle.getKeyFrame(0f).getRegionWidth();
-            Y = 200f;
+            Y = 300f;
             maxHp = 5;
             hp = maxHp;
 
