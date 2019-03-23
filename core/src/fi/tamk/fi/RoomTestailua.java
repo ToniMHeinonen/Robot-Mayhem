@@ -38,7 +38,6 @@ public class RoomTestailua extends RoomParent {
     com.badlogic.gdx.graphics.Color fontColor = com.badlogic.gdx.graphics.Color.BLACK;
     Label.LabelStyle labelStyle;
     Window.WindowStyle windowStyle;
-    String[] allTexts;
 
     RoomTestailua(MainGame game) {
         super(game);
@@ -47,8 +46,6 @@ public class RoomTestailua extends RoomParent {
         createButtons();
         // createPlayerDialog();
         // playMusic();
-
-        //createDialogs(0, 200, 200);
         createDialogs("player says fsfds fsdfdsfs", 200, 200);
     }
 
@@ -91,21 +88,14 @@ public class RoomTestailua extends RoomParent {
 
         windowStyle = new Window.WindowStyle(fontSteps, fontColor, testSkin.getDrawable("dialog_bg"));
         labelStyle = new Label.LabelStyle(fontSteps, fontColor);
-        allTexts = new String[] {"player says blablabla", "enemy says blablabla"};
     }
 
-    // Below two different kind of method creating a dialog.
-    // Don't know which one is more flexible?
-
-    // In this one you can set text and dialogposition when creating this method.
     public void createDialogs(String text, int x, int y) {
         Label label = new Label(text, labelStyle);
         label.setWrap(true);
         final Dialog dialog = new Dialog("", windowStyle);
         dialog.getContentTable().add(label).prefWidth(400);
         dialog.setPosition(x, y);
-        // Is the dialogsize always the same?
-        // If it is, I can just use
         // dialog.getBackground().getMinHeight()
         // dialog.getBackground().getMinWidth()
         dialog.setSize(label.getWidth() + 50,label.getHeight()*4f);
@@ -117,26 +107,6 @@ public class RoomTestailua extends RoomParent {
             }
         });
     }
-
-    // In this one all texts are stored in array and you can choose which one you want use.
-    /*
-    public void createDialogs(int i, int x, int y) {
-            float spaceBetween = 800;
-            Label label = new Label(allTexts[i], labelStyle);
-            label.setWrap(true);
-            final Dialog dialog = new Dialog("", windowStyle);
-            dialog.getContentTable().add(label).prefWidth(400);
-            dialog.setPosition(x, y);
-            dialog.setSize(500,300);
-            stage.addActor(dialog);
-            dialog.addListener(new ClickListener(){
-                @Override
-                public void clicked(InputEvent event, float x, float y){
-                    dialog.remove();
-                }
-            });
-    }
-    */
 
     public void createButtons() {
         for (int i = 0; i < buttonDrawablesOn.length; i++) {

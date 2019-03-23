@@ -49,13 +49,13 @@ public class Hacking extends RoomParent{
 
     Body shieldBody;
 
-    Texture testEnemy = new Texture(Gdx.files.internal("badlogic.jpg"));
+    Texture test = new Texture(Gdx.files.internal("badlogic.jpg"));
     Texture texture = new Texture(Gdx.files.internal("test.png"));
 
     //private int aliveTimer = 560;
     protected float width = 1000;
     protected float height = 1000;
-    private float shieldRadius = 400;
+    private float shieldRadius = 200;
 
     /*
     I commented one thing that I saw was wrong, otherwise I don't remember that well how the
@@ -135,7 +135,10 @@ public class Hacking extends RoomParent{
 
         world.setContactListener(new ContactListener() {
             @Override
-            public void beginContact(Contact contact) { }
+            public void beginContact(Contact contact) {
+
+                System.out.println("Contact detected!");
+            }
 
             @Override
             public void endContact(Contact contact) { }
@@ -165,7 +168,7 @@ public class Hacking extends RoomParent{
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         createShield();
-        createShield();
+        createTest();
 
         world.getBodies(shields);
 
@@ -201,6 +204,26 @@ public class Hacking extends RoomParent{
                         bodiesToBeDestroyed.add(body);
                         checkBodiesToRemove();
                 }
+
+                if (body.getUserData() == test) {
+
+                    batch.draw(texture,
+                            body.getPosition().x,
+                            body.getPosition().y,
+                            x,
+                            y,
+                            x,
+                            y,
+                            1.0f,
+                            1.0f,
+                            body.getTransform().getRotation() * MathUtils.radiansToDegrees,
+                            0,
+                            0,
+                            texture.getWidth(),
+                            texture.getHeight(),
+                            false,
+                            false);
+                }
             }
         }
         batch.end();
@@ -216,6 +239,8 @@ public class Hacking extends RoomParent{
         }
     }
 
+    int asdf = 0;
+    boolean ghjkl = false;
     public void render(float delta) {
 
         super.render(delta);
@@ -223,7 +248,23 @@ public class Hacking extends RoomParent{
          constructor
         create(); */
         pleaseWork();
-        moveShield();
+        //moveShield();
+
+        // Slows circling slightly.
+        if (asdf >= 0 && asdf < 1 && ghjkl == false) {
+            moveShield();
+            //System.out.println(asdf);
+            asdf++;
+        } else {
+
+            ghjkl = true;
+            //System.out.println(asdf);
+            asdf--;
+            if (asdf == 0) {
+
+                ghjkl = false;
+            }
+        }
         /*
         Just to make everything clear, you do know that anything that is in the render() method
         gets called 60 times in a second? So if you only want to for example create something once,
@@ -243,38 +284,20 @@ public class Hacking extends RoomParent{
         shieldBody.applyLinearImpulse(new Vector2(0.0f, 0.0f),
                 shieldBody.getWorldCenter(),
                 true);
+    }
 
-        /*BodyDef myBodyDef = new BodyDef();
+    public void createTest() {
 
-        // It's a body that moves
-        myBodyDef.type = BodyDef.BodyType.DynamicBody;
+        Body testBody;
 
-        FixtureDef shieldFixtureDef = new FixtureDef();
+        testBody = world.createBody(getDefinitionOfBody());
+        testBody.createFixture(getFixtureDefinition());
+        testBody.getPosition();
+        testBody.setUserData(test);
 
-        // Mass per square meter (kg^m2)
-        shieldFixtureDef.density = 9;
-
-        // How bouncy object? Very bouncy [0,1]
-        shieldFixtureDef.restitution = 1.0f;
-
-        // How slipper object? [0,1]
-        shieldFixtureDef.friction = 0.5f;
-
-        // Create circle shape.�
-        CircleShape circleshape = new CircleShape();
-        circleshape.setRadius(100f);
-
-        // Add the shape to the fixture
-        shieldFixtureDef.shape = circleshape;
-
-        Body shield = world.createBody(myBodyDef);
-
-        shield.createFixture(getFixtureDefinition());
-        shield.setUserData(texture);
-
-        shield.applyLinearImpulse(new Vector2(0.0f, 0.0f),
-                shield.getWorldCenter(),
-                true);*/
+        testBody.applyLinearImpulse(new Vector2(0.0f, 0.0f),
+                testBody.getWorldCenter(),
+                true);
     }
 
     // boolean midPointReached = false; <-- possibly useless
@@ -283,12 +306,20 @@ public class Hacking extends RoomParent{
 
         if (shieldBody.getPosition().y <= shieldRadius + shieldBody.getPosition().y) {
 
-            //shieldBody.getPosition().set(x = (float) Math.sqrt(Math.pow(y, 2) + Math.pow(shieldRadius, 2)), y);
+            /*shieldBody.getPosition().set(x = (float) Math.sqrt(Math.pow(y, 2) + Math.pow(shieldRadius, 2)), y);
 
-            shieldBody.getPosition().set( x = (float) (shieldBody.getPosition().x + shieldRadius * cos(a)),
-                    y = (float) (shieldBody.getPosition().y  + shieldRadius * sin(a)));
+            y++;
+            x = (float) (Math.sqrt(Math.pow(y, 2) + Math.pow(shieldRadius, 2)));*/
 
-            a++;
+            //for (int counter = 0; counter < 10; counter++){
+
+                shieldBody.getPosition().set(x = (float) (shieldBody.getPosition().x + shieldRadius * cos(a)),
+                        y = (float) (shieldBody.getPosition().y + shieldRadius * sin(a)));
+
+                a++;
+                //System.out.println(a);
+            //}
+
         }
     }
 }
