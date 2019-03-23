@@ -16,9 +16,16 @@ and have a look. You can apply this to all the buttons and modes (if there is go
 called for example "button_attack_disabled")
  */
 
+/*
+EDIT: Sorry my bad I thought that you did it another way, so the way to correct this is to do
+String arrays instead of drawable, I will show you what I mean. I will comment out my modifications,
+so you can compare your way and my way.
+ */
+
 public class RoomTestailua extends RoomParent {
     private Skin testSkin;
 
+    //EDIT 1: private String[] btn;
     private Drawable[] btnOn, btnOff, tooltips;
     private Drawable attackOn, attackOff, shieldOn, shielfOff, tooltipAttack, tooltipShield;
 
@@ -58,13 +65,14 @@ public class RoomTestailua extends RoomParent {
     }
 
     public void createConstants() {
-        // Make variable called "attack" and array called "btn"
+        //EDIT 2: You don't need these variables at all
         attackOn = testSkin.getDrawable("button_attack");
         attackOff = testSkin.getDrawable("button_attack_off");
         shieldOn = testSkin.getDrawable("button_shield");
         shielfOff = testSkin.getDrawable("button_shield_off");
         tooltipAttack = testSkin.getDrawable("attack_tooltip");
         tooltipShield = testSkin.getDrawable("shield_tooltip");
+        //EDIT 3: btn = new String[] {"button_attack", "button_shield"};
         btnOn = new Drawable[] {attackOn, shieldOn,};
         btnOff = new Drawable[] {attackOff, shielfOff};
         tooltips = new Drawable[] {tooltipAttack, tooltipShield};
@@ -73,8 +81,17 @@ public class RoomTestailua extends RoomParent {
     public void createButtons() {
         for (int i = 0; i < btnOn.length; i++) {
             buttonCounter = i;
-            // replace this with:
-            // final ImageButton imgButton = new ImageButton(btn[i], btn[i] + "_off");
+            // EDIT 4: Replace this with:
+            // final ImageButton imgButton = new ImageButton(testSkin.getDrawable(btn[i]),
+            // testSkin.getDrawable(btn[i] + "_off"));
+
+            /*
+            OR you can make variables for the buttons and pass them on, like this:
+
+            Drawable on = testSkin.getDrawable(btn[i]);
+            Drawable off = testSkin.getDrawable(btn[i] + "_off");
+            final ImageButton imgButton = new ImageButton(on, off);
+             */
             final ImageButton imgButton = new ImageButton(btnOn[i], btnOff[i]);
             imgButton.setPosition(100 + space * i, 100);
             stage.addActor(imgButton);
