@@ -31,7 +31,7 @@ public class RoomFight extends RoomParent {
         ESCAPE
     }
 
-    private Texture imgBg, escapeBg, healthBar;
+    private Texture imgBg, escapeBg, hpBarLeft, hpBarRight;
     private Animation<TextureRegion> playerHealthBar, enemyHealthBar;
     private Animating animHealthPlayer = new Animating();
     private Animating animHealthEnemy = new Animating();
@@ -107,9 +107,10 @@ public class RoomFight extends RoomParent {
     }
 
     private void createHealthBars() {
-        healthBar = game.getHealthBar();
-        playerHealthBar = animHealthPlayer.createAnimation(healthBar, 1, 6);
-        enemyHealthBar = animHealthEnemy.createAnimation(healthBar, 1, 6);
+        hpBarLeft = game.getHpBarLeft();
+        hpBarRight = game.getHpBarRight();
+        playerHealthBar = animHealthPlayer.createAnimation(hpBarLeft, 1, 11);
+        enemyHealthBar = animHealthEnemy.createAnimation(hpBarRight, 1, 11);
         animHealthPlayer.startAnimation(playerHealthBar, 0);
         animHealthEnemy.startAnimation(enemyHealthBar, 0);
         animHealthPlayer.setStateTime(playerHealthBar.getAnimationDuration());

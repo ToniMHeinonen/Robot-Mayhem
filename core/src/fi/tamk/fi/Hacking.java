@@ -35,8 +35,17 @@ import static com.badlogic.gdx.Input.Keys.M;
 import static java.lang.Math.cos;
 import static java.lang.StrictMath.sin;
 
-// A body for contact detection testing isn't working yet. Going to work on that to
-// get the shooting to work.
+/*
+Mistakes I found:
+- You can't change bodies position by using body.getPosition.set(x,y), you have to
+  use body.setTransform(x,y,angle).
+- Don't create new shield 60 times a second and delete it at the same frame, it slows down the game
+  and it is unnecessary. Just create 1 shield and move that.
+- Please use better variable names than "asdf" and "ghjkl", I have no idea what those variables do :D
+
+Next just try to make 1 shield, which speed you can alter by a simple "speed" variable. If you can
+get 1 shield working correctly, then we can add the rest of the needed shields later.
+ */
 
 public class Hacking extends RoomParent{
 
@@ -58,12 +67,7 @@ public class Hacking extends RoomParent{
     //private int aliveTimer = 560;
     protected float width = 1000;
     protected float height = 1000;
-    private float shieldRadius = 300;
-
-    /*
-    I commented one thing that I saw was wrong, otherwise I don't remember that well how the
-    bodies and worlds works, so if you get really stuck with this,m then I will have a better look
-     */
+    private float shieldRadius = 200;
 
     /* Not sure how to change these (x & y) for the creation of a new shield. Tried modifying
     methods but it ended up making the hacking room completely blank so I undid it all.*/
@@ -122,19 +126,13 @@ public class Hacking extends RoomParent{
         batch = new SpriteBatch();
 
         world = new World(new Vector2(0, -0f), true);
-        /*shieldBody = world.createBody(getDefinitionOfBody());
-        shieldBody.createFixture(getFixtureDefinition());
-        shieldBody.getPosition();
-        shieldBody.setUserData(texture);
-
-        shieldBody.applyLinearImpulse(new Vector2(0.0f, 0.0f),
-                shieldBody.getWorldCenter(),
-                true);*/
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1920, 1080);
 
         debugRenderer = new Box2DDebugRenderer();
+
+        createShield();
 
         world.setContactListener(new ContactListener() {
             @Override
@@ -170,8 +168,9 @@ public class Hacking extends RoomParent{
         Gdx.gl.glClearColor(0, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        createShield();
-        createTest();
+        /* Don't create shield 60 times in a second
+        createShield();*/
+        //createTest();
 
         world.getBodies(shields);
 
@@ -204,11 +203,13 @@ public class Hacking extends RoomParent{
                                 texture.getHeight(),
                                 false,
                                 false);
+                        /* Don't remove the body
+                        bodiesToBeDestroyed.add(body);*/
+                        /* I moved this to a better spot in render
+                        checkBodiesToRemove();*/
                 }
-                bodiesToBeDestroyed.add(body);
-                checkBodiesToRemove();
 
-                /*if (body.getUserData() == test) {
+                if (body.getUserData() == test) {
 
                     batch.draw(texture,
                             body.getPosition().x,
@@ -226,7 +227,7 @@ public class Hacking extends RoomParent{
                             texture.getHeight(),
                             false,
                             false);
-                }*/
+                }
             }
         }
         batch.end();
@@ -247,9 +248,6 @@ public class Hacking extends RoomParent{
     public void render(float delta) {
 
         super.render(delta);
-        /* This causes it to create new world 60 times in a second, you should move this to the
-         constructor
-        create(); */
         pleaseWork();
         //moveShield();
 
@@ -268,13 +266,7 @@ public class Hacking extends RoomParent{
                 ghjkl = false;
             }
         }
-        /*
-        Just to make everything clear, you do know that anything that is in the render() method
-        gets called 60 times in a second? So if you only want to for example create something once,
-        then don't put it in here. Contructor runs only once when you switch to this room.
-
-         My comment: I do know that, but the code wasn't working, so I got desperate and decided
-         that this was an acceptable temporary solution. */
+        checkBodiesToRemove();
     }
 
     public void createShield() {
@@ -316,8 +308,8 @@ public class Hacking extends RoomParent{
 
             //for (int counter = 0; counter < 10; counter++){
 
-                shieldBody.getPosition().set(x = (float) (shieldBody.getPosition().x + shieldRadius * cos(a)),
-                        y = (float) (shieldBody.getPosition().y + shieldRadius * sin(a)));
+                shieldBody.setTransform(x = (float) (shieldBody.getPosition().x + shieldRadius * cos(a)),
+                        y = (float) (shieldBody.getPosition().y + shieldRadius * sin(a)), 0);
 
                 a++;
                 //System.out.println(a);

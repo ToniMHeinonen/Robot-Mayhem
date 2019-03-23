@@ -54,7 +54,7 @@ public class MainGame extends Game {
 
 	// Textures
 	private Texture imgBgHall, imgBgBoss, imgTopBar, gamePlayer, playerIdle,
-			playerItem, playerEscape, playerHack, playerDeath, escapeBg, healthBar;
+			playerItem, playerEscape, playerHack, playerDeath, escapeBg, hpBarLeft, hpBarRight;
 
 	//Stepmeter in RoomGame
     private BitmapFont fontSteps;
@@ -187,7 +187,8 @@ public class MainGame extends Game {
         playerHack = new Texture("texture/player/playerHack.png");
 		playerDeath = new Texture("texture/player/playerDeath.png");
 		escapeBg = new Texture("texture/escapeBackground.png");
-		healthBar = new Texture("texture/healthBar.png");
+		hpBarLeft = new Texture("texture/hpbar_left.png");
+		hpBarRight = new Texture("texture/hpbar_right.png");
 	}
 
 	private void createBundle() {
@@ -347,8 +348,12 @@ public class MainGame extends Game {
 		return escapeBg;
 	}
 
-	public Texture getHealthBar() {
-		return healthBar;
+	public Texture getHpBarLeft() {
+		return hpBarLeft;
+	}
+
+	public Texture getHpBarRight() {
+		return hpBarRight;
 	}
 
 	public int getStepCount() {
