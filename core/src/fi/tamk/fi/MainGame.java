@@ -53,7 +53,7 @@ public class MainGame extends Game {
 	private boolean firstPlayTime;
 
 	// Textures
-	private Texture imgBgHall, imgBgBoss, imgTopBar, gamePlayer, playerIdle,
+	private Texture imgBgHall, imgBgBoss, imgTopBar, imgBottomBar, gamePlayer, playerIdle,
 			playerItem, playerEscape, playerHack, playerDeath, escapeBg, hpBarLeft, hpBarRight;
 
 	//Stepmeter in RoomGame
@@ -180,6 +180,7 @@ public class MainGame extends Game {
 		imgBgHall = new Texture("texture/bg_hall_blank.png");
 		imgBgBoss = new Texture("texture/bg_hall_boss_blank.png");
 		imgTopBar = new Texture("texture/topbar.png");
+		imgBottomBar = new Texture("texture/bottombar.png");
 		gamePlayer = new Texture("texture/player/player.png");
         playerIdle = new Texture("texture/player/playerIdle.png");
         playerItem = new Texture("texture/player/playerItem.png");
@@ -310,6 +311,10 @@ public class MainGame extends Game {
 
 	public Texture getImgTopBar() {
 		return imgTopBar;
+	}
+
+	public Texture getImgBottomBar() {
+		return imgBottomBar;
 	}
 
 	public TextButton.TextButtonStyle getStyle() {

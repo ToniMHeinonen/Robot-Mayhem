@@ -19,7 +19,7 @@ import com.badlogic.gdx.utils.I18NBundle;
 
 public class RoomParent implements Screen {
     protected SpriteBatch batch;
-    protected Texture imgBG, imgTopBar;
+    protected Texture imgBG, imgTopBar, imgBottomBar;
     protected I18NBundle myBundle;
     protected MainGame game;
     protected OrthographicCamera camera;
@@ -49,6 +49,7 @@ public class RoomParent implements Screen {
         stage.clear();
 
         imgTopBar = game.getImgTopBar();
+        imgBottomBar = game.getImgBottomBar();
     }
 
     @Override
@@ -98,8 +99,10 @@ public class RoomParent implements Screen {
         }
     }
 
-    public void drawTopBar() {
+    public void drawTopAndBottomBar() {
         batch.draw(imgTopBar, 0,game.pixelHeight - imgTopBar.getHeight(),
+                imgTopBar.getWidth(), imgTopBar.getHeight());
+        batch.draw(imgBottomBar, 0,0,
                 imgTopBar.getWidth(), imgTopBar.getHeight());
     }
 

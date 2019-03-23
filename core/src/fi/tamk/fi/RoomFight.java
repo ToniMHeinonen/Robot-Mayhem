@@ -67,7 +67,7 @@ public class RoomFight extends RoomParent {
 
             batch.begin();
             batch.draw(imgBg, 0,0, imgBg.getWidth(), imgBg.getHeight());
-            drawTopBar();
+            drawTopAndBottomBar();
             drawHP();
             player.update();
             enemy.update();
@@ -109,8 +109,8 @@ public class RoomFight extends RoomParent {
     private void createHealthBars() {
         hpBarLeft = game.getHpBarLeft();
         hpBarRight = game.getHpBarRight();
-        playerHealthBar = animHealthPlayer.createAnimation(hpBarLeft, 1, 11);
-        enemyHealthBar = animHealthEnemy.createAnimation(hpBarRight, 1, 11);
+        playerHealthBar = animHealthPlayer.createAnimationReverse(hpBarLeft, 1, 11);
+        enemyHealthBar = animHealthEnemy.createAnimationReverse(hpBarRight, 1, 11);
         animHealthPlayer.startAnimation(playerHealthBar, 0);
         animHealthEnemy.startAnimation(enemyHealthBar, 0);
         animHealthPlayer.setStateTime(playerHealthBar.getAnimationDuration());

@@ -49,7 +49,7 @@ public class RoomGame extends RoomParent {
 
             batch.begin();
             controlBackground();
-            drawTopBar();
+            drawTopAndBottomBar();
             controlProgBar();
             drawSteps();
             player.update();
