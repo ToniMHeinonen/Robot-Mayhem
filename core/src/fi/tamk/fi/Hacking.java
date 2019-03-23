@@ -64,15 +64,11 @@ public class Hacking extends RoomParent{
     Texture test = new Texture(Gdx.files.internal("badlogic.jpg"));
     Texture texture = new Texture(Gdx.files.internal("test.png"));
 
-    //private int aliveTimer = 560;
-    protected float width = 1000;
-    protected float height = 1000;
-    private float shieldRadius = 200;
-
     /* Not sure how to change these (x & y) for the creation of a new shield. Tried modifying
     methods but it ended up making the hacking room completely blank so I undid it all.*/
-    float x = 400;
-    float y = 200;
+    float x;
+    float y;
+    private float shieldRadius;
 
     float a = 0;
 
@@ -80,17 +76,31 @@ public class Hacking extends RoomParent{
 
     protected BodyDef getDefinitionOfBody() {
 
+        x = 1000;
+        y = 200;
+
+        //setXandY();
+
+        shieldRadius = 400;
+
         BodyDef shieldBody = new BodyDef();
-
-        // It's a body that moves
         shieldBody.type = BodyDef.BodyType.DynamicBody;
-
         shieldBody.position.set(x, y);
 
-        System.out.println(x + " " + y);
+        //System.out.println(x + " " + y);
 
         return shieldBody;
     }
+
+    // Results in a nullPointerException.
+    /*public Vector2 setXandY() {
+
+        y = (float) (shieldBody.getPosition().y + shieldRadius * sin(a));
+        x = (float) (shieldBody.getPosition().x + shieldRadius * cos(a));
+
+        shieldBody.getPosition().set(x, y);
+        return shieldBody.getPosition().set(x, y);
+    }*/
 
     private FixtureDef getFixtureDefinition() {
         FixtureDef playerFixtureDef = new FixtureDef();
@@ -121,6 +131,8 @@ public class Hacking extends RoomParent{
         create();
     }
 
+    int maxShields = 3;
+
     public void create() {
 
         batch = new SpriteBatch();
@@ -132,7 +144,10 @@ public class Hacking extends RoomParent{
 
         debugRenderer = new Box2DDebugRenderer();
 
-        createShield();
+        for (int shieldCounter = 0; shieldCounter < maxShields; shieldCounter++) {
+
+            createShield();
+        }
 
         world.setContactListener(new ContactListener() {
             @Override
@@ -259,6 +274,14 @@ public class Hacking extends RoomParent{
         // How fast should the moving slow down? slowDown is for this.
         if (speed >= 0 && speed < slowDown){
 
+            /*for (int shieldCounter = 0; shieldCounter < maxShields; shieldCounter++) {
+
+                moveShield();
+                for (int pleaseMoveProperly = 0; pleaseMoveProperly < maxShields - 1; pleaseMoveProperly++) {
+
+                    moveShield();
+                }
+            }*/
             moveShield();
             speed++;
         } else {
@@ -294,21 +317,24 @@ public class Hacking extends RoomParent{
                 true);
     }
 
+    /*float x = shieldBody.getPosition().x;
+    float y = shieldBody.getPosition().y;*/
+
     public void moveShield() {
 
-        if (shieldBody.getPosition().y <= shieldRadius + shieldBody.getPosition().y) {
+            if (shieldBody.getPosition().y <= shieldRadius + shieldBody.getPosition().y) {
 
-            shieldBody.setTransform(x, y, a);
-            y = (float) (shieldBody.getPosition().y + shieldRadius * sin(a));
-            x = (float) (shieldBody.getPosition().x + shieldRadius * cos(a));
+                shieldBody.setTransform(x, y, a);
+                y = (float) (shieldBody.getPosition().y + shieldRadius * sin(a));
+                x = (float) (shieldBody.getPosition().x + shieldRadius * cos(a));
 
-            a++;
+                a++;
 
-            // The higher the number the slower shield will move.
-            slower(16);
+                // The higher the number the slower shield will move.
+                slower(16);
 
-            //System.out.println(x + " " + y + " " + a + " " + speed);
-        }
+                //System.out.println(x + " " + y + " " + a + " " + speed);
+            }
     }
 
     public void slower(int howSlowToGo) {
