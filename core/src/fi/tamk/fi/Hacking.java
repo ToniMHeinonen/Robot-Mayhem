@@ -47,6 +47,12 @@ Next just try to make 1 shield, which speed you can alter by a simple "speed" va
 get 1 shield working correctly, then we can add the rest of the needed shields later.
  */
 
+/* Would an ArrayList be useful with multiple shields? I haven't gotten more shields to move than
+the first one. Nothing I've tried has worked yet and I'm starting to wonder what it requires and
+trying an ArrayList popped into my mind.
+ */
+
+
 public class Hacking extends RoomParent{
 
     MainGame game;
@@ -146,7 +152,20 @@ public class Hacking extends RoomParent{
 
         for (int shieldCounter = 0; shieldCounter < maxShields; shieldCounter++) {
 
-            createShield();
+            // Doesn't work as is but could be useful later on. Maybe with an ArrayList?
+            if (shieldCounter > 0) {
+
+                createShield();
+                /*shieldBody.setTransform(x, y, a);
+                y = (float) (shieldBody.getPosition().y + shieldRadius * sin(a));
+                x = (float) (shieldBody.getPosition().x + shieldRadius * cos(a));
+
+                a++;*/
+
+            } else {
+
+                createShield();
+            }
         }
 
         world.setContactListener(new ContactListener() {
