@@ -1,18 +1,15 @@
 package fi.tamk.fi;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
@@ -23,11 +20,6 @@ import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.util.Locale;
-
-import javax.xml.soap.Text;
-
-import static com.badlogic.gdx.graphics.Color.GRAY;
-import static com.badlogic.gdx.graphics.Color.rgb888ToColor;
 
 public class MainGame extends Game {
 	private SpriteBatch batch;
@@ -73,6 +65,7 @@ public class MainGame extends Game {
 	private TextButton.TextButtonStyle style;
 
 	//Dialog
+	private UtilDialog dialog;
 	private TextureAtlas testButtonAtlas;
 	private Skin testSkin;
 	private Label.LabelStyle labelStyle;
@@ -92,7 +85,6 @@ public class MainGame extends Game {
 		createSkinAndStage();
 		createButtonFiles();
 		createProgressBarFiles();
-		createStepsFont();
 		createDialogConstants();
 		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("music/fansu_1.mp3"));
 		bossMusic = Gdx.audio.newMusic(Gdx.files.internal("music/bossmusic.mp3"));
@@ -158,17 +150,15 @@ public class MainGame extends Game {
 	}
 
 	private void createDialogConstants() {
+		fontSteps = new BitmapFont(Gdx.files.internal("stepfont/stepfont.fnt"),
+				Gdx.files.internal("stepfont/stepfont.png"),
+				false);
 		testButtonAtlas = new TextureAtlas("testbuttons/testbuttons.pack");
 		testSkin = new Skin(testButtonAtlas);
 		windowStyle = new Window.WindowStyle(fontSteps, fontColor, testSkin.getDrawable("dialog_bg"));
 		labelStyle = new Label.LabelStyle(fontSteps, fontColor);
+		dialog = new UtilDialog(this);
 	}
-
-    private void createStepsFont() {
-        fontSteps = new BitmapFont(Gdx.files.internal("stepfont/stepfont.fnt"),
-                Gdx.files.internal("stepfont/stepfont.png"),
-                false);
-    }
 
     private void createButtonFiles() {
 		buttonsAtlas = new TextureAtlas("test/button.pack"); //**button atlas image **//
@@ -436,5 +426,9 @@ public class MainGame extends Game {
 
 	public Color getFontColor() {
 		return fontColor;
+	}
+
+	public UtilDialog getDialog() {
+		return dialog;
 	}
 }

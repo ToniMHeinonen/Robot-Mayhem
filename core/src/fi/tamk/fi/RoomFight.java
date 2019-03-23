@@ -3,17 +3,13 @@ package fi.tamk.fi;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Timer;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,6 +21,8 @@ public class RoomFight extends RoomParent {
 
     // Enums give simple constants, which decreases the chance for coding mistakes
     enum State {
+        START_ROOM,
+        DIALOG_START,
         START_TURN,
         AWAITING,
         ACTION,
@@ -44,7 +42,7 @@ public class RoomFight extends RoomParent {
     private String[] btnTexts = new String[] {"Attack", "Defend", "Item"};
     private int btnCounter; // Used for button classes to get the correct value
     private int deathTimer = 240;
-    private State state = State.START_TURN;
+    private State state = State.START_ROOM;
     private boolean escapePopup;
     private ShaderProgram shFlashWhite;
 
@@ -59,7 +57,6 @@ public class RoomFight extends RoomParent {
         createHealthBars();
         createButtons();
         createShader();
-        createDialog("player says fsfds fsdfdsfs", dialogX, dialogY);
 
         player = new Player();
         enemy = new Enemy();
@@ -73,6 +70,8 @@ public class RoomFight extends RoomParent {
 
         if (!game.haveWeChangedTheRoom) {
 
+            universalStateChecks();
+
             batch.begin();
             batch.draw(imgBg, 0,0, imgBg.getWidth(), imgBg.getHeight());
             drawTopAndBottomBar();
@@ -85,6 +84,15 @@ public class RoomFight extends RoomParent {
             stage.act(Gdx.graphics.getDeltaTime());
             stage.draw();
             death();
+        }
+    }
+
+    private void universalStateChecks() {
+        switch (state) {
+            case DIALOG_START: {
+                if (!dialog.isDialogOn()) state = State.START_TURN;
+                break;
+            }
         }
     }
 
@@ -527,6 +535,7 @@ public class RoomFight extends RoomParent {
     private class Enemy extends Fighters {
 
         private Animation<TextureRegion> skill1, skill2, skill3;
+        private String dialogStart, dialogEnd;
         private HashMap<String,Object> mapBoss;
 
         private int actionDelay = 30;
@@ -540,6 +549,8 @@ public class RoomFight extends RoomParent {
             Y = 300f;
             maxHp = 5;
             hp = maxHp;
+
+            startDialogTimer();
 
             animList = new ArrayList<Animation<TextureRegion>>();
             Collections.addAll(animList, skill1, skill2, skill3);
@@ -569,6 +580,10 @@ public class RoomFight extends RoomParent {
 
         private void retrieveBoss() {
             mapBoss = Bosses.getBoss("roombot");
+
+            // Retrieve dialogs
+            dialogStart = (String) mapBoss.get(Bosses.getDialogStart());
+            dialogEnd = (String) mapBoss.get(Bosses.getDialogEnd());
 
             // Retrieve animations
             idle = (Animation<TextureRegion>) mapBoss.get(Bosses.getIdle());
@@ -628,6 +643,16 @@ public class RoomFight extends RoomParent {
             hp -= damage;
             flashAndMove();
             if (hp < 0) hp = 0;
+        }
+
+        private void startDialogTimer() {
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    state = State.DIALOG_START;
+                    dialog.createDialog(dialogStart, dialogX, dialogY);
+                }
+            }, 1);
         }
     }
 }

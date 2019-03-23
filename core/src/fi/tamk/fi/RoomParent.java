@@ -1,7 +1,6 @@
 package fi.tamk.fi;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
@@ -9,17 +8,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.I18NBundle;
 
 public class RoomParent implements Screen {
@@ -36,13 +30,7 @@ public class RoomParent implements Screen {
     protected ProgressBar.ProgressBarStyle progressBarStyle;
     protected BitmapFont fontSteps;
     private int transitionCounter = 20;
-
-    //Dialog
-    protected TextureAtlas testButtonAtlas;
-    protected Skin testSkin;
-    protected Label.LabelStyle labelStyle;
-    protected Window.WindowStyle windowStyle;
-    protected com.badlogic.gdx.graphics.Color fontColor;
+    protected UtilDialog dialog;
 
     protected TextButton button; //Temporary solution
 
@@ -60,15 +48,9 @@ public class RoomParent implements Screen {
         this.progressBarStyle = game.getProgBarStyle();
         stage.clear();
 
+        dialog = game.getDialog();
         imgTopBar = game.getImgTopBar();
         imgBottomBar = game.getImgBottomBar();
-
-        //Dialog
-        testButtonAtlas = game.getTestButtonAtlas();
-        testSkin = game.getTestSkin();
-        labelStyle = game.getLabelStyle();
-        windowStyle = game.getWindowStyle();
-        fontColor = game.getFontColor();
     }
 
     @Override
@@ -118,23 +100,7 @@ public class RoomParent implements Screen {
         }
     }
 
-    public void createDialog(String text, float x, float y) {
-        Label label = new Label(text, labelStyle);
-        label.setWrap(true);
-        final Dialog dialog = new Dialog("", windowStyle);
-        dialog.getContentTable().add(label).prefWidth(400);
-        dialog.setPosition(x, y);
-        // dialog.getBackground().getMinHeight()
-        // dialog.getBackground().getMinWidth()
-        dialog.setSize(label.getWidth() + 50,label.getHeight()*4f);
-        stage.addActor(dialog);
-        dialog.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                dialog.remove();
-            }
-        });
-    }
+
 
     public void drawTopAndBottomBar() {
         batch.draw(imgTopBar, 0,game.pixelHeight - imgTopBar.getHeight(),

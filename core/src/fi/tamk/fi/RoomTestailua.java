@@ -1,22 +1,17 @@
 package fi.tamk.fi;
 
-
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
 
-import java.awt.Color;
-
 public class RoomTestailua extends RoomParent {
+    private Skin testSkin;
+
     ImageButton.ImageButtonStyle styleAttack;
     ImageButton.ImageButtonStyle styleShield;
     ImageButton.ImageButtonStyle styleTooltipAttack;
@@ -39,7 +34,7 @@ public class RoomTestailua extends RoomParent {
         createButtons();
         // createPlayerDialog();
         // playMusic();
-        createDialog("player says fsfds fsdfdsfs", 200, 200);
+        dialog.createDialog("player says fsfds fsdfdsfs", 200f, 200f);
     }
 
     public void playMusic() {
@@ -64,6 +59,8 @@ public class RoomTestailua extends RoomParent {
     }
 
     public void createConstants() {
+
+        testSkin = game.getTestSkin();
 
         styleAttack = new ImageButton.ImageButtonStyle();
         styleShield = new ImageButton.ImageButtonStyle();
