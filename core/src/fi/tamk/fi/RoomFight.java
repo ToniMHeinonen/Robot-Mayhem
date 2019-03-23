@@ -56,7 +56,7 @@ public class RoomFight extends RoomParent {
 
         createHealthBars();
         createButtons();
-        createShader();
+        createShader(); // Used for flashing white
 
         player = new Player();
         enemy = new Enemy();
@@ -83,20 +83,29 @@ public class RoomFight extends RoomParent {
 
             stage.act(Gdx.graphics.getDeltaTime());
             stage.draw();
-            death();
         }
     }
 
     private void universalStateChecks() {
         switch (state) {
+            // If dialog box has been closed, start the turn
             case DIALOG_START: {
                 if (!dialog.isDialogOn()) state = State.START_TURN;
+                break;
+            }
+            // If dead, wait some time and then exit back to corridor
+            case DEAD: {
+                deathTimer--;
+                if (deathTimer <= 0) {
+                    game.switchToRoomGame();
+                }
                 break;
             }
         }
     }
 
     public void createShader() {
+        // No idea what these does, I just found this code from google
         String vertexShader = "attribute vec4 a_position; \n" + "attribute vec4 a_color;\n" +
                 "attribute vec2 a_texCoord0; \n" + "uniform mat4 u_projTrans; \n" +
                 "varying vec4 v_color; \n" + "varying vec2 v_texCoords; \n" +
@@ -118,17 +127,22 @@ public class RoomFight extends RoomParent {
 
     @Override
     public void hide() {
+        // These need to be optimized better, removed from here and used in MainGame
         backgroundMusic.play();
         bossMusic.stop();
     }
 
     private void createHealthBars() {
+        // Retrieve Texture
         hpBarLeft = game.getHpBarLeft();
         hpBarRight = game.getHpBarRight();
+        // Create animations (Reversed since they are in wrong order)
         playerHealthBar = animHealthPlayer.createAnimationReverse(hpBarLeft, 1, 11);
         enemyHealthBar = animHealthEnemy.createAnimationReverse(hpBarRight, 1, 11);
+        // "Start" the animation to initialize all the variables
         animHealthPlayer.startAnimation(playerHealthBar, 0);
         animHealthEnemy.startAnimation(enemyHealthBar, 0);
+        // Set the frame to be the last one on the sheet
         animHealthPlayer.setStateTime(playerHealthBar.getAnimationDuration());
         animHealthEnemy.setStateTime(enemyHealthBar.getAnimationDuration());
     }
@@ -139,6 +153,7 @@ public class RoomFight extends RoomParent {
         createActionButtons();
     }
 
+    // This array has to be in same order than in Player's action array
     private void createActionButtons() {
         float space = 400f;
         for (int i = 0; i < btnTexts.length; i++) {
@@ -162,16 +177,7 @@ public class RoomFight extends RoomParent {
         }
     }
 
-    private void death() {
-        if (state == State.DEAD) {
-            deathTimer--;
-
-            if (deathTimer <= 0) {
-                game.switchToRoomGame();
-            }
-        }
-    }
-
+    // Controls the escape button's popup
     private void escaping() {
         if (escapePopup) {
             batch.draw(escapeBg, game.pixelWidth/2 - escapeBg.getWidth()/2,
@@ -184,10 +190,6 @@ public class RoomFight extends RoomParent {
     }
 
     private void drawHP() {
-        /*fontSteps.draw(batch, "Player " + String.valueOf(player.getHp()),
-                400, game.pixelHeight - 50);
-        fontSteps.draw(batch, "Enemy " + String.valueOf(enemy.getHp()),
-                1000, game.pixelHeight - 50);*/
         double div, spot;
         int frame;
         // Get correct frame from player
@@ -206,6 +208,7 @@ public class RoomFight extends RoomParent {
         animHealthEnemy.draw(batch, 1000, game.pixelHeight - 100);
     }
 
+    // Creates the upper left escape button
     private void createEscapeButton() {
         final TextButton btn = new TextButton("Escape", skin);
         btn.setWidth(300);
@@ -227,6 +230,7 @@ public class RoomFight extends RoomParent {
         });
     }
 
+    // Creates yes and no buttons for escaping
     private void createYesNo() {
         final TextButton btn = new TextButton("Yes", skin);
         btn.setWidth(300);
@@ -265,17 +269,12 @@ public class RoomFight extends RoomParent {
     CREATE PARENT FIGHTER
      */
     private class Fighters {
-        protected float X;
-        protected float Y;
-        protected double maxHp;
-        protected double hp;
-        protected double damage;
-        protected double dmgAmount;
+        protected float X, Y;
+        protected double maxHp, hp, targetHp, dmgAmount;
         protected Animating anim = new Animating();
 
         protected boolean flashWhite;
-        protected int flashTime = 15;
-        protected int whiteTimer = flashTime;
+        protected float flashTime = 0.5f;
 
         protected float positionOffset;
         protected boolean positionIncorrect;
@@ -283,6 +282,8 @@ public class RoomFight extends RoomParent {
         protected int positionTimer = positionTime;
 
         protected boolean tempAnimation = false;
+        protected boolean pauseStates = false;
+        protected boolean hpIncorrect = false;
 
         protected int idleSpd, hackSpd, deathSpd, escapeSpd;
         protected Animation<TextureRegion> curAnimation, idle, hack;
@@ -291,8 +292,9 @@ public class RoomFight extends RoomParent {
 
         // Do this at the start of update method
         public void updateStart() {
-            controlFlashing();
             returnPosition();
+            hpToTarget();
+            checkToPause();
             anim.animate();
         }
 
@@ -313,9 +315,24 @@ public class RoomFight extends RoomParent {
             tempAnimation = false;
         }
 
+        // If taken hit, then pause so that new actions won't take place
+        public void checkToPause() {
+            if (!hpIncorrect && !positionIncorrect) pauseStates = false;
+            else pauseStates = true;
+        }
+
+        // When taken hit, flash white for a certain amount of time
         public void flashAndMove() {
             flashWhite = true;
-            if (hp > 0) {
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    flashWhite = false;
+                }
+            }, flashTime);
+
+            // If target hp is over 0, then move the player
+            if (targetHp > 0) {
                 positionIncorrect = true;
                 if (X < game.pixelWidth/2) {
                     // Player
@@ -327,6 +344,18 @@ public class RoomFight extends RoomParent {
             }
         }
 
+        // When taken hit, target hp is lower than hp. This makes the hp bar smoothly lower down
+        public void hpToTarget() {
+            if (hp > targetHp) {
+                hpIncorrect = true;
+                hp -= 0.02;
+            } else {
+                hpIncorrect = false;
+                hp = targetHp;
+            }
+        }
+
+        // When taken hit and position is off, return back to original position
         public void returnPosition() {
             if (positionIncorrect) {
                 if (positionTimer> 0) {
@@ -338,26 +367,18 @@ public class RoomFight extends RoomParent {
                         positionOffset++;
                     } else {
                         positionIncorrect = false;
+                        positionTimer = positionTime;
                     }
                 }
             }
         }
 
-        public void controlFlashing() {
-            if (flashWhite) {
-                if (whiteTimer > 0) {
-                    whiteTimer--;
-                } else {
-                    flashWhite = false;
-                    whiteTimer = flashTime;
-                }
-            }
-        }
-
+        // Health bar uses this
         public double getHp() {
             return hp;
         }
 
+        // Health bar uses this
         public double getMaxHp() {
             return maxHp;
         }
@@ -381,7 +402,8 @@ public class RoomFight extends RoomParent {
             Y = 300f;
             maxHp = game.getPlayerMaxHp();
             hp = maxHp;
-            damage = 2.5;
+            targetHp = hp;
+
             idleSpd = 30;
             hackSpd = 30;
             deathSpd = 30;
@@ -398,7 +420,6 @@ public class RoomFight extends RoomParent {
             idle = anim.createAnimation(game.getPlayerIdle(), 3, 1);
             attack = (Animation<TextureRegion>) mapAttack.get(Skills.getAnimation());
             defend = (Animation<TextureRegion>) mapDefend.get(Skills.getAnimation());
-            //defend = anim.createAnimation((Texture) mapDefend.get(Skills.getSheet()), 3, 1);
             escape = anim.createAnimation(game.getPlayerEscape(), 3, 1);
             item = anim.createAnimation(game.getPlayerItem(), 3, 1);
             hack = anim.createAnimation(game.getPlayerHack(), 3, 1);
@@ -414,7 +435,7 @@ public class RoomFight extends RoomParent {
 
         public void update() {
             updateStart();
-            if (!positionIncorrect) {
+            if (!pauseStates) {
                 checkHp();
 
                 if (state == State.START_TURN) {
@@ -493,11 +514,11 @@ public class RoomFight extends RoomParent {
         public void takeHit(double damage) {
             if (curAnimation == defend) enemy.takeHit(damage);
             else {
-                hp -= damage;
+                targetHp = hp - damage;
                 flashAndMove();
             }
 
-            if (hp < 0) hp = 0;
+            if (targetHp < 0) targetHp = 0;
         }
 
         /*
@@ -549,6 +570,7 @@ public class RoomFight extends RoomParent {
             Y = 300f;
             maxHp = 5;
             hp = maxHp;
+            targetHp = hp;
 
             startDialogTimer();
 
@@ -561,7 +583,7 @@ public class RoomFight extends RoomParent {
         public void update() {
             updateStart();
 
-            if (!positionIncorrect) {
+            if (!pauseStates) {
                 checkHp();
                 attack();
 
@@ -639,12 +661,14 @@ public class RoomFight extends RoomParent {
             }
         }
 
+        // When taking hit, lower targetHp, flash white and take knockback
         public void takeHit(double damage) {
-            hp -= damage;
+            targetHp = hp - damage;
             flashAndMove();
-            if (hp < 0) hp = 0;
+            if (targetHp < 0) targetHp = 0;
         }
 
+        // When the fight begins, wait for some time to start the dialogue
         private void startDialogTimer() {
             Timer.schedule(new Timer.Task() {
                 @Override
