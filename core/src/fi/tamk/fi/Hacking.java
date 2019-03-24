@@ -66,7 +66,8 @@ public class Hacking extends RoomParent {
     private Box2DDebugRenderer debugRenderer;
     private float radius = 0.5f;
     Vector2 center;
-    float speed = 5;
+    float speed = 500;
+    float length;
 
     Hacking(MainGame game) {
         super(game);
@@ -95,6 +96,7 @@ public class Hacking extends RoomParent {
         distanceJointDef.dampingRatio = 0.1f;
 
         DistanceJoint distanceJoint = (DistanceJoint) world.createJoint(distanceJointDef);
+        length = distanceJoint.getLength();
     }
 
     private FixtureDef getFixtureDefinition() {
@@ -117,7 +119,7 @@ public class Hacking extends RoomParent {
 
     private BodyDef getDefinitionOfCenterBody() {
         BodyDef myBodyDef = new BodyDef();
-        myBodyDef.type = BodyDef.BodyType.DynamicBody;
+        myBodyDef.type = BodyDef.BodyType.StaticBody;
         myBodyDef.position.set(WORLD_WIDTH / 2.5f, WORLD_HEIGHT / 2.5f);
         return myBodyDef;
     }
@@ -137,10 +139,21 @@ public class Hacking extends RoomParent {
     }
 
     public void movement(float speed, Vector2 center) {
+
         Vector2 radius = center.cpy().sub(ballBody.getPosition());
+        // orig: Vector2 force = radius.rotate90(1).nor().scl(speed);
         Vector2 force = radius.rotate90(1).nor().scl(speed);
+
+        // Below current last tried new one v
+        //Vector2 force = radius.rotate90(1).nor().scl(ballBody.getPosition().x, ballBody.getPosition().y);
+
+        //slower(speed - 2); <-- Not yes useful.
+
         ballBody.setLinearVelocity(force.x, force.y);
     }
+
+    int slow = 0;
+    int maxShields = 2;
 
     @Override
     public void render (float delta) {
@@ -155,6 +168,7 @@ public class Hacking extends RoomParent {
             debugRenderer.render(world, camera.combined);
             doPhysicsStep(Gdx.graphics.getDeltaTime());
             batch.begin();
+
             batch.draw(ball,
                     ballBody.getPosition().x - radius,
                     ballBody.getPosition().y - radius,
@@ -171,9 +185,18 @@ public class Hacking extends RoomParent {
                     ball.getHeight(), // End drawing y
                     false, // flipX
                     false); // flipY
-            centerBody.setTransform(WORLD_WIDTH / 2.5f, WORLD_HEIGHT / 2.5f, centerBody.getAngle());
+            //centerBody.setTransform(WORLD_WIDTH / 2.5f, WORLD_HEIGHT / 2.5f, centerBody.getAngle());
             batch.end();
             movement(speed, center);
+        }
+    }
+
+    // Not useful yet.
+    public void slower(float howSlowToGo) {
+
+        for (int counter = 0; counter < howSlowToGo; counter++) {
+
+            speed--;
         }
     }
 
