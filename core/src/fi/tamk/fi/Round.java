@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -14,6 +15,8 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.joints.DistanceJoint;
+import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 
 import fi.tamk.fi.RoomParent;
 
@@ -23,8 +26,8 @@ public class Round extends RoomParent {
 
     SpriteBatch batch;
     Texture ball;
-    public static final float WORLD_WIDTH = 8.0f;
-    public static final float WORLD_HEIGHT = 4.8f;
+    public static final float WORLD_WIDTH = 19.20f;
+    public static final float WORLD_HEIGHT = 10.80f;
     private OrthographicCamera camera;
     private World world;
     private Body ballBody;
@@ -35,6 +38,8 @@ public class Round extends RoomParent {
     private float radius = 0.5f;
     Vector2 center;
     float speed = 5;
+    //DistanceJointDef distanceJointDef;
+    //DistanceJoint distanceJoint;
 
     Round(MainGame game) {
         super(game);
@@ -50,9 +55,17 @@ public class Round extends RoomParent {
         ballBody = world.createBody(getDefinitionOfBody());
         //ballBody.createFixture(getFixtureDefinition());
         centerBody = world.createBody(getDefinitionOfCenterBody());
-        centerBody.createFixture(getFixtureDefinition());
+        //centerBody.createFixture(getFixtureDefinition());
         debugRenderer = new Box2DDebugRenderer();
         center = centerBody.getPosition();
+        DistanceJointDef distanceJointDef = new DistanceJointDef();
+        distanceJointDef.bodyA = ballBody;
+        distanceJointDef.bodyB = centerBody;
+        distanceJointDef.length = 3;
+        distanceJointDef.frequencyHz = 3;
+        distanceJointDef.dampingRatio = 0.1f;
+
+        DistanceJoint distanceJoint = (DistanceJoint) world.createJoint(distanceJointDef);
     }
 
     private FixtureDef getFixtureDefinition() {
@@ -76,7 +89,7 @@ public class Round extends RoomParent {
     private BodyDef getDefinitionOfCenterBody() {
         BodyDef myBodyDef = new BodyDef();
         myBodyDef.type = BodyDef.BodyType.DynamicBody;
-        myBodyDef.position.set(WORLD_WIDTH / 1.9f, WORLD_HEIGHT / 1.9f);
+        myBodyDef.position.set(WORLD_WIDTH / 2.5f, WORLD_HEIGHT / 2.5f);
         return myBodyDef;
     }
 
@@ -125,6 +138,24 @@ public class Round extends RoomParent {
                 ball.getHeight(), // End drawing y
                 false, // flipX
                 false); // flipY
+        centerBody.setTransform(WORLD_WIDTH / 2.5f, WORLD_HEIGHT / 2.5f, centerBody.getAngle());
+        /*batch.draw(ball,
+                centerBody.getPosition().x - radius,
+                centerBody.getPosition().y - radius,
+                radius, // originX
+                radius, // originY
+                radius * 2, // width
+                radius * 2, // height
+                1.0f, // scaleX
+                1.0f, // scaleY
+                0,
+                0, // Start drawing from x = 0
+                0, // Start drawing from y = 0
+                ball.getWidth(), // End drawing x
+                ball.getHeight(), // End drawing y
+                false, // flipX
+                false); // flipY
+                */
         batch.end();
         movement(speed, center);
     }
