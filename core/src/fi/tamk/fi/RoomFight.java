@@ -204,8 +204,8 @@ public class RoomFight extends RoomParent {
         frame = (int) Math.ceil(spot);
         animHealthEnemy.setStateTime(enemyHealthBar.getFrameDuration() * frame);
 
-        animHealthPlayer.draw(batch, 400, game.pixelHeight - 100);
-        animHealthEnemy.draw(batch, 1000, game.pixelHeight - 100);
+        animHealthPlayer.draw(batch, 400, game.pixelHeight - 115);
+        animHealthEnemy.draw(batch, 1000, game.pixelHeight - 115);
     }
 
     // Creates the upper left escape button
@@ -270,7 +270,7 @@ public class RoomFight extends RoomParent {
      */
     private class Fighters {
         protected float X, Y;
-        protected double maxHp, hp, targetHp, dmgAmount;
+        protected double maxHp, hp, targetHp, hpDecreaseSpd, dmgAmount;
         protected Animating anim = new Animating();
 
         protected boolean flashWhite;
@@ -348,7 +348,7 @@ public class RoomFight extends RoomParent {
         public void hpToTarget() {
             if (hp > targetHp) {
                 hpIncorrect = true;
-                hp -= 0.02;
+                hp -= hpDecreaseSpd;
             } else {
                 hpIncorrect = false;
                 hp = targetHp;
@@ -519,6 +519,7 @@ public class RoomFight extends RoomParent {
             }
 
             if (targetHp < 0) targetHp = 0;
+            hpDecreaseSpd = (hp - targetHp) / 100;
         }
 
         /*
@@ -666,6 +667,7 @@ public class RoomFight extends RoomParent {
             targetHp = hp - damage;
             flashAndMove();
             if (targetHp < 0) targetHp = 0;
+            hpDecreaseSpd = (hp - targetHp) / 100;
         }
 
         // When the fight begins, wait for some time to start the dialogue
