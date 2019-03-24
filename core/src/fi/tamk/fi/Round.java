@@ -38,8 +38,6 @@ public class Round extends RoomParent {
     private float radius = 0.5f;
     Vector2 center;
     float speed = 5;
-    //DistanceJointDef distanceJointDef;
-    //DistanceJoint distanceJoint;
 
     Round(MainGame game) {
         super(game);
@@ -139,23 +137,6 @@ public class Round extends RoomParent {
                 false, // flipX
                 false); // flipY
         centerBody.setTransform(WORLD_WIDTH / 2.5f, WORLD_HEIGHT / 2.5f, centerBody.getAngle());
-        /*batch.draw(ball,
-                centerBody.getPosition().x - radius,
-                centerBody.getPosition().y - radius,
-                radius, // originX
-                radius, // originY
-                radius * 2, // width
-                radius * 2, // height
-                1.0f, // scaleX
-                1.0f, // scaleY
-                0,
-                0, // Start drawing from x = 0
-                0, // Start drawing from y = 0
-                ball.getWidth(), // End drawing x
-                ball.getHeight(), // End drawing y
-                false, // flipX
-                false); // flipY
-                */
         batch.end();
         movement(speed, center);
     }
