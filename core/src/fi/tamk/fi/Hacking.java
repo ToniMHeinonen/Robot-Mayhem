@@ -61,6 +61,9 @@ public class Hacking extends RoomParent{
     TextureAtlas testButtonAtlas;
     Skin testSkin;
 
+    private double accumulator = 0;
+    private float TIME_STEP = 1 / 60f;
+
     private World world;
 
     private Box2DDebugRenderer debugRenderer;
@@ -79,54 +82,6 @@ public class Hacking extends RoomParent{
     float a = 0;
 
     private Array<Body> bodiesToBeDestroyed;
-
-    protected BodyDef getDefinitionOfBody() {
-
-        x = 1000;
-        y = 200;
-
-        //setXandY();
-
-        shieldRadius = 400;
-
-        BodyDef shieldBody = new BodyDef();
-        shieldBody.type = BodyDef.BodyType.DynamicBody;
-        shieldBody.position.set(x, y);
-
-        //System.out.println(x + " " + y);
-
-        return shieldBody;
-    }
-
-    // Results in a nullPointerException.
-    /*public Vector2 setXandY() {
-
-        y = (float) (shieldBody.getPosition().y + shieldRadius * sin(a));
-        x = (float) (shieldBody.getPosition().x + shieldRadius * cos(a));
-
-        shieldBody.getPosition().set(x, y);
-        return shieldBody.getPosition().set(x, y);
-    }*/
-
-    private FixtureDef getFixtureDefinition() {
-        FixtureDef playerFixtureDef = new FixtureDef();
-
-        // Mass per square meter (kg^m2)
-        playerFixtureDef.density = 1.5f;
-
-        // How bouncy object? Very bouncy [0,1]
-        playerFixtureDef.restitution = 1.0f;
-
-        // How slipper object? [0,1]
-        playerFixtureDef.friction = 0.5f;
-
-
-        CircleShape circleshape = new CircleShape();
-        circleshape.setRadius(50f);
-
-        playerFixtureDef.shape = circleshape;
-        return playerFixtureDef;
-    }
 
     Hacking(MainGame game) {
 
@@ -184,6 +139,90 @@ public class Hacking extends RoomParent{
             @Override
             public void postSolve(Contact contact, ContactImpulse impulse) { }
         });
+    }
+
+    // used as a counter and in method slower(int howSlowToGo) as a means to slow down
+    int speed = 0;
+
+    /* When 1 slows down instantly and is at its slowest.
+       When 0 stops moving.
+       Higher than 1 slows down after speed has reached it.
+     */
+    int slowDown = 1;
+
+    public void render(float delta) {
+
+        super.render(delta);
+        doPhysicsStep(Gdx.graphics.getDeltaTime());
+        pleaseWork();
+        //moveShield();
+
+        // How fast should the moving slow down? slowDown is for this.
+        if (speed >= 0 && speed < slowDown){
+
+            /*for (int shieldCounter = 0; shieldCounter < maxShields; shieldCounter++) {
+
+                moveShield();
+                for (int pleaseMoveProperly = 0; pleaseMoveProperly < maxShields - 1; pleaseMoveProperly++) {
+
+                    moveShield();
+                }
+            }*/
+            moveShield();
+            speed++;
+        } else {
+
+            speed--;
+        }
+        checkBodiesToRemove();
+    }
+
+    protected BodyDef getDefinitionOfBody() {
+
+        x = 1000;
+        y = 200;
+
+        //setXandY();
+
+        shieldRadius = 400;
+
+        BodyDef shieldBody = new BodyDef();
+        shieldBody.type = BodyDef.BodyType.DynamicBody;
+        shieldBody.position.set(x, y);
+
+        //System.out.println(x + " " + y);
+
+        return shieldBody;
+    }
+
+    // Results in a nullPointerException.
+    /*public Vector2 setXandY() {
+
+        y = (float) (shieldBody.getPosition().y + shieldRadius * sin(a));
+        x = (float) (shieldBody.getPosition().x + shieldRadius * cos(a));
+
+        shieldBody.getPosition().set(x, y);
+        return shieldBody.getPosition().set(x, y);
+    }*/
+
+    private FixtureDef getFixtureDefinition() {
+        FixtureDef playerFixtureDef = new FixtureDef();
+
+        // Mass per square meter (kg^m2)
+        playerFixtureDef.density = 1.5f;
+
+        // How bouncy object? Very bouncy [0,1]
+        playerFixtureDef.restitution = 1.0f;
+
+        // How slipper object? [0,1]
+        playerFixtureDef.friction = 0.5f;
+
+
+        CircleShape circleshape = new CircleShape();
+        circleshape.setRadius(50f);
+
+        playerFixtureDef.shape = circleshape;
+        return playerFixtureDef;
     }
 
     public void createConstants() {
@@ -275,39 +314,19 @@ public class Hacking extends RoomParent{
         }
     }
 
-    // used as a counter and in method slower(int howSlowToGo) as a means to slow down
-    int speed = 0;
-
-    /* When 1 slows down instantly and is at its slowest.
-       When 0 stops moving.
-       Higher than 1 slows down after speed has reached it.
-     */
-    int slowDown = 1;
-
-    public void render(float delta) {
-
-        super.render(delta);
-        pleaseWork();
-        //moveShield();
-
-        // How fast should the moving slow down? slowDown is for this.
-        if (speed >= 0 && speed < slowDown){
-
-            /*for (int shieldCounter = 0; shieldCounter < maxShields; shieldCounter++) {
-
-                moveShield();
-                for (int pleaseMoveProperly = 0; pleaseMoveProperly < maxShields - 1; pleaseMoveProperly++) {
-
-                    moveShield();
-                }
-            }*/
-            moveShield();
-            speed++;
-        } else {
-
-            speed--;
+    private void doPhysicsStep(float deltaTime) {
+        float frameTime = deltaTime;
+        // If it took ages (over 4 fps, then use 4 fps)
+        // Avoid of "spiral of death"
+        if(deltaTime > 1 / 4f) {
+            frameTime = 1 / 4f;
         }
-        checkBodiesToRemove();
+        accumulator += frameTime;
+        while (accumulator >= TIME_STEP) {
+            // It's fixed time step!
+            world.step(TIME_STEP, 8, 3);
+            accumulator -= TIME_STEP;
+        }
     }
 
     public void createShield() {
