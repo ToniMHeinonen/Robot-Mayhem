@@ -13,7 +13,6 @@ import com.badlogic.gdx.utils.Timer;
 public class RoomTestailua extends RoomParent {
     private Skin testSkin;
 
-    //EDIT 1: private String[] btn;
     private Drawable[] tooltips;
     private Drawable tooltipAttack, tooltipDefend, tooltipItem;
 
@@ -65,9 +64,9 @@ public class RoomTestailua extends RoomParent {
     public void createButtons() {
         for (int i = 0; i < btn.length; i++) {
             buttonCounter = i;
-            Drawable on = testSkin.getDrawable(btn[i]);
-            Drawable off = testSkin.getDrawable(btn[i] + "_off");
-            final ImageButton imgButton = new ImageButton(on, off);
+            Drawable normal = testSkin.getDrawable(btn[i]);
+            Drawable clicked = testSkin.getDrawable(btn[i] + "_clicked");
+            final ImageButton imgButton = new ImageButton(normal, clicked);
             imgButton.setPosition(100 + space * i, 100);
             stage.addActor(imgButton);
             imgButton.addListener(new ActorGestureListener(20,0.4f,0.5f,0.15f) {
