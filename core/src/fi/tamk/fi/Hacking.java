@@ -20,6 +20,8 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.joints.DistanceJoint;
+import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -32,6 +34,8 @@ import java.security.Key;
 import sun.applet.Main;
 
 import static com.badlogic.gdx.Input.Keys.M;
+import static fi.tamk.fi.Round.WORLD_HEIGHT;
+import static fi.tamk.fi.Round.WORLD_WIDTH;
 import static java.lang.Math.cos;
 import static java.lang.StrictMath.sin;
 
@@ -47,339 +51,134 @@ Next just try to make 1 shield, which speed you can alter by a simple "speed" va
 get 1 shield working correctly, then we can add the rest of the needed shields later.
  */
 
-/* Would an ArrayList be useful with multiple shields? I haven't gotten more shields to move than
-the first one. Nothing I've tried has worked yet and I'm starting to wonder what it requires and
-trying an ArrayList popped into my mind.
- */
+public class Hacking extends RoomParent {
 
-
-public class Hacking extends RoomParent{
-
-    MainGame game;
     SpriteBatch batch;
-
-    TextureAtlas testButtonAtlas;
-    Skin testSkin;
-
-    private double accumulator = 0;
-    private float TIME_STEP = 1 / 60f;
-
+    Texture ball;
+    public static final float WORLD_WIDTH = 19.20f;
+    public static final float WORLD_HEIGHT = 10.80f;
+    private OrthographicCamera camera;
     private World world;
-
+    private Body ballBody;
+    // ballBody is the body that should do circles
+    private Body centerBody;
+    // centerBody is just a centerpoint of the circle
     private Box2DDebugRenderer debugRenderer;
-
-    Body shieldBody;
-
-    Texture test = new Texture(Gdx.files.internal("badlogic.jpg"));
-    Texture texture = new Texture(Gdx.files.internal("test.png"));
-
-    /* Not sure how to change these (x & y) for the creation of a new shield. Tried modifying
-    methods but it ended up making the hacking room completely blank so I undid it all.*/
-    float x;
-    float y;
-    private float shieldRadius;
-
-    float a = 0;
-
-    private Array<Body> bodiesToBeDestroyed;
+    private float radius = 0.5f;
+    Vector2 center;
+    float speed = 5;
 
     Hacking(MainGame game) {
-
         super(game);
-
-        bodiesToBeDestroyed = new Array<Body>();
-        createConstants();
         create();
     }
 
-    int maxShields = 3;
-
     public void create() {
-
         batch = new SpriteBatch();
-
-        world = new World(new Vector2(0, -0f), true);
-
+        ball = new Texture("test.png");
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 1920, 1080);
+        camera.setToOrtho(false, WORLD_WIDTH, WORLD_HEIGHT);
+
+        world = new World(new Vector2(0, 0), true);
+
+        ballBody = world.createBody(getDefinitionOfBody());
+        centerBody = world.createBody(getDefinitionOfCenterBody());
 
         debugRenderer = new Box2DDebugRenderer();
 
-        for (int shieldCounter = 0; shieldCounter < maxShields; shieldCounter++) {
+        center = centerBody.getPosition();
+        DistanceJointDef distanceJointDef = new DistanceJointDef();
+        distanceJointDef.bodyA = ballBody;
+        distanceJointDef.bodyB = centerBody;
+        distanceJointDef.length = 3;
+        distanceJointDef.frequencyHz = 3;
+        distanceJointDef.dampingRatio = 0.1f;
 
-            // Doesn't work as is but could be useful later on. Maybe with an ArrayList?
-            if (shieldCounter > 0) {
-
-                createShield();
-                /*shieldBody.setTransform(x, y, a);
-                y = (float) (shieldBody.getPosition().y + shieldRadius * sin(a));
-                x = (float) (shieldBody.getPosition().x + shieldRadius * cos(a));
-
-                a++;*/
-
-            } else {
-
-                createShield();
-            }
-        }
-
-        world.setContactListener(new ContactListener() {
-            @Override
-            public void beginContact(Contact contact) {
-
-                System.out.println("Contact detected!");
-            }
-
-            @Override
-            public void endContact(Contact contact) { }
-
-            @Override
-            public void preSolve(Contact contact, Manifold oldManifold) { }
-
-            @Override
-            public void postSolve(Contact contact, ContactImpulse impulse) { }
-        });
+        DistanceJoint distanceJoint = (DistanceJoint) world.createJoint(distanceJointDef);
     }
-
-    // used as a counter and in method slower(int howSlowToGo) as a means to slow down
-    int speed = 0;
-
-    /* When 1 slows down instantly and is at its slowest.
-       When 0 stops moving.
-       Higher than 1 slows down after speed has reached it.
-     */
-    int slowDown = 1;
-
-    public void render(float delta) {
-
-        super.render(delta);
-        doPhysicsStep(Gdx.graphics.getDeltaTime());
-        pleaseWork();
-        //moveShield();
-
-        // How fast should the moving slow down? slowDown is for this.
-        if (speed >= 0 && speed < slowDown){
-
-            /*for (int shieldCounter = 0; shieldCounter < maxShields; shieldCounter++) {
-
-                moveShield();
-                for (int pleaseMoveProperly = 0; pleaseMoveProperly < maxShields - 1; pleaseMoveProperly++) {
-
-                    moveShield();
-                }
-            }*/
-            moveShield();
-            speed++;
-        } else {
-
-            speed--;
-        }
-        checkBodiesToRemove();
-    }
-
-    protected BodyDef getDefinitionOfBody() {
-
-        x = 1000;
-        y = 200;
-
-        //setXandY();
-
-        shieldRadius = 400;
-
-        BodyDef shieldBody = new BodyDef();
-        shieldBody.type = BodyDef.BodyType.DynamicBody;
-        shieldBody.position.set(x, y);
-
-        //System.out.println(x + " " + y);
-
-        return shieldBody;
-    }
-
-    // Results in a nullPointerException.
-    /*public Vector2 setXandY() {
-
-        y = (float) (shieldBody.getPosition().y + shieldRadius * sin(a));
-        x = (float) (shieldBody.getPosition().x + shieldRadius * cos(a));
-
-        shieldBody.getPosition().set(x, y);
-        return shieldBody.getPosition().set(x, y);
-    }*/
 
     private FixtureDef getFixtureDefinition() {
         FixtureDef playerFixtureDef = new FixtureDef();
-
-        // Mass per square meter (kg^m2)
-        playerFixtureDef.density = 1.5f;
-
-        // How bouncy object? Very bouncy [0,1]
+        playerFixtureDef.density = 1;
         playerFixtureDef.restitution = 1.0f;
-
-        // How slipper object? [0,1]
         playerFixtureDef.friction = 0.5f;
-
-
         CircleShape circleshape = new CircleShape();
-        circleshape.setRadius(50f);
-
+        circleshape.setRadius(0.5f);
         playerFixtureDef.shape = circleshape;
         return playerFixtureDef;
     }
 
-    public void createConstants() {
-        testButtonAtlas = new TextureAtlas("testbuttons/testbuttons.pack");
-        testSkin = new Skin(testButtonAtlas);
+    private BodyDef getDefinitionOfBody() {
+        BodyDef myBodyDef = new BodyDef();
+        myBodyDef.type = BodyDef.BodyType.DynamicBody;
+        myBodyDef.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2);
+        return myBodyDef;
     }
 
-    Array<Body> shields = new Array<Body>();
-
-    public void pleaseWork() {
-
-        batch.setProjectionMatrix(camera.combined);
-
-        Gdx.gl.glClearColor(0, 1, 1, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        /* Don't create shield 60 times in a second
-        createShield();*/
-        //createTest();
-
-        world.getBodies(shields);
-
-        debugRenderer.render(world, camera.combined);
-
-        batch.begin();
-
-        for (Body body : shields) {
-            //System.out.println(body.getUserData());
-            if(body.getUserData() != null) {
-
-                if (body.getUserData() == texture) {
-
-                        float radius = ((CircleShape) body.getFixtureList().get(0).getShape()).getRadius();
-                        Texture texture = (Texture) body.getUserData();
-
-                            batch.draw(texture,
-                                    body.getPosition().x - radius,
-                                    body.getPosition().y - radius,
-                                    radius,
-                                    radius,
-                                    radius * 2,
-                                    radius * 2,
-                                    1.0f,
-                                    1.0f,
-                                    body.getTransform().getRotation() * MathUtils.radiansToDegrees,
-                                    0,
-                                    0,
-                                    texture.getWidth(),
-                                    texture.getHeight(),
-                                    false,
-                                    false);
-                        /* Don't remove the body
-                        bodiesToBeDestroyed.add(body);*/
-                        /* I moved this to a better spot in render
-                        checkBodiesToRemove();*/
-                }
-
-                /*if (body.getUserData() == test) {
-
-                    batch.draw(texture,
-                            body.getPosition().x,
-                            body.getPosition().y,
-                            x,
-                            y,
-                            x,
-                            y,
-                            1.0f,
-                            1.0f,
-                            body.getTransform().getRotation() * MathUtils.radiansToDegrees,
-                            0,
-                            0,
-                            texture.getWidth(),
-                            texture.getHeight(),
-                            false,
-                            false);
-                }*/
-            }
-        }
-        batch.end();
+    private BodyDef getDefinitionOfCenterBody() {
+        BodyDef myBodyDef = new BodyDef();
+        myBodyDef.type = BodyDef.BodyType.DynamicBody;
+        myBodyDef.position.set(WORLD_WIDTH / 2.5f, WORLD_HEIGHT / 2.5f);
+        return myBodyDef;
     }
 
-    private void checkBodiesToRemove() {
-        // Destroy needed bodies
-        for (int i = 0; i < bodiesToBeDestroyed.size; i++) {
-            Body body = bodiesToBeDestroyed.get(i);
-            world.destroyBody(body);
-            bodiesToBeDestroyed.removeIndex(i);
-            i--;
-        }
-    }
-
+    private double accumulator = 0;
+    private float TIME_STEP = 1 / 60f;
     private void doPhysicsStep(float deltaTime) {
         float frameTime = deltaTime;
-        // If it took ages (over 4 fps, then use 4 fps)
-        // Avoid of "spiral of death"
         if(deltaTime > 1 / 4f) {
             frameTime = 1 / 4f;
         }
         accumulator += frameTime;
         while (accumulator >= TIME_STEP) {
-            // It's fixed time step!
             world.step(TIME_STEP, 8, 3);
             accumulator -= TIME_STEP;
         }
     }
 
-    public void createShield() {
-
-        shieldBody = world.createBody(getDefinitionOfBody());
-        shieldBody.createFixture(getFixtureDefinition());
-        shieldBody.getPosition();
-        shieldBody.setUserData(texture);
-
-        shieldBody.applyLinearImpulse(new Vector2(0.0f, 0.0f),
-                shieldBody.getWorldCenter(),
-                true);
+    public void movement(float speed, Vector2 center) {
+        Vector2 radius = center.cpy().sub(ballBody.getPosition());
+        Vector2 force = radius.rotate90(1).nor().scl(speed);
+        ballBody.setLinearVelocity(force.x, force.y);
     }
 
-    public void createTest() {
+    @Override
+    public void render (float delta) {
 
-        Body testBody;
+        super.render(delta);
 
-        testBody = world.createBody(getDefinitionOfBody());
-        testBody.createFixture(getFixtureDefinition());
-        testBody.getPosition();
-        testBody.setUserData(test);
+        if (!game.haveWeChangedTheRoom) {
 
-        testBody.applyLinearImpulse(new Vector2(0.0f, 0.0f),
-                testBody.getWorldCenter(),
-                true);
-    }
-
-    /*float x = shieldBody.getPosition().x;
-    float y = shieldBody.getPosition().y;*/
-
-    public void moveShield() {
-
-            if (shieldBody.getPosition().y <= shieldRadius + shieldBody.getPosition().y) {
-
-                shieldBody.setTransform(x, y, a);
-                y = (float) (shieldBody.getPosition().y + shieldRadius * sin(a));
-                x = (float) (shieldBody.getPosition().x + shieldRadius * cos(a));
-
-                a++;
-
-                // The higher the number the slower shield will move.
-                slower(16);
-
-                //System.out.println(x + " " + y + " " + a + " " + speed);
-            }
-    }
-
-    public void slower(int howSlowToGo) {
-
-        for (int counter = 0; counter < howSlowToGo; counter++) {
-
-            speed++;
+            batch.setProjectionMatrix(camera.combined);
+            Gdx.gl.glClearColor(1, 1, 1, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            debugRenderer.render(world, camera.combined);
+            doPhysicsStep(Gdx.graphics.getDeltaTime());
+            batch.begin();
+            batch.draw(ball,
+                    ballBody.getPosition().x - radius,
+                    ballBody.getPosition().y - radius,
+                    radius, // originX
+                    radius, // originY
+                    radius * 2, // width
+                    radius * 2, // height
+                    1.0f, // scaleX
+                    1.0f, // scaleY
+                    ballBody.getTransform().getRotation() * MathUtils.radiansToDegrees,
+                    0, // Start drawing from x = 0
+                    0, // Start drawing from y = 0
+                    ball.getWidth(), // End drawing x
+                    ball.getHeight(), // End drawing y
+                    false, // flipX
+                    false); // flipY
+            centerBody.setTransform(WORLD_WIDTH / 2.5f, WORLD_HEIGHT / 2.5f, centerBody.getAngle());
+            batch.end();
+            movement(speed, center);
         }
+    }
+
+    @Override
+    public void dispose () {
+        batch.dispose();
     }
 }
