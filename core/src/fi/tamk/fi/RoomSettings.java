@@ -21,6 +21,7 @@ public class RoomSettings extends RoomParent {
         createButtonPlus();
         createButtonMinus();
         createButtonTestailua();
+        createButtonRound();
 
         // Added for testing purposes.
         createButtonHacking();
@@ -151,6 +152,23 @@ public class RoomSettings extends RoomParent {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 game.switchToHacking();
+            }
+        });
+    }
+
+    // Temporary
+    public void createButtonRound() {
+        final TextButton buttonGame = new TextButton("Round", skin);
+        buttonGame.setWidth(300f);
+        buttonGame.setHeight(100f);
+        buttonGame.setPosition(game.pixelWidth /3 - buttonGame.getWidth(),
+                game.pixelHeight/3 - buttonGame.getHeight() /2);
+        stage.addActor(buttonGame);
+
+        buttonGame.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                game.switchToRound();
             }
         });
     }

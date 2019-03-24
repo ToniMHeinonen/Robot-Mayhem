@@ -149,6 +149,13 @@ public class MainGame extends Game {
 		setScreen(room);
 	}
 
+	// Temporary
+	public void switchToRound() {
+	    transition();
+	    Round room = new Round(this);
+	    setScreen(room);
+    }
+
 	private void createDialogConstants() {
 		fontSteps = new BitmapFont(Gdx.files.internal("stepfont/stepfont.fnt"),
 				Gdx.files.internal("stepfont/stepfont.png"),
