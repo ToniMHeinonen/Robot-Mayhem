@@ -29,8 +29,6 @@ public class PowerUps extends RoomParent {
         super(game);
         create();
         createButtonPowerUps();
-        createButtonPowerUpsB();
-        createButtonPowerUpsC();
     }
 
     public void createButtonPowerUps() {
@@ -43,6 +41,22 @@ public class PowerUps extends RoomParent {
 
         stage.addActor(buttonPowerUps);
 
+        TextButton buttonPowerUpsB = new TextButton("PowerUps B", skin);
+        buttonPowerUpsB.setWidth(400f);
+        buttonPowerUpsB.setHeight(100f);
+        buttonPowerUpsB.setPosition(900,
+                200);
+
+        stage.addActor(buttonPowerUpsB);
+
+        TextButton buttonPowerUpsC = new TextButton("PowerUps C", skin);
+        buttonPowerUpsC.setWidth(400f);
+        buttonPowerUpsC.setHeight(100f);
+        buttonPowerUpsC.setPosition(1300,
+                200);
+
+        stage.addActor(buttonPowerUpsC);
+
         buttonPowerUps.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -54,23 +68,6 @@ public class PowerUps extends RoomParent {
                         200);
 
                 stage.addActor(buttonPowerUps);
-            }
-        });
-    }
-
-    public void createButtonPowerUpsB() {
-
-        TextButton buttonPowerUpsB = new TextButton("PowerUps B", skin);
-        buttonPowerUpsB.setWidth(400f);
-        buttonPowerUpsB.setHeight(100f);
-        buttonPowerUpsB.setPosition(900,
-                200);
-
-        stage.addActor(buttonPowerUpsB);
-
-        buttonPowerUpsB.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
 
                 TextButton buttonPowerUpsB = new TextButton(pupB + "", skin);
                 buttonPowerUpsB.setWidth(400f);
@@ -79,22 +76,66 @@ public class PowerUps extends RoomParent {
                         200);
 
                 stage.addActor(buttonPowerUpsB);
+
+                TextButton buttonPowerUpsC = new TextButton(pupC + "", skin);
+                buttonPowerUpsC.setWidth(400f);
+                buttonPowerUpsC.setHeight(100f);
+                buttonPowerUpsC.setPosition(1300,
+                        200);
+
+                stage.addActor(buttonPowerUpsC);
             }
         });
-    }
 
-    public void createButtonPowerUpsC() {
-        TextButton buttonPowerUpsC = new TextButton("PowerUps C", skin);
-        buttonPowerUpsC.setWidth(400f);
-        buttonPowerUpsC.setHeight(100f);
-        buttonPowerUpsC.setPosition(1300,
-                200);
-
-        stage.addActor(buttonPowerUpsC);
-
-        buttonPowerUpsC.addListener(new ClickListener(){
+        buttonPowerUpsB.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y){
+            public void clicked(InputEvent event, float x, float y) {
+
+                TextButton buttonPowerUps = new TextButton(pupA + "", skin);
+                buttonPowerUps.setWidth(400f);
+                buttonPowerUps.setHeight(100f);
+                buttonPowerUps.setPosition(500,
+                        200);
+
+                stage.addActor(buttonPowerUps);
+
+                TextButton buttonPowerUpsB = new TextButton(pupB + "", skin);
+                buttonPowerUpsB.setWidth(400f);
+                buttonPowerUpsB.setHeight(100f);
+                buttonPowerUpsB.setPosition(900,
+                        200);
+
+                stage.addActor(buttonPowerUpsB);
+
+                TextButton buttonPowerUpsC = new TextButton(pupC + "", skin);
+                buttonPowerUpsC.setWidth(400f);
+                buttonPowerUpsC.setHeight(100f);
+                buttonPowerUpsC.setPosition(1300,
+                        200);
+
+                stage.addActor(buttonPowerUpsC);
+            }
+        });
+
+        buttonPowerUpsC.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+                TextButton buttonPowerUps = new TextButton(pupA + "", skin);
+                buttonPowerUps.setWidth(400f);
+                buttonPowerUps.setHeight(100f);
+                buttonPowerUps.setPosition(500,
+                        200);
+
+                stage.addActor(buttonPowerUps);
+
+                TextButton buttonPowerUpsB = new TextButton(pupB + "", skin);
+                buttonPowerUpsB.setWidth(400f);
+                buttonPowerUpsB.setHeight(100f);
+                buttonPowerUpsB.setPosition(900,
+                        200);
+
+                stage.addActor(buttonPowerUpsB);
 
                 TextButton buttonPowerUpsC = new TextButton(pupC + "", skin);
                 buttonPowerUpsC.setWidth(400f);
