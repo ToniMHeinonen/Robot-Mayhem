@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 
 import java.awt.Font;
@@ -15,24 +18,99 @@ import java.awt.Rectangle;
 public class PowerUps extends RoomParent {
 
     SpriteBatch batch;
-    //Rectangle rectangle;
-    Texture box;
+
     int pupA;
     int pupB;
     int pupC;
 
     Array<Integer> pups;
-    Rectangle rectangle;
 
     PowerUps(MainGame game) {
         super(game);
         create();
+        createButtonPowerUps();
+        createButtonPowerUpsB();
+        createButtonPowerUpsC();
+    }
+
+    public void createButtonPowerUps() {
+
+        TextButton buttonPowerUps = new TextButton("PowerUp A", skin);
+        buttonPowerUps.setWidth(400f);
+        buttonPowerUps.setHeight(100f);
+        buttonPowerUps.setPosition(500,
+                200);
+
+        stage.addActor(buttonPowerUps);
+
+        buttonPowerUps.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+                TextButton buttonPowerUps = new TextButton(pupA + "", skin);
+                buttonPowerUps.setWidth(400f);
+                buttonPowerUps.setHeight(100f);
+                buttonPowerUps.setPosition(500,
+                        200);
+
+                stage.addActor(buttonPowerUps);
+            }
+        });
+    }
+
+    public void createButtonPowerUpsB() {
+
+        TextButton buttonPowerUpsB = new TextButton("PowerUps B", skin);
+        buttonPowerUpsB.setWidth(400f);
+        buttonPowerUpsB.setHeight(100f);
+        buttonPowerUpsB.setPosition(900,
+                200);
+
+        stage.addActor(buttonPowerUpsB);
+
+        buttonPowerUpsB.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+                TextButton buttonPowerUpsB = new TextButton(pupB + "", skin);
+                buttonPowerUpsB.setWidth(400f);
+                buttonPowerUpsB.setHeight(100f);
+                buttonPowerUpsB.setPosition(900,
+                        200);
+
+                stage.addActor(buttonPowerUpsB);
+            }
+        });
+    }
+
+    public void createButtonPowerUpsC() {
+        TextButton buttonPowerUpsC = new TextButton("PowerUps C", skin);
+        buttonPowerUpsC.setWidth(400f);
+        buttonPowerUpsC.setHeight(100f);
+        buttonPowerUpsC.setPosition(1300,
+                200);
+
+        stage.addActor(buttonPowerUpsC);
+
+        buttonPowerUpsC.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+
+                TextButton buttonPowerUpsC = new TextButton(pupC + "", skin);
+                buttonPowerUpsC.setWidth(400f);
+                buttonPowerUpsC.setHeight(100f);
+                buttonPowerUpsC.setPosition(1300,
+                        200);
+
+                stage.addActor(buttonPowerUpsC);
+            }
+        });
     }
 
     public void create() {
 
         batch = new SpriteBatch();
-        box = new Texture(Gdx.files.internal("box.png"));
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1920, 1080);
 
@@ -68,23 +146,12 @@ public class PowerUps extends RoomParent {
 
             batch.begin();
 
-            rectangle = new Rectangle(rectangle.x = 500,
-                    rectangle.y = 100,
-                    rectangle.width = 200, rectangle.height = 200);
 
-            int add = box.getWidth();
-
-            batch.draw(box, 500, 100);
-            batch.draw(box, 500 + add, 100);
-            batch.draw(box, 500 + 2 * add, 100);
-
-            if (rectangle.contains(500, 100, 700, 300)) {
+            /*if () {
 
                 System.out.println("It works!");
-            }
+            }*/
 
-            /*rectangle = new Rectangle(rectangle.x = 100, rectangle.y = 100,
-                    rectangle.width = 100, rectangle.height = 100);*/
 
             batch.end();
         }
