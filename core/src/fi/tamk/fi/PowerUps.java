@@ -23,7 +23,10 @@ public class PowerUps extends RoomParent {
     int pupB;
     int pupC;
 
+    // Pups as in PowerUPS.
     Array<Integer> pups;
+
+    int counter = 0;
 
     PowerUps(MainGame game) {
         super(game);
@@ -84,6 +87,8 @@ public class PowerUps extends RoomParent {
                         200);
 
                 stage.addActor(buttonPowerUpsC);
+
+                counter++;
             }
         });
 
@@ -114,6 +119,8 @@ public class PowerUps extends RoomParent {
                         200);
 
                 stage.addActor(buttonPowerUpsC);
+
+                counter++;
             }
         });
 
@@ -121,7 +128,7 @@ public class PowerUps extends RoomParent {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                TextButton buttonPowerUps = new TextButton(pupA + "", skin);
+                final TextButton buttonPowerUps = new TextButton(pupA + "", skin);
                 buttonPowerUps.setWidth(400f);
                 buttonPowerUps.setHeight(100f);
                 buttonPowerUps.setPosition(500,
@@ -137,6 +144,14 @@ public class PowerUps extends RoomParent {
 
                 stage.addActor(buttonPowerUpsB);
 
+                buttonPowerUpsB.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+
+                        createButtonPupB();
+                    }
+                });
+
                 TextButton buttonPowerUpsC = new TextButton(pupC + "", skin);
                 buttonPowerUpsC.setWidth(400f);
                 buttonPowerUpsC.setHeight(100f);
@@ -144,7 +159,69 @@ public class PowerUps extends RoomParent {
                         200);
 
                 stage.addActor(buttonPowerUpsC);
+
+                buttonPowerUpsC.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+
+                        createButtonPupC();
+                    }
+                });
+
+                counter++;
+
+                System.out.println(counter);
             }
+        });
+    }
+
+    public void createButtonPupB() {
+
+        TextButton buttonPowerUpsB = new TextButton(pupB + "", skin);
+        buttonPowerUpsB.setWidth(400f);
+        buttonPowerUpsB.setHeight(100f);
+        buttonPowerUpsB.setPosition(900,
+                200);
+
+        stage.addActor(buttonPowerUpsB);
+
+        buttonPowerUpsB.addListener(new ClickListener() {
+
+            public void clicked(InputEvent event, float x, float y) {
+
+                TextButton buttonPowerUpsB = new TextButton("Selected!", skin);
+                buttonPowerUpsB.setWidth(400f);
+                buttonPowerUpsB.setHeight(100f);
+                buttonPowerUpsB.setPosition(900,
+                        200);
+
+                stage.addActor(buttonPowerUpsB);
+            }
+        });
+    }
+
+    public void createButtonPupC() {
+
+        TextButton buttonPowerUpsC = new TextButton(pupC + "", skin);
+        buttonPowerUpsC.setWidth(400f);
+        buttonPowerUpsC.setHeight(100f);
+        buttonPowerUpsC.setPosition(1300,
+                200);
+
+        stage.addActor(buttonPowerUpsC);
+
+            buttonPowerUpsC.addListener(new ClickListener() {
+
+                public void clicked(InputEvent event, float x, float y) {
+
+                    TextButton buttonPowerUpsC = new TextButton("Selected!", skin);
+                    buttonPowerUpsC.setWidth(400f);
+                    buttonPowerUpsC.setHeight(100f);
+                    buttonPowerUpsC.setPosition(1300,
+                            200);
+
+                    stage.addActor(buttonPowerUpsC);
+                }
         });
     }
 
