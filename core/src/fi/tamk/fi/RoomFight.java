@@ -269,11 +269,14 @@ public class RoomFight extends RoomParent {
     CREATE PARENT FIGHTER
      */
     private class Fighters {
+
         protected float X, Y;
         protected double maxHp, hp, targetHp, hpDecreaseSpd, dmgAmount;
         protected Animating anim = new Animating();
+        protected Animating hitAnim = new Animating();
 
-        protected boolean flashWhite;
+        protected int actionState, NONE = -1, TEMP_ANIM = 0, HIT_ANIM = 1, LONG_ANIM = 2;
+        protected boolean flashWhite, hitAnimationRunning;
         protected float flashTime = 0.5f;
 
         protected float positionOffset;
@@ -286,7 +289,7 @@ public class RoomFight extends RoomParent {
         protected boolean hpIncorrect = false;
 
         protected int idleSpd, hackSpd, deathSpd, escapeSpd;
-        protected Animation<TextureRegion> curAnimation, idle, hack;
+        protected Animation<TextureRegion> curAnimation, curHitAnimation, idle, hack;
         protected ArrayList<Animation<TextureRegion>> animList;
         protected Integer[] speeds;
 
@@ -296,13 +299,31 @@ public class RoomFight extends RoomParent {
             hpToTarget();
             checkToPause();
             anim.animate();
+            if (hitAnim.getAnimation() != null) hitAnim.animate();
         }
 
         // Do this at the end of update method
         public void updateEnd() {
             if (flashWhite) batch.setShader(shFlashWhite);
             anim.draw(batch, X + positionOffset, Y);
+            drawHitAnimation();
             batch.setShader(null);
+        }
+
+        // Opponent starts this when hitting you
+        public void startHitAnimation(Animation<TextureRegion> animation, int spd) {
+            hitAnimationRunning = true;
+            hitAnim.startAnimation(animation, spd);
+        }
+
+        // Draw the animation for as long as it lasts
+        public void drawHitAnimation() {
+            if (hitAnimationRunning) {
+                hitAnim.draw(batch, X, Y);
+                if (hitAnim.getAnimation().isAnimationFinished(hitAnim.getStateTime())) {
+                    hitAnimationRunning = false;
+                }
+            }
         }
 
         public void startIdle() {
@@ -382,6 +403,11 @@ public class RoomFight extends RoomParent {
         public double getMaxHp() {
             return maxHp;
         }
+
+        // Opponent uses this to check if it is time to inflict damage and pass the turn
+        public boolean isHitAnimationRunning() {
+            return hitAnimationRunning;
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -391,7 +417,7 @@ public class RoomFight extends RoomParent {
      */
     private class Player extends Fighters {
 
-        private Animation<TextureRegion> attack, defend, escape, item, death;
+        private Animation<TextureRegion> attack, attackHit, defend, escape, item, death;
         private HashMap<String,Object> mapAttack, mapDefend;
 
         private boolean causeDamage;
@@ -419,6 +445,7 @@ public class RoomFight extends RoomParent {
             // Create animations (probably should be created in MainGame though)
             idle = anim.createAnimation(game.getPlayerIdle(), 3, 1);
             attack = (Animation<TextureRegion>) mapAttack.get(Skills.getAnimation());
+            attackHit = (Animation<TextureRegion>) mapAttack.get(Skills.getHitAnimation());
             defend = (Animation<TextureRegion>) mapDefend.get(Skills.getAnimation());
             escape = anim.createAnimation(game.getPlayerEscape(), 3, 1);
             item = anim.createAnimation(game.getPlayerItem(), 3, 1);
@@ -442,20 +469,7 @@ public class RoomFight extends RoomParent {
                     decreaseCooldowns();
                     state = State.AWAITING;
                 } else if (state == State.ACTION) {
-                    // If temporary animation currently on, wait for it to finish,
-                    // else give turn to enemy
-                    if (tempAnimation) {
-                        if (curAnimation.isAnimationFinished(anim.getStateTime())) {
-                            if (causeDamage) {
-                                enemy.takeHit(dmgAmount);
-                                causeDamage = false;
-                            }
-                            startIdle();
-                            state = State.ENEMY_WAITING;
-                        }
-                    } else {
-                        state = State.ENEMY_WAITING;
-                    }
+                    controlActionStates();
                 } else if (state == State.AWAITING) {
                     if (anim.getAnimation() != idle) startIdle();
                 } else if (state == State.HACK) {
@@ -475,27 +489,52 @@ public class RoomFight extends RoomParent {
          */
         public void doAction(int index) {
             curAnimation = animList.get(index);
+            curHitAnimation = null;
+            causeDamage = false;
+            actionState = NONE;
 
-            //If defend, then it's not temporary
             if (curAnimation == attack){
+                curHitAnimation = attackHit;
                 causeDamage = true;
-                tempAnimation = true;
                 /*
                 Explanation: Object can't be cast to Double, so the object has to be first cast to
                 String and then get the value of String. This is so stupid...
                  */
                 dmgAmount = Double.valueOf(mapAttack.get(Skills.getDamage()).toString());
                 anim.startAnimation(curAnimation, speeds[index]);
+                actionState = TEMP_ANIM;
             } else if (curAnimation == defend) {
                 if (cooldowns.get("defend") > 0) {
                     state = State.AWAITING;
                 } else {
                     anim.startAnimation(curAnimation, speeds[index]);
                     cooldowns.put("defend", (Integer) mapDefend.get(Skills.getCooldown()));
+                    actionState = LONG_ANIM;
                 }
             } else if (curAnimation == item) {
-                tempAnimation = true;
                 anim.startAnimation(curAnimation, speeds[index]);
+                actionState = TEMP_ANIM;
+            }
+        }
+
+        private void controlActionStates() {
+            if (actionState == TEMP_ANIM) {
+                if (curAnimation.isAnimationFinished(anim.getStateTime())) {
+                    if (causeDamage) {
+                        enemy.startHitAnimation(curHitAnimation, 15);
+                        startIdle();
+                        actionState = HIT_ANIM;
+                    } else {
+                        state = State.ENEMY_WAITING;
+                    }
+                }
+            } else if (actionState == HIT_ANIM) {
+                if (!enemy.isHitAnimationRunning()) {
+                    enemy.takeHit(dmgAmount);
+                    state = State.ENEMY_WAITING;
+                }
+            } else if (actionState == LONG_ANIM) {
+                state = State.ENEMY_WAITING;
             }
         }
 
