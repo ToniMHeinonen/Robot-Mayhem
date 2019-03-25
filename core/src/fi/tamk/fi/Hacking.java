@@ -142,7 +142,7 @@ public class Hacking extends RoomParent {
 
         Vector2 radius = center.cpy().sub(ballBody.getPosition());
         // orig: Vector2 force = radius.rotate90(1).nor().scl(speed);
-        Vector2 force = radius.rotate90(1).nor().scl(speed);
+        Vector2 force = radius.rotate90(1).nor().scl(radius.len(), radius.len());
 
         // Below current last tried new one v
         //Vector2 force = radius.rotate90(1).nor().scl(ballBody.getPosition().x, ballBody.getPosition().y);
@@ -163,8 +163,8 @@ public class Hacking extends RoomParent {
         if (!game.haveWeChangedTheRoom) {
 
             batch.setProjectionMatrix(camera.combined);
-            Gdx.gl.glClearColor(1, 1, 1, 1);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            /*Gdx.gl.glClearColor(1, 1, 1, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);*/
             debugRenderer.render(world, camera.combined);
             doPhysicsStep(Gdx.graphics.getDeltaTime());
             batch.begin();

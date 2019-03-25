@@ -156,6 +156,12 @@ public class MainGame extends Game {
 	    setScreen(room);
     }
 
+	public void switchToPowerUps() {
+		transition();
+		PowerUps room = new PowerUps(this);
+		setScreen(room);
+	}
+
 	private void createDialogConstants() {
 		fontSteps = new BitmapFont(Gdx.files.internal("stepfont/stepfont.fnt"),
 				Gdx.files.internal("stepfont/stepfont.png"),
