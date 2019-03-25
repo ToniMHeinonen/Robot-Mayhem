@@ -26,6 +26,10 @@ import com.badlogic.gdx.utils.FloatArray;
 
 public class Round extends RoomParent {
 
+    enum BodyData {
+        SHIELD, BULLET;
+    }
+
     SpriteBatch batch;
     Texture ball;
     public static final float WORLD_WIDTH = 19.20f;
@@ -47,6 +51,7 @@ public class Round extends RoomParent {
     Array<Body> shieldBodies = new Array<Body>();
     Array<DistanceJointDef> distanceJointDefs = new Array<DistanceJointDef>();
     Array<Body> bulletBodies = new Array<Body>();
+    Array<Body> bodiesToBeDestroyed = new Array<Body>();
 
     float widthOfEnemy = WORLD_WIDTH - 3f;
     float heightOfEnemy = 5f;
@@ -54,8 +59,7 @@ public class Round extends RoomParent {
     FloatArray posX = new FloatArray();
     FloatArray posY = new FloatArray();
 
-    // It detects collision if there are more than 4 shields..
-    int shieldAmount = 4;
+    int shieldAmount = 8;
 
     Round(MainGame game) {
         super(game);
@@ -119,6 +123,7 @@ public class Round extends RoomParent {
             myBodyDef.position.set(posX.get(i), posY.get(i));
             shieldBody = world.createBody(myBodyDef);
             shieldBody.createFixture(getFixtureDefinition());
+            shieldBody.setUserData(BodyData.SHIELD);
             shieldBodies.add(shieldBody);
         }
     }
@@ -154,14 +159,21 @@ public class Round extends RoomParent {
     }
 
     public void fireBullet() {
-        BodyDef bulletBodyDef = new BodyDef();
-        bulletBodyDef.type = BodyDef.BodyType.DynamicBody;
-        bulletBodyDef.position.set(1f, 4f);
-        bulletBody = world.createBody(bulletBodyDef);
+        bulletBody = world.createBody(getDefinitionOfBulletBody());
         bulletBody.setBullet(true);
         bulletBody.createFixture(getFixtureDefinition());
+        bulletBody.setUserData(BodyData.BULLET);
         bulletBody.applyLinearImpulse(new Vector2(6, 0), bulletBody.getWorldCenter(), true);
         bulletBodies.add(bulletBody);
+    }
+
+    public void checkBulletBoundaries() {
+        float xPos = WORLD_WIDTH + 1;
+        for (Body body : bulletBodies) {
+            if (body.getPosition().x > xPos) {
+                bodiesToBeDestroyed.add(body);
+            }
+        }
     }
 
     public void createCollisionChecking() {
@@ -171,6 +183,14 @@ public class Round extends RoomParent {
                 Body body1 = contact.getFixtureA().getBody();
                 Body body2 = contact.getFixtureB().getBody();
                 System.out.println("collision");
+
+                if (body1.getUserData() == BodyData.SHIELD && body2.getUserData() == BodyData.BULLET) {
+                    bodiesToBeDestroyed.add(body2);
+                }
+
+                if (body2.getUserData() == BodyData.SHIELD && body1.getUserData() == BodyData.BULLET) {
+                    bodiesToBeDestroyed.add(body1);
+                }
             }
             @Override
             public void endContact(Contact contact) {
@@ -225,6 +245,13 @@ public class Round extends RoomParent {
         return myBodyDef;
     }
 
+    private BodyDef getDefinitionOfBulletBody() {
+        BodyDef bulletBodyDef = new BodyDef();
+        bulletBodyDef.type = BodyDef.BodyType.DynamicBody;
+        bulletBodyDef.position.set(1f, 4f);
+        return bulletBodyDef;
+    }
+
     private void doPhysicsStep(float deltaTime) {
         float frameTime = deltaTime;
         if(deltaTime > 1 / 4f) {
@@ -245,6 +272,13 @@ public class Round extends RoomParent {
         }
     }
 
+    public void deleteBodies() {
+        for (Body body : bodiesToBeDestroyed) {
+            world.destroyBody(body);
+        }
+        bodiesToBeDestroyed.clear();
+    }
+
     @Override
     public void render (float delta) {
         super.render(delta);
@@ -253,43 +287,49 @@ public class Round extends RoomParent {
         doPhysicsStep(Gdx.graphics.getDeltaTime());
         batch.begin();
         for (Body body : shieldBodies) {
-            batch.draw(ball,
-                    body.getPosition().x - radius,
-                    body.getPosition().y - radius,
-                    radius, // originX
-                    radius, // originY
-                    radius * 2, // width
-                    radius * 2, // height
-                    1.0f, // scaleX
-                    1.0f, // scaleY
-                    body.getTransform().getRotation() * MathUtils.radiansToDegrees,
-                    0, // Start drawing from x = 0
-                    0, // Start drawing from y = 0
-                    ball.getWidth(), // End drawing x
-                    ball.getHeight(), // End drawing y
-                    false, // flipX
-                    false); // flipY
+            if (body.getUserData() != null) {
+                batch.draw(ball,
+                        body.getPosition().x - radius,
+                        body.getPosition().y - radius,
+                        radius, // originX
+                        radius, // originY
+                        radius * 2, // width
+                        radius * 2, // height
+                        1.0f, // scaleX
+                        1.0f, // scaleY
+                        body.getTransform().getRotation() * MathUtils.radiansToDegrees,
+                        0, // Start drawing from x = 0
+                        0, // Start drawing from y = 0
+                        ball.getWidth(), // End drawing x
+                        ball.getHeight(), // End drawing y
+                        false, // flipX
+                        false); // flipY
+            }
         }
         for (Body body : bulletBodies) {
-            batch.draw(ball,
-                    body.getPosition().x - radius,
-                    body.getPosition().y - radius,
-                    radius, // originX
-                    radius, // originY
-                    radius * 2, // width
-                    radius * 2, // height
-                    1.0f, // scaleX
-                    1.0f, // scaleY
-                    body.getTransform().getRotation() * MathUtils.radiansToDegrees,
-                    0, // Start drawing from x = 0
-                    0, // Start drawing from y = 0
-                    ball.getWidth(), // End drawing x
-                    ball.getHeight(), // End drawing y
-                    false, // flipX
-                    false); // flipY
+            if (body.getUserData() != null) {
+                batch.draw(ball,
+                        body.getPosition().x - radius,
+                        body.getPosition().y - radius,
+                        radius, // originX
+                        radius, // originY
+                        radius * 2, // width
+                        radius * 2, // height
+                        1.0f, // scaleX
+                        1.0f, // scaleY
+                        body.getTransform().getRotation() * MathUtils.radiansToDegrees,
+                        0, // Start drawing from x = 0
+                        0, // Start drawing from y = 0
+                        ball.getWidth(), // End drawing x
+                        ball.getHeight(), // End drawing y
+                        false, // flipX
+                        false); // flipY
+            }
         }
         batch.end();
         movement(speed, center);
+        //checkBulletBoundaries();
+        deleteBodies();
     }
 
     @Override
