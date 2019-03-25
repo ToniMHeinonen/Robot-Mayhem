@@ -16,7 +16,7 @@ public class Bosses {
     private static String idle = "idle";
     private static String hack = "hack";
     private static String skill = "skill";
-    private static String hit = "hit";
+    private static String skillHit = "skillHit";
     private static String dialogStart = "dialogstart";
     private static String dialogEnd = "dialogend";
     private static String speed = "speed";
@@ -139,9 +139,9 @@ public class Bosses {
         map.put(skill + "1", a_skill1);
         map.put(skill + "2", a_skill2);
         map.put(skill + "3", a_skill3);
-        map.put(hit + skill + "1", a_skill1_hit);
-        map.put(hit + skill + "2", a_skill2_hit);
-        map.put(hit + skill + "3", a_skill3_hit);
+        map.put(skillHit + "1", a_skill1_hit);
+        map.put(skillHit + "2", a_skill2_hit);
+        map.put(skillHit + "3", a_skill3_hit);
         map.put(damage + "1", curDmg1);
         map.put(damage + "2", curDmg2);
         map.put(damage + "3", curDmg3);
@@ -150,9 +150,9 @@ public class Bosses {
         map.put(speed + skill + "1", s_skill1);
         map.put(speed + skill + "2", s_skill2);
         map.put(speed + skill + "3", s_skill3);
-        map.put(speed + hit + skill + "1", s_skill1_hit);
-        map.put(speed + hit + skill + "2", s_skill2_hit);
-        map.put(speed + hit + skill + "3", s_skill3_hit);
+        map.put(speed + skillHit + "1", s_skill1_hit);
+        map.put(speed + skillHit + "2", s_skill2_hit);
+        map.put(speed + skillHit + "3", s_skill3_hit);
         map.put(dialogStart, curDialogStart);
         map.put(dialogEnd, curDialogEnd);
 
@@ -199,7 +199,7 @@ public class Bosses {
         return speed;
     }
 
-    public static String getHit() {
-        return hit;
+    public static String getSkillHit() {
+        return skillHit;
     }
 }
