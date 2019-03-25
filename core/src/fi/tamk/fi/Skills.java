@@ -15,14 +15,15 @@ public class Skills {
     private static String damage = "damage";
     private static String cooldown = "cooldown";
     private static String animation = "animation";
+    private static String hitAnimation = "hitAnimation";
 
     private static HashMap<String,HashMap<String,Object>> mapSkills;
     private static HashMap<String,Object> mapAttack;
     private static HashMap<String,Object> mapDefend;
 
-    private static Texture t_attack, t_defend;
+    private static Texture t_attack, t_attack_hit, t_defend;
     private static Animating anim = new Animating();
-    private static Animation<TextureRegion> a_attack, a_defend;
+    private static Animation<TextureRegion> a_attack, a_attack_hit, a_defend;
 
     /*
     Create skills when the game starts.
@@ -54,6 +55,7 @@ public class Skills {
         mapAttack.put(damage, 2.5);
         mapAttack.put(cooldown, 0);
         mapAttack.put(animation, a_attack);
+        mapAttack.put(hitAnimation, a_attack_hit);
     }
 
     private static void skillDefend() {
@@ -62,17 +64,21 @@ public class Skills {
         mapDefend.put(damage, 0);
         mapDefend.put(cooldown, 3);
         mapDefend.put(animation, a_defend);
+        mapDefend.put(hitAnimation, null);
     }
 
     private static void createTexturesAndAnimations() {
         t_attack = new Texture("texture/player/playerAttack.png");
         a_attack = anim.createAnimation(t_attack, 3, 1);
+        t_attack_hit = new Texture("texture/player/playerAttackHit.png");
+        a_attack_hit = anim.createAnimation(t_attack_hit, 3, 1);
         t_defend = new Texture("texture/player/playerDefend.png");
         a_defend = anim.createAnimation(t_defend, 3, 1);
     }
 
     public static void dispose() {
         t_attack.dispose();
+        t_attack_hit.dispose();
         t_defend.dispose();
     }
 
@@ -90,5 +96,9 @@ public class Skills {
 
     public static String getAnimation() {
         return animation;
+    }
+
+    public static String getHitAnimation() {
+        return hitAnimation;
     }
 }

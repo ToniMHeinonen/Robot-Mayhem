@@ -16,6 +16,7 @@ public class Bosses {
     private static String idle = "idle";
     private static String hack = "hack";
     private static String skill = "skill";
+    private static String hit = "hit";
     private static String dialogStart = "dialogstart";
     private static String dialogEnd = "dialogend";
     private static String speed = "speed";
@@ -23,9 +24,12 @@ public class Bosses {
     private static HashMap<String, HashMap<String,Object>> mapBosses;
     private static HashMap<String,Object> mapRoombot, mapTest;
 
-    private static int s_idle, s_hack, s_skill1, s_skill2, s_skill3; // Animation speed
-    private static Texture t_idle, t_hack, t_skill1, t_skill2, t_skill3;
-    private static Animation<TextureRegion> a_idle, a_hack, a_skill1, a_skill2, a_skill3;
+    private static int s_idle, s_hack, s_skill1, s_skill2, s_skill3,
+                        s_skill1_hit, s_skill2_hit, s_skill3_hit; // Animation speed
+    private static Texture t_idle, t_hack, t_skill1, t_skill2, t_skill3, t_skill1_hit,
+                            t_skill2_hit, t_skill3_hit;
+    private static Animation<TextureRegion> a_idle, a_hack, a_skill1, a_skill2, a_skill3,
+                                            a_skill1_hit, a_skill2_hit, a_skill3_hit;
     private static Animating anim = new Animating();
 
     private static String curName, curDialogStart, curDialogEnd;
@@ -77,6 +81,15 @@ public class Bosses {
         t_skill3 = new Texture("texture/enemy/enemyAttack3.png");
         a_skill3 = anim.createAnimation(t_skill3, 3, 1);
         s_skill3 = 30;
+        t_skill1_hit = new Texture("texture/player/playerAttackHit.png");
+        a_skill1_hit = anim.createAnimation(t_skill1_hit, 3, 1);
+        s_skill1_hit = 30;
+        t_skill2_hit = new Texture("texture/player/playerAttackHit.png");
+        a_skill2_hit = anim.createAnimation(t_skill2_hit, 3, 1);
+        s_skill2_hit = 30;
+        t_skill3_hit = new Texture("texture/player/playerAttackHit.png");
+        a_skill3_hit = anim.createAnimation(t_skill3_hit, 3, 1);
+        s_skill3_hit = 30;
 
         mapRoombot = new HashMap<String, Object>();
         mapRoombot = addToMap(mapRoombot);
@@ -105,6 +118,15 @@ public class Bosses {
         t_skill3 = new Texture("texture/enemy/enemyAttack3.png");
         a_skill3 = anim.createAnimation(t_skill3, 3, 1);
         s_skill3 = 30;
+        t_skill1_hit = new Texture("texture/player/playerAttackHit.png");
+        a_skill1_hit = anim.createAnimation(t_skill1_hit, 3, 1);
+        s_skill1_hit = 30;
+        t_skill2_hit = new Texture("texture/player/playerAttackHit.png");
+        a_skill2_hit = anim.createAnimation(t_skill2_hit, 3, 1);
+        s_skill2_hit = 30;
+        t_skill3_hit = new Texture("texture/player/playerAttackHit.png");
+        a_skill3_hit = anim.createAnimation(t_skill3_hit, 3, 1);
+        s_skill3_hit = 30;
 
         mapTest = new HashMap<String, Object>();
         mapTest = addToMap(mapTest);
@@ -117,6 +139,9 @@ public class Bosses {
         map.put(skill + "1", a_skill1);
         map.put(skill + "2", a_skill2);
         map.put(skill + "3", a_skill3);
+        map.put(hit + skill + "1", a_skill1_hit);
+        map.put(hit + skill + "2", a_skill2_hit);
+        map.put(hit + skill + "3", a_skill3_hit);
         map.put(damage + "1", curDmg1);
         map.put(damage + "2", curDmg2);
         map.put(damage + "3", curDmg3);
@@ -125,6 +150,9 @@ public class Bosses {
         map.put(speed + skill + "1", s_skill1);
         map.put(speed + skill + "2", s_skill2);
         map.put(speed + skill + "3", s_skill3);
+        map.put(speed + hit + skill + "1", s_skill1_hit);
+        map.put(speed + hit + skill + "2", s_skill2_hit);
+        map.put(speed + hit + skill + "3", s_skill3_hit);
         map.put(dialogStart, curDialogStart);
         map.put(dialogEnd, curDialogEnd);
 
@@ -169,5 +197,9 @@ public class Bosses {
 
     public static String getSpeed() {
         return speed;
+    }
+
+    public static String getHit() {
+        return hit;
     }
 }
