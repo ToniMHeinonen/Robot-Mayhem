@@ -42,19 +42,17 @@ public class Round extends RoomParent {
     private float TIME_STEP = 1 / 60f;
     Vector2 center;
     float speed = 5;
+
     Array<Body> shieldBodies = new Array<Body>();
     Array<DistanceJointDef> distanceJointDefs = new Array<DistanceJointDef>();
-    float pos1x = WORLD_WIDTH / 2;
-    float pos1y = WORLD_HEIGHT / 2 + 1;
-    float pos2x = WORLD_WIDTH / 2 + 1;
-    float pos2y = WORLD_HEIGHT / 2;
-    float pos3x = WORLD_WIDTH / 2;
-    float pos3y = WORLD_HEIGHT / 2 - 1;
-    float pos4x = WORLD_WIDTH / 2 - 1;
-    float pos4y = WORLD_HEIGHT / 2;
+
+    float widthOfEnemy = WORLD_WIDTH / 2;
+    float heightOfEnemy = WORLD_HEIGHT / 2;
 
     FloatArray posX = new FloatArray();
     FloatArray posY = new FloatArray();
+
+    int shieldAmount = 16;
 
     Round(MainGame game) {
         super(game);
@@ -64,15 +62,55 @@ public class Round extends RoomParent {
         createJoints();
     }
 
+    // Not funny.. :D
+    // There has to be a better method for this.
     public void createPositions() {
-        posX.add(pos1x, pos2x, pos3x, pos4x);
-        posY.add(pos1y, pos2y, pos3y, pos4y);
+        float pos1x = widthOfEnemy;
+        float pos1y = heightOfEnemy + 1;
+        float pos2x = widthOfEnemy + 1;
+        float pos2y = heightOfEnemy;
+        float pos3x = widthOfEnemy;
+        float pos3y = heightOfEnemy - 1;
+        float pos4x = widthOfEnemy - 1;
+        float pos4y = heightOfEnemy;
+
+        float pos5x = widthOfEnemy + 0.71f;
+        float pos5y = heightOfEnemy + 0.71f;
+        float pos6x = widthOfEnemy - 0.71f;
+        float pos6y = heightOfEnemy + 0.71f;
+        float pos7x = widthOfEnemy - 0.71f;
+        float pos7y = heightOfEnemy - 0.71f;
+        float pos8x = widthOfEnemy + 0.71f;
+        float pos8y = heightOfEnemy - 0.71f;
+
+        float pos9x = widthOfEnemy + 0.92f;
+        float pos9y = heightOfEnemy + 0.38f;
+        float pos10x = widthOfEnemy + 0.38f;
+        float pos10y = heightOfEnemy + 0.92f;
+        float pos11x = widthOfEnemy - 0.38f;
+        float pos11y = heightOfEnemy + 0.92f;
+        float pos12x = widthOfEnemy - 0.92f;
+        float pos12y = heightOfEnemy + 0.38f;
+
+        float pos13x = widthOfEnemy - 0.92f;
+        float pos13y = heightOfEnemy - 0.38f;
+        float pos14x = widthOfEnemy - 0.38f;
+        float pos14y = heightOfEnemy - 0.92f;
+        float pos15x = widthOfEnemy + 0.38f;
+        float pos15y = heightOfEnemy - 0.92f;
+        float pos16x = widthOfEnemy + 0.92f;
+        float pos16y = heightOfEnemy - 0.38f;
+
+        posX.addAll(pos1x, pos2x, pos3x, pos4x, pos5x, pos6x, pos7x, pos8x,
+                pos9x, pos10x, pos11x, pos12x, pos13x, pos14x, pos15x, pos16x);
+        posY.addAll(pos1y, pos2y, pos3y, pos4y, pos5y, pos6y, pos7y, pos8y,
+                pos9y, pos10y, pos11y, pos12y, pos13y, pos14y, pos15y, pos16y);
     }
 
     public void createShields() {
         BodyDef myBodyDef = new BodyDef();
         myBodyDef.type = BodyDef.BodyType.DynamicBody;
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < shieldAmount; i++) {
             myBodyDef.position.set(posX.get(i), posY.get(i));
             shieldBody = world.createBody(myBodyDef);
             shieldBody.createFixture(getFixtureDefinition());
@@ -81,13 +119,13 @@ public class Round extends RoomParent {
     }
 
     public void createJoints() {
-        for (int i = 0; i < 4; i++) {
-            DistanceJointDef distanceJointDef = new DistanceJointDef();
+        DistanceJointDef distanceJointDef = new DistanceJointDef();
+        distanceJointDef.bodyB = centerBody;
+        distanceJointDef.length = 3f;
+        distanceJointDef.frequencyHz = 3;
+        distanceJointDef.dampingRatio = 0.1f;
+        for (int i = 0; i < shieldAmount; i++) {
             distanceJointDef.bodyA = shieldBodies.get(i);
-            distanceJointDef.bodyB = centerBody;
-            distanceJointDef.length = 3f;
-            distanceJointDef.frequencyHz = 3;
-            distanceJointDef.dampingRatio = 0.1f;
             distanceJointDefs.add(distanceJointDef);
 
             DistanceJoint distanceJoint = (DistanceJoint) world.createJoint(distanceJointDefs.get(i));
@@ -148,7 +186,7 @@ public class Round extends RoomParent {
     }
 
     public void movement(float speed, Vector2 center) {
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < shieldAmount; i++) {
             Vector2 radius = center.cpy().sub(shieldBodies.get(i).getPosition());
             Vector2 force = radius.rotate90(1).nor().scl(speed);
             shieldBodies.get(i).setLinearVelocity(force.x, force.y);
