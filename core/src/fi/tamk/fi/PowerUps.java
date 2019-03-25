@@ -28,6 +28,10 @@ public class PowerUps extends RoomParent {
 
     int counter = 0;
 
+    boolean canItBeClickedA = true;
+    boolean canItBeClickedB = true;
+    boolean canItBeClickedC = true;
+
     PowerUps(MainGame game) {
         super(game);
         create();
@@ -72,13 +76,17 @@ public class PowerUps extends RoomParent {
 
                 stage.addActor(buttonPowerUps);
 
-                buttonPowerUps.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
+                if (canItBeClickedA == true) {
+                    buttonPowerUps.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
 
-                        createButtonPup();
-                    }
-                });
+                            canItBeClickedB = false;
+                            canItBeClickedC = false;
+                            createButtonPup();
+                        }
+                    });
+                }
 
                 TextButton buttonPowerUpsB = new TextButton(pupB + "", skin);
                 buttonPowerUpsB.setWidth(400f);
@@ -88,13 +96,17 @@ public class PowerUps extends RoomParent {
 
                 stage.addActor(buttonPowerUpsB);
 
-                buttonPowerUpsB.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
+                if (canItBeClickedB == true) {
+                    buttonPowerUpsB.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
 
-                        createButtonPupB();
-                    }
-                });
+                            canItBeClickedA = false;
+                            canItBeClickedC = false;
+                            createButtonPupB();
+                        }
+                    });
+                }
 
                 TextButton buttonPowerUpsC = new TextButton(pupC + "", skin);
                 buttonPowerUpsC.setWidth(400f);
@@ -104,13 +116,17 @@ public class PowerUps extends RoomParent {
 
                 stage.addActor(buttonPowerUpsC);
 
-                buttonPowerUpsC.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
+                if (canItBeClickedC == true) {
+                    buttonPowerUpsC.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
 
-                        createButtonPupC();
-                    }
-                });
+                            canItBeClickedB = false;
+                            canItBeClickedA = false;
+                            createButtonPupC();
+                        }
+                    });
+                }
 
                 counter++;
             }
@@ -128,13 +144,17 @@ public class PowerUps extends RoomParent {
 
                 stage.addActor(buttonPowerUps);
 
-                buttonPowerUps.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
+                if (canItBeClickedA == true) {
+                    buttonPowerUps.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
 
-                        createButtonPup();
-                    }
-                });
+                            canItBeClickedB = false;
+                            canItBeClickedC = false;
+                            createButtonPup();
+                        }
+                    });
+                }
 
                 TextButton buttonPowerUpsB = new TextButton(pupB + "", skin);
                 buttonPowerUpsB.setWidth(400f);
@@ -144,13 +164,17 @@ public class PowerUps extends RoomParent {
 
                 stage.addActor(buttonPowerUpsB);
 
-                buttonPowerUpsB.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
+                if (canItBeClickedB == true) {
+                    buttonPowerUpsB.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
 
-                        createButtonPupB();
-                    }
-                });
+                            canItBeClickedA = false;
+                            canItBeClickedC = false;
+                            createButtonPupB();
+                        }
+                    });
+                }
 
                 TextButton buttonPowerUpsC = new TextButton(pupC + "", skin);
                 buttonPowerUpsC.setWidth(400f);
@@ -160,14 +184,17 @@ public class PowerUps extends RoomParent {
 
                 stage.addActor(buttonPowerUpsC);
 
-                buttonPowerUpsC.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
+                if (canItBeClickedC == true) {
+                    buttonPowerUpsC.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
 
-                        createButtonPupC();
-                    }
-                });
-
+                            canItBeClickedB = false;
+                            canItBeClickedA = false;
+                            createButtonPupC();
+                        }
+                    });
+                }
                 counter++;
             }
         });
@@ -184,13 +211,17 @@ public class PowerUps extends RoomParent {
 
                 stage.addActor(buttonPowerUps);
 
-                buttonPowerUps.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
+                if (canItBeClickedA == true) {
+                    buttonPowerUps.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
 
-                        createButtonPup();
-                    }
-                });
+                            canItBeClickedB = false;
+                            canItBeClickedC = false;
+                            createButtonPup();
+                        }
+                    });
+                }
 
                 TextButton buttonPowerUpsB = new TextButton(pupB + "", skin);
                 buttonPowerUpsB.setWidth(400f);
@@ -200,13 +231,17 @@ public class PowerUps extends RoomParent {
 
                 stage.addActor(buttonPowerUpsB);
 
-                buttonPowerUpsB.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
+                if (canItBeClickedB == true) {
+                    buttonPowerUpsB.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
 
-                        createButtonPupB();
-                    }
-                });
+                            canItBeClickedA = false;
+                            canItBeClickedC = false;
+                            createButtonPupB();
+                        }
+                    });
+                }
 
                 TextButton buttonPowerUpsC = new TextButton(pupC + "", skin);
                 buttonPowerUpsC.setWidth(400f);
@@ -216,13 +251,17 @@ public class PowerUps extends RoomParent {
 
                 stage.addActor(buttonPowerUpsC);
 
-                buttonPowerUpsC.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
+                if (canItBeClickedC == true) {
+                    buttonPowerUpsC.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
 
-                        createButtonPupC();
-                    }
-                });
+                            canItBeClickedB = false;
+                            canItBeClickedA = false;
+                            createButtonPupC();
+                        }
+                    });
+                }
 
                 counter++;
 
