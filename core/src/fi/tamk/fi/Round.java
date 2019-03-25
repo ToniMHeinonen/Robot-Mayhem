@@ -1,11 +1,8 @@
 package fi.tamk.fi;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -13,16 +10,19 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJoint;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
-
-import fi.tamk.fi.RoomParent;
-
-// https://stackoverflow.com/questions/32832583/libgdx-moving-a-body-in-a-circular-path
 
 public class Round extends RoomParent {
 
@@ -36,6 +36,7 @@ public class Round extends RoomParent {
     // shieldBody is the body that should do circles
     private Body centerBody;
     // centerBody is a centerpoint of the circle
+    private Body bulletBody;
     private Box2DDebugRenderer debugRenderer;
     private float radius = 0.5f;
     private double accumulator = 0;
@@ -45,14 +46,16 @@ public class Round extends RoomParent {
 
     Array<Body> shieldBodies = new Array<Body>();
     Array<DistanceJointDef> distanceJointDefs = new Array<DistanceJointDef>();
+    Array<Body> bulletBodies = new Array<Body>();
 
-    float widthOfEnemy = WORLD_WIDTH / 2;
-    float heightOfEnemy = WORLD_HEIGHT / 2;
+    float widthOfEnemy = WORLD_WIDTH - 3f;
+    float heightOfEnemy = 5f;
 
     FloatArray posX = new FloatArray();
     FloatArray posY = new FloatArray();
 
-    int shieldAmount = 16;
+    // It detects collision if there are more than 4 shields..
+    int shieldAmount = 4;
 
     Round(MainGame game) {
         super(game);
@@ -60,6 +63,8 @@ public class Round extends RoomParent {
         createPositions();
         createShields();
         createJoints();
+        createButtonShoot();
+        createCollisionChecking();
     }
 
     // Not funny.. :D
@@ -132,6 +137,53 @@ public class Round extends RoomParent {
         }
     }
 
+    public void createButtonShoot() {
+            final TextButton buttonFight = new TextButton("Shoot", skin);
+            buttonFight.setWidth(300f);
+            buttonFight.setHeight(100f);
+            buttonFight.setPosition(game.pixelWidth /2 - buttonFight.getWidth() /2,
+                    (game.pixelHeight/3) - buttonFight.getHeight() *2);
+            stage.addActor(buttonFight);
+
+            buttonFight.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    fireBullet();
+                }
+            });
+    }
+
+    public void fireBullet() {
+        BodyDef bulletBodyDef = new BodyDef();
+        bulletBodyDef.type = BodyDef.BodyType.DynamicBody;
+        bulletBodyDef.position.set(1f, 4f);
+        bulletBody = world.createBody(bulletBodyDef);
+        bulletBody.setBullet(true);
+        bulletBody.createFixture(getFixtureDefinition());
+        bulletBody.applyLinearImpulse(new Vector2(6, 0), bulletBody.getWorldCenter(), true);
+        bulletBodies.add(bulletBody);
+    }
+
+    public void createCollisionChecking() {
+        world.setContactListener(new ContactListener() {
+            @Override
+            public void beginContact(Contact contact) {
+                Body body1 = contact.getFixtureA().getBody();
+                Body body2 = contact.getFixtureB().getBody();
+                System.out.println("collision");
+            }
+            @Override
+            public void endContact(Contact contact) {
+            }
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold) {
+            }
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse) {
+            }
+        });
+    }
+
     public void create() {
         batch = new SpriteBatch();
         ball = new Texture("test.png");
@@ -169,7 +221,7 @@ public class Round extends RoomParent {
     private BodyDef getDefinitionOfCenterBody() {
         BodyDef myBodyDef = new BodyDef();
         myBodyDef.type = BodyDef.BodyType.StaticBody;
-        myBodyDef.position.set(WORLD_WIDTH / 2f, WORLD_HEIGHT / 2f);
+        myBodyDef.position.set(widthOfEnemy, heightOfEnemy);
         return myBodyDef;
     }
 
@@ -197,8 +249,6 @@ public class Round extends RoomParent {
     public void render (float delta) {
         super.render(delta);
         batch.setProjectionMatrix(camera.combined);
-        Gdx.gl.glClearColor(0, 0, 0, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         debugRenderer.render(world, camera.combined);
         doPhysicsStep(Gdx.graphics.getDeltaTime());
         batch.begin();
@@ -220,25 +270,24 @@ public class Round extends RoomParent {
                     false, // flipX
                     false); // flipY
         }
-        /*
-        batch.draw(ball,
-                shieldBody.getPosition().x - radius,
-                shieldBody.getPosition().y - radius,
-                radius, // originX
-                radius, // originY
-                radius * 2, // width
-                radius * 2, // height
-                1.0f, // scaleX
-                1.0f, // scaleY
-                shieldBody.getTransform().getRotation() * MathUtils.radiansToDegrees,
-                0, // Start drawing from x = 0
-                0, // Start drawing from y = 0
-                ball.getWidth(), // End drawing x
-                ball.getHeight(), // End drawing y
-                false, // flipX
-                false); // flipY
-                */
-        //centerBody.setTransform(WORLD_WIDTH / 2.5f, WORLD_HEIGHT / 2.5f, centerBody.getAngle());
+        for (Body body : bulletBodies) {
+            batch.draw(ball,
+                    body.getPosition().x - radius,
+                    body.getPosition().y - radius,
+                    radius, // originX
+                    radius, // originY
+                    radius * 2, // width
+                    radius * 2, // height
+                    1.0f, // scaleX
+                    1.0f, // scaleY
+                    body.getTransform().getRotation() * MathUtils.radiansToDegrees,
+                    0, // Start drawing from x = 0
+                    0, // Start drawing from y = 0
+                    ball.getWidth(), // End drawing x
+                    ball.getHeight(), // End drawing y
+                    false, // flipX
+                    false); // flipY
+        }
         batch.end();
         movement(speed, center);
     }
@@ -246,5 +295,6 @@ public class Round extends RoomParent {
     @Override
     public void dispose () {
         batch.dispose();
+        world.dispose();
     }
 }
