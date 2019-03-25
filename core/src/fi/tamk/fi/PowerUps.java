@@ -3,9 +3,14 @@ package fi.tamk.fi;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
+
+import java.awt.Font;
+import java.awt.Rectangle;
 
 public class PowerUps extends RoomParent {
 
@@ -17,6 +22,7 @@ public class PowerUps extends RoomParent {
     int pupC;
 
     Array<Integer> pups;
+    Rectangle rectangle;
 
     PowerUps(MainGame game) {
         super(game);
@@ -62,11 +68,20 @@ public class PowerUps extends RoomParent {
 
             batch.begin();
 
+            rectangle = new Rectangle(rectangle.x = 500,
+                    rectangle.y = 100,
+                    rectangle.width = 200, rectangle.height = 200);
+
             int add = box.getWidth();
 
             batch.draw(box, 500, 100);
             batch.draw(box, 500 + add, 100);
             batch.draw(box, 500 + 2 * add, 100);
+
+            if (rectangle.contains(500, 100, 700, 300)) {
+
+                System.out.println("It works!");
+            }
 
             /*rectangle = new Rectangle(rectangle.x = 100, rectangle.y = 100,
                     rectangle.width = 100, rectangle.height = 100);*/
