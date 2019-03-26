@@ -61,7 +61,7 @@ public class Bosses {
     }
 
     private static void bossRoombot() {
-        curName = "roombot";
+        curName = "Roombot";
         curDmg1 = 1;
         curDmg2 = 1.5;
         curDmg3 = 2;
@@ -101,7 +101,7 @@ public class Bosses {
     }
 
     private static void bossTest() {
-        curName = "test";
+        curName = "Test";
         curDmg1 = 1;
         curDmg2 = 1.5;
         curDmg3 = 2;
