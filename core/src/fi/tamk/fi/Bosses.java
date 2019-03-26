@@ -17,6 +17,7 @@ public class Bosses {
     private static String hack = "hack";
     private static String skill = "skill";
     private static String skillHit = "skillHit";
+    private static String skillName = "skillName";
     private static String dialogStart = "dialogstart";
     private static String dialogEnd = "dialogend";
     private static String speed = "speed";
@@ -32,7 +33,8 @@ public class Bosses {
                                             a_skill1_hit, a_skill2_hit, a_skill3_hit;
     private static Animating anim = new Animating();
 
-    private static String curName, curDialogStart, curDialogEnd;
+    private static String curName, curSkillName1, curSkillName2, curSkillName3,
+                            curDialogStart, curDialogEnd;
     private static double curDmg1, curDmg2, curDmg3;
 
     /*
@@ -63,6 +65,9 @@ public class Bosses {
         curDmg1 = 1;
         curDmg2 = 1.5;
         curDmg3 = 2;
+        curSkillName1 = "Attack";
+        curSkillName2 = "Clean the dust";
+        curSkillName3 = "Accidental bumb";
         curDialogStart = "Vroom Vroom!";
         curDialogEnd = "Vroom poks!";
 
@@ -100,6 +105,9 @@ public class Bosses {
         curDmg1 = 1;
         curDmg2 = 1.5;
         curDmg3 = 2;
+        curSkillName1 = "Test1";
+        curSkillName2 = "Test2";
+        curSkillName3 = "Test3";
         curDialogStart = "Test start!";
         curDialogEnd = "Test end!";
 
@@ -145,6 +153,9 @@ public class Bosses {
         map.put(damage + "1", curDmg1);
         map.put(damage + "2", curDmg2);
         map.put(damage + "3", curDmg3);
+        map.put(skillName + "1", curSkillName1);
+        map.put(skillName + "2", curSkillName2);
+        map.put(skillName + "3", curSkillName3);
         map.put(speed + idle, s_idle);
         map.put(speed + hack, s_hack);
         map.put(speed + skill + "1", s_skill1);
@@ -201,5 +212,9 @@ public class Bosses {
 
     public static String getSkillHit() {
         return skillHit;
+    }
+
+    public static String getSkillName() {
+        return skillName;
     }
 }

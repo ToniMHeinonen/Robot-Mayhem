@@ -599,7 +599,7 @@ public class RoomFight extends RoomParent {
     private class Enemy extends Fighters {
 
         private Animation<TextureRegion> skill1, skill2, skill3, skill1_hit, skill2_hit, skill3_hit;
-        private String dialogStart, dialogEnd;
+        private String skill1_name, skill2_name, skill3_name, dialogStart, dialogEnd;
         private HashMap<String,Object> mapBoss;
 
         private int actionDelay = 30;
@@ -658,9 +658,13 @@ public class RoomFight extends RoomParent {
             mapBoss = Bosses.getBoss("roombot");
             String skill = Bosses.getSkill();
             String skillHit = Bosses.getSkillHit();
+            String skillName = Bosses.getSkillName();
             String spd = Bosses.getSpeed();
 
-            // Retrieve dialogs
+            // Retrieve Strings
+            skill1_name = (String) mapBoss.get(skillName + "1");
+            skill2_name = (String) mapBoss.get(skillName + "2");
+            skill3_name = (String) mapBoss.get(skillName + "3");
             dialogStart = (String) mapBoss.get(Bosses.getDialogStart());
             dialogEnd = (String) mapBoss.get(Bosses.getDialogEnd());
 
