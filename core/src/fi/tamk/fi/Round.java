@@ -44,6 +44,10 @@ public class Round extends RoomParent {
     private float TIME_STEP = 1 / 60f;
     private Vector2 center;
     private float speed = 10;
+    private float pos1x, pos2x, pos3x, pos4x, pos5x, pos6x, pos7x, pos8x, pos9x, pos10x, pos11x,
+    pos12x, pos13x, pos14x, pos15x, pos16x;
+    private float pos1y, pos2y, pos3y, pos4y, pos5y, pos6y, pos7y, pos8y, pos9y, pos10y, pos11y,
+    pos12y, pos13y, pos14y, pos15y, pos16y;
 
     Array<Body> shieldBodies = new Array<Body>();
     Array<DistanceJointDef> distanceJointDefs = new Array<DistanceJointDef>();
@@ -92,46 +96,80 @@ public class Round extends RoomParent {
     }
 
     public void createPositions() {
-        float pos1x = widthOfEnemy;
-        float pos1y = heightOfEnemy + 1;
-        float pos2x = widthOfEnemy + 1;
-        float pos2y = heightOfEnemy;
-        float pos3x = widthOfEnemy;
-        float pos3y = heightOfEnemy - 1;
-        float pos4x = widthOfEnemy - 1;
-        float pos4y = heightOfEnemy;
+        if (shieldAmount == 4) {
+            pos1x = widthOfEnemy;
+            pos1y = heightOfEnemy + 1;
+            pos2x = widthOfEnemy + 1;
+            pos2y = heightOfEnemy;
+            pos3x = widthOfEnemy;
+            pos3y = heightOfEnemy - 1;
+            pos4x = widthOfEnemy - 1;
+            pos4y = heightOfEnemy;
+            posX.addAll(pos1x, pos2x, pos3x, pos4x);
+            posY.addAll(pos1y, pos2y, pos3y, pos4y);
+        }
 
-        float pos5x = widthOfEnemy + 0.71f;
-        float pos5y = heightOfEnemy + 0.71f;
-        float pos6x = widthOfEnemy - 0.71f;
-        float pos6y = heightOfEnemy + 0.71f;
-        float pos7x = widthOfEnemy - 0.71f;
-        float pos7y = heightOfEnemy - 0.71f;
-        float pos8x = widthOfEnemy + 0.71f;
-        float pos8y = heightOfEnemy - 0.71f;
+        if (shieldAmount == 8) {
+            pos1x = widthOfEnemy + 1;
+            pos1y = heightOfEnemy;
+            pos2x = widthOfEnemy + 0.71f;
+            pos2y = heightOfEnemy + 0.71f;
+            pos3x = widthOfEnemy;
+            pos3y = heightOfEnemy + 1;
+            pos4x = widthOfEnemy - 0.71f;
+            pos4y = heightOfEnemy + 0.71f;
+            pos5x = widthOfEnemy - 1;
+            pos5y = heightOfEnemy;
+            pos6x = widthOfEnemy - 0.71f;
+            pos6y = heightOfEnemy - 0.71f;
+            pos7x = widthOfEnemy;
+            pos7y = heightOfEnemy - 1;
+            pos8x = widthOfEnemy + 0.71f;
+            pos8y = heightOfEnemy - 0.71f;
+            posX.addAll(pos1x, pos2x, pos3x, pos4x, pos5x, pos6x, pos7x, pos8x);
+            posY.addAll(pos1y, pos2y, pos3y, pos4y, pos5y, pos6y, pos7y, pos8y);
+        }
 
-        float pos9x = widthOfEnemy + 0.92f;
-        float pos9y = heightOfEnemy + 0.38f;
-        float pos10x = widthOfEnemy + 0.38f;
-        float pos10y = heightOfEnemy + 0.92f;
-        float pos11x = widthOfEnemy - 0.38f;
-        float pos11y = heightOfEnemy + 0.92f;
-        float pos12x = widthOfEnemy - 0.92f;
-        float pos12y = heightOfEnemy + 0.38f;
+        if (shieldAmount == 16) {
+            pos1x = widthOfEnemy + 1;
+            pos1y = heightOfEnemy;
+            pos2x = widthOfEnemy + 0.92f;
+            pos2y = heightOfEnemy + 0.38f;
+            pos3x = widthOfEnemy + 0.71f;
+            pos3y = heightOfEnemy + 0.71f;
+            pos4x = widthOfEnemy + 0.38f;
+            pos4y = heightOfEnemy + 0.92f;
+            pos5x = widthOfEnemy;
+            pos5y = heightOfEnemy + 1;
+            pos6x = widthOfEnemy - 0.38f;
+            pos6y = heightOfEnemy + 0.92f;
+            pos7x = widthOfEnemy - 0.71f;
+            pos7y = heightOfEnemy + 0.71f;
+            pos8x = widthOfEnemy - 0.92f;
+            pos8y = heightOfEnemy + 0.38f;
+            pos9x = widthOfEnemy - 1;
+            pos9y = heightOfEnemy;
+            pos10x = widthOfEnemy - 0.92f;
+            pos10y = heightOfEnemy - 0.38f;
+            pos11x = widthOfEnemy - 0.71f;
+            pos11y = heightOfEnemy - 0.71f;
+            pos12x = widthOfEnemy - 0.38f;
+            pos12y = heightOfEnemy - 0.92f;
+            pos13x = widthOfEnemy;
+            pos13y = heightOfEnemy - 1;
+            pos14x = widthOfEnemy + 0.38f;
+            pos14y = heightOfEnemy - 0.92f;
+            pos15x = widthOfEnemy + 0.71f;
+            pos15y = heightOfEnemy - 0.71f;
+            pos16x = widthOfEnemy + 0.92f;
+            pos16y = heightOfEnemy - 0.38f;
 
-        float pos13x = widthOfEnemy - 0.92f;
-        float pos13y = heightOfEnemy - 0.38f;
-        float pos14x = widthOfEnemy - 0.38f;
-        float pos14y = heightOfEnemy - 0.92f;
-        float pos15x = widthOfEnemy + 0.38f;
-        float pos15y = heightOfEnemy - 0.92f;
-        float pos16x = widthOfEnemy + 0.92f;
-        float pos16y = heightOfEnemy - 0.38f;
+            posX.addAll(pos1x, pos2x, pos3x, pos4x, pos5x, pos6x, pos7x, pos8x,
+                    pos9x, pos10x, pos11x, pos12x, pos13x, pos14x, pos15x, pos16x);
+            posY.addAll(pos1y, pos2y, pos3y, pos4y, pos5y, pos6y, pos7y, pos8y,
+                    pos9y, pos10y, pos11y, pos12y, pos13y, pos14y, pos15y, pos16y);
 
-        posX.addAll(pos1x, pos2x, pos3x, pos4x, pos5x, pos6x, pos7x, pos8x,
-                pos9x, pos10x, pos11x, pos12x, pos13x, pos14x, pos15x, pos16x);
-        posY.addAll(pos1y, pos2y, pos3y, pos4y, pos5y, pos6y, pos7y, pos8y,
-                pos9y, pos10y, pos11y, pos12y, pos13y, pos14y, pos15y, pos16y);
+        }
     }
 
     public void createShields() {
@@ -177,12 +215,14 @@ public class Round extends RoomParent {
     }
 
     private void fireBullet() {
-        bulletBody = world.createBody(getDefinitionOfBulletBody());
-        bulletBody.setBullet(true);
-        bulletBody.createFixture(getFixtureDefinition());
-        bulletBody.setUserData(BodyData.BULLET);
-        bulletBody.applyLinearImpulse(new Vector2(6, 0), bulletBody.getWorldCenter(), true);
-        bulletBodies.add(bulletBody);
+        if (bulletBodies.isEmpty()) {
+            bulletBody = world.createBody(getDefinitionOfBulletBody());
+            bulletBody.setBullet(true);
+            bulletBody.createFixture(getFixtureDefinition());
+            bulletBody.setUserData(BodyData.BULLET);
+            bulletBody.applyLinearImpulse(new Vector2(6, 0), bulletBody.getWorldCenter(), true);
+            bulletBodies.add(bulletBody);
+        }
     }
 
     private void createCollisionChecking() {
@@ -193,11 +233,19 @@ public class Round extends RoomParent {
                 Body body2 = contact.getFixtureB().getBody();
 
                 if (body1.getUserData() == BodyData.SHIELD && body2.getUserData() == BodyData.BULLET) {
+                    if (shieldAmount == 8 || shieldAmount == 16) {
+                        int index = shieldBodies.indexOf(body1, true);
+                        checkNeighbor(index);
+                    }
                     bodiesToBeDestroyed.add(body2);
                     bodiesToBeDestroyed.add(body1);
                 }
 
                 if (body2.getUserData() == BodyData.SHIELD && body1.getUserData() == BodyData.BULLET) {
+                    if (shieldAmount == 8 || shieldAmount == 16) {
+                        int index = shieldBodies.indexOf(body2, true);
+                        checkNeighbor(index);
+                    }
                     bodiesToBeDestroyed.add(body1);
                     bodiesToBeDestroyed.add(body2);
                 }
@@ -212,6 +260,18 @@ public class Round extends RoomParent {
             public void postSolve(Contact contact, ContactImpulse impulse) {
             }
         });
+    }
+
+    private void checkNeighbor(int index) {
+        if (index < (shieldAmount - 1)) {
+            index += 1;
+        }
+        if (index == 0) {
+            index++;
+        }
+        if (shieldBodies.get(index).getUserData() != null) {
+            bodiesToBeDestroyed.add(shieldBodies.get(index));
+        }
     }
 
     private FixtureDef getFixtureDefinition() {
