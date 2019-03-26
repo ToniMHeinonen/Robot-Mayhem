@@ -16,6 +16,7 @@ public class Skills {
     private static String cooldown = "cooldown";
     private static String animation = "animation";
     private static String hitAnimation = "hitAnimation";
+    private static String speed = "speed";
 
     private static HashMap<String,HashMap<String,Object>> mapSkills;
     private static HashMap<String,Object> mapAttack;
@@ -51,20 +52,24 @@ public class Skills {
 
     private static void skillAttack() {
         mapAttack = new HashMap<String, Object>();
-        mapAttack.put(name, "attack");
+        mapAttack.put(name, "Attack");
         mapAttack.put(damage, 2.5);
         mapAttack.put(cooldown, 0);
         mapAttack.put(animation, a_attack);
         mapAttack.put(hitAnimation, a_attack_hit);
+        mapAttack.put(speed + animation, 30);
+        mapAttack.put(speed + hitAnimation, 15);
     }
 
     private static void skillDefend() {
         mapDefend = new HashMap<String, Object>();
-        mapDefend.put(name, "defend");
+        mapDefend.put(name, "Defend");
         mapDefend.put(damage, 0);
         mapDefend.put(cooldown, 3);
         mapDefend.put(animation, a_defend);
         mapDefend.put(hitAnimation, null);
+        mapDefend.put(speed + animation, 5);
+        mapDefend.put(speed + hitAnimation, 0);
     }
 
     private static void createTexturesAndAnimations() {
@@ -100,5 +105,9 @@ public class Skills {
 
     public static String getHitAnimation() {
         return hitAnimation;
+    }
+
+    public static String getSpeed() {
+        return speed;
     }
 }

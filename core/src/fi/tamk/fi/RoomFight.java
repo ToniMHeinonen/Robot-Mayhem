@@ -39,7 +39,8 @@ public class RoomFight extends RoomParent {
     private Animating animHealthEnemy = new Animating();
     private Player player;
     private Enemy enemy;
-    private String[] btnTexts = new String[] {"Attack", "Defend", "Item"};
+    private String[] btnTexts = new String[] {"Attack", "Defend", "Item",
+                                game.getSkill1(), game.getSkill2()};
     private int btnCounter; // Used for button classes to get the correct value
     private int deathTimer = 240;
     private State state = State.START_ROOM;
@@ -169,8 +170,7 @@ public class RoomFight extends RoomParent {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     if (state == State.AWAITING) {
-                        state = State.ACTION;
-                        player.doAction(i);
+                        player.doAction(btnTexts[i]);
                     }
                 }
             });
@@ -284,7 +284,7 @@ public class RoomFight extends RoomParent {
         protected Animating anim = new Animating();
         protected Animating hitAnim = new Animating();
 
-        protected int actionState, NONE = -1, TEMP_ANIM = 0, HIT_ANIM = 1, LONG_ANIM = 2;
+        protected int actionState, TEMP_ANIM = 0, HIT_ANIM = 1, LONG_ANIM = 2;
         protected boolean flashWhite, hitAnimationRunning;
         protected float flashTime = 0.5f;
 
@@ -296,7 +296,7 @@ public class RoomFight extends RoomParent {
         protected boolean pauseStates = false;
         protected boolean hpIncorrect = false;
 
-        protected int idleSpd, hackSpd, deathSpd, escapeSpd, curHitAnimationSpd;
+        protected int idleSpd, hackSpd, itemSpd, deathSpd, escapeSpd, curHitAnimationSpd;
         protected Animation<TextureRegion> curAnimation, curHitAnimation, idle, hack;
         protected ArrayList<Animation<TextureRegion>> animList, hitAnimList;
         protected Integer[] speeds, hitSpeeds;
@@ -424,10 +424,10 @@ public class RoomFight extends RoomParent {
      */
     private class Player extends Fighters {
 
-        private Animation<TextureRegion> attack, attackHit, defend, escape, item, death;
-        private HashMap<String,Object> mapAttack, mapDefend;
+        private Animation<TextureRegion> escape, item, death;
+        private HashMap<String,Object> mapAttack, mapDefend, mapSkill1, mapSkill2;
 
-        private boolean causeDamage;
+        private String skill1, skill2, s_spd, s_dmg, s_cool, s_anim, s_hitAnim, s_name;
         private HashMap<String,Integer> cooldowns;
 
         Player() {
@@ -438,31 +438,29 @@ public class RoomFight extends RoomParent {
             targetHp = hp;
 
             idleSpd = 30;
+            itemSpd = 20;
             hackSpd = 30;
             deathSpd = 30;
             escapeSpd = 10;
 
+            initSkillVariables();
+
             // Create maps for skills and cooldowns
-            mapAttack = Skills.getSkill("attack");
-            mapDefend = Skills.getSkill("defend");
+            mapAttack = Skills.getSkill("Attack");
+            mapDefend = Skills.getSkill("Defend");
+            if (skill1 != "") mapSkill1 = Skills.getSkill(skill1);
+            if (skill2 != "") mapSkill2 = Skills.getSkill(skill2);
             cooldowns = new HashMap<String, Integer>();
-            cooldowns.put("attack", 0);
-            cooldowns.put("defend", 0);
+            cooldowns.put("Defend", 0);
+            cooldowns.put("Skill1", 0);
+            cooldowns.put("Skill2", 0);
 
             // Create animations (probably should be created in MainGame though)
             idle = anim.createAnimation(game.getPlayerIdle(), 3, 1);
-            attack = (Animation<TextureRegion>) mapAttack.get(Skills.getAnimation());
-            attackHit = (Animation<TextureRegion>) mapAttack.get(Skills.getHitAnimation());
-            defend = (Animation<TextureRegion>) mapDefend.get(Skills.getAnimation());
             escape = anim.createAnimation(game.getPlayerEscape(), 3, 1);
             item = anim.createAnimation(game.getPlayerItem(), 3, 1);
             hack = anim.createAnimation(game.getPlayerHack(), 3, 1);
             death = anim.createAnimation(game.getPlayerDeath(), 3, 1);
-
-            // Fill needed arrays for doAction() method
-            animList = new ArrayList<Animation<TextureRegion>>();
-            Collections.addAll(animList, attack, defend, item);
-            speeds = new Integer[] {30, 5, 30};
 
             anim.startAnimation(idle, idleSpd);
         }
@@ -494,48 +492,75 @@ public class RoomFight extends RoomParent {
         /*
         Iterate through the actions to find the selected action.
          */
-        public void doAction(int index) {
-            curAnimation = animList.get(index);
+        public void doAction(String action) {
             // Reset necessary values
             curHitAnimation = null;
-            causeDamage = false;
-            actionState = NONE;
+            boolean actionSelected = false;
+            int curAnimSpd = 0;
 
-            if (curAnimation == attack){
-                curHitAnimation = attackHit;
-                causeDamage = true;
-                /*
-                Explanation: Object can't be cast to Double, so the object has to be first cast to
-                String and then get the value of String. This is so stupid...
-                 */
-                dmgAmount = Double.valueOf(mapAttack.get(Skills.getDamage()).toString());
-                anim.startAnimation(curAnimation, speeds[index]);
+            if (action == "Attack"){
+                actionSelected = true;
+                curAnimation = (Animation<TextureRegion>) mapAttack.get(s_anim);
+                curAnimSpd =  (Integer) mapAttack.get(s_spd + s_anim);
+                curHitAnimation = (Animation<TextureRegion>) mapAttack.get(s_hitAnim);
+                curHitAnimationSpd = (Integer) mapAttack.get(s_spd + s_hitAnim);
+                dmgAmount = (Double) mapAttack.get(s_dmg);
                 actionState = TEMP_ANIM;
-                dialog.showSkillName("Attack");
-            } else if (curAnimation == defend) {
-                if (cooldowns.get("defend") > 0) {
-                    state = State.AWAITING;
-                } else {
-                    anim.startAnimation(curAnimation, speeds[index]);
-                    cooldowns.put("defend", (Integer) mapDefend.get(Skills.getCooldown()));
+            } else if (action == "Defend") {
+                if (cooldowns.get("Defend") == 0) {
+                    actionSelected = true;
+                    curAnimation = (Animation<TextureRegion>) mapDefend.get(s_anim);
+                    curAnimSpd = (Integer) mapDefend.get(s_spd + s_anim);
+                    cooldowns.put("Defend", (Integer) mapDefend.get(s_cool));
                     actionState = LONG_ANIM;
-                    scheduleState(State.ENEMY_WAITING, 2.5f);
-                    dialog.showSkillName("Defend");
                 }
-            } else if (curAnimation == item) {
-                anim.startAnimation(curAnimation, speeds[index]);
+            } else if (action == "Item") {
+                actionSelected = true;
+                curAnimation = item;
+                curAnimSpd = itemSpd;
                 actionState = TEMP_ANIM;
-                dialog.showSkillName("Item");
+            } else if (action == game.getSkill1()) {
+                if (skill1 != "") {
+                    if (cooldowns.get("Skill1") == 0) {
+                        actionSelected = true;
+                        curAnimation = (Animation<TextureRegion>) mapSkill1.get(s_anim);
+                        curAnimSpd = (Integer) mapSkill1.get(s_spd + s_anim);
+                        curHitAnimation = (Animation<TextureRegion>) mapSkill1.get(s_hitAnim);
+                        curHitAnimationSpd = (Integer) mapSkill1.get(s_spd + s_hitAnim);
+                        dmgAmount = (Double) mapSkill1.get(s_dmg);
+                        cooldowns.put("Skill1", (Integer) mapSkill1.get(s_cool));
+                        actionState = TEMP_ANIM;
+                    }
+                }
+            } else if (action == game.getSkill2()) {
+                if (skill2 != "") {
+                    if (cooldowns.get("Skill2") == 0) {
+                        actionSelected = true;
+                        curAnimation = (Animation<TextureRegion>) mapSkill2.get(s_anim);
+                        curAnimSpd = (Integer) mapSkill2.get(s_spd + s_anim);
+                        curHitAnimation = (Animation<TextureRegion>) mapSkill2.get(s_hitAnim);
+                        curHitAnimationSpd = (Integer) mapSkill2.get(s_spd + s_hitAnim);
+                        dmgAmount = (Double) mapSkill2.get(s_dmg);
+                        cooldowns.put("Skill2", (Integer) mapSkill2.get(s_cool));
+                        actionState = TEMP_ANIM;
+                    }
+                }
+            }
+
+            if (actionSelected) {
+                anim.startAnimation(curAnimation, curAnimSpd);
+                state = State.ACTION;
+                dialog.showSkillName(action);
             }
         }
 
         private void controlActionStates() {
             if (actionState == TEMP_ANIM) {
-                // If temporary animation is finished, and causeDamage is true, draw hit animation
+                // If temporary animation is finished, and hitAnimation exists, draw hit animation
                 // on enemy's draw method. If not causeDamage, start enemy's turn
                 if (curAnimation.isAnimationFinished(anim.getStateTime())) {
-                    if (causeDamage) {
-                        enemy.startHitAnimation(curHitAnimation, 15);
+                    if (curHitAnimation != null) {
+                        enemy.startHitAnimation(curHitAnimation, curHitAnimationSpd);
                         actionState = HIT_ANIM;
                     } else {
                         state = State.ENEMY_WAITING;
@@ -550,7 +575,19 @@ public class RoomFight extends RoomParent {
                 }
             } else if (actionState == LONG_ANIM) {
                 // Animation lasts until next round
+                state = State.ENEMY_WAITING;
             }
+        }
+
+        private void initSkillVariables() {
+            skill1 = game.getSkill1();
+            skill2 = game.getSkill2();
+            s_spd = Skills.getSpeed();
+            s_dmg = Skills.getDamage();
+            s_name = Skills.getName();
+            s_anim = Skills.getAnimation();
+            s_hitAnim = Skills.getHitAnimation();
+            s_cool = Skills.getCooldown();
         }
 
         /*
@@ -566,7 +603,9 @@ public class RoomFight extends RoomParent {
         Take hit, expect if defending, then return the damage back to the enemy.
          */
         public void takeHit(double damage) {
-            if (curAnimation == defend) enemy.takeHit(damage);
+            if (curAnimation == (Animation<TextureRegion>) mapDefend.get(s_anim)) {
+                enemy.takeHit(damage);
+            }
             else {
                 targetHp = hp - damage;
                 flashAndMove();
@@ -652,7 +691,6 @@ public class RoomFight extends RoomParent {
                         if (curAnimation.isAnimationFinished(anim.getStateTime())) {
                             player.startHitAnimation(curHitAnimation, curHitAnimationSpd);
                             startIdle();
-                            actionTimer = actionDelay;
                             actionState = HIT_ANIM;
                         }
                     } else if (actionState == HIT_ANIM) {
@@ -719,10 +757,11 @@ public class RoomFight extends RoomParent {
          */
         private void attack() {
             if (state == State.ENEMY_WAITING) {
-                // Wait for timer to go down, then select action
-                if (actionTimer > 0) {
+                // Wait for timer and skill name box to go down, then select action
+                if (actionTimer > 0 || dialog.isSkillNameOn()) {
                     actionTimer--;
                 } else {
+                    actionTimer = actionDelay;
                     state = State.ENEMY_ACTION;
                     actionState = TEMP_ANIM;
                     int random = MathUtils.random(0, animList.size() - 1);
