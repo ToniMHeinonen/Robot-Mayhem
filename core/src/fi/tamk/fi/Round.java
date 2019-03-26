@@ -267,9 +267,11 @@ public class Round extends RoomParent {
 
     public void movement(float speed, Vector2 center) {
         for (Body body : shieldBodies) {
-            Vector2 radius = center.cpy().sub(body.getPosition());
-            Vector2 force = radius.rotate90(1).nor().scl(speed);
-            body.setLinearVelocity(force.x, force.y);
+            if (body.getUserData() != null) {
+                Vector2 radius = center.cpy().sub(body.getPosition());
+                Vector2 force = radius.rotate90(1).nor().scl(speed);
+                body.setLinearVelocity(force.x, force.y);
+            }
         }
     }
 
