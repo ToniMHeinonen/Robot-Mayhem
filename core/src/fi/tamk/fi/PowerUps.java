@@ -3,17 +3,13 @@ package fi.tamk.fi;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-
-import java.awt.Font;
-import java.awt.Rectangle;
 
 public class PowerUps extends RoomParent {
 
@@ -26,11 +22,13 @@ public class PowerUps extends RoomParent {
     // Pups as in PowerUPS.
     Array<Integer> pups;
 
-    int counter = 0;
-
     boolean canItBeClickedA = true;
     boolean canItBeClickedB = true;
     boolean canItBeClickedC = true;
+
+    Texture testBox = new Texture(Gdx.files.internal("box.png"));
+
+    Rectangle testRectangle;
 
     PowerUps(MainGame game) {
         super(game);
@@ -38,6 +36,7 @@ public class PowerUps extends RoomParent {
         createButtonPowerUps();
     }
 
+    // A terribly long method, just horrible to go trough. Haven't made a better way yet tho.
     public void createButtonPowerUps() {
 
         TextButton buttonPowerUps = new TextButton("PowerUp A", skin);
@@ -127,8 +126,6 @@ public class PowerUps extends RoomParent {
                         }
                     });
                 }
-
-                counter++;
             }
         });
 
@@ -195,7 +192,6 @@ public class PowerUps extends RoomParent {
                         }
                     });
                 }
-                counter++;
             }
         });
 
@@ -262,10 +258,6 @@ public class PowerUps extends RoomParent {
                         }
                     });
                 }
-
-                counter++;
-
-                System.out.println(counter);
             }
         });
     }
@@ -291,6 +283,7 @@ public class PowerUps extends RoomParent {
                         200);
 
                 stage.addActor(buttonPowerUps);
+                stage.clear();
             }
         });
     }
@@ -354,6 +347,12 @@ public class PowerUps extends RoomParent {
 
         pups = new Array<Integer>();
 
+        float bx = 500;
+        float by = 200;
+
+        testRectangle = new Rectangle(bx, by,
+                testBox.getHeight(), testBox.getWidth());
+
         for (int i = 0; i < 1; i++) {
 
             pupA = MathUtils.random(1, 3);
@@ -374,6 +373,42 @@ public class PowerUps extends RoomParent {
         }
     }
 
+    public Texture getImg() {
+
+        return testBox;
+    }
+
+    public float getWidth() {
+
+        return testBox.getWidth() + 1200;
+    }
+
+    public float getHeight() {
+
+        return testBox.getHeight() + 1200;
+    }
+
+    public float setX(float x) {
+
+        testRectangle.x = x;
+        return x;
+    }
+
+    public float getX() {
+
+        return testRectangle.x;
+    }
+
+    public float getY() {
+
+        return testRectangle.y;
+    }
+
+    public Rectangle getRectangle() {
+
+        return testRectangle;
+    }
+
     public void render (float delta) {
 
         super.render(delta);
@@ -384,12 +419,8 @@ public class PowerUps extends RoomParent {
 
             batch.begin();
 
-
-            /*if () {
-
-                System.out.println("It works!");
-            }*/
-
+            batch.draw(testBox, testRectangle.x, testRectangle.y,
+                    testRectangle.getWidth() + 1000, testRectangle.getHeight());
 
             batch.end();
         }
