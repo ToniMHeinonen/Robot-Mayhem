@@ -182,14 +182,15 @@ public class Round extends RoomParent {
             public void beginContact(Contact contact) {
                 Body body1 = contact.getFixtureA().getBody();
                 Body body2 = contact.getFixtureB().getBody();
-                System.out.println("collision");
 
                 if (body1.getUserData() == BodyData.SHIELD && body2.getUserData() == BodyData.BULLET) {
                     bodiesToBeDestroyed.add(body2);
+                    bodiesToBeDestroyed.add(body1);
                 }
 
                 if (body2.getUserData() == BodyData.SHIELD && body1.getUserData() == BodyData.BULLET) {
                     bodiesToBeDestroyed.add(body1);
+                    bodiesToBeDestroyed.add(body2);
                 }
             }
             @Override
@@ -265,10 +266,10 @@ public class Round extends RoomParent {
     }
 
     public void movement(float speed, Vector2 center) {
-        for (int i = 0; i < shieldAmount; i++) {
-            Vector2 radius = center.cpy().sub(shieldBodies.get(i).getPosition());
+        for (Body body : shieldBodies) {
+            Vector2 radius = center.cpy().sub(body.getPosition());
             Vector2 force = radius.rotate90(1).nor().scl(speed);
-            shieldBodies.get(i).setLinearVelocity(force.x, force.y);
+            body.setLinearVelocity(force.x, force.y);
         }
     }
 
@@ -285,6 +286,7 @@ public class Round extends RoomParent {
         batch.setProjectionMatrix(camera.combined);
         debugRenderer.render(world, camera.combined);
         doPhysicsStep(Gdx.graphics.getDeltaTime());
+        deleteBodies();
         batch.begin();
         for (Body body : shieldBodies) {
             if (body.getUserData() != null) {
@@ -329,7 +331,6 @@ public class Round extends RoomParent {
         batch.end();
         movement(speed, center);
         //checkBulletBoundaries();
-        deleteBodies();
     }
 
     @Override
