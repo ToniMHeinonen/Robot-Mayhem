@@ -27,26 +27,27 @@ import com.badlogic.gdx.utils.FloatArray;
 public class Round extends RoomParent {
 
     enum BodyData {
-        SHIELD, BULLET;
+        SHIELD, BULLET
     }
 
-    SpriteBatch batch;
-    Texture ball;
+    private Texture ball;
     public static final float WORLD_WIDTH = 19.20f;
     public static final float WORLD_HEIGHT = 10.80f;
-    private OrthographicCamera camera;
     private World world;
     private Body shieldBody;
-    // shieldBody is the body that should do circles
     private Body centerBody;
-    // centerBody is a centerpoint of the circle
+    // centerBody is a centerpoint of the circle and position of the enemy
     private Body bulletBody;
     private Box2DDebugRenderer debugRenderer;
     private float radius = 0.5f;
     private double accumulator = 0;
     private float TIME_STEP = 1 / 60f;
-    Vector2 center;
-    float speed = 5;
+    private Vector2 center;
+    private float speed = 10;
+    private float pos1x, pos2x, pos3x, pos4x, pos5x, pos6x, pos7x, pos8x, pos9x, pos10x, pos11x,
+    pos12x, pos13x, pos14x, pos15x, pos16x;
+    private float pos1y, pos2y, pos3y, pos4y, pos5y, pos6y, pos7y, pos8y, pos9y, pos10y, pos11y,
+    pos12y, pos13y, pos14y, pos15y, pos16y;
 
     Array<Body> shieldBodies = new Array<Body>();
     Array<DistanceJointDef> distanceJointDefs = new Array<DistanceJointDef>();
@@ -59,61 +60,116 @@ public class Round extends RoomParent {
     FloatArray posX = new FloatArray();
     FloatArray posY = new FloatArray();
 
-    int shieldAmount = 8;
+    private int shieldAmount = 8;
 
     Round(MainGame game) {
         super(game);
-        create();
+        createConstants();
         createPositions();
         createShields();
         createJoints();
         createButtonShoot();
         createCollisionChecking();
+        movement(speed, center);
     }
 
-    // Not funny.. :D
-    // There has to be a better method for this.
+    @Override
+    public void render (float delta) {
+        super.render(delta);
+        batch.setProjectionMatrix(camera.combined);
+        debugRenderer.render(world, camera.combined);
+        doPhysicsStep(Gdx.graphics.getDeltaTime());
+        deleteBodies();
+        batch.begin();
+        drawBodies(bulletBodies);
+        drawBodies(shieldBodies);
+        batch.end();
+    }
+
+    public void createConstants() {
+        ball = new Texture("test.png");
+        camera.setToOrtho(false, WORLD_WIDTH, WORLD_HEIGHT);
+        world = new World(new Vector2(0, 0), true);
+        centerBody = world.createBody(getDefinitionOfCenterBody());
+        debugRenderer = new Box2DDebugRenderer();
+        center = centerBody.getPosition();
+    }
+
     public void createPositions() {
-        float pos1x = widthOfEnemy;
-        float pos1y = heightOfEnemy + 1;
-        float pos2x = widthOfEnemy + 1;
-        float pos2y = heightOfEnemy;
-        float pos3x = widthOfEnemy;
-        float pos3y = heightOfEnemy - 1;
-        float pos4x = widthOfEnemy - 1;
-        float pos4y = heightOfEnemy;
+        if (shieldAmount == 4) {
+            pos1x = widthOfEnemy;
+            pos1y = heightOfEnemy + 1;
+            pos2x = widthOfEnemy + 1;
+            pos2y = heightOfEnemy;
+            pos3x = widthOfEnemy;
+            pos3y = heightOfEnemy - 1;
+            pos4x = widthOfEnemy - 1;
+            pos4y = heightOfEnemy;
+            posX.addAll(pos1x, pos2x, pos3x, pos4x);
+            posY.addAll(pos1y, pos2y, pos3y, pos4y);
+        }
 
-        float pos5x = widthOfEnemy + 0.71f;
-        float pos5y = heightOfEnemy + 0.71f;
-        float pos6x = widthOfEnemy - 0.71f;
-        float pos6y = heightOfEnemy + 0.71f;
-        float pos7x = widthOfEnemy - 0.71f;
-        float pos7y = heightOfEnemy - 0.71f;
-        float pos8x = widthOfEnemy + 0.71f;
-        float pos8y = heightOfEnemy - 0.71f;
+        if (shieldAmount == 8) {
+            pos1x = widthOfEnemy + 1;
+            pos1y = heightOfEnemy;
+            pos2x = widthOfEnemy + 0.71f;
+            pos2y = heightOfEnemy + 0.71f;
+            pos3x = widthOfEnemy;
+            pos3y = heightOfEnemy + 1;
+            pos4x = widthOfEnemy - 0.71f;
+            pos4y = heightOfEnemy + 0.71f;
+            pos5x = widthOfEnemy - 1;
+            pos5y = heightOfEnemy;
+            pos6x = widthOfEnemy - 0.71f;
+            pos6y = heightOfEnemy - 0.71f;
+            pos7x = widthOfEnemy;
+            pos7y = heightOfEnemy - 1;
+            pos8x = widthOfEnemy + 0.71f;
+            pos8y = heightOfEnemy - 0.71f;
+            posX.addAll(pos1x, pos2x, pos3x, pos4x, pos5x, pos6x, pos7x, pos8x);
+            posY.addAll(pos1y, pos2y, pos3y, pos4y, pos5y, pos6y, pos7y, pos8y);
+        }
 
-        float pos9x = widthOfEnemy + 0.92f;
-        float pos9y = heightOfEnemy + 0.38f;
-        float pos10x = widthOfEnemy + 0.38f;
-        float pos10y = heightOfEnemy + 0.92f;
-        float pos11x = widthOfEnemy - 0.38f;
-        float pos11y = heightOfEnemy + 0.92f;
-        float pos12x = widthOfEnemy - 0.92f;
-        float pos12y = heightOfEnemy + 0.38f;
+        if (shieldAmount == 16) {
+            pos1x = widthOfEnemy + 1;
+            pos1y = heightOfEnemy;
+            pos2x = widthOfEnemy + 0.92f;
+            pos2y = heightOfEnemy + 0.38f;
+            pos3x = widthOfEnemy + 0.71f;
+            pos3y = heightOfEnemy + 0.71f;
+            pos4x = widthOfEnemy + 0.38f;
+            pos4y = heightOfEnemy + 0.92f;
+            pos5x = widthOfEnemy;
+            pos5y = heightOfEnemy + 1;
+            pos6x = widthOfEnemy - 0.38f;
+            pos6y = heightOfEnemy + 0.92f;
+            pos7x = widthOfEnemy - 0.71f;
+            pos7y = heightOfEnemy + 0.71f;
+            pos8x = widthOfEnemy - 0.92f;
+            pos8y = heightOfEnemy + 0.38f;
+            pos9x = widthOfEnemy - 1;
+            pos9y = heightOfEnemy;
+            pos10x = widthOfEnemy - 0.92f;
+            pos10y = heightOfEnemy - 0.38f;
+            pos11x = widthOfEnemy - 0.71f;
+            pos11y = heightOfEnemy - 0.71f;
+            pos12x = widthOfEnemy - 0.38f;
+            pos12y = heightOfEnemy - 0.92f;
+            pos13x = widthOfEnemy;
+            pos13y = heightOfEnemy - 1;
+            pos14x = widthOfEnemy + 0.38f;
+            pos14y = heightOfEnemy - 0.92f;
+            pos15x = widthOfEnemy + 0.71f;
+            pos15y = heightOfEnemy - 0.71f;
+            pos16x = widthOfEnemy + 0.92f;
+            pos16y = heightOfEnemy - 0.38f;
 
-        float pos13x = widthOfEnemy - 0.92f;
-        float pos13y = heightOfEnemy - 0.38f;
-        float pos14x = widthOfEnemy - 0.38f;
-        float pos14y = heightOfEnemy - 0.92f;
-        float pos15x = widthOfEnemy + 0.38f;
-        float pos15y = heightOfEnemy - 0.92f;
-        float pos16x = widthOfEnemy + 0.92f;
-        float pos16y = heightOfEnemy - 0.38f;
+            posX.addAll(pos1x, pos2x, pos3x, pos4x, pos5x, pos6x, pos7x, pos8x,
+                    pos9x, pos10x, pos11x, pos12x, pos13x, pos14x, pos15x, pos16x);
+            posY.addAll(pos1y, pos2y, pos3y, pos4y, pos5y, pos6y, pos7y, pos8y,
+                    pos9y, pos10y, pos11y, pos12y, pos13y, pos14y, pos15y, pos16y);
 
-        posX.addAll(pos1x, pos2x, pos3x, pos4x, pos5x, pos6x, pos7x, pos8x,
-                pos9x, pos10x, pos11x, pos12x, pos13x, pos14x, pos15x, pos16x);
-        posY.addAll(pos1y, pos2y, pos3y, pos4y, pos5y, pos6y, pos7y, pos8y,
-                pos9y, pos10y, pos11y, pos12y, pos13y, pos14y, pos15y, pos16y);
+        }
     }
 
     public void createShields() {
@@ -142,15 +198,15 @@ public class Round extends RoomParent {
         }
     }
 
-    public void createButtonShoot() {
-            final TextButton buttonFight = new TextButton("Shoot", skin);
-            buttonFight.setWidth(300f);
-            buttonFight.setHeight(100f);
-            buttonFight.setPosition(game.pixelWidth /2 - buttonFight.getWidth() /2,
-                    (game.pixelHeight/3) - buttonFight.getHeight() *2);
-            stage.addActor(buttonFight);
+    private void createButtonShoot() {
+            final TextButton buttonShoot = new TextButton("Shoot", skin);
+            buttonShoot.setWidth(300f);
+            buttonShoot.setHeight(100f);
+            buttonShoot.setPosition(game.pixelWidth /2 - buttonShoot.getWidth() /2,
+                    (game.pixelHeight/3) - buttonShoot.getHeight() *2);
+            stage.addActor(buttonShoot);
 
-            buttonFight.addListener(new ClickListener(){
+            buttonShoot.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y){
                     fireBullet();
@@ -158,38 +214,40 @@ public class Round extends RoomParent {
             });
     }
 
-    public void fireBullet() {
-        bulletBody = world.createBody(getDefinitionOfBulletBody());
-        bulletBody.setBullet(true);
-        bulletBody.createFixture(getFixtureDefinition());
-        bulletBody.setUserData(BodyData.BULLET);
-        bulletBody.applyLinearImpulse(new Vector2(6, 0), bulletBody.getWorldCenter(), true);
-        bulletBodies.add(bulletBody);
-    }
-
-    public void checkBulletBoundaries() {
-        float xPos = WORLD_WIDTH + 1;
-        for (Body body : bulletBodies) {
-            if (body.getPosition().x > xPos) {
-                bodiesToBeDestroyed.add(body);
-            }
+    private void fireBullet() {
+        if (bulletBodies.isEmpty()) {
+            bulletBody = world.createBody(getDefinitionOfBulletBody());
+            bulletBody.setBullet(true);
+            bulletBody.createFixture(getFixtureDefinition());
+            bulletBody.setUserData(BodyData.BULLET);
+            bulletBody.applyLinearImpulse(new Vector2(6, 0), bulletBody.getWorldCenter(), true);
+            bulletBodies.add(bulletBody);
         }
     }
 
-    public void createCollisionChecking() {
+    private void createCollisionChecking() {
         world.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
                 Body body1 = contact.getFixtureA().getBody();
                 Body body2 = contact.getFixtureB().getBody();
-                System.out.println("collision");
 
                 if (body1.getUserData() == BodyData.SHIELD && body2.getUserData() == BodyData.BULLET) {
+                    if (shieldAmount == 8 || shieldAmount == 16) {
+                        int index = shieldBodies.indexOf(body1, true);
+                        checkNeighbor(index);
+                    }
                     bodiesToBeDestroyed.add(body2);
+                    bodiesToBeDestroyed.add(body1);
                 }
 
                 if (body2.getUserData() == BodyData.SHIELD && body1.getUserData() == BodyData.BULLET) {
+                    if (shieldAmount == 8 || shieldAmount == 16) {
+                        int index = shieldBodies.indexOf(body2, true);
+                        checkNeighbor(index);
+                    }
                     bodiesToBeDestroyed.add(body1);
+                    bodiesToBeDestroyed.add(body2);
                 }
             }
             @Override
@@ -204,18 +262,16 @@ public class Round extends RoomParent {
         });
     }
 
-    public void create() {
-        batch = new SpriteBatch();
-        ball = new Texture("test.png");
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, WORLD_WIDTH, WORLD_HEIGHT);
-        world = new World(new Vector2(0, 0), true);
-        //shieldBody = world.createBody(getDefinitionOfBody());
-        //shieldBody.createFixture(getFixtureDefinition());
-        centerBody = world.createBody(getDefinitionOfCenterBody());
-        //centerBody.createFixture(getFixtureDefinition());
-        debugRenderer = new Box2DDebugRenderer();
-        center = centerBody.getPosition();
+    private void checkNeighbor(int index) {
+        if (index < (shieldAmount - 1)) {
+            index += 1;
+        }
+        if (index == 0) {
+            index++;
+        }
+        if (shieldBodies.get(index).getUserData() != null) {
+            bodiesToBeDestroyed.add(shieldBodies.get(index));
+        }
     }
 
     private FixtureDef getFixtureDefinition() {
@@ -228,15 +284,6 @@ public class Round extends RoomParent {
         playerFixtureDef.shape = circleshape;
         return playerFixtureDef;
     }
-
-    /*
-    private BodyDef getDefinitionOfBody() {
-        BodyDef myBodyDef = new BodyDef();
-        myBodyDef.type = BodyDef.BodyType.DynamicBody;
-        myBodyDef.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2);
-        return myBodyDef;
-    }
-    */
 
     private BodyDef getDefinitionOfCenterBody() {
         BodyDef myBodyDef = new BodyDef();
@@ -264,29 +311,25 @@ public class Round extends RoomParent {
         }
     }
 
-    public void movement(float speed, Vector2 center) {
-        for (int i = 0; i < shieldAmount; i++) {
-            Vector2 radius = center.cpy().sub(shieldBodies.get(i).getPosition());
-            Vector2 force = radius.rotate90(1).nor().scl(speed);
-            shieldBodies.get(i).setLinearVelocity(force.x, force.y);
+    private void movement(float speed, Vector2 center) {
+        for (Body body : shieldBodies) {
+            if (body.getUserData() != null) {
+                Vector2 radius = center.cpy().sub(body.getPosition());
+                Vector2 force = radius.rotate90(1).nor().scl(speed);
+                body.setLinearVelocity(force.x, force.y);
+            }
         }
     }
 
-    public void deleteBodies() {
+    private void deleteBodies() {
         for (Body body : bodiesToBeDestroyed) {
             world.destroyBody(body);
         }
         bodiesToBeDestroyed.clear();
     }
 
-    @Override
-    public void render (float delta) {
-        super.render(delta);
-        batch.setProjectionMatrix(camera.combined);
-        debugRenderer.render(world, camera.combined);
-        doPhysicsStep(Gdx.graphics.getDeltaTime());
-        batch.begin();
-        for (Body body : shieldBodies) {
+    public void drawBodies(Array<Body> bodies) {
+        for (Body body : bodies) {
             if (body.getUserData() != null) {
                 batch.draw(ball,
                         body.getPosition().x - radius,
@@ -306,35 +349,10 @@ public class Round extends RoomParent {
                         false); // flipY
             }
         }
-        for (Body body : bulletBodies) {
-            if (body.getUserData() != null) {
-                batch.draw(ball,
-                        body.getPosition().x - radius,
-                        body.getPosition().y - radius,
-                        radius, // originX
-                        radius, // originY
-                        radius * 2, // width
-                        radius * 2, // height
-                        1.0f, // scaleX
-                        1.0f, // scaleY
-                        body.getTransform().getRotation() * MathUtils.radiansToDegrees,
-                        0, // Start drawing from x = 0
-                        0, // Start drawing from y = 0
-                        ball.getWidth(), // End drawing x
-                        ball.getHeight(), // End drawing y
-                        false, // flipX
-                        false); // flipY
-            }
-        }
-        batch.end();
-        movement(speed, center);
-        //checkBulletBoundaries();
-        deleteBodies();
     }
 
     @Override
     public void dispose () {
-        batch.dispose();
         world.dispose();
     }
 }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Timer;
 
 public class UtilDialog {
     private MainGame game;
@@ -42,6 +43,29 @@ public class UtilDialog {
                 dialogOn = false;
             }
         });
+    }
+
+    public void showSkillName(String text) {
+        float x = game.pixelWidth/2 - 500f;
+        float y = game.pixelHeight - 350f;
+        Label label = new Label(text, labelStyle);
+        label.setWrap(true);
+        label.setAlignment(1);
+
+        final Dialog dialog = new Dialog("", windowStyle);
+        dialog.getContentTable().add(label).prefWidth(1000f);
+
+        // dialog.getBackground().getMinHeight()
+        // dialog.getBackground().getMinWidth()
+        dialog.setSize(1000f,label.getHeight()*2);
+        dialog.setPosition(x,y);
+        stage.addActor(dialog);
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                dialog.remove();
+            }
+        }, 2f);
     }
 
     public boolean isDialogOn() {

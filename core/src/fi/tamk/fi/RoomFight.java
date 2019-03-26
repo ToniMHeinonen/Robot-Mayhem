@@ -177,6 +177,15 @@ public class RoomFight extends RoomParent {
         }
     }
 
+    public void scheduleState(final State s, float time) {
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                state = s;
+            }
+        }, time);
+    }
+
     // Controls the escape button's popup
     private void escaping() {
         if (escapePopup) {
@@ -502,6 +511,7 @@ public class RoomFight extends RoomParent {
                 dmgAmount = Double.valueOf(mapAttack.get(Skills.getDamage()).toString());
                 anim.startAnimation(curAnimation, speeds[index]);
                 actionState = TEMP_ANIM;
+                dialog.showSkillName("Attack");
             } else if (curAnimation == defend) {
                 if (cooldowns.get("defend") > 0) {
                     state = State.AWAITING;
@@ -509,10 +519,13 @@ public class RoomFight extends RoomParent {
                     anim.startAnimation(curAnimation, speeds[index]);
                     cooldowns.put("defend", (Integer) mapDefend.get(Skills.getCooldown()));
                     actionState = LONG_ANIM;
+                    scheduleState(State.ENEMY_WAITING, 2.5f);
+                    dialog.showSkillName("Defend");
                 }
             } else if (curAnimation == item) {
                 anim.startAnimation(curAnimation, speeds[index]);
                 actionState = TEMP_ANIM;
+                dialog.showSkillName("Item");
             }
         }
 
@@ -537,7 +550,6 @@ public class RoomFight extends RoomParent {
                 }
             } else if (actionState == LONG_ANIM) {
                 // Animation lasts until next round
-                state = State.ENEMY_WAITING;
             }
         }
 
@@ -599,12 +611,13 @@ public class RoomFight extends RoomParent {
     private class Enemy extends Fighters {
 
         private Animation<TextureRegion> skill1, skill2, skill3, skill1_hit, skill2_hit, skill3_hit;
-        private String dialogStart, dialogEnd;
+        private String curSkillName, dialogStart, dialogEnd;
         private HashMap<String,Object> mapBoss;
 
         private int actionDelay = 30;
         private int actionTimer = actionDelay;
         private double[] damages;
+        private String[] skillNames;
 
         Enemy() {
             retrieveBoss();
@@ -655,14 +668,20 @@ public class RoomFight extends RoomParent {
         }
 
         private void retrieveBoss() {
-            mapBoss = Bosses.getBoss("roombot");
+            mapBoss = Bosses.getBoss("Roombot");
             String skill = Bosses.getSkill();
             String skillHit = Bosses.getSkillHit();
+            String skillName = Bosses.getSkillName();
             String spd = Bosses.getSpeed();
 
-            // Retrieve dialogs
+            // Retrieve Strings
+            String skill1_name = (String) mapBoss.get(skillName + "1");
+            String skill2_name = (String) mapBoss.get(skillName + "2");
+            String skill3_name = (String) mapBoss.get(skillName + "3");
             dialogStart = (String) mapBoss.get(Bosses.getDialogStart());
             dialogEnd = (String) mapBoss.get(Bosses.getDialogEnd());
+
+            skillNames = new String[] {skill1_name, skill2_name, skill3_name};
 
             // Retrieve animations
             idle = (Animation<TextureRegion>) mapBoss.get(Bosses.getIdle());
@@ -707,6 +726,7 @@ public class RoomFight extends RoomParent {
                     state = State.ENEMY_ACTION;
                     actionState = TEMP_ANIM;
                     int random = MathUtils.random(0, animList.size() - 1);
+                    dialog.showSkillName(skillNames[random]);
                     curAnimation = animList.get(random);
                     curHitAnimation = hitAnimList.get(random);
                     curHitAnimationSpd = hitSpeeds[random];
