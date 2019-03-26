@@ -27,26 +27,23 @@ import com.badlogic.gdx.utils.FloatArray;
 public class Round extends RoomParent {
 
     enum BodyData {
-        SHIELD, BULLET;
+        SHIELD, BULLET
     }
 
-    SpriteBatch batch;
-    Texture ball;
+    private Texture ball;
     public static final float WORLD_WIDTH = 19.20f;
     public static final float WORLD_HEIGHT = 10.80f;
-    private OrthographicCamera camera;
     private World world;
     private Body shieldBody;
-    // shieldBody is the body that should do circles
     private Body centerBody;
-    // centerBody is a centerpoint of the circle
+    // centerBody is a centerpoint of the circle and position of the enemy
     private Body bulletBody;
     private Box2DDebugRenderer debugRenderer;
     private float radius = 0.5f;
     private double accumulator = 0;
     private float TIME_STEP = 1 / 60f;
-    Vector2 center;
-    float speed = 5;
+    private Vector2 center;
+    private float speed = 10;
 
     Array<Body> shieldBodies = new Array<Body>();
     Array<DistanceJointDef> distanceJointDefs = new Array<DistanceJointDef>();
@@ -59,20 +56,41 @@ public class Round extends RoomParent {
     FloatArray posX = new FloatArray();
     FloatArray posY = new FloatArray();
 
-    int shieldAmount = 8;
+    private int shieldAmount = 8;
 
     Round(MainGame game) {
         super(game);
-        create();
+        createConstants();
         createPositions();
         createShields();
         createJoints();
         createButtonShoot();
         createCollisionChecking();
+        movement(speed, center);
     }
 
-    // Not funny.. :D
-    // There has to be a better method for this.
+    @Override
+    public void render (float delta) {
+        super.render(delta);
+        batch.setProjectionMatrix(camera.combined);
+        debugRenderer.render(world, camera.combined);
+        doPhysicsStep(Gdx.graphics.getDeltaTime());
+        deleteBodies();
+        batch.begin();
+        drawBodies(bulletBodies);
+        drawBodies(shieldBodies);
+        batch.end();
+    }
+
+    public void createConstants() {
+        ball = new Texture("test.png");
+        camera.setToOrtho(false, WORLD_WIDTH, WORLD_HEIGHT);
+        world = new World(new Vector2(0, 0), true);
+        centerBody = world.createBody(getDefinitionOfCenterBody());
+        debugRenderer = new Box2DDebugRenderer();
+        center = centerBody.getPosition();
+    }
+
     public void createPositions() {
         float pos1x = widthOfEnemy;
         float pos1y = heightOfEnemy + 1;
@@ -142,15 +160,15 @@ public class Round extends RoomParent {
         }
     }
 
-    public void createButtonShoot() {
-            final TextButton buttonFight = new TextButton("Shoot", skin);
-            buttonFight.setWidth(300f);
-            buttonFight.setHeight(100f);
-            buttonFight.setPosition(game.pixelWidth /2 - buttonFight.getWidth() /2,
-                    (game.pixelHeight/3) - buttonFight.getHeight() *2);
-            stage.addActor(buttonFight);
+    private void createButtonShoot() {
+            final TextButton buttonShoot = new TextButton("Shoot", skin);
+            buttonShoot.setWidth(300f);
+            buttonShoot.setHeight(100f);
+            buttonShoot.setPosition(game.pixelWidth /2 - buttonShoot.getWidth() /2,
+                    (game.pixelHeight/3) - buttonShoot.getHeight() *2);
+            stage.addActor(buttonShoot);
 
-            buttonFight.addListener(new ClickListener(){
+            buttonShoot.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y){
                     fireBullet();
@@ -158,7 +176,7 @@ public class Round extends RoomParent {
             });
     }
 
-    public void fireBullet() {
+    private void fireBullet() {
         bulletBody = world.createBody(getDefinitionOfBulletBody());
         bulletBody.setBullet(true);
         bulletBody.createFixture(getFixtureDefinition());
@@ -167,16 +185,7 @@ public class Round extends RoomParent {
         bulletBodies.add(bulletBody);
     }
 
-    public void checkBulletBoundaries() {
-        float xPos = WORLD_WIDTH + 1;
-        for (Body body : bulletBodies) {
-            if (body.getPosition().x > xPos) {
-                bodiesToBeDestroyed.add(body);
-            }
-        }
-    }
-
-    public void createCollisionChecking() {
+    private void createCollisionChecking() {
         world.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
@@ -205,20 +214,6 @@ public class Round extends RoomParent {
         });
     }
 
-    public void create() {
-        batch = new SpriteBatch();
-        ball = new Texture("test.png");
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, WORLD_WIDTH, WORLD_HEIGHT);
-        world = new World(new Vector2(0, 0), true);
-        //shieldBody = world.createBody(getDefinitionOfBody());
-        //shieldBody.createFixture(getFixtureDefinition());
-        centerBody = world.createBody(getDefinitionOfCenterBody());
-        //centerBody.createFixture(getFixtureDefinition());
-        debugRenderer = new Box2DDebugRenderer();
-        center = centerBody.getPosition();
-    }
-
     private FixtureDef getFixtureDefinition() {
         FixtureDef playerFixtureDef = new FixtureDef();
         playerFixtureDef.density = 1;
@@ -229,15 +224,6 @@ public class Round extends RoomParent {
         playerFixtureDef.shape = circleshape;
         return playerFixtureDef;
     }
-
-    /*
-    private BodyDef getDefinitionOfBody() {
-        BodyDef myBodyDef = new BodyDef();
-        myBodyDef.type = BodyDef.BodyType.DynamicBody;
-        myBodyDef.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2);
-        return myBodyDef;
-    }
-    */
 
     private BodyDef getDefinitionOfCenterBody() {
         BodyDef myBodyDef = new BodyDef();
@@ -265,7 +251,7 @@ public class Round extends RoomParent {
         }
     }
 
-    public void movement(float speed, Vector2 center) {
+    private void movement(float speed, Vector2 center) {
         for (Body body : shieldBodies) {
             if (body.getUserData() != null) {
                 Vector2 radius = center.cpy().sub(body.getPosition());
@@ -275,22 +261,15 @@ public class Round extends RoomParent {
         }
     }
 
-    public void deleteBodies() {
+    private void deleteBodies() {
         for (Body body : bodiesToBeDestroyed) {
             world.destroyBody(body);
         }
         bodiesToBeDestroyed.clear();
     }
 
-    @Override
-    public void render (float delta) {
-        super.render(delta);
-        batch.setProjectionMatrix(camera.combined);
-        debugRenderer.render(world, camera.combined);
-        doPhysicsStep(Gdx.graphics.getDeltaTime());
-        deleteBodies();
-        batch.begin();
-        for (Body body : shieldBodies) {
+    public void drawBodies(Array<Body> bodies) {
+        for (Body body : bodies) {
             if (body.getUserData() != null) {
                 batch.draw(ball,
                         body.getPosition().x - radius,
@@ -310,34 +289,10 @@ public class Round extends RoomParent {
                         false); // flipY
             }
         }
-        for (Body body : bulletBodies) {
-            if (body.getUserData() != null) {
-                batch.draw(ball,
-                        body.getPosition().x - radius,
-                        body.getPosition().y - radius,
-                        radius, // originX
-                        radius, // originY
-                        radius * 2, // width
-                        radius * 2, // height
-                        1.0f, // scaleX
-                        1.0f, // scaleY
-                        body.getTransform().getRotation() * MathUtils.radiansToDegrees,
-                        0, // Start drawing from x = 0
-                        0, // Start drawing from y = 0
-                        ball.getWidth(), // End drawing x
-                        ball.getHeight(), // End drawing y
-                        false, // flipX
-                        false); // flipY
-            }
-        }
-        batch.end();
-        movement(speed, center);
-        //checkBulletBoundaries();
     }
 
     @Override
     public void dispose () {
-        batch.dispose();
         world.dispose();
     }
 }
