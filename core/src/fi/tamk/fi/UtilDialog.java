@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Timer;
 public class UtilDialog {
     private MainGame game;
     private Stage stage;
-    private boolean dialogOn;
+    private boolean dialogOn, skillNameOn;
 
     private Label.LabelStyle labelStyle;
     private Window.WindowStyle windowStyle;
@@ -46,6 +46,7 @@ public class UtilDialog {
     }
 
     public void showSkillName(String text) {
+        skillNameOn = true;
         float x = game.pixelWidth/2 - 500f;
         float y = game.pixelHeight - 350f;
         Label label = new Label(text, labelStyle);
@@ -63,6 +64,7 @@ public class UtilDialog {
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
+                skillNameOn = false;
                 dialog.remove();
             }
         }, 2f);
@@ -70,5 +72,9 @@ public class UtilDialog {
 
     public boolean isDialogOn() {
         return dialogOn;
+    }
+
+    public boolean isSkillNameOn() {
+        return skillNameOn;
     }
 }
