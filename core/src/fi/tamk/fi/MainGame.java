@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -72,6 +73,15 @@ public class MainGame extends Game {
 	private Window.WindowStyle windowStyle;
 	private com.badlogic.gdx.graphics.Color fontColor = com.badlogic.gdx.graphics.Color.BLACK;
 
+	//Hacking
+    private FloatArray hackPosX;
+    private FloatArray hackPosY;
+    private int hackShieldAmount = 4;
+    private boolean hackFirstTry = true;
+    public final int tier1HackShieldAmount = 4;
+    public final int tier2HackShieldAmount = 8;
+    public final int tier3HackShieldAmount = 16;
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -92,6 +102,8 @@ public class MainGame extends Game {
         loadStats();
 
 		loadTextures();
+
+		createHackFiles();
 
 		// Switch to first room
 		switchToRoomSettings();
@@ -161,6 +173,11 @@ public class MainGame extends Game {
 		PowerUps room = new PowerUps(this);
 		setScreen(room);
 	}
+
+    private void createHackFiles() {
+        hackPosX = new FloatArray();
+        hackPosY = new FloatArray();
+    }
 
 	private void createDialogConstants() {
 		fontSteps = new BitmapFont(Gdx.files.internal("stepfont/stepfont.fnt"),
@@ -444,4 +461,48 @@ public class MainGame extends Game {
 	public UtilDialog getDialog() {
 		return dialog;
 	}
+
+	public void setHackPosX(FloatArray hackPosX) {
+	    this.hackPosX = hackPosX;
+    }
+
+    public void setHackPosY(FloatArray hackPosY) {
+	    this.hackPosY = hackPosY;
+    }
+
+    public void setHackShieldAmount(int hackShieldAmount) {
+	    this.hackShieldAmount = hackShieldAmount;
+    }
+
+    public void setHackFirstTry(boolean hackFirstTry) {
+	    this.hackFirstTry = hackFirstTry;
+    }
+
+    public boolean getHackFirstTry() {
+	    return hackFirstTry;
+    }
+
+    public FloatArray getHackPosX() {
+        return hackPosX;
+    }
+
+    public FloatArray getHackPosY() {
+        return hackPosY;
+    }
+
+    public int getHackShieldAmount() {
+	    return hackShieldAmount;
+    }
+
+    public int getTier1HackShieldAmount() {
+	    return tier1HackShieldAmount;
+    }
+
+    public int getTier2HackShieldAmount() {
+	    return tier2HackShieldAmount;
+    }
+
+    public int getTier3HackShieldAmount() {
+	    return tier3HackShieldAmount;
+    }
 }
