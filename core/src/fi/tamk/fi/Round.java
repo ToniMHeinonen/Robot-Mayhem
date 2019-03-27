@@ -68,6 +68,8 @@ public class Round extends RoomParent {
     private int tier1HackShieldAmount;
     private int tier2HackShieldAmount;
     private int tier3HackShieldAmount;
+    private int pool;
+    private int poolMult;
 
     private boolean doMove = true;
 
@@ -113,105 +115,87 @@ public class Round extends RoomParent {
         this.tier1HackShieldAmount = game.getTier1HackShieldAmount();
         this.tier2HackShieldAmount = game.getTier2HackShieldAmount();
         this.tier3HackShieldAmount = game.getTier3HackShieldAmount();
+        this.pool = game.getPool();
+        this.poolMult = game.getPoolMult();
     }
 
     public void createPositions() {
         if (hackFirstTry) {
             hackPosX.clear();
             hackPosY.clear();
-            pos1x = widthOfEnemy;
-            pos1y = heightOfEnemy + 1;
-            pos2x = widthOfEnemy + 1;
-            pos2y = heightOfEnemy;
-            pos3x = widthOfEnemy;
-            pos3y = heightOfEnemy - 1;
-            pos4x = widthOfEnemy - 1;
-            pos4y = heightOfEnemy;
-            hackPosX.addAll(pos1x, pos2x, pos3x, pos4x);
-            hackPosY.addAll(pos1y, pos2y, pos3y, pos4y);
+            if (pool == 1) {
+                pos1x = widthOfEnemy;
+                pos1y = heightOfEnemy + 1;
+                pos2x = widthOfEnemy + 1;
+                pos2y = heightOfEnemy;
+                pos3x = widthOfEnemy;
+                pos3y = heightOfEnemy - 1;
+                pos4x = widthOfEnemy - 1;
+                pos4y = heightOfEnemy;
+                hackPosX.addAll(pos1x, pos2x, pos3x, pos4x);
+                hackPosY.addAll(pos1y, pos2y, pos3y, pos4y);
+            }
+            if (pool == 2) {
+                pos1x = widthOfEnemy + 1;
+                pos1y = heightOfEnemy;
+                pos2x = widthOfEnemy + 0.71f;
+                pos2y = heightOfEnemy + 0.71f;
+                pos3x = widthOfEnemy;
+                pos3y = heightOfEnemy + 1;
+                pos4x = widthOfEnemy - 0.71f;
+                pos4y = heightOfEnemy + 0.71f;
+                pos5x = widthOfEnemy - 1;
+                pos5y = heightOfEnemy;
+                pos6x = widthOfEnemy - 0.71f;
+                pos6y = heightOfEnemy - 0.71f;
+                pos7x = widthOfEnemy;
+                pos7y = heightOfEnemy - 1;
+                pos8x = widthOfEnemy + 0.71f;
+                pos8y = heightOfEnemy - 0.71f;
+                hackPosX.addAll(pos1x, pos2x, pos3x, pos4x, pos5x, pos6x, pos7x, pos8x);
+                hackPosY.addAll(pos1y, pos2y, pos3y, pos4y, pos5y, pos6y, pos7y, pos8y);
+            }
+            if (pool == 3) {
+                pos1x = widthOfEnemy + 1;
+                pos1y = heightOfEnemy;
+                pos2x = widthOfEnemy + 0.92f;
+                pos2y = heightOfEnemy + 0.38f;
+                pos3x = widthOfEnemy + 0.71f;
+                pos3y = heightOfEnemy + 0.71f;
+                pos4x = widthOfEnemy + 0.38f;
+                pos4y = heightOfEnemy + 0.92f;
+                pos5x = widthOfEnemy;
+                pos5y = heightOfEnemy + 1;
+                pos6x = widthOfEnemy - 0.38f;
+                pos6y = heightOfEnemy + 0.92f;
+                pos7x = widthOfEnemy - 0.71f;
+                pos7y = heightOfEnemy + 0.71f;
+                pos8x = widthOfEnemy - 0.92f;
+                pos8y = heightOfEnemy + 0.38f;
+                pos9x = widthOfEnemy - 1;
+                pos9y = heightOfEnemy;
+                pos10x = widthOfEnemy - 0.92f;
+                pos10y = heightOfEnemy - 0.38f;
+                pos11x = widthOfEnemy - 0.71f;
+                pos11y = heightOfEnemy - 0.71f;
+                pos12x = widthOfEnemy - 0.38f;
+                pos12y = heightOfEnemy - 0.92f;
+                pos13x = widthOfEnemy;
+                pos13y = heightOfEnemy - 1;
+                pos14x = widthOfEnemy + 0.38f;
+                pos14y = heightOfEnemy - 0.92f;
+                pos15x = widthOfEnemy + 0.71f;
+                pos15y = heightOfEnemy - 0.71f;
+                pos16x = widthOfEnemy + 0.92f;
+                pos16y = heightOfEnemy - 0.38f;
+                hackPosX.addAll(pos1x, pos2x, pos3x, pos4x, pos5x, pos6x, pos7x, pos8x,
+                        pos9x, pos10x, pos11x, pos12x, pos13x, pos14x, pos15x, pos16x);
+                hackPosY.addAll(pos1y, pos2y, pos3y, pos4y, pos5y, pos6y, pos7y, pos8y,
+                        pos9y, pos10y, pos11y, pos12y, pos13y, pos14y, pos15y, pos16y);
+            }
             game.setHackPosX(hackPosX);
             game.setHackPosY(hackPosY);
-        } else {
-            hackPosY = game.getHackPosX();
-            hackPosY = game.getHackPosY();
         }
-        /*
-        if (shieldAmount == 4) {
-            pos1x = widthOfEnemy;
-            pos1y = heightOfEnemy + 1;
-            pos2x = widthOfEnemy + 1;
-            pos2y = heightOfEnemy;
-            pos3x = widthOfEnemy;
-            pos3y = heightOfEnemy - 1;
-            pos4x = widthOfEnemy - 1;
-            pos4y = heightOfEnemy;
-            posX.addAll(pos1x, pos2x, pos3x, pos4x);
-            posY.addAll(pos1y, pos2y, pos3y, pos4y);
-        }
-
-        if (shieldAmount == 8) {
-            pos1x = widthOfEnemy + 1;
-            pos1y = heightOfEnemy;
-            pos2x = widthOfEnemy + 0.71f;
-            pos2y = heightOfEnemy + 0.71f;
-            pos3x = widthOfEnemy;
-            pos3y = heightOfEnemy + 1;
-            pos4x = widthOfEnemy - 0.71f;
-            pos4y = heightOfEnemy + 0.71f;
-            pos5x = widthOfEnemy - 1;
-            pos5y = heightOfEnemy;
-            pos6x = widthOfEnemy - 0.71f;
-            pos6y = heightOfEnemy - 0.71f;
-            pos7x = widthOfEnemy;
-            pos7y = heightOfEnemy - 1;
-            pos8x = widthOfEnemy + 0.71f;
-            pos8y = heightOfEnemy - 0.71f;
-            posX.addAll(pos1x, pos2x, pos3x, pos4x, pos5x, pos6x, pos7x, pos8x);
-            posY.addAll(pos1y, pos2y, pos3y, pos4y, pos5y, pos6y, pos7y, pos8y);
-        }
-
-        if (shieldAmount == 16) {
-            pos1x = widthOfEnemy + 1;
-            pos1y = heightOfEnemy;
-            pos2x = widthOfEnemy + 0.92f;
-            pos2y = heightOfEnemy + 0.38f;
-            pos3x = widthOfEnemy + 0.71f;
-            pos3y = heightOfEnemy + 0.71f;
-            pos4x = widthOfEnemy + 0.38f;
-            pos4y = heightOfEnemy + 0.92f;
-            pos5x = widthOfEnemy;
-            pos5y = heightOfEnemy + 1;
-            pos6x = widthOfEnemy - 0.38f;
-            pos6y = heightOfEnemy + 0.92f;
-            pos7x = widthOfEnemy - 0.71f;
-            pos7y = heightOfEnemy + 0.71f;
-            pos8x = widthOfEnemy - 0.92f;
-            pos8y = heightOfEnemy + 0.38f;
-            pos9x = widthOfEnemy - 1;
-            pos9y = heightOfEnemy;
-            pos10x = widthOfEnemy - 0.92f;
-            pos10y = heightOfEnemy - 0.38f;
-            pos11x = widthOfEnemy - 0.71f;
-            pos11y = heightOfEnemy - 0.71f;
-            pos12x = widthOfEnemy - 0.38f;
-            pos12y = heightOfEnemy - 0.92f;
-            pos13x = widthOfEnemy;
-            pos13y = heightOfEnemy - 1;
-            pos14x = widthOfEnemy + 0.38f;
-            pos14y = heightOfEnemy - 0.92f;
-            pos15x = widthOfEnemy + 0.71f;
-            pos15y = heightOfEnemy - 0.71f;
-            pos16x = widthOfEnemy + 0.92f;
-            pos16y = heightOfEnemy - 0.38f;
-
-            posX.addAll(pos1x, pos2x, pos3x, pos4x, pos5x, pos6x, pos7x, pos8x,
-                    pos9x, pos10x, pos11x, pos12x, pos13x, pos14x, pos15x, pos16x);
-            posY.addAll(pos1y, pos2y, pos3y, pos4y, pos5y, pos6y, pos7y, pos8y,
-                    pos9y, pos10y, pos11y, pos12y, pos13y, pos14y, pos15y, pos16y);
-
-
-        }
-        */
     }
 
     public void createShields() {
@@ -376,10 +360,10 @@ public class Round extends RoomParent {
     private FixtureDef getFixtureDefinition() {
         FixtureDef playerFixtureDef = new FixtureDef();
         playerFixtureDef.density = 1;
-        playerFixtureDef.restitution = 1.0f;
-        playerFixtureDef.friction = 0.5f;
+        playerFixtureDef.restitution = 0f;
+        playerFixtureDef.friction = 0f;
         CircleShape circleshape = new CircleShape();
-        circleshape.setRadius(0.5f);
+        circleshape.setRadius(radius);
         playerFixtureDef.shape = circleshape;
         return playerFixtureDef;
     }
