@@ -19,8 +19,7 @@ public class Skills {
     private static String speed = "speed";
 
     private static HashMap<String,HashMap<String,Object>> mapSkills;
-    private static HashMap<String,Object> mapAttack;
-    private static HashMap<String,Object> mapDefend;
+    private static HashMap<String,Object> mapAttack, mapDefend, mapTest, mapTest2;
 
     private static Texture t_attack, t_attack_hit, t_defend;
     private static Animating anim = new Animating();
@@ -31,12 +30,16 @@ public class Skills {
      */
     public static void createSkills() {
         createTexturesAndAnimations();
-        skillAttack();
-        skillDefend();
+        mapAttack = skillAttack();
+        mapDefend = skillDefend();
+        mapTest = skillTest();
+        mapTest2 = skillTest2();
 
         mapSkills = new HashMap<String, HashMap<String,Object>>();
         mapSkills.put((String) mapAttack.get(name), mapAttack);
         mapSkills.put((String) mapDefend.get(name), mapDefend);
+        mapSkills.put((String) mapTest.get(name), mapTest);
+        mapSkills.put((String) mapTest2.get(name), mapTest2);
     }
 
     /*
@@ -50,26 +53,52 @@ public class Skills {
         return chosenSkill;
     }
 
-    private static void skillAttack() {
-        mapAttack = new HashMap<String, Object>();
-        mapAttack.put(name, "Attack");
-        mapAttack.put(damage, 2.5);
-        mapAttack.put(cooldown, 0);
-        mapAttack.put(animation, a_attack);
-        mapAttack.put(hitAnimation, a_attack_hit);
-        mapAttack.put(speed + animation, 30);
-        mapAttack.put(speed + hitAnimation, 15);
+    private static HashMap<String, Object> skillAttack() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, "Attack");
+        map.put(damage, 2.5);
+        map.put(cooldown, 0);
+        map.put(animation, a_attack);
+        map.put(hitAnimation, a_attack_hit);
+        map.put(speed + animation, 30);
+        map.put(speed + hitAnimation, 15);
+        return map;
     }
 
-    private static void skillDefend() {
-        mapDefend = new HashMap<String, Object>();
-        mapDefend.put(name, "Defend");
-        mapDefend.put(damage, 0);
-        mapDefend.put(cooldown, 3);
-        mapDefend.put(animation, a_defend);
-        mapDefend.put(hitAnimation, null);
-        mapDefend.put(speed + animation, 5);
-        mapDefend.put(speed + hitAnimation, 0);
+    private static HashMap<String, Object> skillDefend() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, "Defend");
+        map.put(damage, 0);
+        map.put(cooldown, 3);
+        map.put(animation, a_defend);
+        map.put(hitAnimation, null);
+        map.put(speed + animation, 5);
+        map.put(speed + hitAnimation, 0);
+        return map;
+    }
+
+    private static HashMap<String, Object> skillTest() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, "Test");
+        map.put(damage, 4.0);
+        map.put(cooldown, 3);
+        map.put(animation, a_attack);
+        map.put(hitAnimation, a_attack_hit);
+        map.put(speed + animation, 20);
+        map.put(speed + hitAnimation, 10);
+        return map;
+    }
+
+    private static HashMap<String, Object> skillTest2() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, "Test2");
+        map.put(damage, 1.0);
+        map.put(cooldown, 3);
+        map.put(animation, a_attack);
+        map.put(hitAnimation, a_attack_hit);
+        map.put(speed + animation, 5);
+        map.put(speed + hitAnimation, 30);
+        return map;
     }
 
     private static void createTexturesAndAnimations() {

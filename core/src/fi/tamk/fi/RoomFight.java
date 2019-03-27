@@ -633,7 +633,7 @@ public class RoomFight extends RoomParent {
          */
         private void decreaseCooldowns() {
             for (Map.Entry<String, Integer> entry : cooldowns.entrySet()) {
-                //System.out.println(entry.getKey() + " = " + String.valueOf(entry.getValue()));
+                System.out.println(entry.getKey() + " = " + String.valueOf(entry.getValue()));
                 int value = entry.getValue();
                 if (value > 0) {
                     cooldowns.put(entry.getKey(), entry.getValue() - 1);
