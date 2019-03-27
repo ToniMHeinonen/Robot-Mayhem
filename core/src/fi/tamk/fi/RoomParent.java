@@ -32,13 +32,6 @@ public class RoomParent implements Screen {
     protected BitmapFont fontSteps;
     private int transitionCounter = 20;
     protected UtilDialog dialog;
-    protected FloatArray hackPosX;
-    protected FloatArray hackPosY;
-    protected int hackShieldAmount;
-    protected boolean hackFirstTry;
-    protected int tier1HackShieldAmount;
-    protected int tier2HackShieldAmount;
-    protected int tier3HackShieldAmount;
 
     protected TextButton button; //Temporary solution
 
@@ -54,13 +47,6 @@ public class RoomParent implements Screen {
         this.bossMusic = game.getBossMusic();
         this.fontSteps = game.getFontSteps();
         this.progressBarStyle = game.getProgBarStyle();
-        this.hackPosX = game.getHackPosX();
-        this.hackPosY = game.getHackPosY();
-        this.hackShieldAmount = game.getHackShieldAmount();
-        this.hackFirstTry = game.getHackFirstTry();
-        this.tier1HackShieldAmount = game.getTier1HackShieldAmount();
-        this.tier2HackShieldAmount = game.getTier2HackShieldAmount();
-        this.tier3HackShieldAmount = game.getTier3HackShieldAmount();
         stage.clear();
 
         dialog = game.getDialog();

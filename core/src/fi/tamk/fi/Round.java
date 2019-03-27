@@ -61,6 +61,14 @@ public class Round extends RoomParent {
     private float widthOfPlayer = 1f;
     private float heightOfPlayer = 5f;
 
+    private FloatArray hackPosX;
+    private FloatArray hackPosY;
+    private int hackShieldAmount;
+    private boolean hackFirstTry;
+    private int tier1HackShieldAmount;
+    private int tier2HackShieldAmount;
+    private int tier3HackShieldAmount;
+
     private boolean doMove = true;
 
     Round(MainGame game) {
@@ -98,11 +106,19 @@ public class Round extends RoomParent {
         centerBody.setUserData(BodyData.ENEMY);
         debugRenderer = new Box2DDebugRenderer();
         center = centerBody.getPosition();
-        hackShieldAmount = game.getHackShieldAmount();
+        this.hackPosX = game.getHackPosX();
+        this.hackPosY = game.getHackPosY();
+        this.hackShieldAmount = game.getHackShieldAmount();
+        this.hackFirstTry = game.getHackFirstTry();
+        this.tier1HackShieldAmount = game.getTier1HackShieldAmount();
+        this.tier2HackShieldAmount = game.getTier2HackShieldAmount();
+        this.tier3HackShieldAmount = game.getTier3HackShieldAmount();
     }
 
     public void createPositions() {
-        if (game.getHackFirstTry()) {
+        if (hackFirstTry) {
+            hackPosX.clear();
+            hackPosY.clear();
             pos1x = widthOfEnemy;
             pos1y = heightOfEnemy + 1;
             pos2x = widthOfEnemy + 1;
@@ -113,6 +129,8 @@ public class Round extends RoomParent {
             pos4y = heightOfEnemy;
             hackPosX.addAll(pos1x, pos2x, pos3x, pos4x);
             hackPosY.addAll(pos1y, pos2y, pos3y, pos4y);
+            game.setHackPosX(hackPosX);
+            game.setHackPosY(hackPosY);
         } else {
             hackPosY = game.getHackPosX();
             hackPosY = game.getHackPosY();
