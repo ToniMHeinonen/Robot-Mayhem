@@ -402,7 +402,6 @@ public class MainGame extends Game {
 	}
 
 	public String getSkill1() {
-		skill1 = "Test"; // For testing purposes, remember to remove!!!
 		return skill1;
 	}
 
@@ -411,7 +410,6 @@ public class MainGame extends Game {
 	}
 
 	public String getSkill2() {
-		skill2 = "Test2";
 		return skill2;
 	}
 

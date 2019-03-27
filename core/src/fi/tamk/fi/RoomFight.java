@@ -429,6 +429,8 @@ public class RoomFight extends RoomParent {
 
         private String skill1, skill2, s_spd, s_dmg, s_cool, s_anim, s_hitAnim, s_name;
         private HashMap<String,Integer> cooldowns;
+        private ArrayList<HashMap<String,Object>> mapSkills;
+        private String[] skills;
 
         Player() {
             X = 100f;
@@ -448,12 +450,10 @@ public class RoomFight extends RoomParent {
             // Create maps for skills and cooldowns
             mapAttack = Skills.getSkill("Attack");
             mapDefend = Skills.getSkill("Defend");
-            if (skill1 != "") mapSkill1 = Skills.getSkill(skill1);
-            if (skill2 != "") mapSkill2 = Skills.getSkill(skill2);
             cooldowns = new HashMap<String, Integer>();
             cooldowns.put("Defend", 0);
+            cooldowns.put("Skill0", 0);
             cooldowns.put("Skill1", 0);
-            cooldowns.put("Skill2", 0);
 
             // Create animations (probably should be created in MainGame though)
             idle = anim.createAnimation(game.getPlayerIdle(), 3, 1);
@@ -519,29 +519,22 @@ public class RoomFight extends RoomParent {
                 curAnimation = item;
                 curAnimSpd = itemSpd;
                 actionState = TEMP_ANIM;
-            } else if (action == game.getSkill1()) {
-                if (skill1 != "") {
-                    if (cooldowns.get("Skill1") == 0) {
+            } else { // It's skill
+                for (int i = 0; i < 2; i++) {
+                    /*
+                    If selected action is this skill, if skill is not empty and if cooldown is 0
+                     */
+                    if (action == skills[i] && skills[i] != ""
+                        && cooldowns.get("Skill" + String.valueOf(i)) == 0) {
                         actionSelected = true;
-                        curAnimation = (Animation<TextureRegion>) mapSkill1.get(s_anim);
-                        curAnimSpd = (Integer) mapSkill1.get(s_spd + s_anim);
-                        curHitAnimation = (Animation<TextureRegion>) mapSkill1.get(s_hitAnim);
-                        curHitAnimationSpd = (Integer) mapSkill1.get(s_spd + s_hitAnim);
-                        dmgAmount = (Double) mapSkill1.get(s_dmg);
-                        cooldowns.put("Skill1", (Integer) mapSkill1.get(s_cool));
-                        actionState = TEMP_ANIM;
-                    }
-                }
-            } else if (action == game.getSkill2()) {
-                if (skill2 != "") {
-                    if (cooldowns.get("Skill2") == 0) {
-                        actionSelected = true;
-                        curAnimation = (Animation<TextureRegion>) mapSkill2.get(s_anim);
-                        curAnimSpd = (Integer) mapSkill2.get(s_spd + s_anim);
-                        curHitAnimation = (Animation<TextureRegion>) mapSkill2.get(s_hitAnim);
-                        curHitAnimationSpd = (Integer) mapSkill2.get(s_spd + s_hitAnim);
-                        dmgAmount = (Double) mapSkill2.get(s_dmg);
-                        cooldowns.put("Skill2", (Integer) mapSkill2.get(s_cool));
+                        HashMap<String, Object> skillMap = mapSkills.get(i);
+                        cooldowns.put("Skill" + String.valueOf(i),
+                                (Integer) skillMap.get(s_cool));
+                        curAnimation = (Animation<TextureRegion>) skillMap.get(s_anim);
+                        curAnimSpd = (Integer) skillMap.get(s_spd + s_anim);
+                        curHitAnimation = (Animation<TextureRegion>) skillMap.get(s_hitAnim);
+                        curHitAnimationSpd = (Integer) skillMap.get(s_spd + s_hitAnim);
+                        dmgAmount = (Double) skillMap.get(s_dmg);
                         actionState = TEMP_ANIM;
                     }
                 }
@@ -580,8 +573,11 @@ public class RoomFight extends RoomParent {
         }
 
         private void initSkillVariables() {
-            skill1 = game.getSkill1();
-            skill2 = game.getSkill2();
+            skills = new String[] {game.getSkill1(), game.getSkill2()};
+            mapSkills = new ArrayList<HashMap<String, Object>>();
+            for (int i = 0; i < 2; i++) {
+                if (skills[i] != "") mapSkills.add(i, Skills.getSkill(skills[i]));
+            }
             s_spd = Skills.getSpeed();
             s_dmg = Skills.getDamage();
             s_name = Skills.getName();
@@ -633,7 +629,7 @@ public class RoomFight extends RoomParent {
          */
         private void decreaseCooldowns() {
             for (Map.Entry<String, Integer> entry : cooldowns.entrySet()) {
-                System.out.println(entry.getKey() + " = " + String.valueOf(entry.getValue()));
+                //System.out.println(entry.getKey() + " = " + String.valueOf(entry.getValue()));
                 int value = entry.getValue();
                 if (value > 0) {
                     cooldowns.put(entry.getKey(), entry.getValue() - 1);
