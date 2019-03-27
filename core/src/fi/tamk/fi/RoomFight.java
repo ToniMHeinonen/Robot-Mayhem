@@ -524,8 +524,8 @@ public class RoomFight extends RoomParent {
                     /*
                     If selected action is this skill, if skill is not empty and if cooldown is 0
                      */
-                    if (action == skills[i] && skills[i] != ""
-                        && cooldowns.get("Skill" + String.valueOf(i)) == 0) {
+                    if (action == skills[i] && skills[i] != "" &&
+                            cooldowns.get("Skill" + String.valueOf(i)) == 0) {
                         actionSelected = true;
                         HashMap<String, Object> skillMap = mapSkills.get(i);
                         cooldowns.put("Skill" + String.valueOf(i),

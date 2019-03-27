@@ -43,7 +43,7 @@ public class MainGame extends Game {
 	private int saveTimerAmount = 3600;
 	private int saveTimer = saveTimerAmount;
 	private Preferences stats;
-	private int stepCount, stepBank, stepAllCount, playerMaxHp;
+	private int stepCount, stepBank, stepAllCount, playerMaxHp, pool, poolMult;
 	private String skill1, skill2;
 	private boolean firstPlayTime;
 
@@ -265,6 +265,8 @@ public class MainGame extends Game {
 		skill1 = stats.getString("skill1", "");
 		skill2 = stats.getString("skill2", "");
 		firstPlayTime = stats.getBoolean("firstPlayTime", true);
+		pool = stats.getInteger("pool", 1);
+		poolMult = stats.getInteger("poolMult", 0);
 	}
 
 	public void saveStats() {
@@ -275,6 +277,8 @@ public class MainGame extends Game {
 		stats.putString("skill1", skill1);
 		stats.putString("skill2", skill2);
 		stats.putBoolean("firstPlayTime", firstPlayTime);
+		stats.putInteger("pool", pool);
+		stats.putInteger("poolMult", poolMult);
 		stats.flush();
 	}
 
@@ -296,6 +300,15 @@ public class MainGame extends Game {
 		if (musicVol > 0.0f && musicVol < 1.0f) {
 			this.musicVol = musicVol;
 		}
+	}
+
+	public void nextPool() {
+		pool++;
+		poolMult = 0;
+	}
+
+	public void increasePoolMultiplier() {
+		poolMult++;
 	}
 
 	/*
@@ -505,4 +518,12 @@ public class MainGame extends Game {
     public int getTier3HackShieldAmount() {
 	    return tier3HackShieldAmount;
     }
+
+	public int getPool() {
+		return pool;
+	}
+
+	public int getPoolMult() {
+		return poolMult;
+	}
 }
