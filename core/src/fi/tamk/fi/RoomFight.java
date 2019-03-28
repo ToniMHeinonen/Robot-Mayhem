@@ -33,7 +33,9 @@ public class RoomFight extends RoomParent {
         ESCAPE
     }
 
-    private Texture imgBg, escapeBg, hpBarLeft, hpBarRight;
+    private Texture hpBarLeft = game.getHpBarLeft();
+    private Texture hpBarRight = game.getHpBarRight();
+    private Texture imgBg, escapeBg;
     private Animation<TextureRegion> playerHealthBar, enemyHealthBar;
     private Animating animHealthPlayer = new Animating();
     private Animating animHealthEnemy = new Animating();
@@ -134,9 +136,6 @@ public class RoomFight extends RoomParent {
     }
 
     private void createHealthBars() {
-        // Retrieve Texture
-        hpBarLeft = game.getHpBarLeft();
-        hpBarRight = game.getHpBarRight();
         // Create animations (Reversed since they are in wrong order)
         playerHealthBar = animHealthPlayer.createAnimationReverse(hpBarLeft, 1, 11);
         enemyHealthBar = animHealthEnemy.createAnimationReverse(hpBarRight, 1, 11);
@@ -177,20 +176,11 @@ public class RoomFight extends RoomParent {
         }
     }
 
-    public void scheduleState(final State s, float time) {
-        Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                state = s;
-            }
-        }, time);
-    }
-
     // Controls the escape button's popup
     private void escaping() {
         if (escapePopup) {
-            batch.draw(escapeBg, game.pixelWidth/2 - escapeBg.getWidth()/2,
-                    game.pixelHeight/2 - escapeBg.getHeight()/2,
+            batch.draw(escapeBg, game.pixelWidth/2 - escapeBg.getWidth()/2f,
+                    game.pixelHeight/2 - escapeBg.getHeight()/2f,
                     escapeBg.getWidth(), escapeBg.getHeight());
             // Temporary font and position, just for testing
             fontSteps.draw(batch, "Do you want to escape?",
@@ -280,7 +270,7 @@ public class RoomFight extends RoomParent {
     private class Fighters {
 
         protected float X, Y;
-        protected double maxHp, hp, targetHp, hpDecreaseSpd, defaultDmg, dmgAmount;
+        protected double maxHp, hp, targetHp, hpDecreaseSpd, defaultDmg, dmgAmount, dmgOverTime;
         protected Animating anim = new Animating();
         protected Animating hitAnim = new Animating();
 
@@ -473,6 +463,7 @@ public class RoomFight extends RoomParent {
 
                 if (state == State.START_TURN) {
                     decreaseCooldowns();
+                    //takeDamageOvertime();
                     state = State.AWAITING;
                 } else if (state == State.ACTION) {
                     controlActionStates();
@@ -519,6 +510,7 @@ public class RoomFight extends RoomParent {
                 actionSelected = true;
                 curAnimation = item;
                 curAnimSpd = itemSpd;
+                dmgOverTime = -10;
                 actionState = TEMP_ANIM;
             } else { // It's skill
                 for (int i = 0; i < 2; i++) {
@@ -586,6 +578,10 @@ public class RoomFight extends RoomParent {
             s_anim = Skills.getAnimation();
             s_hitAnim = Skills.getHitAnimation();
             s_cool = Skills.getCooldown();
+        }
+
+        private void takeDamageOvertime() {
+            hp -= dmgOverTime;
         }
 
         /*
