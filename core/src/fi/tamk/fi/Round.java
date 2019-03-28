@@ -57,9 +57,11 @@ public class Round extends RoomParent {
     private Array<Body> bulletBodies = new Array<Body>();
     private Array<Body> bodiesToBeDestroyed = new Array<Body>();
 
+    // Position of the shields.
     private float widthOfEnemy = WORLD_WIDTH - 3f;
     private float heightOfEnemy = 5f;
 
+    // Starting position of the bullet.
     private float widthOfPlayer = 1f;
     private float heightOfPlayer = 5f;
 
@@ -74,6 +76,12 @@ public class Round extends RoomParent {
     private int poolMult;
 
     private boolean doMove = true;
+    private boolean checkNeighbor = false;
+
+    private float hitPosStartX;
+    private float hitPosEndX;
+    private float hitPosStartY;
+    private float hitPosEndY;
 
     Round(MainGame game) {
         super(game);
@@ -99,6 +107,7 @@ public class Round extends RoomParent {
         batch.end();
         movement(shieldSpeed, center);
         checkMovement();
+        checkNeighbor();
     }
 
     public void createConstants() {
@@ -121,16 +130,18 @@ public class Round extends RoomParent {
         //this.poolMult = game.getPoolMult();
 
         // Change these to test different pools/poolmultipliers.
-        pool = 2;
+        pool = 1;
         poolMult = 1;
     }
 
     public void setSizeAndSpeed() {
+        // Speed of the shields.
         float pool1Speed = 8;
         float pool2Speed = 6;
         float pool3Speed = 4;
         float increasedSpeed = poolMult * 0.2f;
 
+        // Size of the shields.
         float pool1Radius = 1f;
         float pool2Radius = 0.5f;
         float pool3Radius = 0.3f;
@@ -261,6 +272,8 @@ public class Round extends RoomParent {
         }
     }
 
+    // When bullet has hit shield,
+    // this method stops the shields and saves their position to array.
     public void checkMovement() {
         int i = 0;
         if (!doMove) {
@@ -279,7 +292,7 @@ public class Round extends RoomParent {
                     i++;
                 }
             }
-            game.setHackShieldAmount(hackShieldAmount);
+            game.setHackShieldAmount(i);
             game.setHackPosX(hackPosX);
             game.setHackPosY(hackPosY);
             game.setHackFirstTry(false);
@@ -337,21 +350,11 @@ public class Round extends RoomParent {
                 Body body2 = contact.getFixtureB().getBody();
 
                 if (body1.getUserData() == BodyData.SHIELD && body2.getUserData() == BodyData.BULLET) {
-                    /*if (hackShieldAmount == 8 || hackShieldAmount == 16) {
-                        int index = shieldBodies.indexOf(body1, true);
-                        checkNeighbor(index);
-                    }
-                    */
                     collisionBulletShield(body1, body2);
                 }
 
                 if (body2.getUserData() == BodyData.SHIELD && body1.getUserData() == BodyData.BULLET) {
-                    /*if (hackShieldAmount == 8 || hackShieldAmount == 16) {
-                        int index = shieldBodies.indexOf(body2, true);
-                        checkNeighbor(index);
-                    }
-                    */
-                    collisionBulletShield(body1, body2);
+                    collisionBulletShield(body2, body1);
                 }
 
                 if (body1.getUserData() == BodyData.BULLET && body2.getUserData() == BodyData.ENEMY) {
@@ -374,23 +377,40 @@ public class Round extends RoomParent {
         });
     }
 
-    private void checkNeighbor(int index) {
-        if (index < (hackShieldAmount - 1)) {
-            index += 1;
-        }
-        if (index == 0) {
-            index++;
-        }
-        if (shieldBodies.get(index).getUserData() != null) {
-            bodiesToBeDestroyed.add(shieldBodies.get(index));
-        }
-    }
-
+    // Save the area of the collision and delete shield & bullet.
+    // The area of the collision can be changed depending on the pool?
     private void collisionBulletShield(Body body1, Body body2) {
+        // body1 = shield
+        // body2 = bullet
+        hitPosStartX = body1.getPosition().x - 1.5f;
+        hitPosEndX = body1.getPosition().x + 1.5f;
+        hitPosStartY = body1.getPosition().y - 3;
+        hitPosEndY = body1.getPosition().y + 3;
+        System.out.println("hitPosStartX: " + hitPosStartX);
+        System.out.println("hitPosEndX: " + hitPosEndX);
+        System.out.println("hitPosStartY: " + hitPosStartY);
+        System.out.println("hitPosEndY: " + hitPosEndY);
         bodiesToBeDestroyed.add(body2);
         bodiesToBeDestroyed.add(body1);
-        hackShieldAmount--;
+
+        checkNeighbor = true;
         doMove = false;
+    }
+
+    // When bullet has hit a shield,
+    // this method checks if there are shields close by and deletes them.
+    private void checkNeighbor() {
+        if (checkNeighbor) {
+            for (Body body : shieldBodies) {
+                if (body.getUserData() != null) {
+                    if (body.getPosition().x > hitPosStartX && body.getPosition().x < hitPosEndX &&
+                            body.getPosition().y > hitPosStartY && body.getPosition().y < hitPosEndY) {
+                        bodiesToBeDestroyed.add(body);
+                    }
+                }
+            }
+            checkNeighbor = false;
+        }
     }
 
     private void collisionBulletEnemy(Body body) {
