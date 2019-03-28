@@ -31,20 +31,22 @@ public class Round extends RoomParent {
         SHIELD, BULLET, ENEMY
     }
 
-    private Texture ball;
+    private Texture shieldTexture;
+    private Texture bulletTexture;
     public static final float WORLD_WIDTH = 19.20f;
     public static final float WORLD_HEIGHT = 10.80f;
     private World world;
     private Body shieldBody;
-    private Body centerBody;
-    // centerBody is a centerpoint of the circle and position of the enemy
+    private Body enemyBody;
     private Body bulletBody;
     private Box2DDebugRenderer debugRenderer;
-    private float radius = 0.5f;
+    private float shieldRadius;
+    private float shieldSpeed;
+    private float bulletRadius = 0.3f;
+    private int bulletSpeed = 5;
     private double accumulator = 0;
     private float TIME_STEP = 1 / 60f;
     private Vector2 center;
-    private float speed = 5;
     private float pos1x, pos2x, pos3x, pos4x, pos5x, pos6x, pos7x, pos8x, pos9x, pos10x, pos11x,
     pos12x, pos13x, pos14x, pos15x, pos16x;
     private float pos1y, pos2y, pos3y, pos4y, pos5y, pos6y, pos7y, pos8y, pos9y, pos10y, pos11y,
@@ -65,9 +67,9 @@ public class Round extends RoomParent {
     private FloatArray hackPosY;
     private int hackShieldAmount;
     private boolean hackFirstTry;
-    private int tier1HackShieldAmount;
-    private int tier2HackShieldAmount;
-    private int tier3HackShieldAmount;
+    private int pool1HackShieldAmount;
+    private int pool2HackShieldAmount;
+    private int pool3HackShieldAmount;
     private int pool;
     private int poolMult;
 
@@ -76,6 +78,7 @@ public class Round extends RoomParent {
     Round(MainGame game) {
         super(game);
         createConstants();
+        setSizeAndSpeed();
         createPositions();
         createShields();
         createJoints();
@@ -92,31 +95,58 @@ public class Round extends RoomParent {
         doPhysicsStep(Gdx.graphics.getDeltaTime());
         deleteBodies();
         batch.begin();
-        drawBodies(bulletBodies);
-        drawBodies(shieldBodies);
+        drawBodies();
         batch.end();
-        movement(speed, center);
+        movement(shieldSpeed, center);
         checkMovement();
     }
 
     public void createConstants() {
-        ball = new Texture("test.png");
+        shieldTexture = new Texture("texture/hacking/shield.png");
+        bulletTexture = new Texture("texture/hacking/bullet.png");
         camera.setToOrtho(false, WORLD_WIDTH, WORLD_HEIGHT);
         world = new World(new Vector2(0, 0), true);
-        centerBody = world.createBody(getDefinitionOfCenterBody());
-        centerBody.createFixture(getFixtureDefinition());
-        centerBody.setUserData(BodyData.ENEMY);
+        enemyBody = world.createBody(getDefinitionOfEnemyBody());
+        enemyBody.createFixture(getShieldFixtureDefinition());
+        enemyBody.setUserData(BodyData.ENEMY);
         debugRenderer = new Box2DDebugRenderer();
-        center = centerBody.getPosition();
+        center = enemyBody.getPosition();
         this.hackPosX = game.getHackPosX();
         this.hackPosY = game.getHackPosY();
-        this.hackShieldAmount = game.getHackShieldAmount();
         this.hackFirstTry = game.getHackFirstTry();
-        this.tier1HackShieldAmount = game.getTier1HackShieldAmount();
-        this.tier2HackShieldAmount = game.getTier2HackShieldAmount();
-        this.tier3HackShieldAmount = game.getTier3HackShieldAmount();
-        this.pool = game.getPool();
-        this.poolMult = game.getPoolMult();
+        this.pool1HackShieldAmount = game.getPool1HackShieldAmount();
+        this.pool2HackShieldAmount = game.getPool2HackShieldAmount();
+        this.pool3HackShieldAmount = game.getPool3HackShieldAmount();
+        //this.pool = game.getPool();
+        //this.poolMult = game.getPoolMult();
+
+        // Change these to test different pools/poolmultipliers.
+        pool = 2;
+        poolMult = 1;
+    }
+
+    public void setSizeAndSpeed() {
+        float pool1Speed = 8;
+        float pool2Speed = 6;
+        float pool3Speed = 4;
+        float increasedSpeed = poolMult * 0.2f;
+
+        float pool1Radius = 1f;
+        float pool2Radius = 0.5f;
+        float pool3Radius = 0.3f;
+
+        if (pool == 1) {
+            shieldRadius = pool1Radius;
+            shieldSpeed = pool1Speed + increasedSpeed;
+        }
+        if (pool == 2) {
+            shieldRadius = pool2Radius;
+            shieldSpeed = pool2Speed + increasedSpeed;
+        }
+        if (pool == 3) {
+            shieldRadius = pool3Radius;
+            shieldSpeed = pool3Speed + increasedSpeed;
+        }
     }
 
     public void createPositions() {
@@ -124,6 +154,7 @@ public class Round extends RoomParent {
             hackPosX.clear();
             hackPosY.clear();
             if (pool == 1) {
+                hackShieldAmount = pool1HackShieldAmount;
                 pos1x = widthOfEnemy;
                 pos1y = heightOfEnemy + 1;
                 pos2x = widthOfEnemy + 1;
@@ -136,6 +167,7 @@ public class Round extends RoomParent {
                 hackPosY.addAll(pos1y, pos2y, pos3y, pos4y);
             }
             if (pool == 2) {
+                hackShieldAmount = pool2HackShieldAmount;
                 pos1x = widthOfEnemy + 1;
                 pos1y = heightOfEnemy;
                 pos2x = widthOfEnemy + 0.71f;
@@ -156,6 +188,7 @@ public class Round extends RoomParent {
                 hackPosY.addAll(pos1y, pos2y, pos3y, pos4y, pos5y, pos6y, pos7y, pos8y);
             }
             if (pool == 3) {
+                hackShieldAmount = pool3HackShieldAmount;
                 pos1x = widthOfEnemy + 1;
                 pos1y = heightOfEnemy;
                 pos2x = widthOfEnemy + 0.92f;
@@ -195,6 +228,10 @@ public class Round extends RoomParent {
             }
             game.setHackPosX(hackPosX);
             game.setHackPosY(hackPosY);
+        } else {
+            hackPosX = game.getHackPosX();
+            hackPosY = game.getHackPosY();
+            hackShieldAmount = game.getHackShieldAmount();
         }
     }
 
@@ -204,7 +241,7 @@ public class Round extends RoomParent {
         for (int i = 0; i < hackShieldAmount; i++) {
             myBodyDef.position.set(hackPosX.get(i), hackPosY.get(i));
             shieldBody = world.createBody(myBodyDef);
-            shieldBody.createFixture(getFixtureDefinition());
+            shieldBody.createFixture(getShieldFixtureDefinition());
             shieldBody.setUserData(BodyData.SHIELD);
             shieldBodies.add(shieldBody);
         }
@@ -212,7 +249,7 @@ public class Round extends RoomParent {
 
     public void createJoints() {
         DistanceJointDef distanceJointDef = new DistanceJointDef();
-        distanceJointDef.bodyB = centerBody;
+        distanceJointDef.bodyB = enemyBody;
         distanceJointDef.length = 3f;
         distanceJointDef.frequencyHz = 3;
         distanceJointDef.dampingRatio = 0.1f;
@@ -285,9 +322,9 @@ public class Round extends RoomParent {
         if (bulletBodies.isEmpty()) {
             bulletBody = world.createBody(getDefinitionOfBulletBody());
             bulletBody.setBullet(true);
-            bulletBody.createFixture(getFixtureDefinition());
+            bulletBody.createFixture(getBulletFixtureDefinition());
             bulletBody.setUserData(BodyData.BULLET);
-            bulletBody.applyLinearImpulse(new Vector2(6, 0), bulletBody.getWorldCenter(), true);
+            bulletBody.applyLinearImpulse(new Vector2(bulletSpeed, 0), bulletBody.getWorldCenter(), true);
             bulletBodies.add(bulletBody);
         }
     }
@@ -300,37 +337,29 @@ public class Round extends RoomParent {
                 Body body2 = contact.getFixtureB().getBody();
 
                 if (body1.getUserData() == BodyData.SHIELD && body2.getUserData() == BodyData.BULLET) {
-                    if (hackShieldAmount == 8 || hackShieldAmount == 16) {
+                    /*if (hackShieldAmount == 8 || hackShieldAmount == 16) {
                         int index = shieldBodies.indexOf(body1, true);
                         checkNeighbor(index);
                     }
-                    bodiesToBeDestroyed.add(body2);
-                    bodiesToBeDestroyed.add(body1);
-                    hackShieldAmount--;
-                    doMove = false;
+                    */
+                    collisionBulletShield(body1, body2);
                 }
 
                 if (body2.getUserData() == BodyData.SHIELD && body1.getUserData() == BodyData.BULLET) {
-                    if (hackShieldAmount == 8 || hackShieldAmount == 16) {
+                    /*if (hackShieldAmount == 8 || hackShieldAmount == 16) {
                         int index = shieldBodies.indexOf(body2, true);
                         checkNeighbor(index);
                     }
-                    bodiesToBeDestroyed.add(body1);
-                    bodiesToBeDestroyed.add(body2);
-                    hackShieldAmount--;
-                    doMove = false;
+                    */
+                    collisionBulletShield(body1, body2);
                 }
 
                 if (body1.getUserData() == BodyData.BULLET && body2.getUserData() == BodyData.ENEMY) {
-                    game.setHackFirstTry(true);
-                    bodiesToBeDestroyed.add(body1);
-                    game.setHackShieldAmount(tier1HackShieldAmount);
+                    collisionBulletEnemy(body1);
                 }
 
                 if (body2.getUserData() == BodyData.BULLET && body1.getUserData() == BodyData.ENEMY) {
-                    game.setHackFirstTry(true);
-                    bodiesToBeDestroyed.add(body2);
-                    game.setHackShieldAmount(tier1HackShieldAmount);
+                    collisionBulletEnemy(body2);
                 }
             }
             @Override
@@ -357,18 +386,41 @@ public class Round extends RoomParent {
         }
     }
 
-    private FixtureDef getFixtureDefinition() {
-        FixtureDef playerFixtureDef = new FixtureDef();
-        playerFixtureDef.density = 1;
-        playerFixtureDef.restitution = 0f;
-        playerFixtureDef.friction = 0f;
-        CircleShape circleshape = new CircleShape();
-        circleshape.setRadius(radius);
-        playerFixtureDef.shape = circleshape;
-        return playerFixtureDef;
+    private void collisionBulletShield(Body body1, Body body2) {
+        bodiesToBeDestroyed.add(body2);
+        bodiesToBeDestroyed.add(body1);
+        hackShieldAmount--;
+        doMove = false;
     }
 
-    private BodyDef getDefinitionOfCenterBody() {
+    private void collisionBulletEnemy(Body body) {
+        game.setHackFirstTry(true);
+        bodiesToBeDestroyed.add(body);
+    }
+
+    private FixtureDef getShieldFixtureDefinition() {
+        FixtureDef shieldFixtureDef = new FixtureDef();
+        shieldFixtureDef.density = 1;
+        shieldFixtureDef.restitution = 0f;
+        shieldFixtureDef.friction = 0f;
+        CircleShape circleshape = new CircleShape();
+        circleshape.setRadius(shieldRadius);
+        shieldFixtureDef.shape = circleshape;
+        return shieldFixtureDef;
+    }
+
+    private FixtureDef getBulletFixtureDefinition() {
+        FixtureDef bulletFixtureDef = new FixtureDef();
+        bulletFixtureDef.density = 1;
+        bulletFixtureDef.restitution = 0f;
+        bulletFixtureDef.friction = 0f;
+        CircleShape circleshape = new CircleShape();
+        circleshape.setRadius(bulletRadius);
+        bulletFixtureDef.shape = circleshape;
+        return bulletFixtureDef;
+    }
+
+    private BodyDef getDefinitionOfEnemyBody() {
         BodyDef myBodyDef = new BodyDef();
         myBodyDef.type = BodyDef.BodyType.StaticBody;
         myBodyDef.position.set(widthOfEnemy, heightOfEnemy);
@@ -394,11 +446,11 @@ public class Round extends RoomParent {
         }
     }
 
-    private void movement(float speed, Vector2 center) {
+    private void movement(float shieldSpeed, Vector2 center) {
         for (Body body : shieldBodies) {
             if (body.getUserData() != null) {
                 Vector2 radius = center.cpy().sub(body.getPosition());
-                Vector2 force = radius.rotate90(1).nor().scl(speed);
+                Vector2 force = radius.rotate90(1).nor().scl(shieldSpeed);
                 body.setLinearVelocity(force.x, force.y);
             }
         }
@@ -411,23 +463,43 @@ public class Round extends RoomParent {
         bodiesToBeDestroyed.clear();
     }
 
-    public void drawBodies(Array<Body> bodies) {
-        for (Body body : bodies) {
+    public void drawBodies() {
+        for (Body body : shieldBodies) {
             if (body.getUserData() != null) {
-                batch.draw(ball,
-                        body.getPosition().x - radius,
-                        body.getPosition().y - radius,
-                        radius, // originX
-                        radius, // originY
-                        radius * 2, // width
-                        radius * 2, // height
+                batch.draw(shieldTexture,
+                        body.getPosition().x - shieldRadius,
+                        body.getPosition().y - shieldRadius,
+                        shieldRadius, // originX
+                        shieldRadius, // originY
+                        shieldRadius * 2, // width
+                        shieldRadius * 2, // height
                         1.0f, // scaleX
                         1.0f, // scaleY
                         body.getTransform().getRotation() * MathUtils.radiansToDegrees,
                         0, // Start drawing from x = 0
                         0, // Start drawing from y = 0
-                        ball.getWidth(), // End drawing x
-                        ball.getHeight(), // End drawing y
+                        shieldTexture.getWidth(), // End drawing x
+                        shieldTexture.getHeight(), // End drawing y
+                        false, // flipX
+                        false); // flipY
+            }
+        }
+        for (Body body : bulletBodies) {
+            if (body.getUserData() != null) {
+                batch.draw(bulletTexture,
+                        body.getPosition().x - bulletRadius,
+                        body.getPosition().y - bulletRadius,
+                        bulletRadius, // originX
+                        bulletRadius, // originY
+                        bulletRadius * 2, // width
+                        bulletRadius * 2, // height
+                        1.0f, // scaleX
+                        1.0f, // scaleY
+                        body.getTransform().getRotation() * MathUtils.radiansToDegrees,
+                        0, // Start drawing from x = 0
+                        0, // Start drawing from y = 0
+                        bulletTexture.getWidth(), // End drawing x
+                        bulletTexture.getHeight(), // End drawing y
                         false, // flipX
                         false); // flipY
             }

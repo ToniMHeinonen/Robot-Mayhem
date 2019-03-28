@@ -76,11 +76,11 @@ public class MainGame extends Game {
 	//Hacking
     private FloatArray hackPosX;
     private FloatArray hackPosY;
-    private int hackShieldAmount = 4;
+    private int hackShieldAmount;
     private boolean hackFirstTry = true;
-    public final int tier1HackShieldAmount = 4;
-    public final int tier2HackShieldAmount = 8;
-    public final int tier3HackShieldAmount = 16;
+    private final int pool1HackShieldAmount = 4;
+    private final int pool2HackShieldAmount = 8;
+    private final int pool3HackShieldAmount = 16;
 
 	@Override
 	public void create () {
@@ -177,6 +177,17 @@ public class MainGame extends Game {
     private void createHackFiles() {
         hackPosX = new FloatArray();
         hackPosY = new FloatArray();
+        if (hackFirstTry) {
+            if (pool == 1) {
+                hackShieldAmount = pool1HackShieldAmount;
+            }
+            if (pool == 2) {
+                hackShieldAmount = pool2HackShieldAmount;
+            }
+            if (pool == 3) {
+                hackShieldAmount = pool3HackShieldAmount;
+            }
+        }
     }
 
 	private void createDialogConstants() {
@@ -507,16 +518,16 @@ public class MainGame extends Game {
 	    return hackShieldAmount;
     }
 
-    public int getTier1HackShieldAmount() {
-	    return tier1HackShieldAmount;
+    public int getPool1HackShieldAmount() {
+	    return pool1HackShieldAmount;
     }
 
-    public int getTier2HackShieldAmount() {
-	    return tier2HackShieldAmount;
+    public int getPool2HackShieldAmount() {
+	    return pool2HackShieldAmount;
     }
 
-    public int getTier3HackShieldAmount() {
-	    return tier3HackShieldAmount;
+    public int getPool3HackShieldAmount() {
+	    return pool3HackShieldAmount;
     }
 
 	public int getPool() {
