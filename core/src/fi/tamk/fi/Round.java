@@ -1,9 +1,7 @@
 package fi.tamk.fi;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -23,7 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
-import com.badlogic.gdx.utils.Timer;
 
 public class Round extends RoomParent {
 
@@ -76,13 +73,7 @@ public class Round extends RoomParent {
     private int poolMult;
 
     private boolean doMove = true;
-    private boolean checkNeighbor = false;
     private boolean bulletHitShield = false;
-
-    private float hitPosStartX;
-    private float hitPosEndX;
-    private float hitPosStartY;
-    private float hitPosEndY;
 
     Round(MainGame game) {
         super(game);
@@ -109,7 +100,6 @@ public class Round extends RoomParent {
         movement(shieldSpeed, center);
         checkMovement();
         checkBulletHitShield();
-        checkNeighbor();
     }
 
     public void update() {
@@ -123,7 +113,6 @@ public class Round extends RoomParent {
         movement(shieldSpeed, center);
         checkMovement();
         checkBulletHitShield();
-        checkNeighbor();
     }
 
     private void createConstants() {
@@ -146,7 +135,7 @@ public class Round extends RoomParent {
         //this.poolMult = game.getPoolMult();
 
         // Change these to test the effects of different pools/poolmultipliers.
-        pool = 1;
+        pool = 2;
         poolMult = 0;
     }
 
@@ -353,15 +342,15 @@ public class Round extends RoomParent {
         });
     }
 
-    // Save the area of the collision and delete shield & bullet.
-    // The area of the collision can be changed depending on the pool?
+    //Delete bullets and shield.
+    //The area of the collision can be changed depending on the pool?
     private void collisionBulletShield(Body body1, Body body2) {
         // body1 = shield
         // body2 = bullet
-        hitPosStartX = body1.getPosition().x - 1.5f;
-        hitPosEndX = body1.getPosition().x + 1.5f;
-        hitPosStartY = body1.getPosition().y - 3;
-        hitPosEndY = body1.getPosition().y + 3;
+        float hitPosStartX = body1.getPosition().x - 1.5f;
+        float hitPosEndX = body1.getPosition().x + 1.5f;
+        float hitPosStartY = body1.getPosition().y - 3;
+        float hitPosEndY = body1.getPosition().y + 3;
         System.out.println("hitPosStartX: " + hitPosStartX);
         System.out.println("hitPosEndX: " + hitPosEndX);
         System.out.println("hitPosStartY: " + hitPosStartY);
@@ -369,25 +358,16 @@ public class Round extends RoomParent {
         bodiesToBeDestroyed.add(body2);
         bodiesToBeDestroyed.add(body1);
 
-        checkNeighbor = true;
-        doMove = false;
-        bulletHitShield = true;
-    }
-
-    // When bullet has hit a shield,
-    // this method checks if there are shields close by and deletes them.
-    private void checkNeighbor() {
-        if (checkNeighbor) {
-            for (Body body : shieldBodies) {
-                if (body.getUserData() != null) {
-                    if (body.getPosition().x > hitPosStartX && body.getPosition().x < hitPosEndX &&
-                            body.getPosition().y > hitPosStartY && body.getPosition().y < hitPosEndY) {
-                        bodiesToBeDestroyed.add(body);
-                    }
+        for (Body body : shieldBodies) {
+            if (body.getUserData() != null) {
+                if (body.getPosition().x > hitPosStartX && body.getPosition().x < hitPosEndX &&
+                        body.getPosition().y > hitPosStartY && body.getPosition().y < hitPosEndY) {
+                    bodiesToBeDestroyed.add(body);
                 }
             }
-            checkNeighbor = false;
         }
+        doMove = false;
+        bulletHitShield = true;
     }
 
     private void collisionBulletEnemy(Body body) {
