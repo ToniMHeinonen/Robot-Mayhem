@@ -373,11 +373,6 @@ public class PowerUps extends RoomParent {
         }
     }
 
-    public Texture getImg() {
-
-        return testBox;
-    }
-
     public float getWidth() {
 
         return testBox.getWidth() + 1200;
@@ -386,12 +381,6 @@ public class PowerUps extends RoomParent {
     public float getHeight() {
 
         return testBox.getHeight() + 1200;
-    }
-
-    public float setX(float x) {
-
-        testRectangle.x = x;
-        return x;
     }
 
     public float getX() {
@@ -404,11 +393,6 @@ public class PowerUps extends RoomParent {
         return testRectangle.y;
     }
 
-    public Rectangle getRectangle() {
-
-        return testRectangle;
-    }
-
     public void render (float delta) {
 
         super.render(delta);
@@ -419,12 +403,16 @@ public class PowerUps extends RoomParent {
 
             batch.begin();
 
-            batch.draw(testBox, testRectangle.x, testRectangle.y,
-                    testRectangle.getWidth() + 1000, testRectangle.getHeight());
+            batch.draw(testBox, testRectangle.x - 50, testRectangle.y - 50,
+                    testRectangle.getWidth() + 1100, testRectangle.getHeight() + 200);
 
             batch.end();
+
+            stage.draw();
         }
     }
+
+    //public static
 
     public void dispose () {
         batch.dispose();

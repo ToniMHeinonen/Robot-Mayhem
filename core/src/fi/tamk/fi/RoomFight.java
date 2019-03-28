@@ -774,6 +774,19 @@ public class RoomFight extends RoomParent {
                     curHitAnimationSpd = hitSpeeds[random];
                     dmgAmount = defaultDmg * damages[random];
                     anim.startAnimation(curAnimation, speeds[random]);
+
+
+                    // Added this for testing purposes.
+                    /*int i = 2;
+
+                    dialog.showSkillName(skillNames[i]);
+                    curAnimation = animList.get(i);
+                    curHitAnimation = hitAnimList.get(i);
+                    curHitAnimationSpd = hitSpeeds[i];
+                    dmgAmount = defaultDmg * damages[i];
+                    anim.startAnimation(curAnimation, speeds[i]);
+
+                    System.out.println(skillNames[i]);*/
                 }
             }
         }
