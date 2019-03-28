@@ -26,9 +26,9 @@ public class PowerUps extends RoomParent {
     boolean canItBeClickedB = true;
     boolean canItBeClickedC = true;
 
-    Texture testBox = new Texture(Gdx.files.internal("box.png"));
+    static Texture testBox = new Texture(Gdx.files.internal("box.png"));
 
-    Rectangle testRectangle;
+    public static Rectangle testRectangle;
 
     PowerUps(MainGame game) {
         super(game);
@@ -378,12 +378,12 @@ public class PowerUps extends RoomParent {
         return testBox.getWidth() + 1200;
     }
 
-    public float getHeight() {
+    public static float getHeight() {
 
         return testBox.getHeight() + 1200;
     }
 
-    public float getX() {
+    public static float getX() {
 
         return testRectangle.x;
     }
