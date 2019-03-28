@@ -270,7 +270,7 @@ public class RoomFight extends RoomParent {
     private class Fighters {
 
         protected float X, Y;
-        protected double maxHp, hp, targetHp, hpDecreaseSpd, defaultDmg, dmgAmount, dmgOverTime;
+        protected double maxHp, hp, targetHp, hpDecreaseSpd, defaultDmg, dmgAmount;
         protected Animating anim = new Animating();
         protected Animating hitAnim = new Animating();
 
@@ -287,9 +287,15 @@ public class RoomFight extends RoomParent {
         protected boolean hpIncorrect = false;
 
         protected int idleSpd, hackSpd, itemSpd, deathSpd, escapeSpd, curHitAnimationSpd;
-        protected Animation<TextureRegion> curAnimation, curHitAnimation, idle, hack;
+        protected Animation<TextureRegion> curAnimation, curHitAnimation, idle, hack, healthPlus,
+                                            healthMinus;
         protected ArrayList<Animation<TextureRegion>> animList, hitAnimList;
         protected Integer[] speeds, hitSpeeds;
+
+        Fighters() {
+            healthPlus = hitAnim.createAnimation(game.getHealthPlus(), 3, 1);
+            healthMinus = hitAnim.createAnimation(game.getHealthMinus(), 3, 1);
+        }
 
         // Do this at the start of update method
         public void updateStart() {
@@ -339,6 +345,11 @@ public class RoomFight extends RoomParent {
             else pauseStates = true;
         }
 
+        public void checkDoT() {
+            calcTargetHpSpd(-10);
+            startHitAnimation(healthPlus, 30);
+        }
+
         // When taken hit, flash white for a certain amount of time
         public void flashAndMove() {
             flashWhite = true;
@@ -362,11 +373,17 @@ public class RoomFight extends RoomParent {
             }
         }
 
+        public void calcTargetHpSpd(double damage) {
+            targetHp = hp - damage;
+            if (targetHp < 0) targetHp = 0;
+            hpDecreaseSpd = (targetHp - hp) / 100;
+        }
+
         // When taken hit, target hp is lower than hp. This makes the hp bar smoothly lower down
         public void hpToTarget() {
             if (hp > targetHp) {
                 hpIncorrect = true;
-                hp -= hpDecreaseSpd;
+                hp += hpDecreaseSpd;
             } else {
                 hpIncorrect = false;
                 hp = targetHp;
@@ -463,7 +480,7 @@ public class RoomFight extends RoomParent {
 
                 if (state == State.START_TURN) {
                     decreaseCooldowns();
-                    //takeDamageOvertime();
+                    //checkDoT();
                     state = State.AWAITING;
                 } else if (state == State.ACTION) {
                     controlActionStates();
@@ -510,7 +527,6 @@ public class RoomFight extends RoomParent {
                 actionSelected = true;
                 curAnimation = item;
                 curAnimSpd = itemSpd;
-                dmgOverTime = -10;
                 actionState = TEMP_ANIM;
             } else { // It's skill
                 for (int i = 0; i < 2; i++) {
@@ -580,10 +596,6 @@ public class RoomFight extends RoomParent {
             s_cool = Skills.getCooldown();
         }
 
-        private void takeDamageOvertime() {
-            hp -= dmgOverTime;
-        }
-
         /*
         Check Hp at the start of every round.
          */
@@ -600,12 +612,9 @@ public class RoomFight extends RoomParent {
             if (curAction == "Defend") {
                 enemy.takeHit(damage);
             } else {
-                targetHp = hp - damage;
                 flashAndMove();
+                calcTargetHpSpd(damage);
             }
-
-            if (targetHp < 0) targetHp = 0;
-            hpDecreaseSpd = (hp - targetHp) / 100;
         }
 
         /*
@@ -659,7 +668,7 @@ public class RoomFight extends RoomParent {
             maxHp = 100;
             hp = maxHp;
             targetHp = hp;
-            defaultDmg = 20; // Replace this with the correct value later
+            defaultDmg = 15; // Replace this with the correct value later
 
             startDialogTimer();
 
@@ -781,10 +790,8 @@ public class RoomFight extends RoomParent {
 
         // When taking hit, lower targetHp, flash white and take knockback
         public void takeHit(double damage) {
-            targetHp = hp - damage;
             flashAndMove();
-            if (targetHp < 0) targetHp = 0;
-            hpDecreaseSpd = (hp - targetHp) / 100;
+            calcTargetHpSpd(damage);
         }
 
         // When the fight begins, wait for some time to start the dialogue
