@@ -280,7 +280,7 @@ public class RoomFight extends RoomParent {
     private class Fighters {
 
         protected float X, Y;
-        protected double maxHp, hp, targetHp, hpDecreaseSpd, dmgAmount;
+        protected double maxHp, hp, targetHp, hpDecreaseSpd, defaultDmg, dmgAmount;
         protected Animating anim = new Animating();
         protected Animating hitAnim = new Animating();
 
@@ -427,7 +427,7 @@ public class RoomFight extends RoomParent {
         private Animation<TextureRegion> escape, item, death;
         private HashMap<String,Object> mapAttack, mapDefend;
 
-        private String s_spd, s_dmg, s_cool, s_anim, s_hitAnim, s_name;
+        private String s_spd, s_dmg, s_cool, s_anim, s_hitAnim, s_name, curAction;
         private HashMap<String,Integer> cooldowns;
         private ArrayList<HashMap<String,Object>> mapSkills;
         private String[] skills;
@@ -438,6 +438,7 @@ public class RoomFight extends RoomParent {
             maxHp = 100;
             hp = maxHp;
             targetHp = hp;
+            defaultDmg = 30; // Replace this with the correct value later
 
             idleSpd = 30;
             itemSpd = 20;
@@ -504,7 +505,7 @@ public class RoomFight extends RoomParent {
                 curAnimSpd =  (Integer) mapAttack.get(s_spd + s_anim);
                 curHitAnimation = (Animation<TextureRegion>) mapAttack.get(s_hitAnim);
                 curHitAnimationSpd = (Integer) mapAttack.get(s_spd + s_hitAnim);
-                dmgAmount = (Double) mapAttack.get(s_dmg);
+                dmgAmount = defaultDmg;
                 actionState = TEMP_ANIM;
             } else if (action == "Defend") {
                 if (cooldowns.get("Defend") == 0) {
@@ -534,13 +535,14 @@ public class RoomFight extends RoomParent {
                         curAnimSpd = (Integer) skillMap.get(s_spd + s_anim);
                         curHitAnimation = (Animation<TextureRegion>) skillMap.get(s_hitAnim);
                         curHitAnimationSpd = (Integer) skillMap.get(s_spd + s_hitAnim);
-                        dmgAmount = (Double) skillMap.get(s_dmg);
+                        dmgAmount = defaultDmg * (Double) skillMap.get(s_dmg);
                         actionState = TEMP_ANIM;
                     }
                 }
             }
 
             if (actionSelected) {
+                curAction = action;
                 anim.startAnimation(curAnimation, curAnimSpd);
                 state = State.ACTION;
                 dialog.showSkillName(action);
@@ -599,10 +601,9 @@ public class RoomFight extends RoomParent {
         Take hit, expect if defending, then return the damage back to the enemy.
          */
         public void takeHit(double damage) {
-            if (curAnimation == (Animation<TextureRegion>) mapDefend.get(s_anim)) {
+            if (curAction == "Defend") {
                 enemy.takeHit(damage);
-            }
-            else {
+            } else {
                 targetHp = hp - damage;
                 flashAndMove();
             }
@@ -662,6 +663,7 @@ public class RoomFight extends RoomParent {
             maxHp = 100;
             hp = maxHp;
             targetHp = hp;
+            defaultDmg = 20; // Replace this with the correct value later
 
             startDialogTimer();
 
@@ -765,7 +767,7 @@ public class RoomFight extends RoomParent {
                     curAnimation = animList.get(random);
                     curHitAnimation = hitAnimList.get(random);
                     curHitAnimationSpd = hitSpeeds[random];
-                    dmgAmount = damages[random];
+                    dmgAmount = defaultDmg * damages[random];
                     anim.startAnimation(curAnimation, speeds[random]);
                 }
             }

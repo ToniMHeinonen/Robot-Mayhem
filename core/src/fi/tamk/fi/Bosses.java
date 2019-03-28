@@ -23,7 +23,7 @@ public class Bosses {
     private static String speed = "speed";
 
     private static HashMap<String, HashMap<String,Object>> mapBosses;
-    private static HashMap<String,Object> mapRoombot, mapTest;
+    private static HashMap<String,Object> mapRoombot;
 
     private static int s_idle, s_hack, s_skill1, s_skill2, s_skill3,
                         s_skill1_hit, s_skill2_hit, s_skill3_hit; // Animation speed
@@ -42,11 +42,9 @@ public class Bosses {
      */
     public static void createBosses() {
         bossRoombot();
-        bossTest();
 
         mapBosses = new HashMap<String, HashMap<String,Object>>();
         mapBosses.put((String) mapRoombot.get(name), mapRoombot);
-        mapBosses.put((String) mapTest.get(name), mapTest);
     }
 
     /*
@@ -98,46 +96,6 @@ public class Bosses {
 
         mapRoombot = new HashMap<String, Object>();
         mapRoombot = addToMap(mapRoombot);
-    }
-
-    private static void bossTest() {
-        curName = "Test";
-        curDmg1 = 1;
-        curDmg2 = 1.5;
-        curDmg3 = 2;
-        curSkillName1 = "Test1";
-        curSkillName2 = "Test2";
-        curSkillName3 = "Test3";
-        curDialogStart = "Test start!";
-        curDialogEnd = "Test end!";
-
-        t_idle = new Texture("texture/enemy/enemyIdle.png");
-        a_idle = anim.createAnimation(t_idle, 3, 1);
-        s_idle = 30;
-        t_hack = new Texture("texture/enemy/enemyHack.png");
-        a_hack = anim.createAnimation(t_hack, 3, 1);
-        s_hack = 30;
-        t_skill1 = new Texture("texture/enemy/enemyAttack1.png");
-        a_skill1 = anim.createAnimation(t_skill1, 3, 1);
-        s_skill1 = 30;
-        t_skill2 = new Texture("texture/enemy/enemyAttack2.png");
-        a_skill2 = anim.createAnimation(t_skill2, 3, 1);
-        s_skill2 = 30;
-        t_skill3 = new Texture("texture/enemy/enemyAttack3.png");
-        a_skill3 = anim.createAnimation(t_skill3, 3, 1);
-        s_skill3 = 30;
-        t_skill1_hit = new Texture("texture/player/playerAttackHit.png");
-        a_skill1_hit = anim.createAnimation(t_skill1_hit, 3, 1);
-        s_skill1_hit = 30;
-        t_skill2_hit = new Texture("texture/player/playerAttackHit.png");
-        a_skill2_hit = anim.createAnimation(t_skill2_hit, 3, 1);
-        s_skill2_hit = 30;
-        t_skill3_hit = new Texture("texture/player/playerAttackHit.png");
-        a_skill3_hit = anim.createAnimation(t_skill3_hit, 3, 1);
-        s_skill3_hit = 30;
-
-        mapTest = new HashMap<String, Object>();
-        mapTest = addToMap(mapTest);
     }
 
     private static HashMap<String, Object> addToMap(HashMap<String, Object> map) {
