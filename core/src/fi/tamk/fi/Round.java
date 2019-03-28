@@ -110,6 +110,19 @@ public class Round extends RoomParent {
         checkNeighbor();
     }
 
+    public void update() {
+        batch.setProjectionMatrix(camera.combined);
+        debugRenderer.render(world, camera.combined);
+        doPhysicsStep(Gdx.graphics.getDeltaTime());
+        deleteBodies();
+        batch.begin();
+        drawBodies();
+        batch.end();
+        movement(shieldSpeed, center);
+        checkMovement();
+        checkNeighbor();
+    }
+
     public void createConstants() {
         shieldTexture = new Texture("texture/hacking/shield.png");
         bulletTexture = new Texture("texture/hacking/bullet.png");
