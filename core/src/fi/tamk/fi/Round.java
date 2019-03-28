@@ -21,6 +21,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class Round extends RoomParent {
 
@@ -30,20 +32,26 @@ public class Round extends RoomParent {
 
     private Texture shieldTexture;
     private Texture bulletTexture;
+
     public static final float WORLD_WIDTH = 19.20f;
     public static final float WORLD_HEIGHT = 10.80f;
+
     private World world;
     private Body shieldBody;
     private Body enemyBody;
     private Body bulletBody;
     private Box2DDebugRenderer debugRenderer;
+
     private float shieldRadius;
     private float shieldSpeed;
     private float bulletRadius = 0.3f;
     private int bulletSpeed = 5;
+
     private double accumulator = 0;
     private float TIME_STEP = 1 / 60f;
+
     private Vector2 center;
+
     private float pos1x, pos2x, pos3x, pos4x, pos5x, pos6x, pos7x, pos8x, pos9x, pos10x, pos11x,
     pos12x, pos13x, pos14x, pos15x, pos16x;
     private float pos1y, pos2y, pos3y, pos4y, pos5y, pos6y, pos7y, pos8y, pos9y, pos10y, pos11y,
@@ -74,6 +82,12 @@ public class Round extends RoomParent {
 
     private boolean doMove = true;
     private boolean bulletHitShield = false;
+    private boolean checkNeighbor = false;
+
+    private float hitPosStartX;
+    private float hitPosEndX;
+    private float hitPosStartY;
+    private float hitPosEndY;
 
     Round(MainGame game) {
         super(game);
@@ -98,6 +112,7 @@ public class Round extends RoomParent {
         drawBodies();
         batch.end();
         movement(shieldSpeed, center);
+        checkNeighbor();
         checkMovement();
         checkBulletHitShield();
     }
@@ -111,6 +126,7 @@ public class Round extends RoomParent {
         drawBodies();
         batch.end();
         movement(shieldSpeed, center);
+        checkNeighbor();
         checkMovement();
         checkBulletHitShield();
     }
@@ -347,10 +363,10 @@ public class Round extends RoomParent {
     private void collisionBulletShield(Body body1, Body body2) {
         // body1 = shield
         // body2 = bullet
-        float hitPosStartX = body1.getPosition().x - 1.5f;
-        float hitPosEndX = body1.getPosition().x + 1.5f;
-        float hitPosStartY = body1.getPosition().y - 3;
-        float hitPosEndY = body1.getPosition().y + 3;
+        hitPosStartX = body1.getPosition().x - 1.5f;
+        hitPosEndX = body1.getPosition().x + 1.5f;
+        hitPosStartY = body1.getPosition().y - 3;
+        hitPosEndY = body1.getPosition().y + 3;
         System.out.println("hitPosStartX: " + hitPosStartX);
         System.out.println("hitPosEndX: " + hitPosEndX);
         System.out.println("hitPosStartY: " + hitPosStartY);
@@ -358,16 +374,22 @@ public class Round extends RoomParent {
         bodiesToBeDestroyed.add(body2);
         bodiesToBeDestroyed.add(body1);
 
-        for (Body body : shieldBodies) {
-            if (body.getUserData() != null) {
-                if (body.getPosition().x > hitPosStartX && body.getPosition().x < hitPosEndX &&
-                        body.getPosition().y > hitPosStartY && body.getPosition().y < hitPosEndY) {
-                    bodiesToBeDestroyed.add(body);
+        checkNeighbor = true;
+    }
+
+    private void checkNeighbor() {
+        if (checkNeighbor) {
+            for (Body body : shieldBodies) {
+                if (body.getUserData() != null) {
+                    if (body.getPosition().x > hitPosStartX && body.getPosition().x < hitPosEndX &&
+                            body.getPosition().y > hitPosStartY && body.getPosition().y < hitPosEndY) {
+                        bodiesToBeDestroyed.add(body);
+                    }
                 }
             }
+            doMove = false;
+            bulletHitShield = true;
         }
-        doMove = false;
-        bulletHitShield = true;
     }
 
     private void collisionBulletEnemy(Body body) {
