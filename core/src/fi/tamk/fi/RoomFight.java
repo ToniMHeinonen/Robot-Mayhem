@@ -425,9 +425,9 @@ public class RoomFight extends RoomParent {
     private class Player extends Fighters {
 
         private Animation<TextureRegion> escape, item, death;
-        private HashMap<String,Object> mapAttack, mapDefend, mapSkill1, mapSkill2;
+        private HashMap<String,Object> mapAttack, mapDefend;
 
-        private String skill1, skill2, s_spd, s_dmg, s_cool, s_anim, s_hitAnim, s_name;
+        private String s_spd, s_dmg, s_cool, s_anim, s_hitAnim, s_name;
         private HashMap<String,Integer> cooldowns;
         private ArrayList<HashMap<String,Object>> mapSkills;
         private String[] skills;
@@ -435,7 +435,7 @@ public class RoomFight extends RoomParent {
         Player() {
             X = 100f;
             Y = 300f;
-            maxHp = game.getPlayerMaxHp();
+            maxHp = 100;
             hp = maxHp;
             targetHp = hp;
 
@@ -659,7 +659,7 @@ public class RoomFight extends RoomParent {
 
             X = game.pixelWidth - 100f - idle.getKeyFrame(0f).getRegionWidth();
             Y = 300f;
-            maxHp = 5;
+            maxHp = 100;
             hp = maxHp;
             targetHp = hp;
 

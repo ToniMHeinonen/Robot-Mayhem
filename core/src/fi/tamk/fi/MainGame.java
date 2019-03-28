@@ -43,7 +43,7 @@ public class MainGame extends Game {
 	private int saveTimerAmount = 3600;
 	private int saveTimer = saveTimerAmount;
 	private Preferences stats;
-	private int stepCount, stepBank, stepAllCount, playerMaxHp, pool, poolMult;
+	private int stepCount, stepBank, stepAllCount, pool, poolMult;
 	private String skill1, skill2;
 	private boolean firstPlayTime;
 
@@ -272,7 +272,6 @@ public class MainGame extends Game {
 		stepCount = stats.getInteger("stepCount", 0);
 		stepAllCount = stats.getInteger("stepAllCount", 0);
 		stepBank = stats.getInteger("stepBank", 0);
-		playerMaxHp = stats.getInteger("playerMaxHp", 10);
 		skill1 = stats.getString("skill1", "");
 		skill2 = stats.getString("skill2", "");
 		firstPlayTime = stats.getBoolean("firstPlayTime", true);
@@ -284,7 +283,6 @@ public class MainGame extends Game {
 		stats.putInteger("stepCount", stepCount);
 		stats.putInteger("stepAllCount", stepAllCount);
 		stats.putInteger("stepBank", stepBank);
-		stats.putInteger("playerMaxHp", playerMaxHp);
 		stats.putString("skill1", skill1);
 		stats.putString("skill2", skill2);
 		stats.putBoolean("firstPlayTime", firstPlayTime);
@@ -432,14 +430,6 @@ public class MainGame extends Game {
 
 	public int getStepAllCount() {
 		return stepAllCount;
-	}
-
-	public int getPlayerMaxHp() {
-		return playerMaxHp;
-	}
-
-	public void setPlayerMaxHp(int playerHp) {
-		this.playerMaxHp = playerHp;
 	}
 
 	public String getSkill1() {
