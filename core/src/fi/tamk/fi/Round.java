@@ -77,6 +77,7 @@ public class Round extends RoomParent {
 
     private boolean doMove = true;
     private boolean checkNeighbor = false;
+    private boolean bulletHitShield = false;
 
     private float hitPosStartX;
     private float hitPosEndX;
@@ -107,6 +108,7 @@ public class Round extends RoomParent {
         batch.end();
         movement(shieldSpeed, center);
         checkMovement();
+        checkBulletHitShield();
         checkNeighbor();
     }
 
@@ -120,10 +122,11 @@ public class Round extends RoomParent {
         batch.end();
         movement(shieldSpeed, center);
         checkMovement();
+        checkBulletHitShield();
         checkNeighbor();
     }
 
-    public void createConstants() {
+    private void createConstants() {
         shieldTexture = new Texture("texture/hacking/shield.png");
         bulletTexture = new Texture("texture/hacking/bullet.png");
         camera.setToOrtho(false, WORLD_WIDTH, WORLD_HEIGHT);
@@ -142,38 +145,25 @@ public class Round extends RoomParent {
         //this.pool = game.getPool();
         //this.poolMult = game.getPoolMult();
 
-        // Change these to test different pools/poolmultipliers.
+        // Change these to test the effects of different pools/poolmultipliers.
         pool = 1;
-        poolMult = 1;
+        poolMult = 0;
     }
 
-    public void setSizeAndSpeed() {
-        // Speed of the shields.
-        float pool1Speed = 8;
-        float pool2Speed = 6;
-        float pool3Speed = 4;
+    private void setSizeAndSpeed() {
+        FloatArray poolSpeeds = new FloatArray();
+        poolSpeeds.add(8, 6, 4);
+
+        FloatArray poolSizes = new FloatArray();
+        poolSizes.add(1, 0.5f, 0.3f);
+
         float increasedSpeed = poolMult * 0.2f;
 
-        // Size of the shields.
-        float pool1Radius = 1f;
-        float pool2Radius = 0.5f;
-        float pool3Radius = 0.3f;
-
-        if (pool == 1) {
-            shieldRadius = pool1Radius;
-            shieldSpeed = pool1Speed + increasedSpeed;
-        }
-        if (pool == 2) {
-            shieldRadius = pool2Radius;
-            shieldSpeed = pool2Speed + increasedSpeed;
-        }
-        if (pool == 3) {
-            shieldRadius = pool3Radius;
-            shieldSpeed = pool3Speed + increasedSpeed;
-        }
+        shieldSpeed = poolSpeeds.get(pool - 1) + increasedSpeed;
+        shieldRadius = poolSizes.get(pool - 1);
     }
 
-    public void createPositions() {
+    private void createPositions() {
         if (hackFirstTry) {
             hackPosX.clear();
             hackPosY.clear();
@@ -259,7 +249,7 @@ public class Round extends RoomParent {
         }
     }
 
-    public void createShields() {
+    private void createShields() {
         BodyDef myBodyDef = new BodyDef();
         myBodyDef.type = BodyDef.BodyType.DynamicBody;
         for (int i = 0; i < hackShieldAmount; i++) {
@@ -271,7 +261,7 @@ public class Round extends RoomParent {
         }
     }
 
-    public void createJoints() {
+    private void createJoints() {
         DistanceJointDef distanceJointDef = new DistanceJointDef();
         distanceJointDef.bodyB = enemyBody;
         distanceJointDef.length = 3f;
@@ -282,33 +272,6 @@ public class Round extends RoomParent {
             distanceJointDefs.add(distanceJointDef);
 
             DistanceJoint distanceJoint = (DistanceJoint) world.createJoint(distanceJointDefs.get(i));
-        }
-    }
-
-    // When bullet has hit shield,
-    // this method stops the shields and saves their position to array.
-    public void checkMovement() {
-        int i = 0;
-        if (!doMove) {
-            for (Body body : shieldBodies) {
-                if (body.getUserData() != null) {
-                    Vector2 vel = body.getLinearVelocity();
-                    vel.x = 0f;
-                    vel.y = 0f;
-                    body.setLinearVelocity(vel);
-                }
-            }
-            for (Body body : shieldBodies) {
-                if (body.getUserData() != null) {
-                    hackPosX.set(i, body.getPosition().x);
-                    hackPosY.set(i, body.getPosition().y);
-                    i++;
-                }
-            }
-            game.setHackShieldAmount(i);
-            game.setHackPosX(hackPosX);
-            game.setHackPosY(hackPosY);
-            game.setHackFirstTry(false);
         }
     }
 
@@ -408,6 +371,7 @@ public class Round extends RoomParent {
 
         checkNeighbor = true;
         doMove = false;
+        bulletHitShield = true;
     }
 
     // When bullet has hit a shield,
@@ -427,8 +391,43 @@ public class Round extends RoomParent {
     }
 
     private void collisionBulletEnemy(Body body) {
+        doMove = false;
         game.setHackFirstTry(true);
         bodiesToBeDestroyed.add(body);
+    }
+
+    // When bullet has hit shield/enemy, shields stop moving.
+    private void checkMovement() {
+        if (!doMove) {
+            for (Body body : shieldBodies) {
+                if (body.getUserData() != null) {
+                    Vector2 vel = body.getLinearVelocity();
+                    vel.x = 0f;
+                    vel.y = 0f;
+                    body.setLinearVelocity(vel);
+                }
+            }
+        }
+    }
+
+    // When bullet has hit a shield,
+    // saves positions of shields and puts them in array.
+    private void checkBulletHitShield() {
+        int i = 0;
+        if (bulletHitShield) {
+            for (Body body : shieldBodies) {
+                if (body.getUserData() != null) {
+                    hackPosX.set(i, body.getPosition().x);
+                    hackPosY.set(i, body.getPosition().y);
+                    i++;
+                }
+            }
+            game.setHackShieldAmount(i);
+            game.setHackPosX(hackPosX);
+            game.setHackPosY(hackPosY);
+            game.setHackFirstTry(false);
+            bulletHitShield = false;
+        }
     }
 
     private FixtureDef getShieldFixtureDefinition() {
@@ -496,7 +495,7 @@ public class Round extends RoomParent {
         bodiesToBeDestroyed.clear();
     }
 
-    public void drawBodies() {
+    private void drawBodies() {
         for (Body body : shieldBodies) {
             if (body.getUserData() != null) {
                 batch.draw(shieldTexture,
