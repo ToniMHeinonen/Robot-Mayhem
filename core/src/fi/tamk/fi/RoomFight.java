@@ -133,6 +133,7 @@ public class RoomFight extends RoomParent {
         // These need to be optimized better, removed from here and used in MainGame
         backgroundMusic.play();
         bossMusic.stop();
+        // hacking.dispose() Lisää myöhemmin
     }
 
     private void createHealthBars() {
