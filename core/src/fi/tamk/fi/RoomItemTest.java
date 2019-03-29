@@ -16,8 +16,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-
-public class RoomFight extends RoomParent {
+class RoomItemTest extends RoomParent {
 
     // Enums give simple constants, which decreases the chance for coding mistakes
     enum State {
@@ -43,10 +42,10 @@ public class RoomFight extends RoomParent {
     private Player player;
     private Enemy enemy;
     private String[] btnTexts = new String[] {"Attack", "Defend", "Item",
-                                game.getSkill1(), game.getSkill2()};
+            game.getSkill1(), game.getSkill2()};
     private int btnCounter; // Used for button classes to get the correct value
     private int deathTimer = 240;
-    private State state = State.START_ROOM;
+    private RoomFight.State state = RoomFight.State.START_ROOM;
     private boolean escapePopup, spawnHacking;
     private boolean firstHack = true;
     private ShaderProgram shFlashWhite;
@@ -55,7 +54,7 @@ public class RoomFight extends RoomParent {
     //Dialog
     private float dialogX = 500f, dialogY = 500f;
 
-    RoomFight(MainGame game) {
+    RoomItemTest(MainGame game) {
         super(game);
         imgBg = game.getImgBgBoss();
         escapeBg = game.getEscapeBg();
@@ -64,10 +63,10 @@ public class RoomFight extends RoomParent {
         createButtons();
         createShader(); // Used for flashing white
 
-        player = new Player();
-        enemy = new Enemy();
         backgroundMusic.pause();
         bossMusic.play();
+        player = new Player();
+        enemy = new Enemy();
     }
 
     @Override
@@ -97,7 +96,7 @@ public class RoomFight extends RoomParent {
         switch (state) {
             // If dialog box has been closed, start the turn
             case DIALOG_START: {
-                if (!dialog.isDialogOn()) state = State.START_TURN;
+                if (!dialog.isDialogOn()) state = RoomFight.State.START_TURN;
                 break;
             }
             // If dead, wait some time and then exit back to corridor
@@ -173,7 +172,7 @@ public class RoomFight extends RoomParent {
                 int i = btnCounter;
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if (state == State.AWAITING) {
+                    if (state == RoomFight.State.AWAITING) {
                         player.doAction(btnTexts[i]);
                     }
                 }
@@ -194,7 +193,7 @@ public class RoomFight extends RoomParent {
     }
 
     private void hackingPhase() {
-        if (state == State.HACK) {
+        if (state == RoomFight.State.HACK) {
             if (!spawnHacking) {
                 spawnHacking = true;
                 hacking = new Hacking(game, firstHack);
@@ -234,7 +233,7 @@ public class RoomFight extends RoomParent {
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (state == State.AWAITING) {
+                if (state == RoomFight.State.AWAITING) {
                     if (!escapePopup) {
                         escapePopup = true;
                         stage.clear();
@@ -256,7 +255,7 @@ public class RoomFight extends RoomParent {
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                state = State.ESCAPE;
+                state = RoomFight.State.ESCAPE;
                 escapePopup = false;
                 stage.clear();
             }
@@ -283,7 +282,7 @@ public class RoomFight extends RoomParent {
     /*
     CREATE PARENT FIGHTER
      */
-    class Fighters {
+    private class Fighters {
 
         protected float X, Y;
         protected double maxHp, hp, targetHp, hpDecreaseSpd, defaultDmg, dmgAmount;
@@ -306,7 +305,7 @@ public class RoomFight extends RoomParent {
 
         protected int idleSpd, hackSpd, itemSpd, deathSpd, escapeSpd, curHitAnimationSpd;
         protected Animation<TextureRegion> curAnimation, curHitAnimation, idle, hack, healthPlus,
-                                            healthMinus;
+                healthMinus;
         protected ArrayList<Animation<TextureRegion>> animList, hitAnimList;
         protected Integer[] speeds, hitSpeeds;
 
@@ -476,7 +475,7 @@ public class RoomFight extends RoomParent {
     /*
     CREATE PLAYER
      */
-    class Player extends Fighters {
+    private class Player extends Fighters {
 
         private Animation<TextureRegion> escape, item, death;
         private HashMap<String,Object> mapAttack, mapDefend;
@@ -530,19 +529,19 @@ public class RoomFight extends RoomParent {
             if (!pauseStates) {
                 checkHp();
 
-                if (state == State.START_TURN) {
+                if (state == RoomFight.State.START_TURN) {
                     decreaseCooldowns();
                     checkDoT();
-                    state = State.AWAITING;
-                } else if (state == State.ACTION) {
+                    state = RoomFight.State.AWAITING;
+                } else if (state == RoomFight.State.ACTION) {
                     controlActionStates();
-                } else if (state == State.AWAITING) {
+                } else if (state == RoomFight.State.AWAITING) {
                     if (anim.getAnimation() != idle) startIdle();
-                } else if (state == State.HACK) {
+                } else if (state == RoomFight.State.HACK) {
                     if (anim.getAnimation() != hack) startHack();
-                } else if (state == State.DEAD) {
+                } else if (state == RoomFight.State.DEAD) {
                     if (anim.getAnimation() != death) anim.startAnimation(death, deathSpd);
-                } else if (state == State.ESCAPE) {
+                } else if (state == RoomFight.State.ESCAPE) {
                     runAway();
                 }
             }
@@ -610,7 +609,7 @@ public class RoomFight extends RoomParent {
             if (actionSelected) {
                 curAction = action;
                 anim.startAnimation(curAnimation, curAnimSpd);
-                state = State.ACTION;
+                state = RoomFight.State.ACTION;
                 dialog.showSkillName(action);
             }
         }
@@ -624,7 +623,7 @@ public class RoomFight extends RoomParent {
                         enemy.startHitAnimation(curHitAnimation, curHitAnimationSpd);
                         actionState = HIT_ANIM;
                     } else {
-                        state = State.ENEMY_START_TURN;
+                        state = RoomFight.State.ENEMY_START_TURN;
                     }
                     startIdle();
                 }
@@ -632,11 +631,11 @@ public class RoomFight extends RoomParent {
                 // Hit animation is drawn on top of enemy
                 if (!enemy.isHitAnimationRunning()) {
                     enemy.takeHit(dmgAmount);
-                    state = State.ENEMY_START_TURN;
+                    state = RoomFight.State.ENEMY_START_TURN;
                 }
             } else if (actionState == LONG_ANIM) {
                 // Animation lasts until next round
-                state = State.ENEMY_START_TURN;
+                state = RoomFight.State.ENEMY_START_TURN;
             }
         }
 
@@ -661,7 +660,7 @@ public class RoomFight extends RoomParent {
          */
         private void checkHp() {
             if (hp <= 0) {
-                state = State.DEAD;
+                state = RoomFight.State.DEAD;
             }
         }
 
@@ -709,7 +708,7 @@ public class RoomFight extends RoomParent {
     /*
     CREATE ENEMY
      */
-    class Enemy extends Fighters {
+    private class Enemy extends Fighters {
 
         private Animation<TextureRegion> skill1, skill2, skill3, skill1_hit, skill2_hit, skill3_hit;
         private String curSkillName, dialogStart, dialogEnd;
@@ -749,10 +748,10 @@ public class RoomFight extends RoomParent {
                 attack();
 
                 // Pretty much same stuff happens as in player's action states
-                if (state == State.ENEMY_START_TURN) {
+                if (state == RoomFight.State.ENEMY_START_TURN) {
                     checkDoT();
-                    state = State.ENEMY_WAITING;
-                } else if (state == State.ENEMY_ACTION) {
+                    state = RoomFight.State.ENEMY_WAITING;
+                } else if (state == RoomFight.State.ENEMY_ACTION) {
                     if (actionState == TEMP_ANIM) {
                         if (curAnimation.isAnimationFinished(anim.getStateTime())) {
                             player.startHitAnimation(curHitAnimation, curHitAnimationSpd);
@@ -762,7 +761,7 @@ public class RoomFight extends RoomParent {
                     } else if (actionState == HIT_ANIM) {
                         if (!player.isHitAnimationRunning()) {
                             player.takeHit(dmgAmount);
-                            state = State.START_TURN;
+                            state = RoomFight.State.START_TURN;
                         }
                     }
                 }
@@ -822,13 +821,13 @@ public class RoomFight extends RoomParent {
         Attack if state is ENEMY_WAITING.
          */
         private void attack() {
-            if (state == State.ENEMY_WAITING) {
+            if (state == RoomFight.State.ENEMY_WAITING) {
                 // Wait for timer and skill name box to go down, then select action
                 if (actionTimer > 0 || dialog.isSkillNameOn()) {
                     actionTimer--;
                 } else {
                     actionTimer = actionDelay;
-                    state = State.ENEMY_ACTION;
+                    state = RoomFight.State.ENEMY_ACTION;
                     actionState = TEMP_ANIM;
                     int random = MathUtils.random(0, animList.size() - 1);
                     dialog.showSkillName(skillNames[random]);
@@ -859,7 +858,7 @@ public class RoomFight extends RoomParent {
          */
         private void checkHp() {
             if (hp <= 0) {
-                state = State.HACK;
+                state = RoomFight.State.HACK;
                 if (anim.getAnimation() != hack) anim.startAnimation(hack, hackSpd);
             }
         }
@@ -875,7 +874,7 @@ public class RoomFight extends RoomParent {
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
-                    state = State.DIALOG_START;
+                    state = RoomFight.State.DIALOG_START;
                     dialog.createDialog(dialogStart, dialogX, dialogY);
                 }
             }, 1);

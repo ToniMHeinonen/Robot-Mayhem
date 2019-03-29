@@ -167,6 +167,13 @@ public class MainGame extends Game {
 		setScreen(room);
 	}
 
+	public void switchToRoomItemTest() {
+
+		transition();
+		RoomItemTest room = new RoomItemTest(this);
+		setScreen(room);
+	}
+
     private void createHackFiles() {
         hackPosX = new FloatArray();
         hackPosY = new FloatArray();

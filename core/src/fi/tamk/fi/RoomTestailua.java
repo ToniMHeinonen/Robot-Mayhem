@@ -128,6 +128,8 @@ public class RoomTestailua extends RoomParent {
 
                 System.out.println(Item.itemDamage());
                 System.out.println(Item.itemHeal());
+
+                game.switchToRoomItemTest();
             }
         });
     }
