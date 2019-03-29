@@ -48,7 +48,7 @@ public class Item {
         return chosenSkill;
     }
 
-    private static HashMap<String, Object> itemDamage() {
+    protected static HashMap<String, Object> itemDamage() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, "Attack");
         map.put(damage, 5);
@@ -60,7 +60,7 @@ public class Item {
         return map;
     }
 
-    private static HashMap<String, Object> itemHeal() {
+    protected static HashMap<String, Object> itemHeal() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, "heal");
         map.put(damage, -5);
@@ -74,12 +74,12 @@ public class Item {
 
     private static void createDamageAndHeal() {
 
-        t_Damage = new Texture("texture/player/playerDamage.png");
+        t_Damage = new Texture("texture/player/playerAttack.png");
         a_Damage = anim.createAnimation(t_Damage, 3, 1);
-        t_Damage_hit = new Texture("texture/player/playerDamageHit.png");
+        t_Damage_hit = new Texture("texture/player/playerAttackHit.png");
         a_Damage_hit = anim.createAnimation(t_Damage_hit, 3, 1);
 
-        t_Heal = new Texture("texture/player/playerHeal.png");
+        t_Heal = new Texture("texture/player/playerDefend.png");
         a_Heal = anim.createAnimation(t_Heal, 3, 1);
     }
 

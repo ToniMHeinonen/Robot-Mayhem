@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Timer;
 
+import java.awt.SystemTray;
+
 public class RoomTestailua extends RoomParent {
     private Skin testSkin;
 
@@ -34,6 +36,9 @@ public class RoomTestailua extends RoomParent {
         createConstants();
         createButtons();
         // playMusic();
+
+        // Added for testing.
+        createButtonItemTesting();
         dialog.createDialog("player says fsfds fsdfdsfs", 200f, 200f);
     }
 
@@ -106,6 +111,25 @@ public class RoomTestailua extends RoomParent {
                 }
             });
         }
+    }
+
+    // Added for item testing.
+    public void createButtonItemTesting() {
+        final TextButton buttonItemTesting = new TextButton("Item Test", skin);
+        buttonItemTesting.setWidth(300f);
+        buttonItemTesting.setHeight(100f);
+        buttonItemTesting.setPosition(game.pixelWidth /2 - buttonItemTesting.getWidth() /2,
+                (game.pixelHeight/3) + buttonItemTesting.getHeight() /2);
+        stage.addActor(buttonItemTesting);
+
+        buttonItemTesting.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+
+                System.out.println(Item.itemDamage());
+                System.out.println(Item.itemHeal());
+            }
+        });
     }
 
     // Show tooltip for 2 seconds(tooltipDelay) and then remove it from the stage.

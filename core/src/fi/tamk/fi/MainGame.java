@@ -93,6 +93,9 @@ public class MainGame extends Game {
 		Skills.createSkills();
 		Bosses.createBosses();
 
+		// Create items
+		Item.createItems();
+
 		createSkinAndStage();
 		createButtonFiles();
 		createProgressBarFiles();
