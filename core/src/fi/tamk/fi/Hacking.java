@@ -117,8 +117,8 @@ public class Hacking {
 
     public void update() {
         batch.setProjectionMatrix(camera.combined);
-        debugRenderer.render(world, camera.combined);
         doPhysicsStep(Gdx.graphics.getDeltaTime());
+        debugRenderer.render(world, camera.combined);
         deleteBodies();
         batch.begin();
         drawBodies();
@@ -394,6 +394,11 @@ public class Hacking {
         doMove = false;
         game.setHackFirstTry(true);
         bodiesToBeDestroyed.add(body);
+        for (Body b : shieldBodies) {
+            if (b.getUserData() != null) {
+                bodiesToBeDestroyed.add(b);
+            }
+        }
     }
 
     // When bullet has hit shield/enemy, shields stop moving.
