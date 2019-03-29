@@ -463,6 +463,10 @@ public class RoomFight extends RoomParent {
             cooldowns.put("Skill0", 0);
             cooldowns.put("Skill1", 0);
 
+            // Discovered: Learned how to use methods from other classes.
+            /*float Testy = PowerUps.getHeight();
+            System.out.println(Testy);*/
+
             // Create animations (probably should be created in MainGame though)
             idle = anim.createAnimation(game.getPlayerIdle(), 3, 1);
             escape = anim.createAnimation(game.getPlayerEscape(), 3, 1);
@@ -774,6 +778,19 @@ public class RoomFight extends RoomParent {
                     curHitAnimationSpd = hitSpeeds[random];
                     dmgAmount = defaultDmg * damages[random];
                     anim.startAnimation(curAnimation, speeds[random]);
+
+
+                    // Discovered: Added this for testing purposes.
+                    /*int i = 2;
+
+                    dialog.showSkillName(skillNames[i]);
+                    curAnimation = animList.get(i);
+                    curHitAnimation = hitAnimList.get(i);
+                    curHitAnimationSpd = hitSpeeds[i];
+                    dmgAmount = defaultDmg * damages[i];
+                    anim.startAnimation(curAnimation, speeds[i]);
+
+                    System.out.println(skillNames[i]);*/
                 }
             }
         }
