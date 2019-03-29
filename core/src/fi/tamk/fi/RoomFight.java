@@ -26,6 +26,7 @@ public class RoomFight extends RoomParent {
         START_TURN,
         AWAITING,
         ACTION,
+        ENEMY_START_TURN,
         ENEMY_WAITING,
         ENEMY_ACTION,
         HACK,
@@ -286,6 +287,8 @@ public class RoomFight extends RoomParent {
 
         protected float X, Y;
         protected double maxHp, hp, targetHp, hpDecreaseSpd, defaultDmg, dmgAmount;
+        protected ArrayList<Double> dotDamage = new ArrayList<Double>();
+        protected ArrayList<Integer> dotTurns = new ArrayList<Integer>();
         protected Animating anim = new Animating();
         protected Animating hitAnim = new Animating();
 
@@ -360,9 +363,28 @@ public class RoomFight extends RoomParent {
             else pauseStates = true;
         }
 
+        public void addDoT(int turns, double damage) {
+            dotTurns.add(turns);
+            dotDamage.add(damage);
+        }
+
         public void checkDoT() {
-            calcTargetHpSpd(-10);
-            startHitAnimation(healthPlus, 30);
+            double takeDoT = 0;
+            for (int i = 0; i < dotTurns.size(); i++) {
+                takeDoT += dotDamage.get(i);
+                if (dotTurns.get(i) == 0) {
+                    dotTurns.remove(i);
+                    dotDamage.remove(i);
+                    i--;
+                }
+            }
+            if (takeDoT > 0) {
+                calcTargetHpSpd(takeDoT);
+                startHitAnimation(healthMinus, 15);
+            } else if (takeDoT < 0) {
+                calcTargetHpSpd(takeDoT);
+                startHitAnimation(healthPlus, 15);
+            }
         }
 
         // When taken hit, flash white for a certain amount of time
@@ -399,9 +421,19 @@ public class RoomFight extends RoomParent {
             if (hp > targetHp) {
                 hpIncorrect = true;
                 hp += hpDecreaseSpd;
-            } else {
-                hpIncorrect = false;
-                hp = targetHp;
+                if (hp < targetHp) {
+                    hp = targetHp;
+                    hpIncorrect = false;
+                    hp = targetHp;
+                }
+            } else if (hp < targetHp){
+                hpIncorrect = true;
+                hp += hpDecreaseSpd;
+                if (hp > targetHp) {
+                    hp = targetHp;
+                    hpIncorrect = false;
+                    hp = targetHp;
+                }
             }
         }
 
@@ -449,7 +481,8 @@ public class RoomFight extends RoomParent {
         private Animation<TextureRegion> escape, item, death;
         private HashMap<String,Object> mapAttack, mapDefend;
 
-        private String s_spd, s_dmg, s_cool, s_anim, s_hitAnim, s_name, curAction;
+        private String s_spd, s_dmg, s_cool, s_anim, s_hitAnim, s_name, s_DoTDmg, s_DoTTurns,
+                curAction;
         private HashMap<String,Integer> cooldowns;
         private ArrayList<HashMap<String,Object>> mapSkills;
         private String[] skills;
@@ -499,7 +532,7 @@ public class RoomFight extends RoomParent {
 
                 if (state == State.START_TURN) {
                     decreaseCooldowns();
-                    //checkDoT();
+                    checkDoT();
                     state = State.AWAITING;
                 } else if (state == State.ACTION) {
                     controlActionStates();
@@ -563,6 +596,12 @@ public class RoomFight extends RoomParent {
                         curHitAnimation = (Animation<TextureRegion>) skillMap.get(s_hitAnim);
                         curHitAnimationSpd = (Integer) skillMap.get(s_spd + s_hitAnim);
                         dmgAmount = defaultDmg * (Double) skillMap.get(s_dmg);
+                        // Damage over time
+                        double dot = (Double) skillMap.get(s_DoTDmg);
+                        int dotTurns = (Integer) skillMap.get(s_DoTTurns);
+                        if (dot == 0); // Do nothing
+                        else if (dot > 0) enemy.addDoT(dotTurns, dot); // Damage
+                        else if (dot < 0) addDoT(dotTurns, dot); // Healing
                         actionState = TEMP_ANIM;
                     }
                 }
@@ -585,7 +624,7 @@ public class RoomFight extends RoomParent {
                         enemy.startHitAnimation(curHitAnimation, curHitAnimationSpd);
                         actionState = HIT_ANIM;
                     } else {
-                        state = State.ENEMY_WAITING;
+                        state = State.ENEMY_START_TURN;
                     }
                     startIdle();
                 }
@@ -593,11 +632,11 @@ public class RoomFight extends RoomParent {
                 // Hit animation is drawn on top of enemy
                 if (!enemy.isHitAnimationRunning()) {
                     enemy.takeHit(dmgAmount);
-                    state = State.ENEMY_WAITING;
+                    state = State.ENEMY_START_TURN;
                 }
             } else if (actionState == LONG_ANIM) {
                 // Animation lasts until next round
-                state = State.ENEMY_WAITING;
+                state = State.ENEMY_START_TURN;
             }
         }
 
@@ -613,6 +652,8 @@ public class RoomFight extends RoomParent {
             s_anim = Skills.getAnimation();
             s_hitAnim = Skills.getHitAnimation();
             s_cool = Skills.getCooldown();
+            s_DoTDmg = Skills.getDamageOverTime();
+            s_DoTTurns = Skills.getDamageOverTimeTurns();
         }
 
         /*
@@ -708,7 +749,10 @@ public class RoomFight extends RoomParent {
                 attack();
 
                 // Pretty much same stuff happens as in player's action states
-                if (state == State.ENEMY_ACTION) {
+                if (state == State.ENEMY_START_TURN) {
+                    checkDoT();
+                    state = State.ENEMY_WAITING;
+                } else if (state == State.ENEMY_ACTION) {
                     if (actionState == TEMP_ANIM) {
                         if (curAnimation.isAnimationFinished(anim.getStateTime())) {
                             player.startHitAnimation(curHitAnimation, curHitAnimationSpd);
