@@ -25,8 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.utils.Timer;
 
 public class Hacking {
 
@@ -85,7 +84,6 @@ public class Hacking {
     private int pool;
     private int poolMult;
 
-    private boolean doMove = true;
     private boolean bulletHitShield = false;
     private boolean checkNeighbor = false;
 
@@ -102,7 +100,7 @@ public class Hacking {
     private Skin skin;
     private Stage stage;
 
-    int destroyedNeighbors = 0;
+    private int destroyedNeighbors = 0;
 
     Hacking(MainGame game, boolean firstTry) {
         this.game = game;
@@ -131,9 +129,8 @@ public class Hacking {
         drawBodies();
         batch.end();
         movement(shieldSpeed, center);
-        checkNeighbor();
-        checkMovement();
         checkBulletHitShield();
+        checkNeighborMethod();
     }
 
     private void createConstants() {
@@ -159,6 +156,14 @@ public class Hacking {
         poolMult = 0;
     }
 
+    /*
+    poolSpeeds & poolSizes = Different shieldspeed and shieldsize in different pool
+    increasedSpeed = Added speed to shield depending on the poolmultiplier
+    shieldLength = The length between shield and enemy
+    poolHitArea = The collision area, when bullet hits shield. For example, in pool3
+    it checks if there are shields 1.1f to the right and 1.7f up&down of the collision area.
+    Poorly explained, but maybe you get the idea. :D
+     */
     private void setShieldAttributes() {
         FloatArray poolSpeeds = new FloatArray();
         poolSpeeds.add(8, 6, 4);
@@ -179,6 +184,11 @@ public class Hacking {
         poolHitAreaY.add(5f, 3f, 1.7f);
     }
 
+    /*
+    Creates positions to the shields. If player is trying to hack for the first time, it
+    deletes the old positions and put new positions to them depending on pool.
+    If player has failed to hack before, it loads the old positions and amount of shields.
+     */
     private void createPositions() {
         if (hackFirstTry) {
             hackPosX.clear();
@@ -265,6 +275,9 @@ public class Hacking {
         }
     }
 
+    /*
+    Creates the shields.
+     */
     private void createShields() {
         BodyDef myBodyDef = new BodyDef();
         myBodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -277,6 +290,9 @@ public class Hacking {
         }
     }
 
+    /*
+    Creates the joints between shields and enemy.
+     */
     private void createJoints() {
         DistanceJointDef distanceJointDef = new DistanceJointDef();
         distanceJointDef.bodyB = enemyBody;
@@ -324,6 +340,9 @@ public class Hacking {
         });
     }
 
+    /*
+    Allows player to shoot only once.
+     */
     private void fireBullet() {
         if (bulletBodies.isEmpty()) {
             bulletBody = world.createBody(getDefinitionOfBulletBody());
@@ -335,6 +354,11 @@ public class Hacking {
         }
     }
 
+    /*
+    Checks the collisions:
+    bullet & shield
+    bullet & enemy
+     */
     private void createCollisionChecking() {
         world.setContactListener(new ContactListener() {
             @Override
@@ -370,8 +394,18 @@ public class Hacking {
         });
     }
 
-    //Delete bullets and shield.
-    //The area of the collision can be changed depending on the pool?
+    /*
+    hitPosX = Horizontal position of the collision + a little amount to the right.
+    hitPosStartY & hitPosEndY = Vertical position of the collision + a little amount to up and down.
+    So hitPosX + hitPosStartY + hitPosEndY = area, where could be more shields to be destroyed.
+
+    In "bodiesToBeDestroyed.add(body1 and body2);" it adds the shield and bullet which have collided
+    to the bodiesToBeDestroyed-array.
+
+    Then it sets the the value of checkNeighbor to true, so it can check which shields
+    are in the collision area in checkNeighborMethod. I tried to combine these two methods, but I
+    didn't manage to get it work.
+     */
     private void collisionBulletShield(Body body1, Body body2) {
         // body1 = shield
         // body2 = bullet
@@ -387,17 +421,24 @@ public class Hacking {
         checkNeighbor = true;
     }
 
-    private void checkNeighbor() {
+    /*
+    When checkNeighbor has been set to true, it checks which bullets are in the collision
+    area and puts them to bodiesToBeDestroyed-array.
+
+    DestroyedNeighbors is used to limit the amount of shields to be destroyed, if there happens
+    to be too many shields in the collision area.
+
+    After this, it sets bulletHitShield to true.
+     */
+    private void checkNeighborMethod() {
         if (checkNeighbor) {
             for (Body body : shieldBodies) {
                 if (body.getUserData() != null) {
                     if (body.getPosition().x < hitPosX &&
-                            body.getPosition().y > hitPosStartY &&
-                            body.getPosition().y < hitPosEndY) {
-                                    if (destroyedNeighbors < 2) {
-                                        destroyedNeighbors++;
-                                        bodiesToBeDestroyed.add(body);
-                                    }
+                        body.getPosition().y > hitPosStartY &&
+                        body.getPosition().y < hitPosEndY && destroyedNeighbors < 2) {
+                            destroyedNeighbors++;
+                            bodiesToBeDestroyed.add(body);
                     }
                 }
             }
@@ -407,33 +448,13 @@ public class Hacking {
         destroyedNeighbors = 0;
     }
 
-    private void collisionBulletEnemy(Body body) {
-        doMove = false;
-        game.setHackFirstTry(true);
-        bodiesToBeDestroyed.add(body);
-        for (Body b : shieldBodies) {
-            if (b.getUserData() != null) {
-                bodiesToBeDestroyed.add(b);
-            }
-        }
-    }
+    /*
+    After the program has added shields and bullet to the bodiesToBeDestroyed-array,
+    it goes through all the remaining shields and saves their position. It also saves the amount
+    of shields left and sets hackFirstTry to false.
 
-    // When bullet has hit shield/enemy, shields stop moving.
-    private void checkMovement() {
-        if (!doMove) {
-            for (Body body : shieldBodies) {
-                if (body.getUserData() != null) {
-                    Vector2 vel = body.getLinearVelocity();
-                    vel.x = 0f;
-                    vel.y = 0f;
-                    body.setLinearVelocity(vel);
-                }
-            }
-        }
-    }
-
-    // When bullet has hit a shield,
-    // saves positions of shields and puts them in array.
+    Then it waits for one second and adds the remaining shields to the bodiesToBeDestroyed-array.
+     */
     private void checkBulletHitShield() {
         int i = 0;
         if (bulletHitShield) {
@@ -448,6 +469,32 @@ public class Hacking {
             game.setHackPosX(hackPosX);
             game.setHackPosY(hackPosY);
             game.setHackFirstTry(false);
+
+            Timer.schedule(new Timer.Task(){
+                @Override
+                public void run() {
+                    for (Body body : shieldBodies) {
+                        if (body.getUserData() != null) {
+                            bodiesToBeDestroyed.add(body);
+                        }
+                    }
+                }
+            }, 1f);
+            bulletHitShield = false;
+        }
+    }
+
+    /*
+    When bullet has hit the enemy, it sets the hackFirstTry to true and adds enemy and shields to
+    bodiesToBeDestroyed-array.
+     */
+    private void collisionBulletEnemy(Body body) {
+        game.setHackFirstTry(true);
+        bodiesToBeDestroyed.add(body);
+        for (Body b : shieldBodies) {
+            if (b.getUserData() != null) {
+                bodiesToBeDestroyed.add(b);
+            }
         }
     }
 
@@ -499,6 +546,9 @@ public class Hacking {
         }
     }
 
+    /*
+    Moves shields. Not exactly sure, how it does it. :D
+     */
     private void movement(float shieldSpeed, Vector2 center) {
         for (Body body : shieldBodies) {
             if (body.getUserData() != null) {
@@ -509,6 +559,9 @@ public class Hacking {
         }
     }
 
+    /*
+    Deletes all the bodies that have been added to bodiesToBeDestoyed-array.
+     */
     private void deleteBodies() {
         for (Body body : bodiesToBeDestroyed) {
             world.destroyBody(body);
