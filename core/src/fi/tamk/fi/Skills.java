@@ -13,6 +13,8 @@ public class Skills {
      */
     private static String name = "name";
     private static String damage = "damage";
+    private static String damageOverTime = "damageOverTime";
+    private static String damageOverTimeTurns = "damageOverTimeTurns";
     private static String cooldown = "cooldown";
     private static String animation = "animation";
     private static String hitAnimation = "hitAnimation";
@@ -56,7 +58,9 @@ public class Skills {
     private static HashMap<String, Object> skillAttack() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, "Attack");
-        map.put(damage, 0); // Not needed
+        map.put(damage, 0.0); // Not needed
+        map.put(damageOverTime, 0.0); // Not needed
+        map.put(damageOverTimeTurns, 0); // Not needed
         map.put(cooldown, 0);
         map.put(animation, a_attack);
         map.put(hitAnimation, a_attack_hit);
@@ -68,7 +72,9 @@ public class Skills {
     private static HashMap<String, Object> skillDefend() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, "Defend");
-        map.put(damage, 0); // Not needed
+        map.put(damage, 0.0); // Not needed
+        map.put(damageOverTime, 0.0); // Not needed
+        map.put(damageOverTimeTurns, 0); // Not needed
         map.put(cooldown, 3);
         map.put(animation, a_defend);
         map.put(hitAnimation, null);
@@ -81,6 +87,8 @@ public class Skills {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, "Shock");
         map.put(damage, 2.0);
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
         map.put(cooldown, 3);
         map.put(animation, a_attack);
         map.put(hitAnimation, a_attack_hit);
@@ -92,12 +100,14 @@ public class Skills {
     private static HashMap<String, Object> skillFire() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, "Fire");
-        map.put(damage, 1.5);
+        map.put(damage, 0.0);
+        map.put(damageOverTime, 20.0);
+        map.put(damageOverTimeTurns, 3);
         map.put(cooldown, 2);
         map.put(animation, a_defend);
-        map.put(hitAnimation, a_attack_hit);
+        map.put(hitAnimation, null);
         map.put(speed + animation, 15);
-        map.put(speed + hitAnimation, 30);
+        map.put(speed + hitAnimation, 0);
         return map;
     }
 
@@ -122,6 +132,14 @@ public class Skills {
 
     public static String getDamage() {
         return damage;
+    }
+
+    public static String getDamageOverTime() {
+        return damageOverTime;
+    }
+
+    public static String getDamageOverTimeTurns() {
+        return damageOverTimeTurns;
     }
 
     public static String getCooldown() {

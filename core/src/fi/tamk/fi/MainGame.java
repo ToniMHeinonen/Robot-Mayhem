@@ -98,7 +98,9 @@ public class MainGame extends Game {
 		createProgressBarFiles();
 		createDialogConstants();
 		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("music/fansu_1.mp3"));
+		backgroundMusic.setLooping(true);
 		bossMusic = Gdx.audio.newMusic(Gdx.files.internal("music/bossmusic.mp3"));
+		bossMusic.setLooping(true);
         loadSettings();
         loadStats();
 
