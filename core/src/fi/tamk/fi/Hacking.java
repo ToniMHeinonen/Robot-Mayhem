@@ -48,6 +48,7 @@ public class Hacking {
 
     private float shieldRadius;
     private float shieldSpeed;
+    private float shieldLength;
     private float bulletRadius = 0.3f;
     private int bulletSpeed = 5;
 
@@ -88,16 +89,20 @@ public class Hacking {
     private boolean bulletHitShield = false;
     private boolean checkNeighbor = false;
 
-    private float hitPosStartX;
-    private float hitPosEndX;
+    private float hitPosX;
     private float hitPosStartY;
     private float hitPosEndY;
+
+    private FloatArray poolHitAreaX;
+    private FloatArray poolHitAreaY;
 
     private SpriteBatch batch;
     private OrthographicCamera camera;
     MainGame game;
     private Skin skin;
     private Stage stage;
+
+    int destroyedNeighbors = 0;
 
     Hacking(MainGame game) {
         this.game = game;
@@ -106,7 +111,7 @@ public class Hacking {
         skin = game.getSkin();
         stage = game.getStage();
         createConstants();
-        setSizeAndSpeed();
+        setShieldAttributes();
         createPositions();
         createShields();
         createJoints();
@@ -117,8 +122,8 @@ public class Hacking {
 
     public void update() {
         batch.setProjectionMatrix(camera.combined);
-        debugRenderer.render(world, camera.combined);
         doPhysicsStep(Gdx.graphics.getDeltaTime());
+        debugRenderer.render(world, camera.combined);
         deleteBodies();
         batch.begin();
         drawBodies();
@@ -149,21 +154,28 @@ public class Hacking {
         //this.poolMult = game.getPoolMult();
 
         // Change these to test the effects of different pools/poolmultipliers.
-        pool = 2;
+        pool = 3;
         poolMult = 0;
     }
 
-    private void setSizeAndSpeed() {
+    private void setShieldAttributes() {
         FloatArray poolSpeeds = new FloatArray();
         poolSpeeds.add(8, 6, 4);
 
         FloatArray poolSizes = new FloatArray();
-        poolSizes.add(1, 0.5f, 0.3f);
+        poolSizes.add(1.5f, 0.5f, 0.3f);
 
         float increasedSpeed = poolMult * 0.2f;
 
         shieldSpeed = poolSpeeds.get(pool - 1) + increasedSpeed;
         shieldRadius = poolSizes.get(pool - 1);
+        shieldLength = 3f;
+
+        // These may have to be adjusted a bit, if we are going to change shieldLength.
+        poolHitAreaX = new FloatArray();
+        poolHitAreaY = new FloatArray();
+        poolHitAreaX.add(6f, 2f, 1.1f);
+        poolHitAreaY.add(5f, 3f, 1.7f);
     }
 
     private void createPositions() {
@@ -267,7 +279,7 @@ public class Hacking {
     private void createJoints() {
         DistanceJointDef distanceJointDef = new DistanceJointDef();
         distanceJointDef.bodyB = enemyBody;
-        distanceJointDef.length = 3f;
+        distanceJointDef.length = shieldLength;
         distanceJointDef.frequencyHz = 3;
         distanceJointDef.dampingRatio = 0.1f;
         for (int i = 0; i < hackShieldAmount; i++) {
@@ -361,12 +373,10 @@ public class Hacking {
     private void collisionBulletShield(Body body1, Body body2) {
         // body1 = shield
         // body2 = bullet
-        hitPosStartX = body1.getPosition().x - 1.5f;
-        hitPosEndX = body1.getPosition().x + 1.5f;
-        hitPosStartY = body1.getPosition().y - 3;
-        hitPosEndY = body1.getPosition().y + 3;
-        System.out.println("hitPosStartX: " + hitPosStartX);
-        System.out.println("hitPosEndX: " + hitPosEndX);
+        hitPosX = body2.getPosition().x + poolHitAreaX.get(pool - 1);
+        hitPosStartY = body2.getPosition().y - poolHitAreaY.get(pool - 1);
+        hitPosEndY = body2.getPosition().y + poolHitAreaY.get(pool - 1);
+        System.out.println("hitPosX: " + hitPosX);
         System.out.println("hitPosStartY: " + hitPosStartY);
         System.out.println("hitPosEndY: " + hitPosEndY);
         bodiesToBeDestroyed.add(body2);
@@ -379,21 +389,31 @@ public class Hacking {
         if (checkNeighbor) {
             for (Body body : shieldBodies) {
                 if (body.getUserData() != null) {
-                    if (body.getPosition().x > hitPosStartX && body.getPosition().x < hitPosEndX &&
-                            body.getPosition().y > hitPosStartY && body.getPosition().y < hitPosEndY) {
-                        bodiesToBeDestroyed.add(body);
+                    if (body.getPosition().x < hitPosX &&
+                            body.getPosition().y > hitPosStartY &&
+                            body.getPosition().y < hitPosEndY) {
+                                    if (destroyedNeighbors < 2) {
+                                        destroyedNeighbors++;
+                                        bodiesToBeDestroyed.add(body);
+                                    }
                     }
                 }
             }
             bulletHitShield = true;
             checkNeighbor = false;
         }
+        destroyedNeighbors = 0;
     }
 
     private void collisionBulletEnemy(Body body) {
         doMove = false;
         game.setHackFirstTry(true);
         bodiesToBeDestroyed.add(body);
+        for (Body b : shieldBodies) {
+            if (b.getUserData() != null) {
+                bodiesToBeDestroyed.add(b);
+            }
+        }
     }
 
     // When bullet has hit shield/enemy, shields stop moving.
