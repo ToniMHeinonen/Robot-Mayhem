@@ -70,7 +70,7 @@ public class RoomTestailua extends RoomParent {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 startHack = true;
-                hacking = new Hacking(game);
+                //hacking = new Hacking(game);
             }
         });
     }

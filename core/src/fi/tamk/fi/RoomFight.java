@@ -46,8 +46,10 @@ public class RoomFight extends RoomParent {
     private int btnCounter; // Used for button classes to get the correct value
     private int deathTimer = 240;
     private State state = State.START_ROOM;
-    private boolean escapePopup;
+    private boolean escapePopup, spawnHacking;
+    private boolean firstHack = true;
     private ShaderProgram shFlashWhite;
+    private Hacking hacking;
 
     //Dialog
     private float dialogX = 500f, dialogY = 500f;
@@ -84,6 +86,7 @@ public class RoomFight extends RoomParent {
             escaping();
             batch.end();
 
+            hackingPhase();
             stage.act(Gdx.graphics.getDeltaTime());
             stage.draw();
         }
@@ -186,6 +189,17 @@ public class RoomFight extends RoomParent {
             // Temporary font and position, just for testing
             fontSteps.draw(batch, "Do you want to escape?",
                     game.pixelWidth/2 - 400, game.pixelHeight/2 + 150);
+        }
+    }
+
+    private void hackingPhase() {
+        if (state == State.HACK) {
+            if (!spawnHacking) {
+                spawnHacking = true;
+                hacking = new Hacking(game, firstHack);
+                firstHack = false;
+            }
+            hacking.update();
         }
     }
 

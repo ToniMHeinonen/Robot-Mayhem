@@ -104,19 +104,21 @@ public class Hacking {
 
     int destroyedNeighbors = 0;
 
-    Hacking(MainGame game) {
+    Hacking(MainGame game, boolean firstTry) {
         this.game = game;
+        this.hackFirstTry = firstTry;
         batch = game.getBatch();
         camera = game.getCamera();
         skin = game.getSkin();
         stage = game.getStage();
+        stage.clear();
         createConstants();
         setShieldAttributes();
         createPositions();
         createShields();
         createJoints();
         createButtonShoot();
-        createButtonSettings();
+        //createButtonSettings();
         createCollisionChecking();
     }
 
@@ -146,7 +148,6 @@ public class Hacking {
         center = enemyBody.getPosition();
         this.hackPosX = game.getHackPosX();
         this.hackPosY = game.getHackPosY();
-        this.hackFirstTry = game.getHackFirstTry();
         this.pool1HackShieldAmount = game.getPool1HackShieldAmount();
         this.pool2HackShieldAmount = game.getPool2HackShieldAmount();
         this.pool3HackShieldAmount = game.getPool3HackShieldAmount();
@@ -295,13 +296,14 @@ public class Hacking {
         buttonShoot.setWidth(300f);
         buttonShoot.setHeight(100f);
         buttonShoot.setPosition(game.pixelWidth /2 - buttonShoot.getWidth() /2,
-                (game.pixelHeight/3) - buttonShoot.getHeight() *2);
+                (game.pixelHeight/2) - buttonShoot.getHeight()/2);
         stage.addActor(buttonShoot);
 
         buttonShoot.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
                 fireBullet();
+                buttonShoot.remove();
             }
         });
     }
