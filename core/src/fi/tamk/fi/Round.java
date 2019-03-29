@@ -1,7 +1,9 @@
 package fi.tamk.fi;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -17,6 +19,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJoint;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
@@ -24,7 +28,7 @@ import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-public class Round extends RoomParent {
+public class Round {
 
     enum BodyData {
         SHIELD, BULLET, ENEMY
@@ -89,8 +93,18 @@ public class Round extends RoomParent {
     private float hitPosStartY;
     private float hitPosEndY;
 
+    private SpriteBatch batch;
+    private OrthographicCamera camera;
+    MainGame game;
+    private Skin skin;
+    private Stage stage;
+
     Round(MainGame game) {
-        super(game);
+        this.game = game;
+        batch = game.getBatch();
+        camera = game.getCamera();
+        skin = game.getSkin();
+        stage = game.getStage();
         createConstants();
         setSizeAndSpeed();
         createPositions();
@@ -99,22 +113,6 @@ public class Round extends RoomParent {
         createButtonShoot();
         createButtonSettings();
         createCollisionChecking();
-    }
-
-    @Override
-    public void render (float delta) {
-        super.render(delta);
-        batch.setProjectionMatrix(camera.combined);
-        debugRenderer.render(world, camera.combined);
-        doPhysicsStep(Gdx.graphics.getDeltaTime());
-        deleteBodies();
-        batch.begin();
-        drawBodies();
-        batch.end();
-        movement(shieldSpeed, center);
-        checkNeighbor();
-        checkMovement();
-        checkBulletHitShield();
     }
 
     public void update() {
@@ -540,7 +538,6 @@ public class Round extends RoomParent {
         }
     }
 
-    @Override
     public void dispose () {
         world.dispose();
     }

@@ -156,19 +156,6 @@ public class MainGame extends Game {
 	    setScreen(room);
     }
 
-    public void switchToHacking() {
-		transition();
-		Hacking room = new Hacking(this);
-		setScreen(room);
-	}
-
-	// Temporary
-	public void switchToRound() {
-	    transition();
-	    Round room = new Round(this);
-	    setScreen(room);
-    }
-
 	public void switchToPowerUps() {
 		transition();
 		PowerUps room = new PowerUps(this);

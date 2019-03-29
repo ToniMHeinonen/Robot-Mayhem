@@ -21,10 +21,6 @@ public class RoomSettings extends RoomParent {
         createButtonPlus();
         createButtonMinus();
         createButtonTestailua();
-        createButtonRound();
-
-        // Added for testing purposes.
-        createButtonHacking();
 
         createButtonPowerUps();
 
@@ -138,25 +134,6 @@ public class RoomSettings extends RoomParent {
         });
     }
 
-    // Added for testing purposes.
-    public void createButtonHacking() {
-
-        final TextButton buttonHacking = new TextButton("Hacking", skin);
-        buttonHacking.setWidth(300f);
-        buttonHacking.setHeight(100f);
-        buttonHacking.setPosition(game.pixelWidth /3 - buttonHacking.getWidth(),
-                (game.pixelHeight/3) *2 - buttonHacking.getHeight() /2);
-
-        stage.addActor(buttonHacking);
-
-        buttonHacking.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                game.switchToHacking();
-            }
-        });
-    }
-
     public void createButtonPowerUps() {
 
         final TextButton buttonPowerUps = new TextButton("PowerUps", skin);
@@ -171,23 +148,6 @@ public class RoomSettings extends RoomParent {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 game.switchToPowerUps();
-            }
-        });
-    }
-
-    // Temporary
-    public void createButtonRound() {
-        final TextButton buttonGame = new TextButton("Round", skin);
-        buttonGame.setWidth(300f);
-        buttonGame.setHeight(100f);
-        buttonGame.setPosition(game.pixelWidth /3 - buttonGame.getWidth(),
-                game.pixelHeight/3 - buttonGame.getHeight() /2);
-        stage.addActor(buttonGame);
-
-        buttonGame.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                game.switchToRound();
             }
         });
     }
