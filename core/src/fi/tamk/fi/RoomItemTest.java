@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
 
+import java.awt.SystemTray;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -41,7 +42,7 @@ class RoomItemTest extends RoomParent {
     private Animating animHealthEnemy = new Animating();
     private Player player;
     private Enemy enemy;
-    private String[] btnTexts = new String[] {"Attack", "Defend", "Item",
+    private String[] btnTexts = new String[] {"Damage", "Defend", "Item",
             game.getSkill1(), game.getSkill2()};
     private int btnCounter; // Used for button classes to get the correct value
     private int deathTimer = 240;
@@ -155,6 +156,9 @@ class RoomItemTest extends RoomParent {
         createMenuButton();
         createEscapeButton();
         createActionButtons();
+
+        // Added for testing.
+        System.out.println(Item.itemDamage());
     }
 
     // This array has to be in same order than in Player's action array
@@ -503,7 +507,7 @@ class RoomItemTest extends RoomParent {
             initSkillVariables();
 
             // Create maps for skills and cooldowns
-            mapAttack = Skills.getSkill("Attack");
+            mapAttack = Item.getSkill("Damage");
             mapDefend = Skills.getSkill("Defend");
             cooldowns = new HashMap<String, Integer>();
             cooldowns.put("Defend", 0);
@@ -558,7 +562,7 @@ class RoomItemTest extends RoomParent {
             boolean actionSelected = false;
             int curAnimSpd = 0;
 
-            if (action == "Attack"){
+            if (action == "Damage"){
                 actionSelected = true;
                 curAnimation = (Animation<TextureRegion>) mapAttack.get(s_anim);
                 curAnimSpd =  (Integer) mapAttack.get(s_spd + s_anim);
