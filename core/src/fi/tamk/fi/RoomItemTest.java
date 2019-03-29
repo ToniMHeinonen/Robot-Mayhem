@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+// A possibly useless class.
 class RoomItemTest extends RoomParent {
 
     // Enums give simple constants, which decreases the chance for coding mistakes

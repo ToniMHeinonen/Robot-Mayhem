@@ -22,6 +22,7 @@ public class Item {
     private static Animating anim = new Animating();
     private static Animation<TextureRegion> a_Damage, a_Damage_hit, a_Heal;
 
+    // Booleans that can be used later.
     boolean IsItAHallItem;
     boolean IsItASkill;
     boolean Temporary;
