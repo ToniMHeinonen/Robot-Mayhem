@@ -22,7 +22,7 @@ public class RoomTestailua extends RoomParent {
     private float space = 300f;
     private float tooltipDelay = 2;
 
-    Round round;
+    Hacking hacking;
 
     boolean startHack = false;
 
@@ -70,7 +70,7 @@ public class RoomTestailua extends RoomParent {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 startHack = true;
-                round = new Round(game);
+                hacking = new Hacking(game);
             }
         });
     }
@@ -125,7 +125,7 @@ public class RoomTestailua extends RoomParent {
     public void render(float delta) {
         super.render(delta);
         if (startHack) {
-            round.update();
+            hacking.update();
         }
     }
 }
