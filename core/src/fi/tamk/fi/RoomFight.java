@@ -155,13 +155,13 @@ public class RoomFight extends RoomParent {
 
     // This array has to be in same order than in Player's action array
     private void createActionButtons() {
-        float space = 400f;
+        float space = (game.pixelWidth - 100) / 5; // Temporary solution
         for (int i = 0; i < btnTexts.length; i++) {
             btnCounter = i;
             final TextButton btn = new TextButton(btnTexts[i], skin);
             btn.setWidth(300);
             btn.setHeight(100);
-            btn.setPosition(100f + i*space, 100f);
+            btn.setPosition(50f + i*space, 100f);
             stage.addActor(btn);
 
             btn.addListener(new ClickListener() {
