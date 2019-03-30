@@ -86,6 +86,7 @@ public class Hacking {
 
     private boolean bulletHitShield = false;
     private boolean checkNeighbor = false;
+    private boolean bulletMissedEnemy, bulletHitEnemy; // RoomFight uses these
 
     private float hitPosX;
     private float hitPosStartY;
@@ -109,7 +110,6 @@ public class Hacking {
         camera = game.getCamera();
         skin = game.getSkin();
         stage = game.getStage();
-        stage.clear();
         createConstants();
         setShieldAttributes();
         createPositions();
@@ -468,7 +468,6 @@ public class Hacking {
             game.setHackShieldAmount(i);
             game.setHackPosX(hackPosX);
             game.setHackPosY(hackPosY);
-            game.setHackFirstTry(false);
 
             Timer.schedule(new Timer.Task(){
                 @Override
@@ -478,6 +477,8 @@ public class Hacking {
                             bodiesToBeDestroyed.add(body);
                         }
                     }
+                    bulletMissedEnemy = true;
+                    System.out.println("miss");
                 }
             }, 1f);
             bulletHitShield = false;
@@ -489,8 +490,9 @@ public class Hacking {
     bodiesToBeDestroyed-array.
      */
     private void collisionBulletEnemy(Body body) {
-        game.setHackFirstTry(true);
         bodiesToBeDestroyed.add(body);
+        bulletHitEnemy = true;
+        System.out.println("hit");
         for (Body b : shieldBodies) {
             if (b.getUserData() != null) {
                 bodiesToBeDestroyed.add(b);
@@ -614,5 +616,13 @@ public class Hacking {
 
     public void dispose () {
         world.dispose();
+    }
+
+    public boolean isBulletMissedEnemy() {
+        return bulletMissedEnemy;
+    }
+
+    public boolean isBulletHitEnemy() {
+        return bulletHitEnemy;
     }
 }
