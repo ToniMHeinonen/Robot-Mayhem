@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 // A possibly useless class.
-class RoomItemTest extends RoomParent {
+/*class RoomItemTest extends RoomParent {
 
     // Enums give simple constants, which decreases the chance for coding mistakes
     enum State {
@@ -98,7 +98,7 @@ class RoomItemTest extends RoomParent {
         switch (state) {
             // If dialog box has been closed, start the turn
             case DIALOG_START: {
-                if (!dialog.isDialogOn()) state = RoomFight.State.START_TURN;
+                if (!dialog.isDialogOn()) state = RoomFight.State.PLAYER_TURN;
                 break;
             }
             // If dead, wait some time and then exit back to corridor
@@ -287,7 +287,7 @@ class RoomItemTest extends RoomParent {
     /*
     CREATE PARENT FIGHTER
      */
-    private class Fighters {
+    /*private class Fighters {
 
         protected float X, Y;
         protected double maxHp, hp, targetHp, hpDecreaseSpd, defaultDmg, dmgAmount;
@@ -480,7 +480,7 @@ class RoomItemTest extends RoomParent {
     /*
     CREATE PLAYER
      */
-    private class Player extends Fighters {
+    /*private class Player extends Fighters {
 
         private Animation<TextureRegion> escape, item, death;
         private HashMap<String,Object> mapAttack, mapDefend;
@@ -520,7 +520,7 @@ class RoomItemTest extends RoomParent {
             System.out.println(Testy);*/
 
             // Create animations (probably should be created in MainGame though)
-            idle = anim.createAnimation(game.getPlayerIdle(), 3, 1);
+            /*idle = anim.createAnimation(game.getPlayerIdle(), 3, 1);
             escape = anim.createAnimation(game.getPlayerEscape(), 3, 1);
             item = anim.createAnimation(game.getPlayerItem(), 3, 1);
             hack = anim.createAnimation(game.getPlayerHack(), 3, 1);
@@ -557,7 +557,7 @@ class RoomItemTest extends RoomParent {
         /*
         Iterate through the actions to find the selected action.
          */
-        public void doAction(String action) {
+        /*public void doAction(String action) {
             // Reset necessary values
             curHitAnimation = null;
             boolean actionSelected = false;
@@ -589,7 +589,7 @@ class RoomItemTest extends RoomParent {
                     /*
                     If selected action is this skill, if skill is not empty and if cooldown is 0
                      */
-                    if (action == skills[i] && skills[i] != "" &&
+                    /*if (action == skills[i] && skills[i] != "" &&
                             cooldowns.get("Skill" + String.valueOf(i)) == 0) {
                         actionSelected = true;
                         HashMap<String, Object> skillMap = mapSkills.get(i);
@@ -663,7 +663,7 @@ class RoomItemTest extends RoomParent {
         /*
         Check Hp at the start of every round.
          */
-        private void checkHp() {
+        /*private void checkHp() {
             if (hp <= 0) {
                 state = RoomFight.State.DEAD;
             }
@@ -672,7 +672,7 @@ class RoomItemTest extends RoomParent {
         /*
         Take hit, expect if defending, then return the damage back to the enemy.
          */
-        public void takeHit(double damage) {
+        /*public void takeHit(double damage) {
             if (curAction == "Defend") {
                 enemy.takeHit(damage);
             } else {
@@ -684,7 +684,7 @@ class RoomItemTest extends RoomParent {
         /*
         Run away if escape is chosen
          */
-        private void runAway() {
+        /*private void runAway() {
             if (anim.getAnimation() != escape) anim.startAnimation(escape, escapeSpd);
 
             if (X > - 400) {
@@ -697,7 +697,7 @@ class RoomItemTest extends RoomParent {
         /*
         At the start of each round, decrease cooldown timers.
          */
-        private void decreaseCooldowns() {
+        /*private void decreaseCooldowns() {
             for (Map.Entry<String, Integer> entry : cooldowns.entrySet()) {
                 //System.out.println(entry.getKey() + " = " + String.valueOf(entry.getValue()));
                 int value = entry.getValue();
@@ -713,7 +713,7 @@ class RoomItemTest extends RoomParent {
     /*
     CREATE ENEMY
      */
-    private class Enemy extends Fighters {
+    /*private class Enemy extends Fighters {
 
         private Animation<TextureRegion> skill1, skill2, skill3, skill1_hit, skill2_hit, skill3_hit;
         private String curSkillName, dialogStart, dialogEnd;
@@ -825,7 +825,7 @@ class RoomItemTest extends RoomParent {
         /*
         Attack if state is ENEMY_WAITING.
          */
-        private void attack() {
+        /*private void attack() {
             if (state == RoomFight.State.ENEMY_WAITING) {
                 // Wait for timer and skill name box to go down, then select action
                 if (actionTimer > 0 || dialog.isSkillNameOn()) {
@@ -854,14 +854,14 @@ class RoomItemTest extends RoomParent {
                     anim.startAnimation(curAnimation, speeds[i]);
 
                     System.out.println(skillNames[i]);*/
-                }
+                /*}
             }
         }
 
         /*
         Check hp before anything else in render.
          */
-        private void checkHp() {
+        /*private void checkHp() {
             if (hp <= 0) {
                 state = RoomFight.State.HACK;
                 if (anim.getAnimation() != hack) anim.startAnimation(hack, hackSpd);
@@ -886,3 +886,4 @@ class RoomItemTest extends RoomParent {
         }
     }
 }
+*/

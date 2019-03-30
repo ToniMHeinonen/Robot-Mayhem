@@ -170,8 +170,8 @@ public class MainGame extends Game {
 	public void switchToRoomItemTest() {
 
 		transition();
-		RoomItemTest room = new RoomItemTest(this);
-		setScreen(room);
+		//RoomItemTest room = new RoomItemTest(this);
+		//setScreen(room);
 	}
 
     private void createHackFiles() {

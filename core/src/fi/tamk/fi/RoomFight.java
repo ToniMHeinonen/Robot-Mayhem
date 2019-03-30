@@ -23,13 +23,9 @@ public class RoomFight extends RoomParent {
     enum State {
         START_ROOM,
         DIALOG_START,
-        START_TURN,
-        AWAITING,
-        ACTION,
+        PLAYER_TURN,
         CHANGING_TURN,
-        ENEMY_START_TURN,
-        ENEMY_WAITING,
-        ENEMY_ACTION,
+        ENEMY_TURN,
         HACK,
         HACK_SUCCESS,
         HACK_FAILED,
@@ -80,7 +76,6 @@ public class RoomFight extends RoomParent {
         if (!game.haveWeChangedTheRoom) {
 
             universalStateChecks();
-            checkButtonsState();
 
             batch.begin();
             batch.draw(imgBg, 0,0, imgBg.getWidth(), imgBg.getHeight());
@@ -101,7 +96,7 @@ public class RoomFight extends RoomParent {
         switch (state) {
             // If dialog box has been closed, start the turn
             case DIALOG_START: {
-                if (!dialog.isDialogOn()) state = State.START_TURN;
+                if (!dialog.isDialogOn()) player.startTurn();
                 break;
             }
             // If dead, wait some time and then exit back to corridor
@@ -156,13 +151,6 @@ public class RoomFight extends RoomParent {
         animHealthEnemy.setStateTime(enemyHealthBar.getAnimationDuration());
     }
 
-    // If it's player's turn, spawn buttons
-    private void checkButtonsState() {
-        if (state == State.AWAITING) {
-            if (!actionButtonsOn) createButtons();
-        }
-    }
-
     private void createButtons() {
         actionButtonsOn = true;
         createMenuButton();
@@ -190,9 +178,7 @@ public class RoomFight extends RoomParent {
                 int i = btnCounter;
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if (state == State.AWAITING) {
-                        player.doAction(btnTexts[i]);
-                    }
+                    player.doAction(btnTexts[i]);
                 }
             });
         }
@@ -258,12 +244,10 @@ public class RoomFight extends RoomParent {
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (state == State.AWAITING) {
-                    if (!escapePopup) {
-                        escapePopup = true;
-                        stage.clear();
-                        createYesNo();
-                    }
+                if (!escapePopup) {
+                    escapePopup = true;
+                    stage.clear();
+                    createYesNo();
                 }
             }
         });
@@ -302,6 +286,16 @@ public class RoomFight extends RoomParent {
         });
     }
 
+    public boolean fightersTakingDamage() {
+        boolean takingDamage = false;
+
+        if (player.isPauseStates() || enemy.isPauseStates()) {
+            takingDamage = true;
+        }
+
+        return takingDamage;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
@@ -316,6 +310,8 @@ public class RoomFight extends RoomParent {
         protected Animating anim = new Animating();
         protected Animating hitAnim = new Animating();
 
+        protected int turnState, BEFORE = 0, TAKING_DOT = 1, START = 2, WAIT_FOR_ACTION = 3,
+                                DOING_ACTION = 4, END_ACTION = 5, TURN_COMPLETE = 6;
         protected int actionState, TEMP_ANIM = 0, HIT_ANIM = 1, LONG_ANIM = 2;
         protected boolean flashWhite, hitAnimationRunning;
         protected float flashTime = 0.5f;
@@ -406,9 +402,13 @@ public class RoomFight extends RoomParent {
             if (takeDoT > 0) {
                 calcTargetHpSpd(takeDoT);
                 startHitAnimation(healthMinus, 15);
+                turnState = TAKING_DOT;
             } else if (takeDoT < 0) {
                 calcTargetHpSpd(takeDoT);
                 startHitAnimation(healthPlus, 15);
+                turnState = TAKING_DOT;
+            } else {
+                turnState = START;
             }
         }
 
@@ -486,6 +486,7 @@ public class RoomFight extends RoomParent {
                 @Override
                 public void run() {
                     state = next;
+                    turnState = BEFORE;
                 }
             }, 0.5f);
         }
@@ -577,16 +578,34 @@ public class RoomFight extends RoomParent {
         public void update() {
             updateStart();
             if (!pauseStates) {
-                checkIfAlive();
 
-                if (state == State.START_TURN) {
-                    state = State.AWAITING;
-                    decreaseCooldowns();
-                    checkDoT();
-                } else if (state == State.ACTION) {
-                    controlActionStates();
-                } else if (state == State.AWAITING) {
-                    if (anim.getAnimation() != idle) startIdle();
+                if (state == State.PLAYER_TURN) {
+                    if (turnState == BEFORE) {
+                        checkDoT();
+
+                    } else if (turnState == TAKING_DOT) {
+                        if (targetHp == hp) {
+                            turnState = START;
+                            checkIfAlive();
+                        }
+
+                    } else if (turnState == START) {
+                        decreaseCooldowns();
+                        turnState = WAIT_FOR_ACTION;
+
+                    } else if (turnState == WAIT_FOR_ACTION) {
+                        if (!actionButtonsOn) createButtons();
+                        if (anim.getAnimation() != idle) startIdle();
+
+                    } else if (turnState == DOING_ACTION) {
+                        controlActionStates();
+                    } else if (turnState == END_ACTION) {
+                        if (!fightersTakingDamage()) {
+                            enemy.startTurn();
+                            checkIfAlive();
+                            enemy.checkIfAlive();
+                        }
+                    }
                 } else if (state == State.HACK) {
                     if (anim.getAnimation() != hack) startHack();
                 } else if (state == State.DEAD) {
@@ -659,7 +678,7 @@ public class RoomFight extends RoomParent {
             if (actionSelected) {
                 curAction = action;
                 anim.startAnimation(curAnimation, curAnimSpd);
-                state = State.ACTION;
+                turnState = DOING_ACTION;
                 removeButtons();
                 dialog.showSkillName(action);
             }
@@ -674,7 +693,7 @@ public class RoomFight extends RoomParent {
                         enemy.startHitAnimation(curHitAnimation, curHitAnimationSpd);
                         actionState = HIT_ANIM;
                     } else {
-                        endTurn(State.ENEMY_START_TURN);
+                        turnState = END_ACTION;
                     }
                     startIdle();
                 }
@@ -682,11 +701,11 @@ public class RoomFight extends RoomParent {
                 // Hit animation is drawn on top of enemy
                 if (!enemy.isHitAnimationRunning()) {
                     enemy.takeHit(dmgAmount);
-                    endTurn(State.ENEMY_START_TURN);
+                    turnState = END_ACTION;
                 }
             } else if (actionState == LONG_ANIM) {
                 // Animation lasts until next round
-                endTurn(State.ENEMY_START_TURN);
+                turnState = END_ACTION;
             }
         }
 
@@ -743,6 +762,11 @@ public class RoomFight extends RoomParent {
                 }
             }
         }
+
+        public void startTurn() {
+            turnState = BEFORE;
+            state = State.PLAYER_TURN;
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -787,26 +811,34 @@ public class RoomFight extends RoomParent {
             updateStart();
 
             if (!pauseStates) {
-                attack();
-                checkIfAlive();
 
                 // Pretty much same stuff happens as in player's action states
-                if (state == State.ENEMY_START_TURN) {
-                    if (!dialog.isSkillNameOn()) {
-                        state = State.ENEMY_WAITING;
-                        checkDoT();
-                    }
-                } else if (state == State.ENEMY_ACTION) {
-                    if (actionState == TEMP_ANIM) {
-                        if (curAnimation.isAnimationFinished(anim.getStateTime())) {
-                            player.startHitAnimation(curHitAnimation, curHitAnimationSpd);
-                            startIdle();
-                            actionState = HIT_ANIM;
+                if (state == State.ENEMY_TURN) {
+                    if (turnState == BEFORE) {
+                        if (!dialog.isSkillNameOn()) {
+                            checkDoT();
                         }
-                    } else if (actionState == HIT_ANIM) {
-                        if (!player.isHitAnimationRunning()) {
-                            player.takeHit(dmgAmount);
-                            endTurn(State.START_TURN);
+
+                    } else if (turnState == TAKING_DOT) {
+                        if (targetHp == hp) {
+                            turnState = START;
+                            checkIfAlive();
+                        }
+
+                    } else if (turnState == START) {
+                        // decreaseCooldowns(); not functional yet
+                        turnState = WAIT_FOR_ACTION;
+                    } else if (turnState == WAIT_FOR_ACTION) {
+                        if (anim.getAnimation() != idle) startIdle();
+                        attack();
+
+                    } else if (turnState == DOING_ACTION) {
+                        controlActionStates();
+                    } else if (turnState == END_ACTION) {
+                        if (!fightersTakingDamage()) {
+                            player.startTurn();
+                            checkIfAlive();
+                            player.checkIfAlive();
                         }
                     }
                 } else if (state == State.HACK) {
@@ -817,11 +849,10 @@ public class RoomFight extends RoomParent {
                 } else if (state == State.HACK_RESTORING) {
                     if (targetHp == hp) {
                         startIdle();
-                        endTurn(State.START_TURN);
+                        player.startTurn();
                     }
                 }
-            }
-
+}
             updateEnd();
         }
 
@@ -876,34 +907,47 @@ public class RoomFight extends RoomParent {
         Attack if state is ENEMY_WAITING.
          */
         private void attack() {
-            if (state == State.ENEMY_WAITING) {
-                // Wait for timer and skill name box to go down, then select action
-                if (actionTimer > 0 || dialog.isSkillNameOn()) {
-                    actionTimer--;
-                } else {
-                    actionTimer = actionDelay;
-                    state = State.ENEMY_ACTION;
-                    actionState = TEMP_ANIM;
-                    int random = MathUtils.random(0, animList.size() - 1);
-                    dialog.showSkillName(skillNames[random]);
-                    curAnimation = animList.get(random);
-                    curHitAnimation = hitAnimList.get(random);
-                    curHitAnimationSpd = hitSpeeds[random];
-                    dmgAmount = defaultDmg * damages[random];
-                    anim.startAnimation(curAnimation, speeds[random]);
+            // Wait for timer and skill name box to go down, then select action
+            if (actionTimer > 0 || dialog.isSkillNameOn()) {
+                actionTimer--;
+            } else {
+                actionTimer = actionDelay;
+                turnState = DOING_ACTION;
+                actionState = TEMP_ANIM;
+                int random = MathUtils.random(0, animList.size() - 1);
+                dialog.showSkillName(skillNames[random]);
+                curAnimation = animList.get(random);
+                curHitAnimation = hitAnimList.get(random);
+                curHitAnimationSpd = hitSpeeds[random];
+                dmgAmount = defaultDmg * damages[random];
+                anim.startAnimation(curAnimation, speeds[random]);
 
 
-                    // Discovered: Added this for testing purposes.
-                    /*int i = 2;
+                // Discovered: Added this for testing purposes.
+                /*int i = 2;
 
-                    dialog.showSkillName(skillNames[i]);
-                    curAnimation = animList.get(i);
-                    curHitAnimation = hitAnimList.get(i);
-                    curHitAnimationSpd = hitSpeeds[i];
-                    dmgAmount = defaultDmg * damages[i];
-                    anim.startAnimation(curAnimation, speeds[i]);
+                dialog.showSkillName(skillNames[i]);
+                curAnimation = animList.get(i);
+                curHitAnimation = hitAnimList.get(i);
+                curHitAnimationSpd = hitSpeeds[i];
+                dmgAmount = defaultDmg * damages[i];
+                anim.startAnimation(curAnimation, speeds[i]);
 
-                    System.out.println(skillNames[i]);*/
+                System.out.println(skillNames[i]);*/
+            }
+        }
+
+        private void controlActionStates() {
+            if (actionState == TEMP_ANIM) {
+                if (curAnimation.isAnimationFinished(anim.getStateTime())) {
+                    player.startHitAnimation(curHitAnimation, curHitAnimationSpd);
+                    startIdle();
+                    actionState = HIT_ANIM;
+                }
+            } else if (actionState == HIT_ANIM) {
+                if (!player.isHitAnimationRunning()) {
+                    player.takeHit(dmgAmount);
+                    turnState = END_ACTION;
                 }
             }
         }
@@ -923,6 +967,11 @@ public class RoomFight extends RoomParent {
                     dialog.createDialog(dialogStart, dialogX, dialogY);
                 }
             }, 1);
+        }
+
+        public void startTurn() {
+            turnState = BEFORE;
+            state = State.ENEMY_TURN;
         }
     }
 }
