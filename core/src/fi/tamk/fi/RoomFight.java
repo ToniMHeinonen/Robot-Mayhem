@@ -32,6 +32,7 @@ public class RoomFight extends RoomParent {
         HACK,
         HACK_SUCCESS,
         HACK_FAILED,
+        HACK_RESTORING,
         DEAD,
         ESCAPE
     }
@@ -568,7 +569,7 @@ public class RoomFight extends RoomParent {
                 } else if (state == State.ESCAPE) {
                     runAway();
                 }
-            }
+            } else System.out.println("PlayerPause");
 
             updateEnd();
         }
@@ -799,10 +800,14 @@ public class RoomFight extends RoomParent {
                     }
                 } else if (state == State.HACK_FAILED) {
                     calcTargetHpSpd(-maxHp/3);
-                    startIdle();
-                    if (targetHp == hp) state = State.START_TURN;
+                    state = State.HACK_RESTORING;
+                } else if (state == State.HACK_RESTORING) {
+                    if (targetHp == hp) {
+                        startIdle();
+                        state = State.START_TURN;
+                    }
                 }
-            }
+            } else System.out.println("EnemyPause");
 
             updateEnd();
         }
