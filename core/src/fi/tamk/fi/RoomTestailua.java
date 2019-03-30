@@ -1,9 +1,13 @@
 package fi.tamk.fi;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -28,6 +32,11 @@ public class RoomTestailua extends RoomParent {
 
     boolean startHack = false;
 
+    // Open settings
+    Dialog settingsDialog;
+    boolean closeDialog = false;
+    boolean clickedOpenSettings = false;
+
     RoomTestailua(MainGame game) {
         super(game);
         testSkin = game.getTestSkin();
@@ -36,6 +45,7 @@ public class RoomTestailua extends RoomParent {
         createConstants();
         createButtons();
         // playMusic();
+        createOpenSettingsButton();
 
         // Added for testing.
         createButtonItemTesting();
@@ -147,11 +157,78 @@ public class RoomTestailua extends RoomParent {
         }, tooltipDelay);
     }
 
+    public void createOpenSettingsButton() {
+        final TextButton buttonSettings = new TextButton("Open settings", skin);
+        buttonSettings.setWidth(300f);
+        buttonSettings.setHeight(100f);
+        buttonSettings.setPosition(game.pixelWidth /2 - buttonSettings.getWidth() /2,
+                (game.pixelHeight/3) *2 + buttonSettings.getHeight() * 2);
+        stage.addActor(buttonSettings);
+
+        buttonSettings.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                createDialog();
+                clickedOpenSettings = true;
+            }
+        });
+    }
+
+    // Testing, if dialog could be used to settings. Not finished.
+    // Buttons, sliders, texts etc. will be moved to different method.
+    public void createDialog() {
+        Label text = new Label("Music volume", skin);
+        text.setColor(Color.BLACK);
+        Slider slider = new Slider(0f, 1f, 0.1f, false, skin);
+        TextButton textButton = new TextButton("Close", skin);
+        textButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                closeDialog = true;
+            }
+        });
+        settingsDialog = new Dialog("settings", skin);
+        settingsDialog.setMovable(false);
+        settingsDialog.setPosition(200, -500);
+        settingsDialog.setSize(500, 500);
+        slider.setPosition(settingsDialog.getWidth()/2,
+                settingsDialog.getHeight()/2);
+        text.setPosition(settingsDialog.getWidth()/2 - textButton.getWidth()/2,
+                settingsDialog.getHeight()/2);
+        textButton.setPosition(settingsDialog.getWidth()/2 - textButton.getWidth()/2
+                , settingsDialog.getHeight()/2 - textButton.getWidth()/2);
+        settingsDialog.addActor(textButton);
+        settingsDialog.addActor(text);
+        settingsDialog.addActor(slider);
+        settingsDialog.setKeepWithinStage(false);
+        stage.addActor(settingsDialog);
+    }
+
+    public void controlSettings() {
+        if (!closeDialog) {
+            if (settingsDialog.getY() <= 300) {
+                settingsDialog.setY(settingsDialog.getY() + 10);
+            }
+        }
+        if (closeDialog) {
+            if (settingsDialog.getY() > -500)
+                settingsDialog.setY(settingsDialog.getY() - 10);
+            if (settingsDialog.getY() == -500) {
+                settingsDialog.remove();
+                closeDialog = false;
+                clickedOpenSettings = false;
+            }
+        }
+    }
+
     @Override
     public void render(float delta) {
         super.render(delta);
         if (startHack) {
             hacking.update();
+        }
+        if (clickedOpenSettings) {
+            controlSettings();
         }
     }
 }
