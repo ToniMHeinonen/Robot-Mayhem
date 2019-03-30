@@ -59,7 +59,7 @@ public class Item {
         return chosenSkill;
     }
 
-    protected static HashMap<String, Object> itemDamage() {
+    protected static HashMap<String, Object> itemDamage() { // Not protected, use private
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, "Attack");
         map.put(damage, 5);
@@ -77,7 +77,7 @@ public class Item {
         return map;
     }
 
-    protected static HashMap<String, Object> itemHeal() {
+    protected static HashMap<String, Object> itemHeal() { // Not protected, use private
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, "heal");
         map.put(damage, -5);
