@@ -51,12 +51,12 @@ public class Item {
         mapItems.put((String) mapHeal.get(name), mapHeal);
     }
 
-    public static HashMap<String, Object> getSkill(String skill) {
-        HashMap<String, Object> chosenSkill;
+    public static HashMap<String, Object> getItem(String item) {
+        HashMap<String, Object> chosenItem;
 
-        chosenSkill = mapItems.get(skill);
+        chosenItem = mapItems.get(item);
 
-        return chosenSkill;
+        return chosenItem;
     }
 
     protected static HashMap<String, Object> itemDamage() { // Not protected, use private
