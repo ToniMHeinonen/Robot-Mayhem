@@ -93,6 +93,9 @@ public class MainGame extends Game {
 		Skills.createSkills();
 		Bosses.createBosses();
 
+		// Create items
+		Item.createItems();
+
 		createSkinAndStage();
 		createButtonFiles();
 		createProgressBarFiles();
@@ -161,6 +164,13 @@ public class MainGame extends Game {
 	public void switchToPowerUps() {
 		transition();
 		PowerUps room = new PowerUps(this);
+		setScreen(room);
+	}
+
+	public void switchToRoomItemTest() {
+
+		transition();
+		RoomItemTest room = new RoomItemTest(this);
 		setScreen(room);
 	}
 
