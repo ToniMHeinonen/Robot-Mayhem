@@ -1,4 +1,4 @@
-package fi.tamk.fi;
+package pepperstep;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -51,15 +51,15 @@ public class Item {
         mapItems.put((String) mapHeal.get(name), mapHeal);
     }
 
-    public static HashMap<String, Object> getSkill(String skill) {
-        HashMap<String, Object> chosenSkill;
+    public static HashMap<String, Object> getItem(String item) {
+        HashMap<String, Object> chosenItem;
 
-        chosenSkill = mapItems.get(skill);
+        chosenItem = mapItems.get(item);
 
-        return chosenSkill;
+        return chosenItem;
     }
 
-    protected static HashMap<String, Object> itemDamage() { // Not protected, use private
+    private static HashMap<String, Object> itemDamage() { // Not protected, use private
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, "Attack");
         map.put(damage, 5);
@@ -77,7 +77,7 @@ public class Item {
         return map;
     }
 
-    protected static HashMap<String, Object> itemHeal() { // Not protected, use private
+    private static HashMap<String, Object> itemHeal() { // Not protected, use private
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, "heal");
         map.put(damage, -5);

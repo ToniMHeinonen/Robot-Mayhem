@@ -1,4 +1,4 @@
-package fi.tamk.fi;
+package pepperstep;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -135,9 +135,6 @@ public class RoomTestailua extends RoomParent {
         buttonItemTesting.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-
-                System.out.println(Item.itemDamage());
-                System.out.println(Item.itemHeal());
 
                 game.switchToRoomItemTest();
             }
