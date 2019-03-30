@@ -26,6 +26,7 @@ public class RoomFight extends RoomParent {
         START_TURN,
         AWAITING,
         ACTION,
+        CHANGING_TURN,
         ENEMY_START_TURN,
         ENEMY_WAITING,
         ENEMY_ACTION,
@@ -318,6 +319,7 @@ public class RoomFight extends RoomParent {
         protected int actionState, TEMP_ANIM = 0, HIT_ANIM = 1, LONG_ANIM = 2;
         protected boolean flashWhite, hitAnimationRunning;
         protected float flashTime = 0.5f;
+        protected State ifDead;
 
         protected float positionOffset;
         protected boolean positionIncorrect;
@@ -478,6 +480,25 @@ public class RoomFight extends RoomParent {
             }
         }
 
+        public void endTurn(final State next) {
+            state = State.CHANGING_TURN;
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    state = next;
+                }
+            }, 0.5f);
+        }
+
+        /*
+        Check Hp at the start of every round.
+         */
+        public void checkIfAlive() {
+            if (hp <= 0) {
+                state = ifDead;
+            }
+        }
+
         // Health bar uses this
         public double getHp() {
             return hp;
@@ -491,6 +512,10 @@ public class RoomFight extends RoomParent {
         // Opponent uses this to check if it is time to inflict damage and pass the turn
         public boolean isHitAnimationRunning() {
             return hitAnimationRunning;
+        }
+
+        public boolean isPauseStates() {
+            return pauseStates;
         }
     }
 
@@ -517,6 +542,7 @@ public class RoomFight extends RoomParent {
             hp = maxHp;
             targetHp = hp;
             defaultDmg = 30; // Replace this with the correct value later
+            ifDead = State.DEAD;
 
             idleSpd = 30;
             itemSpd = 20;
@@ -551,13 +577,12 @@ public class RoomFight extends RoomParent {
         public void update() {
             updateStart();
             if (!pauseStates) {
+                checkIfAlive();
 
                 if (state == State.START_TURN) {
-                    if (checkIfAlive()) {
-                        decreaseCooldowns();
-                        checkDoT();
-                        state = State.AWAITING;
-                    }
+                    state = State.AWAITING;
+                    decreaseCooldowns();
+                    checkDoT();
                 } else if (state == State.ACTION) {
                     controlActionStates();
                 } else if (state == State.AWAITING) {
@@ -569,7 +594,7 @@ public class RoomFight extends RoomParent {
                 } else if (state == State.ESCAPE) {
                     runAway();
                 }
-            } else System.out.println("PlayerPause");
+            }
 
             updateEnd();
         }
@@ -649,7 +674,7 @@ public class RoomFight extends RoomParent {
                         enemy.startHitAnimation(curHitAnimation, curHitAnimationSpd);
                         actionState = HIT_ANIM;
                     } else {
-                        state = State.ENEMY_START_TURN;
+                        endTurn(State.ENEMY_START_TURN);
                     }
                     startIdle();
                 }
@@ -657,11 +682,11 @@ public class RoomFight extends RoomParent {
                 // Hit animation is drawn on top of enemy
                 if (!enemy.isHitAnimationRunning()) {
                     enemy.takeHit(dmgAmount);
-                    state = State.ENEMY_START_TURN;
+                    endTurn(State.ENEMY_START_TURN);
                 }
             } else if (actionState == LONG_ANIM) {
                 // Animation lasts until next round
-                state = State.ENEMY_START_TURN;
+                endTurn(State.ENEMY_START_TURN);
             }
         }
 
@@ -679,20 +704,6 @@ public class RoomFight extends RoomParent {
             s_cool = Skills.getCooldown();
             s_DoTDmg = Skills.getDamageOverTime();
             s_DoTTurns = Skills.getDamageOverTimeTurns();
-        }
-
-        /*
-        Check Hp at the start of every round.
-         */
-        private boolean checkIfAlive() {
-            boolean alive = true;
-
-            if (hp <= 0) {
-                alive = false;
-                state = State.DEAD;
-            }
-
-            return alive;
         }
 
         /*
@@ -759,6 +770,7 @@ public class RoomFight extends RoomParent {
             hp = maxHp;
             targetHp = hp;
             defaultDmg = 15; // Replace this with the correct value later
+            ifDead = State.HACK;
 
             startDialogTimer();
 
@@ -776,14 +788,13 @@ public class RoomFight extends RoomParent {
 
             if (!pauseStates) {
                 attack();
+                checkIfAlive();
 
                 // Pretty much same stuff happens as in player's action states
                 if (state == State.ENEMY_START_TURN) {
                     if (!dialog.isSkillNameOn()) {
-                        if (checkIfAlive()) {
-                            checkDoT();
-                            state = State.ENEMY_WAITING;
-                        }
+                        state = State.ENEMY_WAITING;
+                        checkDoT();
                     }
                 } else if (state == State.ENEMY_ACTION) {
                     if (actionState == TEMP_ANIM) {
@@ -795,19 +806,21 @@ public class RoomFight extends RoomParent {
                     } else if (actionState == HIT_ANIM) {
                         if (!player.isHitAnimationRunning()) {
                             player.takeHit(dmgAmount);
-                            state = State.START_TURN;
+                            endTurn(State.START_TURN);
                         }
                     }
+                } else if (state == State.HACK) {
+                    if (anim.getAnimation() != hack) anim.startAnimation(hack, hackSpd);
                 } else if (state == State.HACK_FAILED) {
                     calcTargetHpSpd(-maxHp/3);
                     state = State.HACK_RESTORING;
                 } else if (state == State.HACK_RESTORING) {
                     if (targetHp == hp) {
                         startIdle();
-                        state = State.START_TURN;
+                        endTurn(State.START_TURN);
                     }
                 }
-            } else System.out.println("EnemyPause");
+            }
 
             updateEnd();
         }
@@ -893,21 +906,6 @@ public class RoomFight extends RoomParent {
                     System.out.println(skillNames[i]);*/
                 }
             }
-        }
-
-        /*
-        Check hp before starting turn.
-         */
-        private boolean checkIfAlive() {
-            boolean alive = true;
-
-            if (hp <= 0) {
-                alive = false;
-                state = State.HACK;
-                if (anim.getAnimation() != hack) anim.startAnimation(hack, hackSpd);
-            }
-
-            return alive;
         }
 
         // When taking hit, lower targetHp, flash white and take knockback
