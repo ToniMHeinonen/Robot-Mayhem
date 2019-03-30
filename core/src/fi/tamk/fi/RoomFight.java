@@ -750,8 +750,10 @@ public class RoomFight extends RoomParent {
 
                 // Pretty much same stuff happens as in player's action states
                 if (state == State.ENEMY_START_TURN) {
-                    checkDoT();
-                    state = State.ENEMY_WAITING;
+                    if (!dialog.isSkillNameOn()) {
+                        checkDoT();
+                        state = State.ENEMY_WAITING;
+                    }
                 } else if (state == State.ENEMY_ACTION) {
                     if (actionState == TEMP_ANIM) {
                         if (curAnimation.isAnimationFinished(anim.getStateTime())) {
