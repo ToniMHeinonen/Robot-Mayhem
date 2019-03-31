@@ -64,6 +64,7 @@ public class RoomFight extends RoomParent {
 
         createHealthBars();
         createShader(); // Used for flashing white
+        createPowerUpButton();
 
         player = new Player();
         enemy = new Enemy();
@@ -95,12 +96,28 @@ public class RoomFight extends RoomParent {
         }
     }
 
+    // Creates the upper left escape button
+    private void createPowerUpButton() {
+        final TextButton btn = new TextButton("PowerUpTest", skin);
+        btn.setWidth(300);
+        btn.setHeight(100);
+        btn.setPosition(200f, game.pixelHeight - 100f);
+        stage.addActor(btn);
+
+        btn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stage.clear();
+                state = State.POWER_UP;
+            }
+        });
+    }
+
     private void universalStateChecks() {
         switch (state) {
             // If dialog box has been closed, start the turn
             case DIALOG_START: {
                 if (!dialog.isDialogOn()) player.startTurn();
-                //if (!dialog.isDialogOn()) state = State.POWER_UP; // For testing purposes
                 break;
             }
             // If dead, wait some time and then exit back to corridor

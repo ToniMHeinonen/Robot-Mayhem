@@ -5,9 +5,14 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Timer;
 
 import java.util.HashMap;
 
@@ -20,11 +25,13 @@ public class UtilPowerUp {
     private BitmapFont bigFont;
     private int MONEY = 0, HALL_ITEM = 1, BATTLE_ITEM = 2;
     private String powerUp[];
+    private UtilDialog dialog;
 
     UtilPowerUp(MainGame game) {
         this.game = game;
         batch = game.getBatch();
         stage = game.getStage();
+        dialog = game.getDialog();
         skin = game.getSkin();
         background = game.getPowerUpBg();
         bigFont = game.getFontSteps();
@@ -52,7 +59,7 @@ public class UtilPowerUp {
 
     private void spawnRandomPowerUps() {
         int random[] = new int[2];
-        String name;
+        String name, description;
         for (int i = 0; i < 2; i++) {
             while (true) {
                 random[i] = MathUtils.random(0, 2);
@@ -60,11 +67,13 @@ public class UtilPowerUp {
 
                 if (random[i] == MONEY) {
                     name = "Money";
+                    description = "Money money money!";
                     break;
                 } else {
                     name = Item.selectRandomItem();
                     HashMap<String, Object> map = Item.getItem(name);
                     boolean hallItem = (Boolean) map.get(Item.getUsedInHall());
+                    description = (String) map.get(Item.getDescription());
                     if (random[i] == HALL_ITEM) {
                         if (hallItem) break;
                     } else if (random[i] == BATTLE_ITEM) {
@@ -73,7 +82,7 @@ public class UtilPowerUp {
                 }
             }
             powerUp[i] = name;
-            createPowerUp(i);
+            createPowerUp(i, description);
         }
     }
 
@@ -81,13 +90,20 @@ public class UtilPowerUp {
 
     }
 
-    private void createPowerUp(int pos) {
+    private void createPowerUp(int pos, final String desc) {
         float[] xPos = new float[] {300f, 750f};
         TextButton btn = new TextButton(powerUp[pos], skin);
         btn.setWidth(400f);
         btn.setHeight(400f);
-        btn.setPosition(xPos[pos],  game.pixelHeight/4);
+        btn.setPosition(xPos[pos],  game.pixelHeight/5);
 
         stage.addActor(btn);
+
+        btn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                dialog.drawDescription(desc);
+            }
+        });
     }
 }
