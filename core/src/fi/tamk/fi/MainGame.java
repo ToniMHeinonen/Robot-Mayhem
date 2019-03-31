@@ -43,8 +43,8 @@ public class MainGame extends Game {
 	private int saveTimerAmount = 3600;
 	private int saveTimer = saveTimerAmount;
 	private Preferences stats;
-	private int stepCount, stepBank, stepAllCount, pool, poolMult;
-	private String skill1, skill2;
+	private int stepCount, stepBank, stepAllCount, pool, poolMult, money;
+	private String skill1, skill2, currentBoss;
 	private boolean firstPlayTime;
 
 	// Textures
@@ -272,22 +272,26 @@ public class MainGame extends Game {
 
 	public void loadStats() {
 		stats = Gdx.app.getPreferences("Robot_Mayhem_Stats");
+		money = stats.getInteger("money", 0);
 		stepCount = stats.getInteger("stepCount", 0);
 		stepAllCount = stats.getInteger("stepAllCount", 0);
 		stepBank = stats.getInteger("stepBank", 0);
 		skill1 = stats.getString("skill1", "");
 		skill2 = stats.getString("skill2", "");
+		currentBoss = stats.getString("boss", "Roombot");
 		firstPlayTime = stats.getBoolean("firstPlayTime", true);
 		pool = stats.getInteger("pool", 1);
 		poolMult = stats.getInteger("poolMult", 0);
 	}
 
 	public void saveStats() {
+		stats.putInteger("money", money);
 		stats.putInteger("stepCount", stepCount);
 		stats.putInteger("stepAllCount", stepAllCount);
 		stats.putInteger("stepBank", stepBank);
 		stats.putString("skill1", skill1);
 		stats.putString("skill2", skill2);
+		stats.putString("boss", currentBoss);
 		stats.putBoolean("firstPlayTime", firstPlayTime);
 		stats.putInteger("pool", pool);
 		stats.putInteger("poolMult", poolMult);
