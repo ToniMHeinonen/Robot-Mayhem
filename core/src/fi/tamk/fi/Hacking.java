@@ -123,7 +123,7 @@ public class Hacking {
     public void update() {
         batch.setProjectionMatrix(camera.combined);
         doPhysicsStep(Gdx.graphics.getDeltaTime());
-        debugRenderer.render(world, camera.combined);
+        //debugRenderer.render(world, camera.combined);
         deleteBodies();
         batch.begin();
         drawBodies();

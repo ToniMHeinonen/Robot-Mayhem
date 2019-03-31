@@ -23,6 +23,7 @@ public class RoomFight extends RoomParent {
     enum State {
         START_ROOM,
         DIALOG_START,
+        DIALOG_END,
         PLAYER_TURN,
         ENEMY_TURN,
         HACK,
@@ -206,6 +207,7 @@ public class RoomFight extends RoomParent {
 
             if (hacking.isBulletHitEnemy()) {
                 state = State.HACK_SUCCESS;
+                enemy.endDialogTimer();
             } else if (hacking.isBulletMissedEnemy()) {
                 state = State.HACK_FAILED;
                 spawnHacking = false;
@@ -982,6 +984,16 @@ public class RoomFight extends RoomParent {
                     dialog.createDialog(dialogStart, dialogX, dialogY);
                 }
             }, 1);
+        }
+
+        public void endDialogTimer() {
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    state = State.DIALOG_END;
+                    dialog.createDialog(dialogEnd, dialogX, dialogY);
+                }
+            }, 2);
         }
     }
 }
