@@ -30,6 +30,7 @@ public class RoomFight extends RoomParent {
         HACK_SUCCESS,
         HACK_FAILED,
         HACK_RESTORING,
+        POWER_UP,
         DEAD,
         ESCAPE
     }
@@ -47,10 +48,11 @@ public class RoomFight extends RoomParent {
     private int btnCounter; // Used for button classes to get the correct value
     private int deathTimer = 240;
     private State state = State.START_ROOM;
-    private boolean escapePopup, spawnHacking, actionButtonsOn;
+    private boolean escapePopup, spawnHacking, actionButtonsOn, spawnPowerUp;
     private boolean firstHack = true;
     private ShaderProgram shFlashWhite;
     private Hacking hacking;
+    private UtilPowerUp powerUp;
 
     //Dialog
     private float dialogX = 500f, dialogY = 500f;
@@ -87,6 +89,7 @@ public class RoomFight extends RoomParent {
             batch.end();
 
             hackingPhase();
+            powerUpPhase();
             stage.act(Gdx.graphics.getDeltaTime());
             stage.draw();
         }
@@ -97,6 +100,7 @@ public class RoomFight extends RoomParent {
             // If dialog box has been closed, start the turn
             case DIALOG_START: {
                 if (!dialog.isDialogOn()) player.startTurn();
+                //if (!dialog.isDialogOn()) state = State.POWER_UP; // For testing purposes
                 break;
             }
             // If dead, wait some time and then exit back to corridor
@@ -217,6 +221,16 @@ public class RoomFight extends RoomParent {
                 state = State.HACK_FAILED;
                 spawnHacking = false; // Reset spawnHacking
             }
+        }
+    }
+
+    public void powerUpPhase() {
+        if (state == State.POWER_UP) {
+            if (!spawnPowerUp) {
+                spawnPowerUp = true;
+                powerUp = new UtilPowerUp(game);
+            }
+            powerUp.update();
         }
     }
 
