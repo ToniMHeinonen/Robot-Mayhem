@@ -3,6 +3,7 @@ package fi.tamk.fi;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 
 import java.util.HashMap;
 
@@ -39,6 +40,9 @@ public class Bosses {
     private static double curDmg1, curDmg2, curDmg3;
     private static int curSkillCD1, curSkillCD2, curSkillCD3;
 
+    private static String[] allBosses = new String[] {"Roombot"};
+    private static int ROOMBOT = 0;
+
     /*
     Create bosses when the game starts.
      */
@@ -60,8 +64,16 @@ public class Bosses {
         return chosenBoss;
     }
 
+    public static String selectRandomBoss() {
+        String selected = "";
+        int random = MathUtils.random(0, allBosses.length - 1);
+        selected = allBosses[random];
+
+        return selected;
+    }
+
     private static void bossRoombot() {
-        curName = "Roombot";
+        curName = allBosses[ROOMBOT];
         curDmg1 = 1;
         curDmg2 = 1.5;
         curDmg3 = 2;

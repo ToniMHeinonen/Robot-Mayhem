@@ -18,8 +18,7 @@ public class UtilPowerUp {
     private Skin skin;
     private Texture background;
     private BitmapFont bigFont;
-    private int type, MONEY = 0, HALL_ITEM = 1, BATTLE_ITEM = 2;
-    private float xPos[];
+    private int MONEY = 0, HALL_ITEM = 1, BATTLE_ITEM = 2;
     private String powerUp[];
 
     UtilPowerUp(MainGame game) {
@@ -29,7 +28,7 @@ public class UtilPowerUp {
         skin = game.getSkin();
         background = game.getPowerUpBg();
         bigFont = game.getFontSteps();
-        xPos = new float[] {300f, 750f};
+
         powerUp = new String[2];
         spawnRandomPowerUps();
     }
@@ -83,6 +82,7 @@ public class UtilPowerUp {
     }
 
     private void createPowerUp(int pos) {
+        float[] xPos = new float[] {300f, 750f};
         TextButton btn = new TextButton(powerUp[pos], skin);
         btn.setWidth(400f);
         btn.setHeight(400f);
