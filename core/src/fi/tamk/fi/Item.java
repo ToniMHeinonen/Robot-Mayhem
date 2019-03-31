@@ -1,5 +1,7 @@
 package fi.tamk.fi;
 
+import com.badlogic.gdx.math.MathUtils;
+
 import java.util.HashMap;
 
 public class Item {
@@ -13,6 +15,9 @@ public class Item {
     private static HashMap<String,HashMap<String,Object>> mapItems;
     private static HashMap<String,Object> mapBomb, mapPotion, mapDoubleSteps;
 
+    private static String[] allItems = new String[] {"Bomb", "Potion", "Polished Rotor"};
+    private static int BOMB = 0, POTION = 1, DOUBLE_STEPS = 2;
+
     /*
     Create items when the game starts.
      */
@@ -25,6 +30,7 @@ public class Item {
         mapItems = new HashMap<String, HashMap<String,Object>>();
         mapItems.put((String) mapBomb.get(name), mapBomb);
         mapItems.put((String) mapPotion.get(name), mapPotion);
+        mapItems.put((String) mapDoubleSteps.get(name), mapDoubleSteps);
     }
 
     public static HashMap<String, Object> getItem(String item) {
@@ -35,9 +41,17 @@ public class Item {
         return chosenItem;
     }
 
+    public static String selectRandomItem() {
+        String selected = "";
+        int random = MathUtils.random(0, allItems.length - 1);
+        selected = allItems[random];
+
+        return selected;
+    }
+
     private static HashMap<String, Object> itemBomb() {
         HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put(name, "Bomb");
+        map.put(name, allItems[BOMB]);
         map.put(description, "Halven enemy's health");
         map.put(damage, 50);
         map.put(usedInHall, false);
@@ -48,7 +62,7 @@ public class Item {
 
     private static HashMap<String, Object> itemPotion() {
         HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put(name, "Potion");
+        map.put(name, allItems[POTION]);
         map.put(description, "Heal 50%");
         map.put(damage, -50);
         map.put(usedInHall, false);
@@ -59,7 +73,7 @@ public class Item {
 
     private static HashMap<String, Object> itemDoubleSteps() {
         HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put(name, "Polished rotor");
+        map.put(name, allItems[DOUBLE_STEPS]);
         map.put(description, "Gain double steps");
         map.put(damage, 0);
         map.put(usedInHall, true);
