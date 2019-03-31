@@ -18,6 +18,7 @@ public class Bosses {
     private static String skill = "skill";
     private static String skillHit = "skillHit";
     private static String skillName = "skillName";
+    private static String skillCooldown = "skillCooldown";
     private static String dialogStart = "dialogstart";
     private static String dialogEnd = "dialogend";
     private static String speed = "speed";
@@ -36,6 +37,7 @@ public class Bosses {
     private static String curName, curSkillName1, curSkillName2, curSkillName3,
                             curDialogStart, curDialogEnd;
     private static double curDmg1, curDmg2, curDmg3;
+    private static int curSkillCD1, curSkillCD2, curSkillCD3;
 
     /*
     Create bosses when the game starts.
@@ -63,6 +65,9 @@ public class Bosses {
         curDmg1 = 1;
         curDmg2 = 1.5;
         curDmg3 = 2;
+        curSkillCD1 = 0;
+        curSkillCD2 = 2;
+        curSkillCD3 = 3;
         curSkillName1 = "Attack";
         curSkillName2 = "Clean the dust";
         curSkillName3 = "Accidental bumb";
@@ -111,6 +116,9 @@ public class Bosses {
         map.put(damage + "1", curDmg1);
         map.put(damage + "2", curDmg2);
         map.put(damage + "3", curDmg3);
+        map.put(skillCooldown + "1", curSkillCD1);
+        map.put(skillCooldown + "2", curSkillCD2);
+        map.put(skillCooldown + "3", curSkillCD3);
         map.put(skillName + "1", curSkillName1);
         map.put(skillName + "2", curSkillName2);
         map.put(skillName + "3", curSkillName3);
@@ -174,5 +182,9 @@ public class Bosses {
 
     public static String getSkillName() {
         return skillName;
+    }
+
+    public static String getSkillCooldown() {
+        return skillCooldown;
     }
 }

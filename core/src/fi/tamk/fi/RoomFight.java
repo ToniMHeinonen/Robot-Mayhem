@@ -24,7 +24,6 @@ public class RoomFight extends RoomParent {
         START_ROOM,
         DIALOG_START,
         PLAYER_TURN,
-        CHANGING_TURN,
         ENEMY_TURN,
         HACK,
         HACK_SUCCESS,
@@ -311,11 +310,12 @@ public class RoomFight extends RoomParent {
         protected Animating hitAnim = new Animating();
 
         protected int turnState, BEFORE = 0, TAKING_DOT = 1, START = 2, WAIT_FOR_ACTION = 3,
-                                DOING_ACTION = 4, END_ACTION = 5, TURN_COMPLETE = 6;
+                                DOING_ACTION = 4, END_ACTION = 5;
         protected int actionState, TEMP_ANIM = 0, HIT_ANIM = 1, LONG_ANIM = 2;
         protected boolean flashWhite, hitAnimationRunning;
         protected float flashTime = 0.5f;
         protected State ifDead;
+        protected int ID, PLAYER = 0, ENEMY = 1;
 
         protected float positionOffset;
         protected boolean positionIncorrect;
@@ -330,6 +330,7 @@ public class RoomFight extends RoomParent {
                                             healthMinus;
         protected ArrayList<Animation<TextureRegion>> animList, hitAnimList;
         protected Integer[] speeds, hitSpeeds;
+        protected HashMap<String,Integer> cooldowns;
 
         Fighters() {
             healthPlus = hitAnim.createAnimation(game.getHealthPlus(), 3, 1);
@@ -337,7 +338,7 @@ public class RoomFight extends RoomParent {
         }
 
         // Do this at the start of update method
-        public void updateStart() {
+        protected void updateStart() {
             returnPosition();
             hpToTarget();
             checkToPause();
@@ -346,21 +347,69 @@ public class RoomFight extends RoomParent {
         }
 
         // Do this at the end of update method
-        public void updateEnd() {
+        protected void updateEnd() {
             if (flashWhite) batch.setShader(shFlashWhite);
             anim.draw(batch, X + positionOffset, Y);
             drawHitAnimation();
             batch.setShader(null);
         }
 
+        // Turn's agenda
+        protected void controlTurnStates() {
+            if (turnState == BEFORE) {
+                if (!dialog.isSkillNameOn()) {
+                    checkDoT();
+                }
+
+            } else if (turnState == TAKING_DOT) {
+                if (targetHp == hp) {
+                    turnState = START;
+                    checkIfAlive();
+                }
+
+            } else if (turnState == START) {
+                decreaseCooldowns();
+                turnState = WAIT_FOR_ACTION;
+
+            } else if (turnState == WAIT_FOR_ACTION) {
+                if (anim.getAnimation() != idle) startIdle();
+
+            } else if (turnState == DOING_ACTION) {
+                controlActionStates();
+            } else if (turnState == END_ACTION) {
+                if (!fightersTakingDamage()) {
+                    if (ID == PLAYER) {
+                        enemy.startTurn();
+                        enemy.checkIfAlive();
+                    } else if (ID == ENEMY) {
+                        player.startTurn();
+                        player.checkIfAlive();
+                    }
+                    checkIfAlive();
+                    System.out.println("turnEnd");
+                }
+            }
+        }
+
+        protected void controlActionStates() {
+            // This is needed for the parent's controlTurnStates to function correctly
+        }
+
+        // Before starting turn, reset turnState
+        protected void startTurn() {
+            turnState = BEFORE;
+            if (ID == PLAYER) state = State.PLAYER_TURN;
+            else if (ID == ENEMY) state = State.ENEMY_TURN;
+        }
+
         // Opponent starts this when hitting you
-        public void startHitAnimation(Animation<TextureRegion> animation, int spd) {
+        protected void startHitAnimation(Animation<TextureRegion> animation, int spd) {
             hitAnimationRunning = true;
             hitAnim.startAnimation(animation, spd);
         }
 
         // Draw the animation for as long as it lasts
-        public void drawHitAnimation() {
+        protected void drawHitAnimation() {
             if (hitAnimationRunning) {
                 if (hitAnim.getAnimation().isAnimationFinished(hitAnim.getStateTime())) {
                     hitAnimationRunning = false;
@@ -370,35 +419,41 @@ public class RoomFight extends RoomParent {
             }
         }
 
-        public void startIdle() {
+        protected void startIdle() {
             anim.startAnimation(idle, idleSpd);
         }
 
-        public void startHack() {
+        protected void startHack() {
             anim.startAnimation(hack, hackSpd);
         }
 
         // If taken hit, then pause so that new actions won't take place
-        public void checkToPause() {
+        protected void checkToPause() {
             if (!hpIncorrect && !positionIncorrect) pauseStates = false;
             else pauseStates = true;
         }
 
-        public void addDoT(int turns, double damage) {
+        // If skill has DoT, it will be added here
+        protected void addDoT(int turns, double damage) {
             dotTurns.add(turns);
             dotDamage.add(damage);
         }
 
-        public void checkDoT() {
+        // Add all the DoTs on top of each other and decrease their turn timers
+        protected void checkDoT() {
             double takeDoT = 0;
             for (int i = 0; i < dotTurns.size(); i++) {
                 takeDoT += dotDamage.get(i);
+                dotTurns.set(i, dotTurns.get(i) - 1);
                 if (dotTurns.get(i) == 0) {
                     dotTurns.remove(i);
                     dotDamage.remove(i);
                     i--;
                 }
             }
+            /*
+            If DoT is over 0, then do damage, if it's under 0, then heal, else start the turn
+             */
             if (takeDoT > 0) {
                 calcTargetHpSpd(takeDoT);
                 startHitAnimation(healthMinus, 15);
@@ -413,7 +468,7 @@ public class RoomFight extends RoomParent {
         }
 
         // When taken hit, flash white for a certain amount of time
-        public void flashAndMove() {
+        protected void flashAndMove() {
             flashWhite = true;
             Timer.schedule(new Timer.Task() {
                 @Override
@@ -435,21 +490,21 @@ public class RoomFight extends RoomParent {
             }
         }
 
-        public void calcTargetHpSpd(double damage) {
+        // Calculates how fast to decrease hp
+        protected void calcTargetHpSpd(double damage) {
             targetHp = hp - damage;
             if (targetHp < 0) targetHp = 0;
             hpDecreaseSpd = (targetHp - hp) / 100;
         }
 
         // When taken hit, target hp is lower than hp. This makes the hp bar smoothly lower down
-        public void hpToTarget() {
+        protected void hpToTarget() {
             if (hp > targetHp) {
                 hpIncorrect = true;
                 hp += hpDecreaseSpd;
                 if (hp < targetHp) {
                     hp = targetHp;
                     hpIncorrect = false;
-                    hp = targetHp;
                 }
             } else if (hp < targetHp){
                 hpIncorrect = true;
@@ -457,13 +512,12 @@ public class RoomFight extends RoomParent {
                 if (hp > targetHp) {
                     hp = targetHp;
                     hpIncorrect = false;
-                    hp = targetHp;
                 }
             }
         }
 
         // When taken hit and position is off, return back to original position
-        public void returnPosition() {
+        protected void returnPosition() {
             if (positionIncorrect) {
                 if (positionTimer> 0) {
                     positionTimer--;
@@ -480,23 +534,25 @@ public class RoomFight extends RoomParent {
             }
         }
 
-        public void endTurn(final State next) {
-            state = State.CHANGING_TURN;
-            Timer.schedule(new Timer.Task() {
-                @Override
-                public void run() {
-                    state = next;
-                    turnState = BEFORE;
-                }
-            }, 0.5f);
-        }
-
         /*
         Check Hp at the start of every round.
          */
-        public void checkIfAlive() {
+        protected void checkIfAlive() {
             if (hp <= 0) {
                 state = ifDead;
+            }
+        }
+
+        /*
+        At the start of each round, decrease cooldown timers.
+         */
+        protected void decreaseCooldowns() {
+            for (Map.Entry<String, Integer> entry : cooldowns.entrySet()) {
+                //System.out.println(entry.getKey() + " = " + String.valueOf(entry.getValue()));
+                int value = entry.getValue();
+                if (value > 0) {
+                    cooldowns.put(entry.getKey(), entry.getValue() - 1);
+                }
             }
         }
 
@@ -515,6 +571,7 @@ public class RoomFight extends RoomParent {
             return hitAnimationRunning;
         }
 
+        // Used to check if player and enemy has finished their turn on fightersTakingDamage
         public boolean isPauseStates() {
             return pauseStates;
         }
@@ -532,7 +589,6 @@ public class RoomFight extends RoomParent {
 
         private String s_spd, s_dmg, s_cool, s_anim, s_hitAnim, s_name, s_DoTDmg, s_DoTTurns,
                 curAction;
-        private HashMap<String,Integer> cooldowns;
         private ArrayList<HashMap<String,Object>> mapSkills;
         private String[] skills;
 
@@ -544,6 +600,7 @@ public class RoomFight extends RoomParent {
             targetHp = hp;
             defaultDmg = 30; // Replace this with the correct value later
             ifDead = State.DEAD;
+            ID = PLAYER;
 
             idleSpd = 30;
             itemSpd = 20;
@@ -579,33 +636,10 @@ public class RoomFight extends RoomParent {
             updateStart();
             if (!pauseStates) {
 
+
                 if (state == State.PLAYER_TURN) {
-                    if (turnState == BEFORE) {
-                        checkDoT();
-
-                    } else if (turnState == TAKING_DOT) {
-                        if (targetHp == hp) {
-                            turnState = START;
-                            checkIfAlive();
-                        }
-
-                    } else if (turnState == START) {
-                        decreaseCooldowns();
-                        turnState = WAIT_FOR_ACTION;
-
-                    } else if (turnState == WAIT_FOR_ACTION) {
-                        if (!actionButtonsOn) createButtons();
-                        if (anim.getAnimation() != idle) startIdle();
-
-                    } else if (turnState == DOING_ACTION) {
-                        controlActionStates();
-                    } else if (turnState == END_ACTION) {
-                        if (!fightersTakingDamage()) {
-                            enemy.startTurn();
-                            checkIfAlive();
-                            enemy.checkIfAlive();
-                        }
-                    }
+                    if (turnState == WAIT_FOR_ACTION) if (!actionButtonsOn) createButtons();
+                    controlTurnStates();
                 } else if (state == State.HACK) {
                     if (anim.getAnimation() != hack) startHack();
                 } else if (state == State.DEAD) {
@@ -684,7 +718,7 @@ public class RoomFight extends RoomParent {
             }
         }
 
-        private void controlActionStates() {
+        protected void controlActionStates() {
             if (actionState == TEMP_ANIM) {
                 // If temporary animation is finished, and hitAnimation exists, draw hit animation
                 // on enemy's draw method. If not causeDamage, start enemy's turn
@@ -749,24 +783,6 @@ public class RoomFight extends RoomParent {
                 game.switchToRoomGame();
             }
         }
-
-        /*
-        At the start of each round, decrease cooldown timers.
-         */
-        private void decreaseCooldowns() {
-            for (Map.Entry<String, Integer> entry : cooldowns.entrySet()) {
-                //System.out.println(entry.getKey() + " = " + String.valueOf(entry.getValue()));
-                int value = entry.getValue();
-                if (value > 0) {
-                    cooldowns.put(entry.getKey(), entry.getValue() - 1);
-                }
-            }
-        }
-
-        public void startTurn() {
-            turnState = BEFORE;
-            state = State.PLAYER_TURN;
-        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -784,6 +800,7 @@ public class RoomFight extends RoomParent {
         private int actionTimer = actionDelay;
         private double[] damages;
         private String[] skillNames;
+        private int[] cooldownAmount;
 
         Enemy() {
             retrieveBoss();
@@ -795,6 +812,12 @@ public class RoomFight extends RoomParent {
             targetHp = hp;
             defaultDmg = 15; // Replace this with the correct value later
             ifDead = State.HACK;
+            ID = ENEMY;
+
+            cooldowns = new HashMap<String, Integer>();
+            cooldowns.put("Skill0", 0);
+            cooldowns.put("Skill1", 0);
+            cooldowns.put("Skill2", 0);
 
             startDialogTimer();
 
@@ -814,33 +837,8 @@ public class RoomFight extends RoomParent {
 
                 // Pretty much same stuff happens as in player's action states
                 if (state == State.ENEMY_TURN) {
-                    if (turnState == BEFORE) {
-                        if (!dialog.isSkillNameOn()) {
-                            checkDoT();
-                        }
-
-                    } else if (turnState == TAKING_DOT) {
-                        if (targetHp == hp) {
-                            turnState = START;
-                            checkIfAlive();
-                        }
-
-                    } else if (turnState == START) {
-                        // decreaseCooldowns(); not functional yet
-                        turnState = WAIT_FOR_ACTION;
-                    } else if (turnState == WAIT_FOR_ACTION) {
-                        if (anim.getAnimation() != idle) startIdle();
-                        attack();
-
-                    } else if (turnState == DOING_ACTION) {
-                        controlActionStates();
-                    } else if (turnState == END_ACTION) {
-                        if (!fightersTakingDamage()) {
-                            player.startTurn();
-                            checkIfAlive();
-                            player.checkIfAlive();
-                        }
-                    }
+                    if (turnState == WAIT_FOR_ACTION) attack();
+                    controlTurnStates();
                 } else if (state == State.HACK) {
                     if (anim.getAnimation() != hack) anim.startAnimation(hack, hackSpd);
                 } else if (state == State.HACK_FAILED) {
@@ -862,6 +860,8 @@ public class RoomFight extends RoomParent {
             String skillHit = Bosses.getSkillHit();
             String skillName = Bosses.getSkillName();
             String spd = Bosses.getSpeed();
+            String dmg = Bosses.getDamage();
+            String skillCd = Bosses.getSkillCooldown();
 
             // Retrieve Strings
             String skill1_name = (String) mapBoss.get(skillName + "1");
@@ -883,11 +883,18 @@ public class RoomFight extends RoomParent {
             hack = (Animation<TextureRegion>) mapBoss.get(Bosses.getHack());
 
             // Retrieve damages
-            double dmg1 = Double.valueOf(mapBoss.get(Bosses.getDamage() + "1").toString());
-            double dmg2 = Double.valueOf(mapBoss.get(Bosses.getDamage() + "2").toString());
-            double dmg3 = Double.valueOf(mapBoss.get(Bosses.getDamage() + "3").toString());
+            double dmg1 = Double.valueOf(mapBoss.get(dmg + "1").toString());
+            double dmg2 = Double.valueOf(mapBoss.get(dmg + "2").toString());
+            double dmg3 = Double.valueOf(mapBoss.get(dmg + "3").toString());
 
             damages = new double[] {dmg1, dmg2, dmg3};
+
+            // Retrieve cooldowns
+            int cd1 = (Integer) mapBoss.get(skillCd + "1");
+            int cd2 = (Integer) mapBoss.get(skillCd + "2");
+            int cd3 = (Integer) mapBoss.get(skillCd + "3");
+
+            cooldownAmount = new int[] {cd1, cd2, cd3};
 
             // Retrieve animation speeds
             idleSpd = (Integer) mapBoss.get(spd + Bosses.getIdle());
@@ -903,9 +910,7 @@ public class RoomFight extends RoomParent {
             hitSpeeds = new Integer[] {skill1HitSpd, skill2HitSpd, skill3HitSpd};
         }
 
-        /*
-        Attack if state is ENEMY_WAITING.
-         */
+        // Select skill
         private void attack() {
             // Wait for timer and skill name box to go down, then select action
             if (actionTimer > 0 || dialog.isSkillNameOn()) {
@@ -914,7 +919,16 @@ public class RoomFight extends RoomParent {
                 actionTimer = actionDelay;
                 turnState = DOING_ACTION;
                 actionState = TEMP_ANIM;
-                int random = MathUtils.random(0, animList.size() - 1);
+                int random;
+                // While skill chosen which is on cooldown, select new one
+                while (true) {
+                    random = MathUtils.random(0, animList.size() - 1);
+                    String selSkill = "Skill" + String.valueOf(random);
+                    if (cooldowns.get(selSkill) == 0) {
+                        cooldowns.put(selSkill, cooldownAmount[random]);
+                        break;
+                    }
+                }
                 dialog.showSkillName(skillNames[random]);
                 curAnimation = animList.get(random);
                 curHitAnimation = hitAnimList.get(random);
@@ -937,7 +951,8 @@ public class RoomFight extends RoomParent {
             }
         }
 
-        private void controlActionStates() {
+        // Control what happens once action has been selected
+        protected void controlActionStates() {
             if (actionState == TEMP_ANIM) {
                 if (curAnimation.isAnimationFinished(anim.getStateTime())) {
                     player.startHitAnimation(curHitAnimation, curHitAnimationSpd);
@@ -967,11 +982,6 @@ public class RoomFight extends RoomParent {
                     dialog.createDialog(dialogStart, dialogX, dialogY);
                 }
             }, 1);
-        }
-
-        public void startTurn() {
-            turnState = BEFORE;
-            state = State.ENEMY_TURN;
         }
     }
 }
