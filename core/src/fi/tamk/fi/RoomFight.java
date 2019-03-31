@@ -151,6 +151,7 @@ public class RoomFight extends RoomParent {
         animHealthEnemy.setStateTime(enemyHealthBar.getAnimationDuration());
     }
 
+    // When player's turn starts, spawn buttons
     private void createButtons() {
         actionButtonsOn = true;
         createMenuButton();
@@ -158,6 +159,7 @@ public class RoomFight extends RoomParent {
         createActionButtons();
     }
 
+    // When player has selected action, remove buttons
     private void removeButtons() {
         actionButtonsOn = false;
         stage.clear();
@@ -196,25 +198,29 @@ public class RoomFight extends RoomParent {
         }
     }
 
+    // Controls the hacking phase
     private void hackingPhase() {
         if (state == State.HACK) {
+            // If balls has not been spawned, spawn them
             if (!spawnHacking) {
                 spawnHacking = true;
+                // When room starts, firstHack is true, after this it's false
                 hacking = new Hacking(game, firstHack);
                 firstHack = false;
             }
-            hacking.update();
+            hacking.update(); // spin the balls and control shooting
 
             if (hacking.isBulletHitEnemy()) {
                 state = State.HACK_SUCCESS;
                 enemy.endDialogTimer();
             } else if (hacking.isBulletMissedEnemy()) {
                 state = State.HACK_FAILED;
-                spawnHacking = false;
+                spawnHacking = false; // Reset spawnHacking
             }
         }
     }
 
+    // Draws player's and enemy's health bars on top
     private void drawHP() {
         double div, spot;
         int frame;
@@ -287,6 +293,7 @@ public class RoomFight extends RoomParent {
         });
     }
 
+    // Used for checking that enemy and player has completed their action, before moving on
     public boolean fightersTakingDamage() {
         boolean takingDamage = false;
 
@@ -453,9 +460,8 @@ public class RoomFight extends RoomParent {
                     i--;
                 }
             }
-            /*
-            If DoT is over 0, then do damage, if it's under 0, then heal, else start the turn
-             */
+
+            // If DoT is over 0, then do damage, if it's under 0, then heal, else start the turn
             if (takeDoT > 0) {
                 calcTargetHpSpd(takeDoT);
                 startHitAnimation(healthMinus, 15);
@@ -536,18 +542,15 @@ public class RoomFight extends RoomParent {
             }
         }
 
-        /*
-        Check Hp at the start of every round.
-         */
+        // Checks hp after DoT and at the end of the player's and enemy's turn
         protected void checkIfAlive() {
             if (hp <= 0) {
                 state = ifDead;
             }
         }
 
-        /*
-        At the start of each round, decrease cooldown timers.
-         */
+
+        // At the start of each round, decrease cooldown timers
         protected void decreaseCooldowns() {
             for (Map.Entry<String, Integer> entry : cooldowns.entrySet()) {
                 //System.out.println(entry.getKey() + " = " + String.valueOf(entry.getValue()));
@@ -638,7 +641,6 @@ public class RoomFight extends RoomParent {
             updateStart();
             if (!pauseStates) {
 
-
                 if (state == State.PLAYER_TURN) {
                     if (turnState == WAIT_FOR_ACTION) if (!actionButtonsOn) createButtons();
                     controlTurnStates();
@@ -663,7 +665,8 @@ public class RoomFight extends RoomParent {
             boolean actionSelected = false;
             int curAnimSpd = 0;
 
-            if (action == "Attack"){
+            if (action == "Attack")
+            {
                 actionSelected = true;
                 curAnimation = (Animation<TextureRegion>) mapAttack.get(s_anim);
                 curAnimSpd =  (Integer) mapAttack.get(s_spd + s_anim);
@@ -671,7 +674,9 @@ public class RoomFight extends RoomParent {
                 curHitAnimationSpd = (Integer) mapAttack.get(s_spd + s_hitAnim);
                 dmgAmount = defaultDmg;
                 actionState = TEMP_ANIM;
-            } else if (action == "Defend") {
+            }
+            else if (action == "Defend")
+            {
                 if (cooldowns.get("Defend") == 0) {
                     actionSelected = true;
                     curAnimation = (Animation<TextureRegion>) mapDefend.get(s_anim);
@@ -679,12 +684,15 @@ public class RoomFight extends RoomParent {
                     cooldowns.put("Defend", (Integer) mapDefend.get(s_cool));
                     actionState = LONG_ANIM;
                 }
-            } else if (action == "Item") {
+            }
+            else if (action == "Item")
+            {
                 actionSelected = true;
                 curAnimation = item;
                 curAnimSpd = itemSpd;
                 actionState = TEMP_ANIM;
-            } else { // It's skill
+            }
+            else { // It's skill
                 for (int i = 0; i < 2; i++) {
                     /*
                     If selected action is this skill, if skill is not empty and if cooldown is 0
@@ -711,6 +719,7 @@ public class RoomFight extends RoomParent {
                 }
             }
 
+            // If player touched something that was on cooldown, actionSelected remains false
             if (actionSelected) {
                 curAction = action;
                 anim.startAnimation(curAnimation, curAnimSpd);
@@ -745,6 +754,7 @@ public class RoomFight extends RoomParent {
             }
         }
 
+        // Initialize skill variables for easy access
         private void initSkillVariables() {
             skills = new String[] {game.getSkill1(), game.getSkill2()};
             mapSkills = new ArrayList<HashMap<String, Object>>();
@@ -761,9 +771,8 @@ public class RoomFight extends RoomParent {
             s_DoTTurns = Skills.getDamageOverTimeTurns();
         }
 
-        /*
-        Take hit, expect if defending, then return the damage back to the enemy.
-         */
+
+        // Take hit, expect if defending, then return the damage back to the enemy.
         public void takeHit(double damage) {
             if (curAction == "Defend") {
                 enemy.takeHit(damage);
@@ -773,9 +782,8 @@ public class RoomFight extends RoomParent {
             }
         }
 
-        /*
-        Run away if escape is chosen
-         */
+
+        // Run away if escape is chosen
         private void runAway() {
             if (anim.getAnimation() != escape) anim.startAnimation(escape, escapeSpd);
 
@@ -837,7 +845,6 @@ public class RoomFight extends RoomParent {
 
             if (!pauseStates) {
 
-                // Pretty much same stuff happens as in player's action states
                 if (state == State.ENEMY_TURN) {
                     if (turnState == WAIT_FOR_ACTION) attack();
                     controlTurnStates();
@@ -856,6 +863,7 @@ public class RoomFight extends RoomParent {
             updateEnd();
         }
 
+        // Retrieve boss's information to use in attack()
         private void retrieveBoss() {
             mapBoss = Bosses.getBoss("Roombot");
             String skill = Bosses.getSkill();
@@ -986,6 +994,7 @@ public class RoomFight extends RoomParent {
             }, 1);
         }
 
+        // Room calls this after hack is successful
         public void endDialogTimer() {
             Timer.schedule(new Timer.Task() {
                 @Override
