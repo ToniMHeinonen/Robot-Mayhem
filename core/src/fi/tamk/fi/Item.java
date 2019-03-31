@@ -1,54 +1,30 @@
 package fi.tamk.fi;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import java.util.HashMap;
 
 public class Item {
 
     private static String name = "name";
+    private static String description = "description";
     private static String damage = "damage";
-    /* Missing:
     private static String usedInHall = "usedInHall";
     private static String isSkill = "isSkill";
-     */
-
-    //(temporary will probably not be needed at all, so let's not add it)
-
-    /* Not needed
-    private static String cooldown = "cooldown";
-    private static String animation = "animation";
-    private static String hitAnimation = "hitAnimation";
-    private static String speed = "speed";*/
 
     private static HashMap<String,HashMap<String,Object>> mapItems;
-    private static HashMap<String,Object> mapDamage, mapHeal;
-
-    /* Not needed
-    private static Texture t_Damage, t_Damage_hit, t_Heal;
-    private static Animating anim = new Animating();
-    private static Animation<TextureRegion> a_Damage, a_Damage_hit, a_Heal;*/
-
-    /* Not needed
-    Booleans that can be used later.
-    boolean IsItAHallItem;
-    boolean IsItASkill;
-    boolean Temporary;*/
+    private static HashMap<String,Object> mapBomb, mapPotion, mapDoubleSteps;
 
     /*
     Create items when the game starts.
      */
     public static void createItems() {
 
-        // createDamageAndHeal(); Not needed
-        mapDamage = itemDamage();
-        mapHeal = itemHeal();
+        mapBomb = itemBomb();
+        mapPotion = itemPotion();
+        mapDoubleSteps = itemDoubleSteps();
 
         mapItems = new HashMap<String, HashMap<String,Object>>();
-        mapItems.put((String) mapDamage.get(name), mapDamage);
-        mapItems.put((String) mapHeal.get(name), mapHeal);
+        mapItems.put((String) mapBomb.get(name), mapBomb);
+        mapItems.put((String) mapPotion.get(name), mapPotion);
     }
 
     public static HashMap<String, Object> getItem(String item) {
@@ -59,60 +35,38 @@ public class Item {
         return chosenItem;
     }
 
-    private static HashMap<String, Object> itemDamage() { // Not protected, use private
+    private static HashMap<String, Object> itemBomb() {
         HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put(name, "Attack");
-        map.put(damage, 5);
-        /* Missing:
+        map.put(name, "Bomb");
+        map.put(description, "Halven enemy's health");
+        map.put(damage, 50);
         map.put(usedInHall, false);
         map.put(isSkill, false);
-         */
 
-        /* Not needed
-        map.put(cooldown, 0);
-        map.put(animation, a_Damage);
-        map.put(hitAnimation, a_Damage_hit);
-        map.put(speed + animation, 30);
-        map.put(speed + hitAnimation, 15);*/
         return map;
     }
 
-    private static HashMap<String, Object> itemHeal() { // Not protected, use private
+    private static HashMap<String, Object> itemPotion() {
         HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put(name, "heal");
-        map.put(damage, -5);
-        /* Missing:
+        map.put(name, "Potion");
+        map.put(description, "Heal 50%");
+        map.put(damage, -50);
         map.put(usedInHall, false);
         map.put(isSkill, false);
-         */
 
-        /* Not needed
-        map.put(cooldown, 3);
-        map.put(animation, a_Heal);
-        map.put(hitAnimation, null);
-        map.put(speed + animation, 5);
-        map.put(speed + hitAnimation, 0);*/
         return map;
     }
 
-    /* Not needed
-    private static void createDamageAndHeal() {
+    private static HashMap<String, Object> itemDoubleSteps() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, "Polished rotor");
+        map.put(description, "Gain double steps");
+        map.put(damage, 0);
+        map.put(usedInHall, true);
+        map.put(isSkill, false);
 
-        t_Damage = new Texture("texture/player/playerAttack.png");
-        a_Damage = anim.createAnimation(t_Damage, 3, 1);
-        t_Damage_hit = new Texture("texture/player/playerAttackHit.png");
-        a_Damage_hit = anim.createAnimation(t_Damage_hit, 3, 1);
-
-        t_Heal = new Texture("texture/player/playerDefend.png");
-        a_Heal = anim.createAnimation(t_Heal, 3, 1);
-    }*/
-
-    /* Not needed
-    public static void dispose() {
-        t_Damage.dispose();
-        t_Damage_hit.dispose();
-        t_Heal.dispose();
-    }*/
+        return map;
+    }
 
     public static String getName() {
         return name;
@@ -122,9 +76,6 @@ public class Item {
         return damage;
     }
 
-
-
-    /* Missing:
     public static String getIsSkill() {
         return isSkill;
     }
@@ -132,19 +83,8 @@ public class Item {
     public static String getUsedInHall() {
         return usedInHall;
     }
-     */
 
-    /* Not needed
-    public static String getCooldown() {
-        return cooldown;
+    public static String getDescription() {
+        return description;
     }
-    public static String getAnimation() {
-        return animation;
-    }
-    public static String getHitAnimation() {
-        return hitAnimation;
-    }
-    public static String getSpeed() {
-        return speed;
-    }*/
 }

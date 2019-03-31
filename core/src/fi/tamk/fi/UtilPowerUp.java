@@ -10,6 +10,7 @@ public class UtilPowerUp {
     private SpriteBatch batch;
     private Texture background;
     private BitmapFont bigFont;
+    private int type, MONEY = 0, HALL_ITEM = 1, BATTLE_ITEM = 2;
 
     UtilPowerUp(MainGame game) {
         this.game = game;
