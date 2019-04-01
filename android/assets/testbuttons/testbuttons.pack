@@ -3,93 +3,121 @@ testbuttons.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-dialog_bg
-  rotate: false
-  xy: 1, 267
-  size: 200, 200
-  orig: 200, 200
-  offset: 0, 0
-  index: -1
 button_attack
   rotate: false
-  xy: 203, 347
-  size: 240, 120
-  orig: 240, 120
+  xy: 1, 727
+  size: 384, 240
+  orig: 384, 240
   offset: 0, 0
   index: -1
-button_attack_clicked
+button_attack1
   rotate: false
-  xy: 445, 347
-  size: 240, 120
-  orig: 240, 120
+  xy: 1, 485
+  size: 384, 240
+  orig: 384, 240
   offset: 0, 0
   index: -1
-button_attack_off
+button_defend1
   rotate: false
-  xy: 687, 347
-  size: 240, 120
-  orig: 240, 120
+  xy: 1, 485
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_item1
+  rotate: false
+  xy: 1, 485
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_attack2
+  rotate: false
+  xy: 387, 727
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_defend2
+  rotate: false
+  xy: 387, 727
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_item2
+  rotate: false
+  xy: 387, 727
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_attack3
+  rotate: false
+  xy: 1, 243
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_defend3
+  rotate: false
+  xy: 1, 243
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_item3
+  rotate: false
+  xy: 1, 243
+  size: 384, 240
+  orig: 384, 240
   offset: 0, 0
   index: -1
 button_defend
   rotate: false
-  xy: 1, 145
-  size: 240, 120
-  orig: 240, 120
-  offset: 0, 0
-  index: -1
-button_defend_clicked
-  rotate: false
-  xy: 1, 23
-  size: 240, 120
-  orig: 240, 120
-  offset: 0, 0
-  index: -1
-button_defend_off
-  rotate: false
-  xy: 243, 225
-  size: 240, 120
-  orig: 240, 120
+  xy: 387, 485
+  size: 384, 240
+  orig: 384, 240
   offset: 0, 0
   index: -1
 button_item
   rotate: false
-  xy: 243, 103
-  size: 240, 120
-  orig: 240, 120
+  xy: 1, 1
+  size: 384, 240
+  orig: 384, 240
   offset: 0, 0
   index: -1
-button_item_clicked
+cooldown
   rotate: false
-  xy: 485, 225
-  size: 240, 120
-  orig: 240, 120
+  xy: 387, 243
+  size: 384, 240
+  orig: 384, 240
   offset: 0, 0
   index: -1
-button_item_off
+dialog_bg
   rotate: false
-  xy: 485, 103
-  size: 240, 120
-  orig: 240, 120
+  xy: 773, 767
+  size: 200, 200
+  orig: 200, 200
   offset: 0, 0
   index: -1
 tooltip_attack
   rotate: false
-  xy: 727, 245
+  xy: 387, 141
   size: 200, 100
   orig: 200, 100
   offset: 0, 0
   index: -1
 tooltip_defend
   rotate: false
-  xy: 727, 143
+  xy: 773, 665
   size: 200, 100
   orig: 200, 100
   offset: 0, 0
   index: -1
 tooltip_item
   rotate: false
-  xy: 243, 1
+  xy: 387, 39
   size: 200, 100
   orig: 200, 100
   offset: 0, 0
