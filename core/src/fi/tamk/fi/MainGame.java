@@ -228,8 +228,8 @@ public class MainGame extends Game {
     }
 
 	private void loadTextures() {
-		imgBgHall = new Texture("texture/bg_hall_blank.png");
-		imgBgBoss = new Texture("texture/bg_hall_boss_blank.png");
+		imgBgHall = new Texture("texture/bg_hall1.png");
+		imgBgBoss = new Texture("texture/bg_hall1_boss.png");
 		imgTopBar = new Texture("texture/topbar.png");
 		imgBottomBar = new Texture("texture/bottombar.png");
 		gamePlayer = new Texture("texture/player/player.png");

@@ -21,7 +21,7 @@ public class Skills {
     private static String speed = "speed";
 
     private static HashMap<String,HashMap<String,Object>> mapSkills;
-    private static HashMap<String,Object> mapAttack, mapDefend, mapShock, mapFire;
+    private static HashMap<String,Object> mapAttack, mapDefend, mapShock, mapFire, mapClean;
 
     private static Texture t_attack, t_attack_hit, t_defend;
     private static Animating anim = new Animating();
@@ -36,12 +36,14 @@ public class Skills {
         mapDefend = skillDefend();
         mapShock = skillShock();
         mapFire = skillFire();
+        mapClean = skillClean();
 
         mapSkills = new HashMap<String, HashMap<String,Object>>();
         mapSkills.put((String) mapAttack.get(name), mapAttack);
         mapSkills.put((String) mapDefend.get(name), mapDefend);
         mapSkills.put((String) mapShock.get(name), mapShock);
         mapSkills.put((String) mapFire.get(name), mapFire);
+        mapSkills.put((String) mapClean.get(name), mapClean);
     }
 
     /*
@@ -107,6 +109,20 @@ public class Skills {
         map.put(animation, a_defend);
         map.put(hitAnimation, null);
         map.put(speed + animation, 15);
+        map.put(speed + hitAnimation, 0);
+        return map;
+    }
+
+    private static HashMap<String, Object> skillClean() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, "Clean the dust");
+        map.put(damage, 1.5);
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
+        map.put(cooldown, 2);
+        map.put(animation, null);
+        map.put(hitAnimation, a_attack_hit);
+        map.put(speed + animation, 0);
         map.put(speed + hitAnimation, 0);
         return map;
     }
