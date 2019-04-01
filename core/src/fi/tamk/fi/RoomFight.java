@@ -417,7 +417,9 @@ public class RoomFight extends RoomParent {
 
             } else if (turnState == DOING_ACTION) {
                 controlActionStates();
+                System.out.println("doing");
             } else if (turnState == END_ACTION) {
+                System.out.println("ending");
                 if (!fightersTakingDamage()) {
                     if (ID == PLAYER) {
                         enemy.startTurn();
@@ -542,14 +544,21 @@ public class RoomFight extends RoomParent {
             if (hp > targetHp) {
                 hpIncorrect = true;
                 hp += hpDecreaseSpd;
-                if (hp < targetHp) {
+                /*
+                I hate that it has to be checked like this, the reason for it is that even
+                though I get hpDecreaseSpd by dividing value by 100, it is not really 1 percent
+                of the value, it can be 0.000001 off, so it causes hp to go over the target...
+                if I would use type Long, it could probably fix it, but since it works like this,
+                I don't want to take any more risks.
+                */
+                if (hp < targetHp || hp == targetHp) {
                     hp = targetHp;
                     hpIncorrect = false;
                 }
             } else if (hp < targetHp){
                 hpIncorrect = true;
                 hp += hpDecreaseSpd;
-                if (hp > targetHp) {
+                if (hp > targetHp || hp == targetHp) {
                     hp = targetHp;
                     hpIncorrect = false;
                 }

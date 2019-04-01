@@ -116,7 +116,6 @@ public class Hacking {
         createShields();
         createJoints();
         createButtonShoot();
-        //createButtonSettings();
         createCollisionChecking();
     }
 
@@ -320,22 +319,6 @@ public class Hacking {
             public void clicked(InputEvent event, float x, float y){
                 fireBullet();
                 buttonShoot.remove();
-            }
-        });
-    }
-
-    private void createButtonSettings() {
-        final TextButton buttonShoot = new TextButton("Settings", skin);
-        buttonShoot.setWidth(300f);
-        buttonShoot.setHeight(100f);
-        buttonShoot.setPosition(game.pixelWidth /2 - buttonShoot.getWidth() *2,
-                (game.pixelHeight/3) - buttonShoot.getHeight() *2);
-        stage.addActor(buttonShoot);
-
-        buttonShoot.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                game.switchToRoomSettings();
             }
         });
     }
