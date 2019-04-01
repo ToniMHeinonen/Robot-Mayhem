@@ -22,15 +22,16 @@ public class RoomTestailua extends RoomParent {
     private Drawable[] tooltips;
     private Drawable tooltipAttack, tooltipDefend, tooltipItem;
 
+    int attackCooldown;
+    int defendCooldown;
+    int itemCooldown;
+    int[] cooldowns;
+
     private String[] btn;
 
     private int buttonCounter;
     private float space = 300f;
     private float tooltipDelay = 2;
-
-    Hacking hacking;
-
-    boolean startHack = false;
 
     RoomTestailua(MainGame game) {
         super(game);
@@ -72,14 +73,18 @@ public class RoomTestailua extends RoomParent {
         tooltipItem = testSkin.getDrawable("tooltip_item");
         tooltips = new Drawable[] {tooltipAttack, tooltipDefend, tooltipItem};
         btn = new String[] {"button_attack", "button_defend", "button_item"};
+
+        attackCooldown = 0;
+        defendCooldown = 1;
+        itemCooldown = 0;
+        cooldowns = new int[] {attackCooldown, defendCooldown, itemCooldown};
     }
 
     public void createButtons() {
         for (int i = 0; i < btn.length; i++) {
             buttonCounter = i;
-            Drawable normal = testSkin.getDrawable(btn[i]);
-            Drawable clicked = testSkin.getDrawable(btn[i] + "_clicked");
-            final ImageButton imgButton = new ImageButton(normal, clicked);
+            Drawable normal = testSkin.getDrawable(btn[i] + cooldowns[i]);
+            final ImageButton imgButton = new ImageButton(normal);
             imgButton.setPosition(100 + space * i, 100);
             stage.addActor(imgButton);
             imgButton.addListener(new ActorGestureListener(20,0.4f,0.5f,0.15f) {
