@@ -111,8 +111,8 @@ public class UtilPowerUp {
                 } else {
                     name = Item.selectRandomItem();
                     HashMap<String, Object> map = Item.getItem(name);
-                    boolean hallItem = (Boolean) map.get(Item.getUsedInHall());
-                    description = (String) map.get(Item.getDescription());
+                    boolean hallItem = (Boolean) map.get(Item.usedInHall);
+                    description = (String) map.get(Item.description);
                     if (random[i] == HALL_ITEM) {
                         if (hallItem) break;
                     } else if (random[i] == BATTLE_ITEM) {

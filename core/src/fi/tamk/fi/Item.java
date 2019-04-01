@@ -6,31 +6,27 @@ import java.util.HashMap;
 
 public class Item {
 
-    private static String name = "name";
-    private static String description = "description";
-    private static String damage = "damage";
-    private static String usedInHall = "usedInHall";
-    private static String isSkill = "isSkill";
+    public static final String name = "name";
+    public static final String description = "description";
+    public static final String damage = "damage";
+    public static final String usedInHall = "usedInHall";
+    public static final String isSkill = "isSkill";
 
+    public static final String BOMB = "Bomb";
+    public static final String POTION = "Potion";
+    public static final String DOUBLE_STEPS = "Polished Rotor";
+
+    private static String[] allItems = new String[] {BOMB, POTION, DOUBLE_STEPS};
     private static HashMap<String,HashMap<String,Object>> mapItems;
-    private static HashMap<String,Object> mapBomb, mapPotion, mapDoubleSteps;
-
-    private static String[] allItems = new String[] {"Bomb", "Potion", "Polished Rotor"};
-    private static int BOMB = 0, POTION = 1, DOUBLE_STEPS = 2;
 
     /*
     Create items when the game starts.
      */
     public static void createItems() {
-
-        mapBomb = itemBomb();
-        mapPotion = itemPotion();
-        mapDoubleSteps = itemDoubleSteps();
-
         mapItems = new HashMap<String, HashMap<String,Object>>();
-        mapItems.put((String) mapBomb.get(name), mapBomb);
-        mapItems.put((String) mapPotion.get(name), mapPotion);
-        mapItems.put((String) mapDoubleSteps.get(name), mapDoubleSteps);
+        itemBomb();
+        itemPotion();
+        itemDoubleSteps();
     }
 
     public static HashMap<String, Object> getItem(String item) {
@@ -49,56 +45,36 @@ public class Item {
         return selected;
     }
 
-    private static HashMap<String, Object> itemBomb() {
+    private static void itemBomb() {
         HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put(name, allItems[BOMB]);
+        map.put(name, BOMB);
         map.put(description, "Halven enemy's health");
         map.put(damage, 50);
         map.put(usedInHall, false);
         map.put(isSkill, false);
 
-        return map;
+        mapItems.put((String) map.get(name), map);
     }
 
-    private static HashMap<String, Object> itemPotion() {
+    private static void itemPotion() {
         HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put(name, allItems[POTION]);
+        map.put(name, POTION);
         map.put(description, "Heal 50%");
         map.put(damage, -50);
         map.put(usedInHall, false);
         map.put(isSkill, false);
 
-        return map;
+        mapItems.put((String) map.get(name), map);
     }
 
-    private static HashMap<String, Object> itemDoubleSteps() {
+    private static void itemDoubleSteps() {
         HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put(name, allItems[DOUBLE_STEPS]);
+        map.put(name, DOUBLE_STEPS);
         map.put(description, "Gain double steps");
         map.put(damage, 0);
         map.put(usedInHall, true);
         map.put(isSkill, false);
 
-        return map;
-    }
-
-    public static String getName() {
-        return name;
-    }
-
-    public static String getDamage() {
-        return damage;
-    }
-
-    public static String getIsSkill() {
-        return isSkill;
-    }
-
-    public static String getUsedInHall() {
-        return usedInHall;
-    }
-
-    public static String getDescription() {
-        return description;
+        mapItems.put((String) map.get(name), map);
     }
 }

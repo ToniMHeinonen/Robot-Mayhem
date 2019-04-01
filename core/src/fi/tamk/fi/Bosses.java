@@ -12,20 +12,19 @@ public class Bosses {
     Use these, since if you need to change the name to something else, you then only need
     to change it in here.
      */
-    private static String name = "name";
-    private static String damage = "damage";
-    private static String idle = "idle";
-    private static String hack = "hack";
-    private static String skill = "skill";
-    private static String skillHit = "skillHit";
-    private static String skillName = "skillName";
-    private static String skillCooldown = "skillCooldown";
-    private static String dialogStart = "dialogstart";
-    private static String dialogEnd = "dialogend";
-    private static String speed = "speed";
+    public static final String name = "name";
+    public static final String damage = "damage";
+    public static final String idle = "idle";
+    public static final String hack = "hack";
+    public static final String skill = "skill";
+    public static final String skillHit = "skillHit";
+    public static final String skillName = "skillName";
+    public static final String skillCooldown = "skillCooldown";
+    public static final String dialogStart = "dialogstart";
+    public static final String dialogEnd = "dialogend";
+    public static final String speed = "speed";
 
     private static HashMap<String, HashMap<String,Object>> mapBosses;
-    private static HashMap<String,Object> mapRoombot;
 
     private static int s_idle, s_hack, s_skill1, s_skill2, s_skill3,
                         s_skill1_hit, s_skill2_hit, s_skill3_hit; // Animation speed
@@ -40,17 +39,15 @@ public class Bosses {
     private static double curDmg1, curDmg2, curDmg3;
     private static int curSkillCD1, curSkillCD2, curSkillCD3;
 
-    private static String[] allBosses = new String[] {"Roombot"};
-    private static int ROOMBOT = 0;
+    public static final String ROOMBOT = "Roombot";
+    private static String[] allBosses = new String[] {ROOMBOT};
 
     /*
     Create bosses when the game starts.
      */
     public static void createBosses() {
-        bossRoombot();
-
         mapBosses = new HashMap<String, HashMap<String,Object>>();
-        mapBosses.put((String) mapRoombot.get(name), mapRoombot);
+        bossRoombot();
     }
 
     /*
@@ -73,16 +70,16 @@ public class Bosses {
     }
 
     private static void bossRoombot() {
-        curName = allBosses[ROOMBOT];
+        curName = ROOMBOT;
         curDmg1 = 1;
         curDmg2 = 1.5;
         curDmg3 = 2;
         curSkillCD1 = 0;
         curSkillCD2 = 2;
         curSkillCD3 = 3;
-        curSkillName1 = "Attack";
-        curSkillName2 = "Clean the dust";
-        curSkillName3 = "Accidental bumb";
+        curSkillName1 = Skills.ATTACK;
+        curSkillName2 = Skills.CLEAN;
+        curSkillName3 = Skills.BUMB;
         curDialogStart = "Vroom Vroom!";
         curDialogEnd = "Vroom poks!";
 
@@ -111,11 +108,11 @@ public class Bosses {
         a_skill3_hit = anim.createAnimation(t_skill3_hit, 3, 1);
         s_skill3_hit = 30;
 
-        mapRoombot = new HashMap<String, Object>();
-        mapRoombot = addToMap(mapRoombot);
+        addToMap();
     }
 
-    private static HashMap<String, Object> addToMap(HashMap<String, Object> map) {
+    private static void addToMap() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, curName);
         map.put(idle, a_idle);
         map.put(hack, a_hack);
@@ -145,7 +142,7 @@ public class Bosses {
         map.put(dialogStart, curDialogStart);
         map.put(dialogEnd, curDialogEnd);
 
-        return map;
+        mapBosses.put((String) map.get(name), map);
     }
 
     public static void dispose() {
@@ -242,48 +239,4 @@ public class Bosses {
     }
 
      */
-
-    public static String getName() {
-        return name;
-    }
-
-    public static String getDamage() {
-        return damage;
-    }
-
-    public static String getIdle() {
-        return idle;
-    }
-
-    public static String getSkill() {
-        return skill;
-    }
-
-    public static String getHack() {
-        return hack;
-    }
-
-    public static String getDialogStart() {
-        return dialogStart;
-    }
-
-    public static String getDialogEnd() {
-        return dialogEnd;
-    }
-
-    public static String getSpeed() {
-        return speed;
-    }
-
-    public static String getSkillHit() {
-        return skillHit;
-    }
-
-    public static String getSkillName() {
-        return skillName;
-    }
-
-    public static String getSkillCooldown() {
-        return skillCooldown;
-    }
 }

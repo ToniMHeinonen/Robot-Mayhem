@@ -809,14 +809,14 @@ public class RoomFight extends RoomParent {
             for (int i = 0; i < 2; i++) {
                 if (skills[i] != "") mapSkills.add(i, Skills.getSkill(skills[i]));
             }
-            s_spd = Skills.getSpeed();
-            s_dmg = Skills.getDamage();
-            s_name = Skills.getName();
-            s_anim = Skills.getAnimation();
-            s_hitAnim = Skills.getHitAnimation();
-            s_cool = Skills.getCooldown();
-            s_DoTDmg = Skills.getDamageOverTime();
-            s_DoTTurns = Skills.getDamageOverTimeTurns();
+            s_spd = Skills.speed;
+            s_dmg = Skills.damage;
+            s_name = Skills.name;
+            s_anim = Skills.animation;
+            s_hitAnim = Skills.hitAnimation;
+            s_cool = Skills.cooldown;
+            s_DoTDmg = Skills.damageOverTime;
+            s_DoTTurns = Skills.damageOverTimeTurns;
         }
 
 
@@ -914,31 +914,31 @@ public class RoomFight extends RoomParent {
         // Retrieve boss's information to use in attack()
         private void retrieveBoss() {
             mapBoss = Bosses.getBoss("Roombot");
-            String skill = Bosses.getSkill();
-            String skillHit = Bosses.getSkillHit();
-            String skillName = Bosses.getSkillName();
-            String spd = Bosses.getSpeed();
-            String dmg = Bosses.getDamage();
-            String skillCd = Bosses.getSkillCooldown();
+            String skill = Bosses.skill;
+            String skillHit = Bosses.skillHit;
+            String skillName = Bosses.skillName;
+            String spd = Bosses.speed;
+            String dmg = Bosses.damage;
+            String skillCd = Bosses.skillCooldown;
 
             // Retrieve Strings
             String skill1_name = (String) mapBoss.get(skillName + "1");
             String skill2_name = (String) mapBoss.get(skillName + "2");
             String skill3_name = (String) mapBoss.get(skillName + "3");
-            dialogStart = (String) mapBoss.get(Bosses.getDialogStart());
-            dialogEnd = (String) mapBoss.get(Bosses.getDialogEnd());
+            dialogStart = (String) mapBoss.get(Bosses.dialogStart);
+            dialogEnd = (String) mapBoss.get(Bosses.dialogEnd);
 
             skillNames = new String[] {skill1_name, skill2_name, skill3_name};
 
             // Retrieve animations
-            idle = (Animation<TextureRegion>) mapBoss.get(Bosses.getIdle());
+            idle = (Animation<TextureRegion>) mapBoss.get(Bosses.idle);
             skill1 = (Animation<TextureRegion>) mapBoss.get(skill + "1");
             skill2 = (Animation<TextureRegion>) mapBoss.get(skill + "2");
             skill3 = (Animation<TextureRegion>) mapBoss.get(skill + "3");
             skill1_hit = (Animation<TextureRegion>) mapBoss.get(skillHit + "1");
             skill2_hit = (Animation<TextureRegion>) mapBoss.get(skillHit + "2");
             skill3_hit = (Animation<TextureRegion>) mapBoss.get(skillHit + "3");
-            hack = (Animation<TextureRegion>) mapBoss.get(Bosses.getHack());
+            hack = (Animation<TextureRegion>) mapBoss.get(Bosses.hack);
 
             // Retrieve damages
             double dmg1 = Double.valueOf(mapBoss.get(dmg + "1").toString());
@@ -955,14 +955,14 @@ public class RoomFight extends RoomParent {
             cooldownAmount = new int[] {cd1, cd2, cd3};
 
             // Retrieve animation speeds
-            idleSpd = (Integer) mapBoss.get(spd + Bosses.getIdle());
+            idleSpd = (Integer) mapBoss.get(spd + Bosses.idle);
             int skill1Spd = (Integer) mapBoss.get(spd + skill + "1");
             int skill2Spd = (Integer) mapBoss.get(spd + skill + "2");
             int skill3Spd = (Integer) mapBoss.get(spd + skill + "3");
             int skill1HitSpd = (Integer) mapBoss.get(spd + skillHit + "1");
             int skill2HitSpd = (Integer) mapBoss.get(spd + skillHit + "2");
             int skill3HitSpd = (Integer) mapBoss.get(spd + skillHit + "3");
-            hackSpd = (Integer) mapBoss.get(spd + Bosses.getHack());
+            hackSpd = (Integer) mapBoss.get(spd + Bosses.hack);
 
             speeds = new Integer[] {skill1Spd, skill2Spd, skill3Spd};
             hitSpeeds = new Integer[] {skill1HitSpd, skill2HitSpd, skill3HitSpd};
