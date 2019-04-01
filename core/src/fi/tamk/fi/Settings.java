@@ -47,10 +47,10 @@ public class Settings {
 
     public void update() {
         if (!closeDialog && settingsDialog.getY() >= onScreenY) {
-            settingsDialog.setY(settingsDialog.getY() - Gdx.graphics.getDeltaTime()*300);
+            settingsDialog.setY(settingsDialog.getY() - Gdx.graphics.getDeltaTime()*1000);
         }
         if (closeDialog && settingsDialog.getY() < outOfScreenY) {
-            settingsDialog.setY(settingsDialog.getY() + Gdx.graphics.getDeltaTime()*300);
+            settingsDialog.setY(settingsDialog.getY() + Gdx.graphics.getDeltaTime()*1000);
         } if (closeDialog && settingsDialog.getY() >= outOfScreenY) {
             game.setClickedOpenSettings(false);
             settingsDialog.remove();
