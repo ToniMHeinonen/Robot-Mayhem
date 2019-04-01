@@ -88,11 +88,10 @@ public class RoomFight extends RoomParent {
             enemy.update();
             escaping();
             batch.end();
+            stage.draw();
 
             hackingPhase();
             powerUpPhase();
-            stage.act(Gdx.graphics.getDeltaTime());
-            stage.draw();
         }
     }
 

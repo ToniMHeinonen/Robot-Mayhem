@@ -75,7 +75,6 @@ public class RoomParent implements Screen {
             defaultColor();
 
             stage.act(Gdx.graphics.getDeltaTime());
-            stage.draw();
         }
     }
 

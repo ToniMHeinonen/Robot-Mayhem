@@ -5,12 +5,14 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
 
@@ -21,11 +23,16 @@ public class UtilPowerUp {
     private SpriteBatch batch;
     private Stage stage;
     private Skin skin;
-    private Texture background;
+    private Texture background, popup;
     private BitmapFont bigFont;
     private int MONEY = 0, HALL_ITEM = 1, BATTLE_ITEM = 2;
     private String powerUp[];
     private UtilDialog dialog;
+    private boolean selected;
+    private Group powerups = new Group();
+
+    private Label.LabelStyle labelStyle;
+    private Window.WindowStyle emptyWindowsStyle;
 
     UtilPowerUp(MainGame game) {
         this.game = game;
@@ -34,10 +41,15 @@ public class UtilPowerUp {
         dialog = game.getDialog();
         skin = game.getSkin();
         background = game.getPowerUpBg();
+        popup = game.getPowerUpPopup();
         bigFont = game.getFontSteps();
+
+        labelStyle = game.getLabelStyle();
+        emptyWindowsStyle = game.getEmptyWindowStyle();
 
         powerUp = new String[2];
         spawnRandomPowerUps();
+        stage.addActor(powerups);
     }
 
     public void update() {
@@ -46,8 +58,9 @@ public class UtilPowerUp {
                 game.pixelHeight/2f - background.getHeight()/2f,
                 background.getWidth(), background.getHeight());
         drawChoosePowerUp();
+        powerups.draw(batch,1f);
+        drawPopup();
         batch.end();
-        stage.draw();
     }
 
     private void drawChoosePowerUp() {
@@ -55,6 +68,14 @@ public class UtilPowerUp {
         final float fontX = game.pixelWidth/2 - layout.width / 2;
         final float fontY = game.pixelHeight -200 - layout.height / 2;
         bigFont.draw(batch, layout, fontX, fontY);
+    }
+
+    private void drawPopup() {
+        if (selected) {
+            batch.draw(popup, game.pixelWidth/2f - popup.getWidth()/2f,
+                    game.pixelHeight/2f - popup.getHeight()/2f,
+                    popup.getWidth(), popup.getHeight());
+        }
     }
 
     private void spawnRandomPowerUps() {
@@ -97,12 +118,59 @@ public class UtilPowerUp {
         btn.setHeight(400f);
         btn.setPosition(xPos[pos],  game.pixelHeight/5);
 
+        powerups.addActor(btn);
+
+        btn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                selected = true;
+                createDescription(desc);
+                createConfirmationButtons();
+            }
+        });
+    }
+
+    private void createDescription(String text) {
+        Label label = new Label(text, labelStyle);
+        label.setWrap(true);
+        final Dialog dialog = new Dialog("", emptyWindowsStyle);
+        dialog.getContentTable().add(label).prefWidth(400);
+        dialog.setPosition(game.pixelWidth/2, game.pixelHeight/2);
+        // dialog.getBackground().getMinHeight()
+        // dialog.getBackground().getMinWidth()
+        dialog.setSize(label.getWidth() + 50,label.getHeight()*4f);
+        stage.addActor(dialog);
+        dialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+            }
+        });
+    }
+
+    private void createConfirmationButtons() {
+        final TextButton btn = new TextButton("Choose", skin);
+        btn.setWidth(300);
+        btn.setHeight(100);
+        btn.setPosition(game.pixelWidth/2 - btn.getWidth()/2, game.pixelHeight/2 - 50);
         stage.addActor(btn);
 
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                dialog.drawDescription(desc);
+
+            }
+        });
+
+        final TextButton btn2 = new TextButton("Back", skin);
+        btn2.setWidth(300);
+        btn2.setHeight(100);
+        btn2.setPosition(game.pixelWidth/2 - btn2.getWidth()/2, game.pixelHeight/2 - 175);
+        stage.addActor(btn2);
+
+        btn2.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
             }
         });
     }

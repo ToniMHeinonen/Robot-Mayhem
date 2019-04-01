@@ -31,6 +31,9 @@ public class RoomSettings extends RoomParent {
     @Override
     public void render(float delta) {
         super.render(delta);
+        if (!game.haveWeChangedTheRoom) {
+            stage.draw();
+        }
     }
 
     public void createNewFont() {

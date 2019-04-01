@@ -50,7 +50,7 @@ public class MainGame extends Game {
 	// Textures
 	private Texture imgBgHall, imgBgBoss, imgTopBar, imgBottomBar, gamePlayer, playerIdle,
 			playerItem, playerEscape, playerHack, playerDeath, escapeBg, hpBarLeft, hpBarRight,
-			healthPlus, healthMinus, powerUpBg;
+			healthPlus, healthMinus, powerUpBg, powerUpPopup;
 
 	//Stepmeter in RoomGame
     private BitmapFont fontSteps;
@@ -72,6 +72,7 @@ public class MainGame extends Game {
 	private Skin testSkin;
 	private Label.LabelStyle labelStyle;
 	private Window.WindowStyle windowStyle;
+	private Window.WindowStyle emptyWindowStyle;
 	private com.badlogic.gdx.graphics.Color fontColor = com.badlogic.gdx.graphics.Color.BLACK;
 
 	//Hacking
@@ -197,6 +198,7 @@ public class MainGame extends Game {
 		testButtonAtlas = new TextureAtlas("testbuttons/testbuttons.pack");
 		testSkin = new Skin(testButtonAtlas);
 		windowStyle = new Window.WindowStyle(fontSteps, fontColor, testSkin.getDrawable("dialog_bg"));
+		emptyWindowStyle = new Window.WindowStyle(fontSteps, fontColor, null);
 		labelStyle = new Label.LabelStyle(fontSteps, fontColor);
 		dialog = new UtilDialog(this);
 	}
@@ -241,6 +243,7 @@ public class MainGame extends Game {
 		healthPlus = new Texture("texture/skills/plusHealth.png");
 		healthMinus = new Texture("texture/skills/minusHealth.png");
 		powerUpBg = new Texture("texture/powerUpBg.jpg");
+		powerUpPopup = new Texture("texture/powerUpPopup.jpg");
 	}
 
 	private void createBundle() {
@@ -545,5 +548,13 @@ public class MainGame extends Game {
 
 	public Texture getPowerUpBg() {
 		return powerUpBg;
+	}
+
+	public Texture getPowerUpPopup() {
+		return powerUpPopup;
+	}
+
+	public Window.WindowStyle getEmptyWindowStyle() {
+		return emptyWindowStyle;
 	}
 }
