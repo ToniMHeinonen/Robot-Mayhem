@@ -3,7 +3,7 @@ testbuttons.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-button_attack
+button_attack0
   rotate: false
   xy: 1, 727
   size: 384, 240
@@ -73,14 +73,14 @@ button_item3
   orig: 384, 240
   offset: 0, 0
   index: -1
-button_defend
+button_defend0
   rotate: false
   xy: 387, 485
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
-button_item
+button_item0
   rotate: false
   xy: 1, 1
   size: 384, 240
