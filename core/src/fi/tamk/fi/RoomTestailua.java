@@ -32,17 +32,10 @@ public class RoomTestailua extends RoomParent {
 
     boolean startHack = false;
 
-    // Open settings
-    Dialog settingsDialog;
-    boolean closeDialog = false;
-
-    Settings settings;
-
     RoomTestailua(MainGame game) {
         super(game);
         testSkin = game.getTestSkin();
         createButtonSettings();
-        createButtonStartHack();
         createConstants();
         createButtons();
         // playMusic();
@@ -69,23 +62,6 @@ public class RoomTestailua extends RoomParent {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 game.switchToRoomSettings();
-            }
-        });
-    }
-
-    public void createButtonStartHack() {
-        final TextButton buttonSettings = new TextButton("Start Hacking", skin);
-        buttonSettings.setWidth(300f);
-        buttonSettings.setHeight(100f);
-        buttonSettings.setPosition(game.pixelWidth /2 - buttonSettings.getWidth() /2,
-                (game.pixelHeight/3) *2 + buttonSettings.getHeight() /2);
-        stage.addActor(buttonSettings);
-
-        buttonSettings.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                startHack = true;
-                //hacking = new Hacking(game, game.getHackFirstTry());
             }
         });
     }
@@ -161,8 +137,5 @@ public class RoomTestailua extends RoomParent {
     public void render(float delta) {
         super.render(delta);
         stage.draw();
-        if (startHack) {
-            hacking.update();
-        }
     }
 }
