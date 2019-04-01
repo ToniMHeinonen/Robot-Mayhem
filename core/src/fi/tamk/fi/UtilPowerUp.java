@@ -24,12 +24,14 @@ public class UtilPowerUp {
     private Stage stage;
     private Skin skin;
     private Texture background, popup;
+    private float backgroundX, backgroundY, popupX, popupY;
     private BitmapFont bigFont;
     private int MONEY = 0, HALL_ITEM = 1, BATTLE_ITEM = 2;
     private String powerUp[];
     private UtilDialog dialog;
     private boolean selected;
     private Group powerups = new Group();
+    private Group confirmation = new Group();
 
     private Label.LabelStyle labelStyle;
     private Window.WindowStyle emptyWindowsStyle;
@@ -50,17 +52,26 @@ public class UtilPowerUp {
         powerUp = new String[2];
         spawnRandomPowerUps();
         stage.addActor(powerups);
+
+        popupX = game.pixelWidth/2f - popup.getWidth()/2f;
+        popupY = game.pixelHeight/2f - popup.getHeight()/2f;
+        backgroundX = game.pixelWidth/2f - background.getWidth()/2f;
+        backgroundY = game.pixelHeight/2f - background.getHeight()/2f;
     }
 
     public void update() {
         batch.begin();
-        batch.draw(background, game.pixelWidth/2f - background.getWidth()/2f,
-                game.pixelHeight/2f - background.getHeight()/2f,
-                background.getWidth(), background.getHeight());
+        drawBackground();
         drawChoosePowerUp();
         powerups.draw(batch,1f);
         drawPopup();
+        confirmation.draw(batch, 1f);
         batch.end();
+    }
+
+    private void drawBackground() {
+        batch.draw(background, backgroundX, backgroundY,
+                background.getWidth(), background.getHeight());
     }
 
     private void drawChoosePowerUp() {
@@ -72,9 +83,7 @@ public class UtilPowerUp {
 
     private void drawPopup() {
         if (selected) {
-            batch.draw(popup, game.pixelWidth/2f - popup.getWidth()/2f,
-                    game.pixelHeight/2f - popup.getHeight()/2f,
-                    popup.getWidth(), popup.getHeight());
+            batch.draw(popup, popupX, popupY, popup.getWidth(), popup.getHeight());
         }
     }
 
@@ -148,11 +157,14 @@ public class UtilPowerUp {
     }
 
     private void createConfirmationButtons() {
+        float margin = 50f;
+        float btnX = popupX + margin;
+        float btnY = popupY + margin;
         final TextButton btn = new TextButton("Choose", skin);
         btn.setWidth(300);
         btn.setHeight(100);
-        btn.setPosition(game.pixelWidth/2 - btn.getWidth()/2, game.pixelHeight/2 - 50);
-        stage.addActor(btn);
+        btn.setPosition(btnX, btnY);
+        confirmation.addActor(btn);
 
         btn.addListener(new ClickListener() {
             @Override
@@ -164,8 +176,14 @@ public class UtilPowerUp {
         final TextButton btn2 = new TextButton("Back", skin);
         btn2.setWidth(300);
         btn2.setHeight(100);
-        btn2.setPosition(game.pixelWidth/2 - btn2.getWidth()/2, game.pixelHeight/2 - 175);
-        stage.addActor(btn2);
+        float btn2X = popupX + popup.getWidth() - margin - btn2.getWidth();
+        float btn2Y = popupY + margin;
+        btn2.setPosition(btn2X, btn2Y);
+        System.out.println("bg" + String.valueOf(backgroundX));
+        System.out.println("bg" + String.valueOf(backgroundY));
+        System.out.println("pop" + String.valueOf(popupX));
+        System.out.println("pop" + String.valueOf(popupY));
+        confirmation.addActor(btn2);
 
         btn2.addListener(new ClickListener() {
             @Override
