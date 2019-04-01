@@ -96,7 +96,7 @@ public class Hacking {
     private FloatArray poolHitAreaY;
 
     private SpriteBatch batch;
-    private OrthographicCamera camera;
+    private OrthographicCamera hackingCamera;
     MainGame game;
     private Skin skin;
     private Stage stage;
@@ -107,7 +107,7 @@ public class Hacking {
         this.game = game;
         this.hackFirstTry = firstTry;
         batch = game.getBatch();
-        camera = game.getCamera();
+        hackingCamera = new OrthographicCamera();
         skin = game.getSkin();
         stage = game.getStage();
         createConstants();
@@ -121,7 +121,7 @@ public class Hacking {
     }
 
     public void update() {
-        batch.setProjectionMatrix(camera.combined);
+        batch.setProjectionMatrix(hackingCamera.combined);
         doPhysicsStep(Gdx.graphics.getDeltaTime());
         //debugRenderer.render(world, camera.combined);
         deleteBodies();
@@ -136,7 +136,7 @@ public class Hacking {
     private void createConstants() {
         shieldTexture = new Texture("texture/hacking/shield.png");
         bulletTexture = new Texture("texture/hacking/bullet.png");
-        camera.setToOrtho(false, WORLD_WIDTH, WORLD_HEIGHT);
+        hackingCamera.setToOrtho(false, WORLD_WIDTH, WORLD_HEIGHT);
         world = new World(new Vector2(0, 0), true);
         enemyBody = world.createBody(getDefinitionOfEnemyBody());
         enemyBody.createFixture(getShieldFixtureDefinition());

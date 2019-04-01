@@ -78,6 +78,7 @@ public class RoomFight extends RoomParent {
 
         if (!game.haveWeChangedTheRoom) {
 
+            //stage.draw();
             universalStateChecks();
 
             batch.begin();
@@ -88,10 +89,11 @@ public class RoomFight extends RoomParent {
             enemy.update();
             escaping();
             batch.end();
-            stage.draw();
+
 
             hackingPhase();
             powerUpPhase();
+            stage.draw();
         }
     }
 

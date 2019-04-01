@@ -86,7 +86,7 @@ public class Skills {
     private static HashMap<String, Object> skillShock() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, "Shock");
-        map.put(damage, 2.0);
+        map.put(damage, 4.0);
         map.put(damageOverTime, 0.0);
         map.put(damageOverTimeTurns, 0);
         map.put(cooldown, 3);
