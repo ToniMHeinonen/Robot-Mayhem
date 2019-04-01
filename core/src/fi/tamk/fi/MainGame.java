@@ -331,6 +331,10 @@ public class MainGame extends Game {
 		poolMult++;
 	}
 
+	public void addMoney(int amount) {
+		money += amount;
+	}
+
 	/*
 	GETTERS
 	 */

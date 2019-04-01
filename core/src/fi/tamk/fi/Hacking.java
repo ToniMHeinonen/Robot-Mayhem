@@ -395,9 +395,6 @@ public class Hacking {
         hitPosX = body2.getPosition().x + poolHitAreaX.get(pool - 1);
         hitPosStartY = body2.getPosition().y - poolHitAreaY.get(pool - 1);
         hitPosEndY = body2.getPosition().y + poolHitAreaY.get(pool - 1);
-        System.out.println("hitPosX: " + hitPosX);
-        System.out.println("hitPosStartY: " + hitPosStartY);
-        System.out.println("hitPosEndY: " + hitPosEndY);
         bodiesToBeDestroyed.add(body2);
         bodiesToBeDestroyed.add(body1);
 
@@ -461,7 +458,6 @@ public class Hacking {
                         }
                     }
                     bulletMissedEnemy = true;
-                    System.out.println("miss");
                 }
             }, 1f);
             bulletHitShield = false;
@@ -475,7 +471,6 @@ public class Hacking {
     private void collisionBulletEnemy(Body body) {
         bodiesToBeDestroyed.add(body);
         bulletHitEnemy = true;
-        System.out.println("hit");
         for (Body b : shieldBodies) {
             if (b.getUserData() != null) {
                 bodiesToBeDestroyed.add(b);

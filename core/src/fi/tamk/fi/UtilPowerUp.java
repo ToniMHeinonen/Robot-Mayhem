@@ -1,5 +1,6 @@
 package fi.tamk.fi;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.util.HashMap;
 
@@ -27,11 +29,14 @@ public class UtilPowerUp {
     private float backgroundX, backgroundY, popupX, popupY;
     private BitmapFont bigFont;
     private int MONEY = 0, HALL_ITEM = 1, BATTLE_ITEM = 2;
-    private String powerUp[];
+    private String chosenName;
+    private int chosenType;
+    private int moneyAmount;
     private UtilDialog dialog;
-    private boolean selected;
+    private boolean showDesc, powerUpChosen;
     private Group powerups = new Group();
     private Group confirmation = new Group();
+    private Group descriptionBox = new Group();
 
     private Label.LabelStyle labelStyle;
     private Window.WindowStyle emptyWindowsStyle;
@@ -49,9 +54,10 @@ public class UtilPowerUp {
         labelStyle = game.getLabelStyle();
         emptyWindowsStyle = game.getEmptyWindowStyle();
 
-        powerUp = new String[2];
         spawnRandomPowerUps();
         stage.addActor(powerups);
+        stage.addActor(descriptionBox);
+        stage.addActor(confirmation);
 
         popupX = game.pixelWidth/2f - popup.getWidth()/2f;
         popupY = game.pixelHeight/2f - popup.getHeight()/2f;
@@ -60,11 +66,13 @@ public class UtilPowerUp {
     }
 
     public void update() {
+        stage.act(Gdx.graphics.getDeltaTime());
         batch.begin();
         drawBackground();
         drawChoosePowerUp();
         powerups.draw(batch,1f);
         drawPopup();
+        descriptionBox.draw(batch,1f);
         confirmation.draw(batch, 1f);
         batch.end();
     }
@@ -82,7 +90,7 @@ public class UtilPowerUp {
     }
 
     private void drawPopup() {
-        if (selected) {
+        if (showDesc) {
             batch.draw(popup, popupX, popupY, popup.getWidth(), popup.getHeight());
         }
     }
@@ -97,7 +105,8 @@ public class UtilPowerUp {
 
                 if (random[i] == MONEY) {
                     name = "Money";
-                    description = "Money money money!";
+                    moneyAmount = MathUtils.random(5, 10);
+                    description = String.valueOf(moneyAmount) + " shiny coins!";
                     break;
                 } else {
                     name = Item.selectRandomItem();
@@ -111,8 +120,7 @@ public class UtilPowerUp {
                     }
                 }
             }
-            powerUp[i] = name;
-            createPowerUp(i, description);
+            createPowerUp(i, name, description);
         }
     }
 
@@ -120,9 +128,9 @@ public class UtilPowerUp {
 
     }
 
-    private void createPowerUp(int pos, final String desc) {
+    private void createPowerUp(final int pos, final String name, final String desc) {
         float[] xPos = new float[] {300f, 750f};
-        TextButton btn = new TextButton(powerUp[pos], skin);
+        TextButton btn = new TextButton(name, skin);
         btn.setWidth(400f);
         btn.setHeight(400f);
         btn.setPosition(xPos[pos],  game.pixelHeight/5);
@@ -132,7 +140,9 @@ public class UtilPowerUp {
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                selected = true;
+                showDesc = true;
+                chosenName = name;
+                chosenType = pos;
                 createDescription(desc);
                 createConfirmationButtons();
             }
@@ -143,17 +153,10 @@ public class UtilPowerUp {
         Label label = new Label(text, labelStyle);
         label.setWrap(true);
         final Dialog dialog = new Dialog("", emptyWindowsStyle);
-        dialog.getContentTable().add(label).prefWidth(400);
-        dialog.setPosition(game.pixelWidth/2, game.pixelHeight/2);
-        // dialog.getBackground().getMinHeight()
-        // dialog.getBackground().getMinWidth()
-        dialog.setSize(label.getWidth() + 50,label.getHeight()*4f);
-        stage.addActor(dialog);
-        dialog.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-            }
-        });
+        dialog.getContentTable().add(label).prefWidth(popup.getWidth());
+        dialog.setPosition(popupX, popupY + popup.getHeight()/2);
+        dialog.setSize(popup.getWidth(),popup.getHeight()/2);
+        descriptionBox.addActor(dialog);
     }
 
     private void createConfirmationButtons() {
@@ -169,7 +172,7 @@ public class UtilPowerUp {
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
+                addToInventory();
             }
         });
 
@@ -179,17 +182,28 @@ public class UtilPowerUp {
         float btn2X = popupX + popup.getWidth() - margin - btn2.getWidth();
         float btn2Y = popupY + margin;
         btn2.setPosition(btn2X, btn2Y);
-        System.out.println("bg" + String.valueOf(backgroundX));
-        System.out.println("bg" + String.valueOf(backgroundY));
-        System.out.println("pop" + String.valueOf(popupX));
-        System.out.println("pop" + String.valueOf(popupY));
         confirmation.addActor(btn2);
 
         btn2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
+                descriptionBox.clear();
+                confirmation.clear();
+                showDesc = false;
             }
         });
+    }
+
+    private void addToInventory() {
+        powerUpChosen = true;
+        if (chosenType == MONEY) {
+            game.addMoney(moneyAmount);
+        } else {
+            // Add to inventory
+        }
+    }
+
+    public boolean isPowerUpChosen() {
+        return powerUpChosen;
     }
 }

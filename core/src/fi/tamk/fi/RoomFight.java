@@ -32,7 +32,8 @@ public class RoomFight extends RoomParent {
         HACK_RESTORING,
         POWER_UP,
         DEAD,
-        ESCAPE
+        ESCAPE,
+        CHANGE_ROOM
     }
 
     private Texture hpBarLeft = game.getHpBarLeft();
@@ -78,7 +79,6 @@ public class RoomFight extends RoomParent {
 
         if (!game.haveWeChangedTheRoom) {
 
-            //stage.draw();
             universalStateChecks();
 
             batch.begin();
@@ -89,11 +89,10 @@ public class RoomFight extends RoomParent {
             enemy.update();
             escaping();
             batch.end();
-
+            stage.draw(); // Keep before hacking and powerup since they use the same stage
 
             hackingPhase();
             powerUpPhase();
-            stage.draw();
         }
     }
 
@@ -249,6 +248,17 @@ public class RoomFight extends RoomParent {
                 powerUp = new UtilPowerUp(game);
             }
             powerUp.update();
+
+            if (powerUp.isPowerUpChosen()) {
+                state = State.CHANGE_ROOM;
+                stage.clear();
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        game.switchToRoomGame();
+                    }
+                }, 2);
+            }
         }
     }
 
@@ -417,9 +427,7 @@ public class RoomFight extends RoomParent {
 
             } else if (turnState == DOING_ACTION) {
                 controlActionStates();
-                System.out.println("doing");
             } else if (turnState == END_ACTION) {
-                System.out.println("ending");
                 if (!fightersTakingDamage()) {
                     if (ID == PLAYER) {
                         enemy.startTurn();
@@ -429,7 +437,6 @@ public class RoomFight extends RoomParent {
                         player.checkIfAlive();
                     }
                     checkIfAlive();
-                    System.out.println("turnEnd");
                 }
             }
         }
