@@ -38,6 +38,7 @@ public class MainGame extends Game {
 	//Settings
 	private Preferences settings;
 	private float musicVol;
+    private boolean clickedOpenSettings = false;
 
 	//Stats
 	private int saveTimerAmount = 3600;
@@ -113,7 +114,7 @@ public class MainGame extends Game {
 		createHackFiles();
 
 		// Switch to first room
-		switchToRoomSettings();
+		switchToRoomGame();
 	}
 
 	@Override
@@ -557,4 +558,12 @@ public class MainGame extends Game {
 	public Window.WindowStyle getEmptyWindowStyle() {
 		return emptyWindowStyle;
 	}
+
+    public boolean getClickedOpenSettings() {
+        return clickedOpenSettings;
+    }
+
+    public void setClickedOpenSettings(boolean clickedOpenSettings) {
+        this.clickedOpenSettings = clickedOpenSettings;
+    }
 }

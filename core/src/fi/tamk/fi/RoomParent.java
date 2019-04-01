@@ -32,6 +32,9 @@ public class RoomParent implements Screen {
     protected BitmapFont fontSteps;
     private int transitionCounter = 20;
     protected UtilDialog dialog;
+    protected boolean clickedOpenSettings;
+
+    protected Settings settings;
 
     protected TextButton button; //Temporary solution
 
@@ -47,6 +50,7 @@ public class RoomParent implements Screen {
         this.bossMusic = game.getBossMusic();
         this.fontSteps = game.getFontSteps();
         this.progressBarStyle = game.getProgBarStyle();
+        this.clickedOpenSettings = game.getClickedOpenSettings();
         stage.clear();
 
         dialog = game.getDialog();
@@ -75,6 +79,10 @@ public class RoomParent implements Screen {
             defaultColor();
 
             stage.act(Gdx.graphics.getDeltaTime());
+        }
+
+        if (clickedOpenSettings) {
+            settings.update();
         }
     }
 
@@ -118,7 +126,8 @@ public class RoomParent implements Screen {
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                game.switchToRoomSettings();
+                settings = new Settings(game);
+                clickedOpenSettings = true;
             }
         });
 
@@ -153,6 +162,7 @@ public class RoomParent implements Screen {
 
     @Override
     public void hide() {
+        System.out.println(clickedOpenSettings);
     }
 
     @Override
