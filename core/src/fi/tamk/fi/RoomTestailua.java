@@ -84,7 +84,11 @@ public class RoomTestailua extends RoomParent {
         for (int i = 0; i < btn.length; i++) {
             buttonCounter = i;
             Drawable normal = testSkin.getDrawable(btn[i] + cooldowns[i]);
-            final ImageButton imgButton = new ImageButton(normal);
+            Drawable clicked = testSkin.getDrawable(btn[i] + cooldowns[i]);
+            if (cooldowns[i] == 0) {
+                clicked = testSkin.getDrawable(btn[i] + "_clicked");
+            }
+            final ImageButton imgButton = new ImageButton(normal, clicked);
             imgButton.setPosition(100 + space * i, 100);
             stage.addActor(imgButton);
             if (cooldowns[i] == 0) {
