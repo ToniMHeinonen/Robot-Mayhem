@@ -87,20 +87,25 @@ public class RoomTestailua extends RoomParent {
             final ImageButton imgButton = new ImageButton(normal);
             imgButton.setPosition(100 + space * i, 100);
             stage.addActor(imgButton);
-            imgButton.addListener(new ActorGestureListener(20,0.4f,0.5f,0.15f) {
-                int i = buttonCounter;
-                public boolean longPress(Actor actor, float x, float y) {
-                    System.out.println("longpress");
-                    showTooltip(i);
-                    return true;
-                }
-                public void tap(InputEvent event, float x, float y, int count, int button) {
-                    System.out.println("tap");
-                }
-                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                    System.out.println("touchup");
-                }
-            });
+            if (cooldowns[i] == 0) {
+                imgButton.addListener(new ActorGestureListener(20, 0.4f, 0.5f, 0.15f) {
+                    int i = buttonCounter;
+
+                    public boolean longPress(Actor actor, float x, float y) {
+                        System.out.println("longpress");
+                        showTooltip(i);
+                        return true;
+                    }
+
+                    public void tap(InputEvent event, float x, float y, int count, int button) {
+                        System.out.println("tap");
+                    }
+
+                    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                        System.out.println("touchup");
+                    }
+                });
+            }
         }
     }
 
