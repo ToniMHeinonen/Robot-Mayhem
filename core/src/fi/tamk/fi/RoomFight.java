@@ -33,7 +33,8 @@ public class RoomFight extends RoomParent {
         POWER_UP,
         DEAD,
         ESCAPE,
-        CHANGE_ROOM
+        CHANGE_ROOM,
+        TIMER
     }
 
     private Texture hpBarLeft = game.getHpBarLeft();
@@ -65,7 +66,6 @@ public class RoomFight extends RoomParent {
 
         createHealthBars();
         createShader(); // Used for flashing white
-        createPowerUpButton();
 
         player = new Player();
         enemy = new Enemy();
@@ -118,6 +118,19 @@ public class RoomFight extends RoomParent {
             // If dialog box has been closed, start the turn
             case DIALOG_START: {
                 if (!dialog.isDialogOn()) player.startTurn();
+                break;
+            }
+            // If dialog box has been closed, start the
+            case DIALOG_END: {
+                if (!dialog.isDialogOn()) {
+                    state = State.TIMER;
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            state = State.POWER_UP;
+                        }
+                    }, 0.5f);
+                }
                 break;
             }
             // If dead, wait some time and then exit back to corridor
@@ -655,6 +668,7 @@ public class RoomFight extends RoomParent {
             ID = PLAYER;
 
             idleSpd = 30;
+            skillSpd = 30;
             itemSpd = 20;
             hackSpd = 30;
             deathSpd = 30;
@@ -851,10 +865,10 @@ public class RoomFight extends RoomParent {
 
         private int actionDelay = 30;
         private int actionTimer = actionDelay;
-        private double[] damages;
+        private double[] damages, damageOverTimes;
         private ArrayList<Animation<TextureRegion>> hitAnimList;
         private String[] skillNames;
-        private int[] cooldownAmount;
+        private int[] cooldownAmount, damageOverTimeTurns;
 
         Enemy() {
             retrieveBoss();
@@ -914,6 +928,8 @@ public class RoomFight extends RoomParent {
             hitSpeeds = new Integer[3];
             damages = new double[3];
             cooldownAmount = new int[3];
+            damageOverTimes = new double[3];
+            damageOverTimeTurns = new int[3];
 
             for (int i = 0; i < 3; i++) {
                 // Retrieve skill's name from boss and add it to the array
@@ -937,6 +953,14 @@ public class RoomFight extends RoomParent {
                 // Retrieve skill's cooldown
                 int cd = (Integer) mapSkill.get(Skills.cooldown);
                 cooldownAmount[i] = cd;
+
+                // Retrieve skills' damage over time
+                double dot = (Double) mapSkill.get(Skills.damageOverTime);
+                damageOverTimes[i] = dot;
+
+                // Retrieve skill's damage over time turns
+                int dotTurn = (Integer) mapSkill.get(Skills.damageOverTimeTurns);
+                damageOverTimeTurns[i] = dotTurn;
             }
 
             // Retrieve enemy animations and speed
@@ -975,6 +999,14 @@ public class RoomFight extends RoomParent {
                 curHitAnimation = hitAnimList.get(random);
                 curHitAnimationSpd = hitSpeeds[random];
                 dmgAmount = defaultDmg * damages[random];
+
+                // Damage over time
+                double dot = damageOverTimes[random];
+                int dotTurns = damageOverTimeTurns[random];
+                if (dot == 0); // Do nothing
+                else if (dot > 0) player.addDoT(dotTurns, dot); // Damage
+                else if (dot < 0) addDoT(dotTurns, dot); // Healing
+
                 anim.startAnimation(skillAnim, skillSpd);
             }
         }
