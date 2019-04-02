@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class MainGame extends Game {
@@ -47,6 +48,8 @@ public class MainGame extends Game {
 	private int stepCount, stepBank, stepAllCount, pool, poolMult, money;
 	private String skill1, skill2, currentBoss;
 	private boolean firstPlayTime;
+	private ArrayList<String> inventory = new ArrayList<String>();
+	private int inventorySize; // Needed for loading inventory
 
 	// Textures
 	private Texture imgBgHall, imgBgBoss, imgTopBar, imgBottomBar, gamePlayer, playerIdle,
@@ -286,6 +289,13 @@ public class MainGame extends Game {
 		firstPlayTime = stats.getBoolean("firstPlayTime", true);
 		pool = stats.getInteger("pool", 1);
 		poolMult = stats.getInteger("poolMult", 0);
+
+		/*// Load the size of inventory before loading inventory items
+		inventorySize = stats.getInteger("inventorySize", 0);
+		for (int i = 0; i < inventorySize; i++) {
+			inventory.add(i, stats.getString("testventure" + String.valueOf(i), ""));
+			System.out.println(inventory.get(i));
+		}*/
 	}
 
 	public void saveStats() {
@@ -299,7 +309,18 @@ public class MainGame extends Game {
 		stats.putBoolean("firstPlayTime", firstPlayTime);
 		stats.putInteger("pool", pool);
 		stats.putInteger("poolMult", poolMult);
+
+		/*// Save inventory's current size on inventorySize key
+		stats.putInteger("inventorySize", inventory.size());
+		for (int i = 0; i < inventory.size(); i++) {
+			stats.putString("testventure" + String.valueOf(i), inventory.get(i));
+		}*/
+
 		stats.flush();
+	}
+
+	public void addToInventory(String name) {
+		inventory.add(name);
 	}
 
     private void createSkinAndStage() {
@@ -570,4 +591,8 @@ public class MainGame extends Game {
     public void setClickedOpenSettings(boolean clickedOpenSettings) {
         this.clickedOpenSettings = clickedOpenSettings;
     }
+
+	public String getCurrentBoss() {
+		return currentBoss;
+	}
 }

@@ -58,6 +58,15 @@ public class Skills {
         return chosenSkill;
     }
 
+    public static String retrieveSkillDescription(String skill) {
+        String desc = "";
+        HashMap<String, Object> skillMap = getSkill(skill);
+
+        desc = (String) skillMap.get(description);
+
+        return desc;
+    }
+
     private static void skillAttack() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, ATTACK);

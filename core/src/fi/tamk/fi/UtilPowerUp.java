@@ -55,6 +55,7 @@ public class UtilPowerUp {
         emptyWindowsStyle = game.getEmptyWindowStyle();
 
         spawnRandomPowerUps();
+        spawnEnemyPowerUp();
         stage.addActor(powerups);
         stage.addActor(descriptionBox);
         stage.addActor(confirmation);
@@ -120,16 +121,25 @@ public class UtilPowerUp {
                     }
                 }
             }
-            createPowerUp(i, name, description);
+            createPowerUp(i, random[i], name, description);
         }
     }
 
     private void spawnEnemyPowerUp() {
+        String[] bossSkills = Bosses.retrieveBossSkills(game.getCurrentBoss());
 
+        // Choose from 1 and 2, since 0 is normal attack
+        String chosenSkill = bossSkills[MathUtils.random(1, 2)];
+        String desc = Skills.retrieveSkillDescription(chosenSkill);
+
+        // Loop through inventory and skills and check if player owns both skills already
+        // (Do this when inventory is finished)
+
+        createPowerUp(2, HALL_ITEM, chosenSkill, desc);
     }
 
-    private void createPowerUp(final int pos, final String name, final String desc) {
-        float[] xPos = new float[] {300f, 750f};
+    private void createPowerUp(int pos, final int type, final String name, final String desc) {
+        float[] xPos = new float[] {300f, 750f, 1200f};
         TextButton btn = new TextButton(name, skin);
         btn.setWidth(400f);
         btn.setHeight(400f);
@@ -142,7 +152,7 @@ public class UtilPowerUp {
             public void clicked(InputEvent event, float x, float y) {
                 showDesc = true;
                 chosenName = name;
-                chosenType = pos;
+                chosenType = type;
                 createDescription(desc);
                 createConfirmationButtons();
             }
@@ -199,7 +209,7 @@ public class UtilPowerUp {
         if (chosenType == MONEY) {
             game.addMoney(moneyAmount);
         } else {
-            // Add to inventory
+            game.addToInventory(chosenName);
         }
     }
 

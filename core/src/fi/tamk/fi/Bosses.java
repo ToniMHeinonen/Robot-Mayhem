@@ -61,6 +61,17 @@ public class Bosses {
         return selected;
     }
 
+    public static String[] retrieveBossSkills(String boss) {
+        String[] skills = new String[3];
+        HashMap<String, Object> bossMap = getBoss(boss);
+
+        for (int i = 0; i < skills.length; i++) {
+            skills[i] = (String) bossMap.get(skillName + String.valueOf(i));
+        }
+
+        return skills;
+    }
+
     private static void bossRoombot() {
         curName = ROOMBOT;
         curSkillName0 = Skills.ATTACK;
