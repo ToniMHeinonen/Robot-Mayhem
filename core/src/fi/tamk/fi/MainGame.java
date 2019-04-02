@@ -56,7 +56,7 @@ public class MainGame extends Game {
 	// Textures
 	private Texture imgBgHall, imgBgBoss, imgTopBar, imgBottomBar, gamePlayer, playerIdle,
 			playerItem, playerEscape, playerHack, playerDeath, escapeBg, hpBarLeft, hpBarRight,
-			healthPlus, healthMinus, powerUpBg, powerUpPopup;
+			healthPlus, healthMinus, powerUpBg, powerUpPopup, itemBg;
 
 	//Stepmeter in RoomGame
     private BitmapFont fontSteps;
@@ -256,6 +256,7 @@ public class MainGame extends Game {
 		healthMinus = new Texture("texture/skills/minusHealth.png");
 		powerUpBg = new Texture("texture/powerUpBg.jpg");
 		powerUpPopup = new Texture("texture/powerUpPopup.jpg");
+		itemBg = new Texture("texture/itemBg.jpg");
 	}
 
 	private void createBundle() {
@@ -634,4 +635,12 @@ public class MainGame extends Game {
 	public int getPoolBossNumber() {
 		return poolBossNumber;
 	}
+
+	public Texture getItemBg() {
+	    return itemBg;
+    }
+
+    public int getMoney() {
+	    return money;
+    }
 }

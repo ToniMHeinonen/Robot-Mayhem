@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 public class RoomSettings extends RoomParent {
     private BitmapFont fontTest;
     private TextButton.TextButtonStyle styleTest;
+    private UtilItem item;
+    private boolean startItem = false;
 
     RoomSettings(MainGame game) {
         super(game);
@@ -20,6 +22,7 @@ public class RoomSettings extends RoomParent {
         createButtonPlus();
         createButtonMinus();
         createButtonTestailua();
+        createButtonItem();
 
         createButtonPowerUps();
 
@@ -32,6 +35,9 @@ public class RoomSettings extends RoomParent {
         super.render(delta);
         if (!game.haveWeChangedTheRoom) {
             stage.draw();
+        }
+        if (startItem) {
+            item.update();
         }
     }
 
@@ -150,6 +156,23 @@ public class RoomSettings extends RoomParent {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 game.switchToPowerUps();
+            }
+        });
+    }
+
+    public void createButtonItem() {
+        final TextButton buttonFight = new TextButton("Item", skin);
+        buttonFight.setWidth(300f);
+        buttonFight.setHeight(100f);
+        buttonFight.setPosition(game.pixelWidth /2 - buttonFight.getWidth() *2,
+                (game.pixelHeight/3) *2 - buttonFight.getHeight() /2);
+        stage.addActor(buttonFight);
+
+        buttonFight.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                item = new UtilItem(game);
+                startItem = true;
             }
         });
     }
