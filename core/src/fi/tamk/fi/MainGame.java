@@ -263,9 +263,9 @@ public class MainGame extends Game {
 				locale,"ISO-8859-1");
 
 		//EXAMPLE CODE
-		System.out.println(myBundle.get("test"));
-		String str = myBundle.get("test");
-		System.out.println(str);
+		//System.out.println(myBundle.get("test"));
+		//String str = myBundle.get("test");
+		//System.out.println(str);
 	}
 
     public void loadSettings() {

@@ -13,7 +13,6 @@ public class RoomSettings extends RoomParent {
 
     RoomSettings(MainGame game) {
         super(game);
-        System.out.println(game.getMusicVol());
         createNewFont();
         createButtonFight();
         createButtonGame();

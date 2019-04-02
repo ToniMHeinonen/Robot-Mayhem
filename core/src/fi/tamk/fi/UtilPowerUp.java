@@ -165,9 +165,9 @@ public class UtilPowerUp {
         Label label = new Label(text, descriptionLabelStyle);
         label.setWrap(true);
         final Dialog dialog = new Dialog("", emptyWindowsStyle);
-        dialog.getContentTable().add(label).prefWidth(popup.getWidth());
-        dialog.setPosition(popupX, popupY + popup.getHeight()/2);
-        dialog.setSize(popup.getWidth(),popup.getHeight()/2);
+        dialog.getContentTable().add(label).prefWidth(popup.getWidth()-50);
+        dialog.setPosition(popupX, popupY + popup.getHeight()/3);
+        dialog.setSize(popup.getWidth(),popup.getHeight()/3 * 2);
         descriptionBox.addActor(dialog);
     }
 
