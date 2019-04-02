@@ -609,15 +609,22 @@ public class RoomFight extends RoomParent {
             }
         }
 
+        protected void addCooldown(String skill, int amount) {
+            /*
+             +1 since cooldowns get decreased at the beginning of round and we want cooldown "3"
+             to last for 3 whole rounds
+              */
+            cooldowns.put(skill, amount + 1);
+        }
 
         // At the start of each round, decrease cooldown timers
         protected void decreaseCooldowns() {
             for (Map.Entry<String, Integer> entry : cooldowns.entrySet()) {
-                //System.out.println(entry.getKey() + " = " + String.valueOf(entry.getValue()));
                 int value = entry.getValue();
                 if (value > 0) {
                     cooldowns.put(entry.getKey(), entry.getValue() - 1);
                 }
+                System.out.println(entry.getKey() + " = " + String.valueOf(entry.getValue()));
             }
         }
 
@@ -656,6 +663,7 @@ public class RoomFight extends RoomParent {
                 curAction;
         private ArrayList<HashMap<String,Object>> mapSkills;
         private String[] skills;
+        private double[] defaultDamages = new double[] {34, 25, 20, 25, 20, 15, 20, 15, 10};
 
         Player() {
             X = 100f;
@@ -663,7 +671,7 @@ public class RoomFight extends RoomParent {
             maxHp = 100;
             hp = maxHp;
             targetHp = hp;
-            defaultDmg = 30; // Replace this with the correct value later
+            defaultDmg = defaultDamages[game.getPoolBossNumber()];
             ifDead = State.DEAD;
             ID = PLAYER;
 
@@ -738,7 +746,7 @@ public class RoomFight extends RoomParent {
                     actionSelected = true;
                     curAnimation = (Animation<TextureRegion>) mapDefend.get(s_anim);
                     curAnimSpd = (Integer) mapDefend.get(s_spd + s_anim);
-                    cooldowns.put("Defend", (Integer) mapDefend.get(s_cool));
+                    addCooldown("Defend", (Integer) mapDefend.get(s_cool));
                     actionState = LONG_ANIM;
                 }
             }
@@ -758,7 +766,7 @@ public class RoomFight extends RoomParent {
                             cooldowns.get("Skill" + String.valueOf(i)) == 0) {
                         actionSelected = true;
                         HashMap<String, Object> skillMap = mapSkills.get(i);
-                        cooldowns.put("Skill" + String.valueOf(i),
+                        addCooldown("Skill" + String.valueOf(i),
                                 (Integer) skillMap.get(s_cool));
                         curAnimation = (Animation<TextureRegion>) skillMap.get(s_anim);
                         curAnimSpd = (Integer) skillMap.get(s_spd + s_anim);
@@ -878,7 +886,7 @@ public class RoomFight extends RoomParent {
             maxHp = 100;
             hp = maxHp;
             targetHp = hp;
-            defaultDmg = 15; // Replace this with the correct value later
+            defaultDmg = 15;
             ifDead = State.HACK;
             ID = ENEMY;
 
@@ -991,7 +999,7 @@ public class RoomFight extends RoomParent {
                     random = MathUtils.random(0, cooldowns.size() - 1);
                     String selSkill = "Skill" + String.valueOf(random);
                     if (cooldowns.get(selSkill) == 0) {
-                        cooldowns.put(selSkill, cooldownAmount[random]);
+                        addCooldown(selSkill, cooldownAmount[random]);
                         break;
                     }
                 }

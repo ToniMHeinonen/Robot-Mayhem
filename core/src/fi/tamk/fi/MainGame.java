@@ -47,7 +47,7 @@ public class MainGame extends Game {
 	private int saveTimerAmount = 3600;
 	private int saveTimer = saveTimerAmount;
 	private Preferences stats;
-	private int stepCount, stepBank, stepAllCount, pool, poolMult, money;
+	private int stepCount, stepBank, stepAllCount, pool, poolMult, poolBossNumber, money;
 	private String skill1, skill2, currentBoss;
 	private boolean firstPlayTime;
 	private ArrayList<String> inventory = new ArrayList<String>();
@@ -297,6 +297,7 @@ public class MainGame extends Game {
 		firstPlayTime = stats.getBoolean("firstPlayTime", true);
 		pool = stats.getInteger("pool", 1);
 		poolMult = stats.getInteger("poolMult", 0);
+		poolBossNumber = stats.getInteger("poolBossNumber", 0);
 
 		// Load the size of inventory before loading inventory items
 		inventorySize = stats.getInteger("inventorySize", 0);
@@ -317,6 +318,7 @@ public class MainGame extends Game {
 		stats.putBoolean("firstPlayTime", firstPlayTime);
 		stats.putInteger("pool", pool);
 		stats.putInteger("poolMult", poolMult);
+		stats.putInteger("poolBossNumber", poolBossNumber);
 
 		// Save inventory's current size on inventorySize key
 		stats.putInteger("inventorySize", inventory.size());
@@ -627,5 +629,9 @@ public class MainGame extends Game {
 
 	public String getCurrentBoss() {
 		return currentBoss;
+	}
+
+	public int getPoolBossNumber() {
+		return poolBossNumber;
 	}
 }
