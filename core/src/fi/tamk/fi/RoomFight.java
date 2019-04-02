@@ -389,9 +389,10 @@ public class RoomFight extends RoomParent {
         protected boolean pauseStates = false;
         protected boolean hpIncorrect = false;
 
-        protected int idleSpd, skillSpd, hackSpd, itemSpd, deathSpd, escapeSpd, curHitAnimationSpd;
+        protected int idleSpd, skillSpd, hackSpd, takeHitSpd, itemSpd, deathSpd, escapeSpd,
+                defendSpd, curHitAnimationSpd;
         protected Animation<TextureRegion> curAnimation, curHitAnimation, idleAnim, hackAnim,
-                skillAnim, healthPlus, healthMinus;
+                skillAnim, takeHitAnim, healthPlus, healthMinus;
         protected Integer[] hitSpeeds;
         protected HashMap<String,Integer> cooldowns;
 
@@ -528,6 +529,16 @@ public class RoomFight extends RoomParent {
             }
         }
 
+        protected void changeToTakeHitAnimation() {
+            anim.startAnimation(takeHitAnim, takeHitSpd);
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    startIdle();
+                }
+            }, 1f);
+        }
+
         // When taken hit, flash white for a certain amount of time
         protected void flashAndMove() {
             flashWhite = true;
@@ -656,7 +667,7 @@ public class RoomFight extends RoomParent {
      */
     class Player extends Fighters {
 
-        private Animation<TextureRegion> escape, item, death;
+        private Animation<TextureRegion> defendAnim, escapeAnim, itemAnim, deathAnim;
         private HashMap<String,Object> mapAttack, mapDefend;
 
         private String s_spd, s_dmg, s_cool, s_anim, s_hitAnim, s_name, s_DoTDmg, s_DoTTurns,
@@ -677,7 +688,9 @@ public class RoomFight extends RoomParent {
 
             idleSpd = 30;
             skillSpd = 30;
+            defendSpd = 10;
             itemSpd = 20;
+            takeHitSpd = 30;
             hackSpd = 30;
             deathSpd = 30;
             escapeSpd = 10;
@@ -694,10 +707,13 @@ public class RoomFight extends RoomParent {
 
             // Create animations (probably should be created in MainGame though)
             idleAnim = anim.createAnimation(game.getPlayerIdle(), 3, 1);
-            escape = anim.createAnimation(game.getPlayerEscape(), 3, 1);
-            item = anim.createAnimation(game.getPlayerItem(), 3, 1);
+            skillAnim = anim.createAnimation(game.getPlayerAttack(), 3, 1);
+            defendAnim = anim.createAnimation(game.getPlayerDefend(), 3, 1);
+            takeHitAnim = anim.createAnimation(game.getPlayerEscape(), 3, 1);
+            escapeAnim = anim.createAnimation(game.getPlayerEscape(), 3, 1);
+            itemAnim = anim.createAnimation(game.getPlayerItem(), 3, 1);
             hackAnim = anim.createAnimation(game.getPlayerHack(), 3, 1);
-            death = anim.createAnimation(game.getPlayerDeath(), 3, 1);
+            deathAnim = anim.createAnimation(game.getPlayerDeath(), 3, 1);
 
             anim.startAnimation(idleAnim, idleSpd);
         }
@@ -712,7 +728,7 @@ public class RoomFight extends RoomParent {
                 } else if (state == State.HACK) {
                     if (anim.getAnimation() != hackAnim) startHack();
                 } else if (state == State.DEAD) {
-                    if (anim.getAnimation() != death) anim.startAnimation(death, deathSpd);
+                    if (anim.getAnimation() != deathAnim) anim.startAnimation(deathAnim, deathSpd);
                 } else if (state == State.ESCAPE) {
                     runAway();
                 }
@@ -733,8 +749,8 @@ public class RoomFight extends RoomParent {
             if (action == "Attack")
             {
                 actionSelected = true;
-                curAnimation = (Animation<TextureRegion>) mapAttack.get(s_anim);
-                curAnimSpd =  (Integer) mapAttack.get(s_spd + s_anim);
+                curAnimation = skillAnim;
+                curAnimSpd =  skillSpd;
                 curHitAnimation = (Animation<TextureRegion>) mapAttack.get(s_hitAnim);
                 curHitAnimationSpd = (Integer) mapAttack.get(s_spd + s_hitAnim);
                 dmgAmount = defaultDmg;
@@ -744,8 +760,8 @@ public class RoomFight extends RoomParent {
             {
                 if (cooldowns.get("Defend") == 0) {
                     actionSelected = true;
-                    curAnimation = (Animation<TextureRegion>) mapDefend.get(s_anim);
-                    curAnimSpd = (Integer) mapDefend.get(s_spd + s_anim);
+                    curAnimation = defendAnim;
+                    curAnimSpd = defendSpd;
                     addCooldown("Defend", (Integer) mapDefend.get(s_cool));
                     actionState = LONG_ANIM;
                 }
@@ -753,7 +769,7 @@ public class RoomFight extends RoomParent {
             else if (action == "Item")
             {
                 actionSelected = true;
-                curAnimation = item;
+                curAnimation = itemAnim;
                 curAnimSpd = itemSpd;
                 actionState = TEMP_ANIM;
             }
@@ -844,13 +860,14 @@ public class RoomFight extends RoomParent {
             } else {
                 flashAndMove();
                 calcTargetHpSpd(damage);
+                changeToTakeHitAnimation();
             }
         }
 
 
         // Run away if escape is chosen
         private void runAway() {
-            if (anim.getAnimation() != escape) anim.startAnimation(escape, escapeSpd);
+            if (anim.getAnimation() != escapeAnim) anim.startAnimation(escapeAnim, escapeSpd);
 
             if (X > - 400) {
                 X -= Gdx.graphics.getDeltaTime() * 150f;
@@ -928,7 +945,7 @@ public class RoomFight extends RoomParent {
 
         // Retrieve boss's information
         private void retrieveBoss() {
-            mapBoss = Bosses.getBoss("Roombot");
+            mapBoss = Bosses.getBoss(Bosses.COPPER);
 
             // Use these arrays when selecting skills in attack()
             skillNames = new String[3];
@@ -975,9 +992,11 @@ public class RoomFight extends RoomParent {
             idleAnim = (Animation<TextureRegion>) mapBoss.get(Bosses.idle);
             skillAnim = (Animation<TextureRegion>) mapBoss.get(Bosses.skill);
             hackAnim = (Animation<TextureRegion>) mapBoss.get(Bosses.hack);
+            takeHitAnim = (Animation<TextureRegion>) mapBoss.get(Bosses.takeHit);
             idleSpd = (Integer) mapBoss.get(Bosses.speed + Bosses.idle);
             skillSpd = (Integer) mapBoss.get(Bosses.speed + Bosses.skill);
             hackSpd = (Integer) mapBoss.get(Bosses.speed + Bosses.hack);
+            takeHitSpd = (Integer) mapBoss.get(Bosses.speed + Bosses.takeHit);
 
             // Retrieve dialog start and end from Boss
             dialogStart = (String) mapBoss.get(Bosses.dialogStart);
@@ -1023,9 +1042,14 @@ public class RoomFight extends RoomParent {
         protected void controlActionStates() {
             if (actionState == TEMP_ANIM) {
                 if (skillAnim.isAnimationFinished(anim.getStateTime())) {
-                    player.startHitAnimation(curHitAnimation, curHitAnimationSpd);
+
+                    if (curHitAnimation != null) {
+                        player.startHitAnimation(curHitAnimation, curHitAnimationSpd);
+                        actionState = HIT_ANIM;
+                    } else {
+                        turnState = END_ACTION;
+                    }
                     startIdle();
-                    actionState = HIT_ANIM;
                 }
             } else if (actionState == HIT_ANIM) {
                 if (!player.isHitAnimationRunning()) {
@@ -1039,6 +1063,7 @@ public class RoomFight extends RoomParent {
         public void takeHit(double damage) {
             flashAndMove();
             calcTargetHpSpd(damage);
+            changeToTakeHitAnimation();
         }
 
         // When the fight begins, wait for some time to start the dialogue

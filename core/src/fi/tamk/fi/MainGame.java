@@ -55,7 +55,7 @@ public class MainGame extends Game {
 
 	// Textures
 	private Texture imgBgHall, imgBgBoss, imgTopBar, imgBottomBar, gamePlayer, playerIdle,
-			playerItem, playerEscape, playerHack, playerDeath, escapeBg, hpBarLeft, hpBarRight,
+			playerAttack, playerDefend, playerItem, playerEscape, playerHack, playerDeath, escapeBg, hpBarLeft, hpBarRight,
 			healthPlus, healthMinus, powerUpBg, powerUpPopup, itemBg;
 
 	//Stepmeter in RoomGame
@@ -245,6 +245,8 @@ public class MainGame extends Game {
 		imgBottomBar = new Texture("texture/bottombar.png");
 		gamePlayer = new Texture("texture/player/player.png");
         playerIdle = new Texture("texture/player/playerIdle.png");
+		playerAttack = new Texture("texture/player/playerAttack.png");
+		playerDefend = new Texture("texture/player/playerDefend.png");
         playerItem = new Texture("texture/player/playerItem.png");
         playerEscape = new Texture("texture/player/playerEscape.png");
         playerHack = new Texture("texture/player/playerHack.png");
@@ -463,6 +465,14 @@ public class MainGame extends Game {
     public Texture getPlayerIdle() {
         return playerIdle;
     }
+
+	public Texture getPlayerAttack() {
+		return playerAttack;
+	}
+
+	public Texture getPlayerDefend() {
+		return playerDefend;
+	}
 
 	public BitmapFont getFontSteps() {
 	    return fontSteps;

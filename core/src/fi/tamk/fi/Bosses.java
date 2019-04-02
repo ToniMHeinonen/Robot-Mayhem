@@ -16,6 +16,7 @@ public class Bosses {
     public static final String idle = "idle";
     public static final String hack = "hack";
     public static final String skill = "skill";
+    public static final String takeHit = "takeHit";
     public static final String speed = "speed";
     public static final String skillName = "skillName";
     public static final String dialogStart = "dialogstart";
@@ -23,16 +24,24 @@ public class Bosses {
 
     private static HashMap<String, HashMap<String,Object>> mapBosses;
 
-    private static int s_idle, s_hack, s_skill; // Animation speed
-    private static Texture t_idle, t_hack, t_skill;
-    private static Animation<TextureRegion> a_idle, a_hack, a_skill;
+    private static int s_idle, s_hack, s_skill, s_takeHit; // Animation speed
+    private static Texture t_idle, t_hack, t_skill, t_takeHit;
+    private static Animation<TextureRegion> a_idle, a_hack, a_skill, a_takeHit;
     private static Animating anim = new Animating();
 
     private static String curName, curSkillName0, curSkillName1, curSkillName2,
                             curDialogStart, curDialogEnd;
 
     public static final String ROOMBOT = "Roombot";
-    private static String[] allBosses = new String[] {ROOMBOT};
+    public static final String COPPER = "Copper";
+    private static String[] allBosses = new String[] {ROOMBOT, COPPER};
+
+    /* NOTE!
+    Everytime you add new boss, remember to:
+    1. Make a String for it
+    2. Add it to the allBosses array
+    3. Make a new method for it
+     */
 
     /*
     Create bosses when the game starts.
@@ -40,6 +49,7 @@ public class Bosses {
     public static void createBosses() {
         mapBosses = new HashMap<String, HashMap<String,Object>>();
         bossRoombot();
+        bossCopper();
     }
 
     /*
@@ -89,6 +99,33 @@ public class Bosses {
         t_skill = new Texture("texture/enemy/enemyAttack1.png");
         a_skill = anim.createAnimation(t_skill, 3, 1);
         s_skill = 30;
+        t_takeHit = new Texture("texture/enemy/enemyHack.png");
+        a_takeHit = anim.createAnimation(t_takeHit, 3, 1);
+        s_takeHit = 30;
+
+        addToMap();
+    }
+
+    private static void bossCopper() {
+        curName = COPPER;
+        curSkillName0 = Skills.ATTACK;
+        curSkillName1 = Skills.SHOCK;
+        curSkillName2 = Skills.FIRE;
+        curDialogStart = "Here, have a 500 ticket!";
+        curDialogEnd = "I'll pay your ticket!";
+
+        t_idle = new Texture("texture/copper/copper_idle.png");
+        a_idle = anim.createAnimation(t_idle, 8, 2);
+        s_idle = 15;
+        t_hack = new Texture("texture/copper/copper_stun.png");
+        a_hack = anim.createAnimation(t_hack, 8, 1);
+        s_hack = 15;
+        t_skill = new Texture("texture/copper/copper_attack.png");
+        a_skill = anim.createAnimation(t_skill, 4, 1);
+        s_skill = 15;
+        t_takeHit = new Texture("texture/copper/copper_take_hit.png");
+        a_takeHit = anim.createAnimation(t_takeHit, 4, 1);
+        s_takeHit = 15;
 
         addToMap();
     }
@@ -99,12 +136,14 @@ public class Bosses {
         map.put(idle, a_idle);
         map.put(hack, a_hack);
         map.put(skill, a_skill);
+        map.put(takeHit, a_takeHit);
         map.put(skillName + "0", curSkillName0);
         map.put(skillName + "1", curSkillName1);
         map.put(skillName + "2", curSkillName2);
         map.put(speed + idle, s_idle);
         map.put(speed + hack, s_hack);
         map.put(speed + skill, s_skill);
+        map.put(speed + takeHit, s_takeHit);
         map.put(dialogStart, curDialogStart);
         map.put(dialogEnd, curDialogEnd);
 
@@ -115,5 +154,6 @@ public class Bosses {
         t_idle.dispose();
         t_hack.dispose();
         t_skill.dispose();
+        t_takeHit.dispose();
     }
 }
