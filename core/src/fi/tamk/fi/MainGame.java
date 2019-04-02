@@ -18,9 +18,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.I18NBundle;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Locale;
 
 public class MainGame extends Game {
@@ -296,12 +298,12 @@ public class MainGame extends Game {
 		pool = stats.getInteger("pool", 1);
 		poolMult = stats.getInteger("poolMult", 0);
 
-		/*// Load the size of inventory before loading inventory items
+		// Load the size of inventory before loading inventory items
 		inventorySize = stats.getInteger("inventorySize", 0);
 		for (int i = 0; i < inventorySize; i++) {
-			inventory.add(i, stats.getString("testventure" + String.valueOf(i), ""));
+			inventory.add(i, stats.getString("inventory" + String.valueOf(i), ""));
 			System.out.println(inventory.get(i));
-		}*/
+		}
 	}
 
 	public void saveStats() {
@@ -316,17 +318,34 @@ public class MainGame extends Game {
 		stats.putInteger("pool", pool);
 		stats.putInteger("poolMult", poolMult);
 
-		/*// Save inventory's current size on inventorySize key
+		// Save inventory's current size on inventorySize key
 		stats.putInteger("inventorySize", inventory.size());
 		for (int i = 0; i < inventory.size(); i++) {
-			stats.putString("testventure" + String.valueOf(i), inventory.get(i));
-		}*/
+			stats.putString("inventory" + String.valueOf(i), inventory.get(i));
+		}
 
 		stats.flush();
 	}
 
-	public void addToInventory(String name) {
-		inventory.add(name);
+	public void addToInventory(String name, boolean isSkill) {
+		// If it's skill and either skill1 or 2 is empty, add it instantly
+		if (isSkill) {
+			if (skill1 == "") skill1 = name;
+			else if (skill2 == "") skill2 = name;
+			else inventory.add(name);
+		} else {
+			inventory.add(name);
+		}
+		saveStats();
+	}
+
+	public boolean inventoryOrSkillsContains(String name) {
+		boolean contains = false;
+
+		if (inventory.contains(name)) contains = true;
+		if (skill1 == name || skill2 == name) contains = true;
+
+		return contains;
 	}
 
     private void createSkinAndStage() {

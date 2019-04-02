@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Skills {
@@ -25,6 +26,9 @@ public class Skills {
     public static final String FIRE = "Fire";
     public static final String SUCTION = "Suction";
     public static final String DUST = "Dust throw";
+
+    private static String[] allSkills = new String[] {ATTACK, DEFEND, REPAIR, SHOCK, FIRE,
+    SUCTION, DUST};
 
     private static HashMap<String,HashMap<String,Object>> mapSkills;
 
@@ -172,9 +176,9 @@ public class Skills {
         map.put(damageOverTime, 30.0);
         map.put(damageOverTimeTurns, 2);
         map.put(cooldown, 3);
-        map.put(animation, null);
+        map.put(animation, a_attack);
         map.put(hitAnimation, a_attack_hit);
-        map.put(speed + animation, 0);
+        map.put(speed + animation, 15);
         map.put(speed + hitAnimation, 10);
 
         mapSkills.put((String) map.get(name), map);
