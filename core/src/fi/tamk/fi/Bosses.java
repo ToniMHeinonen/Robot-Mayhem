@@ -64,8 +64,8 @@ public class Bosses {
     private static void bossRoombot() {
         curName = ROOMBOT;
         curSkillName0 = Skills.ATTACK;
-        curSkillName1 = Skills.CLEAN;
-        curSkillName2 = Skills.BUMB;
+        curSkillName1 = Skills.SUCTION;
+        curSkillName2 = Skills.DUST;
         curDialogStart = "Vroom Vroom!";
         curDialogEnd = "Vroom poks!";
 

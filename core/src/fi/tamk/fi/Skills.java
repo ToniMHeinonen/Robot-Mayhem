@@ -9,6 +9,7 @@ import java.util.HashMap;
 public class Skills {
 
     public static final String name = "name";
+    public static final String description = "description";
     public static final String damage = "damage";
     public static final String damageOverTime = "damageOverTime";
     public static final String damageOverTimeTurns = "damageOverTimeTurns";
@@ -19,10 +20,11 @@ public class Skills {
 
     public static final String ATTACK = "Attack";
     public static final String DEFEND = "Defend";
+    public static final String REPAIR = "Self-repair";
     public static final String SHOCK = "Shock";
     public static final String FIRE = "Fire";
-    public static final String CLEAN = "Clean the dust";
-    public static final String BUMB = "Accidental Bumb";
+    public static final String SUCTION = "Suction";
+    public static final String DUST = "Dust throw";
 
     private static HashMap<String,HashMap<String,Object>> mapSkills;
 
@@ -38,10 +40,11 @@ public class Skills {
         createAttackAndDefend();
         skillAttack();
         skillDefend();
+        skillRepair();
         skillShock();
         skillFire();
-        skillClean();
-        skillBumb();
+        skillSuction();
+        skillDust();
     }
 
     /*
@@ -58,6 +61,7 @@ public class Skills {
     private static void skillAttack() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, ATTACK);
+        map.put(description, "Light attack that’s usable every turn.");
         map.put(damage, 1.0);
         map.put(damageOverTime, 0.0); // Not needed
         map.put(damageOverTimeTurns, 0); // Not needed
@@ -73,6 +77,8 @@ public class Skills {
     private static void skillDefend() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, DEFEND);
+        map.put(description,
+                "Shield protects you completely from damage you’d receive in the next turn.");
         map.put(damage, 0.0); // Not needed
         map.put(damageOverTime, 0.0); // Not needed
         map.put(damageOverTimeTurns, 0); // Not needed
@@ -80,6 +86,22 @@ public class Skills {
         map.put(animation, a_defend);
         map.put(hitAnimation, null);
         map.put(speed + animation, 5);
+        map.put(speed + hitAnimation, 0);
+
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private static void skillRepair() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, REPAIR);
+        map.put(description, "Self-repair heals you slightly over 2 turns.");
+        map.put(damage, 0.0);
+        map.put(damageOverTime, -15.0);
+        map.put(damageOverTimeTurns, 2);
+        map.put(cooldown, 2);
+        map.put(animation, a_defend);
+        map.put(hitAnimation, null);
+        map.put(speed + animation, 30);
         map.put(speed + hitAnimation, 0);
 
         mapSkills.put((String) map.get(name), map);
@@ -115,9 +137,11 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
-    private static void skillClean() {
+    private static void skillSuction() {
         HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put(name, CLEAN);
+        map.put(name, SUCTION);
+        map.put(description, "Suctions suckforce causes medium damage to the recipient. " +
+                "(has an 10% increased chance to be a critical hit)");
         map.put(damage, 1.5);
         map.put(damageOverTime, 0.0);
         map.put(damageOverTimeTurns, 0);
@@ -125,22 +149,24 @@ public class Skills {
         map.put(animation, null);
         map.put(hitAnimation, a_attack_hit);
         map.put(speed + animation, 0);
-        map.put(speed + hitAnimation, 0);
+        map.put(speed + hitAnimation, 30);
 
         mapSkills.put((String) map.get(name), map);
     }
 
-    private static void skillBumb() {
+    private static void skillDust() {
         HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put(name, BUMB);
-        map.put(damage, 2.0);
-        map.put(damageOverTime, 0.0);
-        map.put(damageOverTimeTurns, 0);
+        map.put(name, DUST);
+        map.put(description, "Dust throw releases a big amount of dust inside the robot’s fans" +
+                " and causes medium damage to the recipient over two turns.");
+        map.put(damage, 0.0);
+        map.put(damageOverTime, 30.0);
+        map.put(damageOverTimeTurns, 2);
         map.put(cooldown, 3);
         map.put(animation, null);
         map.put(hitAnimation, a_attack_hit);
         map.put(speed + animation, 0);
-        map.put(speed + hitAnimation, 0);
+        map.put(speed + hitAnimation, 10);
 
         mapSkills.put((String) map.get(name), map);
     }
