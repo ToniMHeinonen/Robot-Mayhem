@@ -39,6 +39,7 @@ public class UtilPowerUp {
     private Group descriptionBox = new Group();
 
     private Label.LabelStyle labelStyle;
+    private Label.LabelStyle descriptionLabelStyle;
     private Window.WindowStyle emptyWindowsStyle;
 
     UtilPowerUp(MainGame game) {
@@ -52,6 +53,7 @@ public class UtilPowerUp {
         bigFont = game.getFontSteps();
 
         labelStyle = game.getLabelStyle();
+        descriptionLabelStyle = game.getDescriptionLabelStyle();
         emptyWindowsStyle = game.getEmptyWindowStyle();
 
         spawnRandomPowerUps();
@@ -160,7 +162,7 @@ public class UtilPowerUp {
     }
 
     private void createDescription(String text) {
-        Label label = new Label(text, labelStyle);
+        Label label = new Label(text, descriptionLabelStyle);
         label.setWrap(true);
         final Dialog dialog = new Dialog("", emptyWindowsStyle);
         dialog.getContentTable().add(label).prefWidth(popup.getWidth());

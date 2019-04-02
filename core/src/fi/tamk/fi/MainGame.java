@@ -75,9 +75,11 @@ public class MainGame extends Game {
 	private TextureAtlas testButtonAtlas;
 	private Skin testSkin;
 	private Label.LabelStyle labelStyle;
+	private Label.LabelStyle descriptionLabelStyle;
 	private Window.WindowStyle windowStyle;
 	private Window.WindowStyle emptyWindowStyle;
 	private com.badlogic.gdx.graphics.Color fontColor = com.badlogic.gdx.graphics.Color.BLACK;
+	private BitmapFont descriptionFont;
 
 	//Hacking
     private FloatArray hackPosX;
@@ -199,11 +201,15 @@ public class MainGame extends Game {
 		fontSteps = new BitmapFont(Gdx.files.internal("stepfont/stepfont.fnt"),
 				Gdx.files.internal("stepfont/stepfont.png"),
 				false);
+		descriptionFont = new BitmapFont(Gdx.files.internal("descriptionfont/descriptionfont.fnt"),
+                Gdx.files.internal("descriptionfont/descriptionfont.png"),
+                false);
 		testButtonAtlas = new TextureAtlas("testbuttons/testbuttons.pack");
 		testSkin = new Skin(testButtonAtlas);
 		windowStyle = new Window.WindowStyle(fontSteps, fontColor, testSkin.getDrawable("dialog_bg"));
 		emptyWindowStyle = new Window.WindowStyle(fontSteps, fontColor, null);
 		labelStyle = new Label.LabelStyle(fontSteps, fontColor);
+		descriptionLabelStyle = new Label.LabelStyle(descriptionFont, fontColor);
 		dialog = new UtilDialog(this);
 	}
 
@@ -440,6 +446,10 @@ public class MainGame extends Game {
 	    return fontSteps;
     }
 
+    public BitmapFont getDescriptionFont() {
+	    return descriptionFont;
+    }
+
 	public Texture getPlayerDeath() {
 		return playerDeath;
 	}
@@ -499,6 +509,10 @@ public class MainGame extends Game {
 	public Label.LabelStyle getLabelStyle() {
 		return labelStyle;
 	}
+
+	public Label.LabelStyle getDescriptionLabelStyle() {
+	    return descriptionLabelStyle;
+    }
 
 	public Window.WindowStyle getWindowStyle() {
 		return windowStyle;
