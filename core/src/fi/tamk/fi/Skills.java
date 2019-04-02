@@ -58,7 +58,7 @@ public class Skills {
     private static void skillAttack() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, ATTACK);
-        map.put(damage, 0.0); // Not needed
+        map.put(damage, 1.0);
         map.put(damageOverTime, 0.0); // Not needed
         map.put(damageOverTimeTurns, 0); // Not needed
         map.put(cooldown, 0);

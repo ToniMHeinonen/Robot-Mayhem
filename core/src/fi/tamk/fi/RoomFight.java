@@ -376,11 +376,10 @@ public class RoomFight extends RoomParent {
         protected boolean pauseStates = false;
         protected boolean hpIncorrect = false;
 
-        protected int idleSpd, hackSpd, itemSpd, deathSpd, escapeSpd, curHitAnimationSpd;
-        protected Animation<TextureRegion> curAnimation, curHitAnimation, idle, hack, healthPlus,
-                                            healthMinus;
-        protected ArrayList<Animation<TextureRegion>> animList, hitAnimList;
-        protected Integer[] speeds, hitSpeeds;
+        protected int idleSpd, skillSpd, hackSpd, itemSpd, deathSpd, escapeSpd, curHitAnimationSpd;
+        protected Animation<TextureRegion> curAnimation, curHitAnimation, idleAnim, hackAnim,
+                skillAnim, healthPlus, healthMinus;
+        protected Integer[] hitSpeeds;
         protected HashMap<String,Integer> cooldowns;
 
         Fighters() {
@@ -423,7 +422,7 @@ public class RoomFight extends RoomParent {
                 turnState = WAIT_FOR_ACTION;
 
             } else if (turnState == WAIT_FOR_ACTION) {
-                if (anim.getAnimation() != idle) startIdle();
+                if (anim.getAnimation() != idleAnim) startIdle();
 
             } else if (turnState == DOING_ACTION) {
                 controlActionStates();
@@ -470,11 +469,11 @@ public class RoomFight extends RoomParent {
         }
 
         protected void startIdle() {
-            anim.startAnimation(idle, idleSpd);
+            anim.startAnimation(idleAnim, idleSpd);
         }
 
         protected void startHack() {
-            anim.startAnimation(hack, hackSpd);
+            anim.startAnimation(hackAnim, hackSpd);
         }
 
         // If taken hit, then pause so that new actions won't take place
@@ -671,18 +670,14 @@ public class RoomFight extends RoomParent {
             cooldowns.put("Skill0", 0);
             cooldowns.put("Skill1", 0);
 
-            // Discovered: Learned how to use methods from other classes.
-            /*float Testy = PowerUps.getHeight();
-            System.out.println(Testy);*/
-
             // Create animations (probably should be created in MainGame though)
-            idle = anim.createAnimation(game.getPlayerIdle(), 3, 1);
+            idleAnim = anim.createAnimation(game.getPlayerIdle(), 3, 1);
             escape = anim.createAnimation(game.getPlayerEscape(), 3, 1);
             item = anim.createAnimation(game.getPlayerItem(), 3, 1);
-            hack = anim.createAnimation(game.getPlayerHack(), 3, 1);
+            hackAnim = anim.createAnimation(game.getPlayerHack(), 3, 1);
             death = anim.createAnimation(game.getPlayerDeath(), 3, 1);
 
-            anim.startAnimation(idle, idleSpd);
+            anim.startAnimation(idleAnim, idleSpd);
         }
 
         public void update() {
@@ -693,7 +688,7 @@ public class RoomFight extends RoomParent {
                     if (turnState == WAIT_FOR_ACTION) if (!actionButtonsOn) createButtons();
                     controlTurnStates();
                 } else if (state == State.HACK) {
-                    if (anim.getAnimation() != hack) startHack();
+                    if (anim.getAnimation() != hackAnim) startHack();
                 } else if (state == State.DEAD) {
                     if (anim.getAnimation() != death) anim.startAnimation(death, deathSpd);
                 } else if (state == State.ESCAPE) {
@@ -850,20 +845,21 @@ public class RoomFight extends RoomParent {
      */
     class Enemy extends Fighters {
 
-        private Animation<TextureRegion> skill1, skill2, skill3, skill1_hit, skill2_hit, skill3_hit;
-        private String curSkillName, dialogStart, dialogEnd;
+        private Animation<TextureRegion> skill1_hit, skill2_hit, skill3_hit;
+        private String dialogStart, dialogEnd;
         private HashMap<String,Object> mapBoss;
 
         private int actionDelay = 30;
         private int actionTimer = actionDelay;
         private double[] damages;
+        private ArrayList<Animation<TextureRegion>> hitAnimList;
         private String[] skillNames;
         private int[] cooldownAmount;
 
         Enemy() {
             retrieveBoss();
 
-            X = game.pixelWidth - 100f - idle.getKeyFrame(0f).getRegionWidth();
+            X = game.pixelWidth - 100f - idleAnim.getKeyFrame(0f).getRegionWidth();
             Y = 300f;
             maxHp = 100;
             hp = maxHp;
@@ -879,13 +875,10 @@ public class RoomFight extends RoomParent {
 
             startDialogTimer();
 
-            animList = new ArrayList<Animation<TextureRegion>>();
-            Collections.addAll(animList, skill1, skill2, skill3);
+            //hitAnimList = new ArrayList<Animation<TextureRegion>>();
+            //Collections.addAll(hitAnimList, skill1_hit, skill2_hit, skill3_hit);
 
-            hitAnimList = new ArrayList<Animation<TextureRegion>>();
-            Collections.addAll(hitAnimList, skill1_hit, skill2_hit, skill3_hit);
-
-            anim.startAnimation(idle, idleSpd);
+            anim.startAnimation(idleAnim, idleSpd);
         }
 
         public void update() {
@@ -897,7 +890,7 @@ public class RoomFight extends RoomParent {
                     if (turnState == WAIT_FOR_ACTION) attack();
                     controlTurnStates();
                 } else if (state == State.HACK) {
-                    if (anim.getAnimation() != hack) anim.startAnimation(hack, hackSpd);
+                    if (anim.getAnimation() != hackAnim) anim.startAnimation(hackAnim, hackSpd);
                 } else if (state == State.HACK_FAILED) {
                     calcTargetHpSpd(-maxHp/3);
                     state = State.HACK_RESTORING;
@@ -911,61 +904,52 @@ public class RoomFight extends RoomParent {
             updateEnd();
         }
 
-        // Retrieve boss's information to use in attack()
+        // Retrieve boss's information
         private void retrieveBoss() {
             mapBoss = Bosses.getBoss("Roombot");
-            String skill = Bosses.skill;
-            String skillHit = Bosses.skillHit;
-            String skillName = Bosses.skillName;
-            String spd = Bosses.speed;
-            String dmg = Bosses.damage;
-            String skillCd = Bosses.skillCooldown;
 
-            // Retrieve Strings
-            String skill1_name = (String) mapBoss.get(skillName + "1");
-            String skill2_name = (String) mapBoss.get(skillName + "2");
-            String skill3_name = (String) mapBoss.get(skillName + "3");
+            // Use these arrays when selecting skills in attack()
+            skillNames = new String[3];
+            hitAnimList = new ArrayList<Animation<TextureRegion>>();
+            hitSpeeds = new Integer[3];
+            damages = new double[3];
+            cooldownAmount = new int[3];
+
+            for (int i = 0; i < 3; i++) {
+                // Retrieve skill's name from boss and add it to the array
+                String skillName = (String) mapBoss.get(Bosses.skillName + String.valueOf(i));
+                skillNames[i] = skillName;
+
+                // Retrieve the skills map from Skills class which contains skill values
+                HashMap<String, Object> mapSkill = Skills.getSkill(skillName);
+
+                // Retrieve hit animation and it's speed from Skills class
+                Animation<TextureRegion> skillHit =
+                        (Animation<TextureRegion>) mapSkill.get(Skills.hitAnimation);
+                hitAnimList.add(skillHit);
+                int skillHitSpd = (Integer) mapSkill.get(Skills.speed + Skills.hitAnimation);
+                hitSpeeds[i] = skillHitSpd;
+
+                // Retrieve skills's damage
+                double dmg = (Double) mapSkill.get(Skills.damage);
+                damages[i] = dmg;
+
+                // Retrieve skill's cooldown
+                int cd = (Integer) mapSkill.get(Skills.cooldown);
+                cooldownAmount[i] = cd;
+            }
+
+            // Retrieve enemy animations and speed
+            idleAnim = (Animation<TextureRegion>) mapBoss.get(Bosses.idle);
+            skillAnim = (Animation<TextureRegion>) mapBoss.get(Bosses.skill);
+            hackAnim = (Animation<TextureRegion>) mapBoss.get(Bosses.hack);
+            idleSpd = (Integer) mapBoss.get(Bosses.speed + Bosses.idle);
+            skillSpd = (Integer) mapBoss.get(Bosses.speed + Bosses.skill);
+            hackSpd = (Integer) mapBoss.get(Bosses.speed + Bosses.hack);
+
+            // Retrieve dialog start and end from Boss
             dialogStart = (String) mapBoss.get(Bosses.dialogStart);
             dialogEnd = (String) mapBoss.get(Bosses.dialogEnd);
-
-            skillNames = new String[] {skill1_name, skill2_name, skill3_name};
-
-            // Retrieve animations
-            idle = (Animation<TextureRegion>) mapBoss.get(Bosses.idle);
-            skill1 = (Animation<TextureRegion>) mapBoss.get(skill + "1");
-            skill2 = (Animation<TextureRegion>) mapBoss.get(skill + "2");
-            skill3 = (Animation<TextureRegion>) mapBoss.get(skill + "3");
-            skill1_hit = (Animation<TextureRegion>) mapBoss.get(skillHit + "1");
-            skill2_hit = (Animation<TextureRegion>) mapBoss.get(skillHit + "2");
-            skill3_hit = (Animation<TextureRegion>) mapBoss.get(skillHit + "3");
-            hack = (Animation<TextureRegion>) mapBoss.get(Bosses.hack);
-
-            // Retrieve damages
-            double dmg1 = Double.valueOf(mapBoss.get(dmg + "1").toString());
-            double dmg2 = Double.valueOf(mapBoss.get(dmg + "2").toString());
-            double dmg3 = Double.valueOf(mapBoss.get(dmg + "3").toString());
-
-            damages = new double[] {dmg1, dmg2, dmg3};
-
-            // Retrieve cooldowns
-            int cd1 = (Integer) mapBoss.get(skillCd + "1");
-            int cd2 = (Integer) mapBoss.get(skillCd + "2");
-            int cd3 = (Integer) mapBoss.get(skillCd + "3");
-
-            cooldownAmount = new int[] {cd1, cd2, cd3};
-
-            // Retrieve animation speeds
-            idleSpd = (Integer) mapBoss.get(spd + Bosses.idle);
-            int skill1Spd = (Integer) mapBoss.get(spd + skill + "1");
-            int skill2Spd = (Integer) mapBoss.get(spd + skill + "2");
-            int skill3Spd = (Integer) mapBoss.get(spd + skill + "3");
-            int skill1HitSpd = (Integer) mapBoss.get(spd + skillHit + "1");
-            int skill2HitSpd = (Integer) mapBoss.get(spd + skillHit + "2");
-            int skill3HitSpd = (Integer) mapBoss.get(spd + skillHit + "3");
-            hackSpd = (Integer) mapBoss.get(spd + Bosses.hack);
-
-            speeds = new Integer[] {skill1Spd, skill2Spd, skill3Spd};
-            hitSpeeds = new Integer[] {skill1HitSpd, skill2HitSpd, skill3HitSpd};
         }
 
         // Select skill
@@ -980,7 +964,7 @@ public class RoomFight extends RoomParent {
                 int random;
                 // While skill chosen which is on cooldown, select new one
                 while (true) {
-                    random = MathUtils.random(0, animList.size() - 1);
+                    random = MathUtils.random(0, cooldowns.size() - 1);
                     String selSkill = "Skill" + String.valueOf(random);
                     if (cooldowns.get(selSkill) == 0) {
                         cooldowns.put(selSkill, cooldownAmount[random]);
@@ -988,31 +972,17 @@ public class RoomFight extends RoomParent {
                     }
                 }
                 dialog.showSkillName(skillNames[random]);
-                curAnimation = animList.get(random);
                 curHitAnimation = hitAnimList.get(random);
                 curHitAnimationSpd = hitSpeeds[random];
                 dmgAmount = defaultDmg * damages[random];
-                anim.startAnimation(curAnimation, speeds[random]);
-
-
-                // Discovered: Added this for testing purposes.
-                /*int i = 2;
-
-                dialog.showSkillName(skillNames[i]);
-                curAnimation = animList.get(i);
-                curHitAnimation = hitAnimList.get(i);
-                curHitAnimationSpd = hitSpeeds[i];
-                dmgAmount = defaultDmg * damages[i];
-                anim.startAnimation(curAnimation, speeds[i]);
-
-                System.out.println(skillNames[i]);*/
+                anim.startAnimation(skillAnim, skillSpd);
             }
         }
 
         // Control what happens once action has been selected
         protected void controlActionStates() {
             if (actionState == TEMP_ANIM) {
-                if (curAnimation.isAnimationFinished(anim.getStateTime())) {
+                if (skillAnim.isAnimationFinished(anim.getStateTime())) {
                     player.startHitAnimation(curHitAnimation, curHitAnimationSpd);
                     startIdle();
                     actionState = HIT_ANIM;
