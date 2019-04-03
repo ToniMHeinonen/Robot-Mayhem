@@ -12,6 +12,7 @@ public class Skills {
     public static final String name = "name";
     public static final String description = "description";
     public static final String damage = "damage";
+    public static final String critChance = "critChance";
     public static final String damageOverTime = "damageOverTime";
     public static final String damageOverTimeTurns = "damageOverTimeTurns";
     public static final String dotPurePercent = "dotPurePercent";
@@ -26,6 +27,8 @@ public class Skills {
     public static final String FIRE = "Fire";
     public static final String SUCTION = "Suction";
     public static final String DUST = "Dust throw";
+
+    private static final int defCrit = 10; // Default crit chance percent
 
     private static String[] allSkills = new String[] {ATTACK, DEFEND, REPAIR, SHOCK, FIRE,
     SUCTION, DUST};
@@ -47,6 +50,7 @@ public class Skills {
     - name = Name of the skill
     - description = Description of the skill
     - damage = The amount of damage it deals when it hits
+    - critChance = The amount of percent chance to deal 1.5x damage
     - damageOverTime (DoT) = The amount of damage it deals before every round when inflicted
     - damageOverTimeTurn = The number of turns the DoT lasts
     - dotPurePercent = If to deal DoT in percents compared to MaxHp (example: value 20.0 deals 20
@@ -98,6 +102,7 @@ public class Skills {
         map.put(name, ATTACK);
         map.put(description, "Light attack that’s usable every turn.");
         map.put(damage, 1.0);
+        map.put(critChance, defCrit);
         map.put(damageOverTime, 0.0);
         map.put(damageOverTimeTurns, 0);
         map.put(dotPurePercent, false);
@@ -114,6 +119,7 @@ public class Skills {
         map.put(description,
                 "Shield protects you completely from damage you’d receive in the next turn.");
         map.put(damage, 0.0);
+        map.put(critChance, 0);
         map.put(damageOverTime, 0.0);
         map.put(damageOverTimeTurns, 0);
         map.put(dotPurePercent, false);
@@ -129,6 +135,7 @@ public class Skills {
         map.put(name, REPAIR);
         map.put(description, "Self-repair heals you slightly over 2 turns.");
         map.put(damage, 0.0);
+        map.put(critChance, 0);
         map.put(damageOverTime, -15.0);
         map.put(damageOverTimeTurns, 2);
         map.put(dotPurePercent, true);
@@ -142,7 +149,8 @@ public class Skills {
     private static void skillShock() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, SHOCK);
-        map.put(damage, 4.0);
+        map.put(damage, 3.0);
+        map.put(critChance, defCrit);
         map.put(damageOverTime, 0.0);
         map.put(damageOverTimeTurns, 0);
         map.put(dotPurePercent, false);
@@ -157,6 +165,7 @@ public class Skills {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, FIRE);
         map.put(damage, 0.0);
+        map.put(critChance, 0);
         map.put(damageOverTime, 20.0);
         map.put(damageOverTimeTurns, 3);
         map.put(dotPurePercent, true);
@@ -173,6 +182,7 @@ public class Skills {
         map.put(description, "Suctions suckforce causes medium damage to the recipient. " +
                 "(has an 10% increased chance to be a critical hit)");
         map.put(damage, 1.5);
+        map.put(critChance, defCrit + 10);
         map.put(damageOverTime, 0.0);
         map.put(damageOverTimeTurns, 0);
         map.put(dotPurePercent, false);
@@ -189,6 +199,7 @@ public class Skills {
         map.put(description, "Dust throw releases a big amount of dust inside the robot’s fans" +
                 " and causes medium damage to the recipient over two turns.");
         map.put(damage, 0.0);
+        map.put(critChance, 0);
         map.put(damageOverTime, 1.0);
         map.put(damageOverTimeTurns, 2);
         map.put(dotPurePercent, false);

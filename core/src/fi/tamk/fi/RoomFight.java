@@ -372,11 +372,12 @@ public class RoomFight extends RoomParent {
         protected ArrayList<Integer> dotTurns = new ArrayList<Integer>();
         protected Animating anim = new Animating();
         protected Animating hitAnim = new Animating();
+        protected Animating critMissAnim = new Animating();
 
         protected int turnState, BEFORE = 0, TAKING_DOT = 1, START = 2, WAIT_FOR_ACTION = 3,
                                 DOING_ACTION = 4, END_ACTION = 5;
         protected int actionState, TEMP_ANIM = 0, HIT_ANIM = 1, LONG_ANIM = 2;
-        protected boolean flashWhite, hitAnimationRunning;
+        protected boolean flashWhite, hitAnimationRunning, missCritAnimationRunning;
         protected float flashTime = 0.25f;
         protected State ifDead;
         protected int ID, PLAYER = 0, ENEMY = 1;
@@ -392,13 +393,15 @@ public class RoomFight extends RoomParent {
         protected int idleSpd, skillSpd, hackSpd, takeHitSpd, itemSpd, deathSpd, escapeSpd,
                 defendSpd, curHitAnimationSpd;
         protected Animation<TextureRegion> curAnimation, curHitAnimation, idleAnim, hackAnim,
-                skillAnim, takeHitAnim, healthPlus, healthMinus;
+                skillAnim, takeHitAnim, healthPlus, healthMinus, criticalHitAnim, missAnim;
         protected Integer[] hitSpeeds;
         protected HashMap<String,Integer> cooldowns;
 
         Fighters() {
             healthPlus = game.getAnimHealthPlusDoT();
             healthMinus = game.getAnimHealthMinusDoT();
+            criticalHitAnim = game.getAnimCriticalHit();
+            missAnim = game.getAnimMiss();
         }
 
         // Do this at the start of update method
@@ -408,6 +411,7 @@ public class RoomFight extends RoomParent {
             checkToPause();
             anim.animate();
             if (hitAnim.getAnimation() != null) hitAnim.animate();
+            if (critMissAnim.getAnimation() != null) critMissAnim.animate();
         }
 
         // Do this at the end of update method
@@ -415,6 +419,7 @@ public class RoomFight extends RoomParent {
             if (flashWhite) batch.setShader(shFlashWhite);
             anim.draw(batch, X + positionOffset, Y);
             drawHitAnimation();
+            drawCritOrMissAnimation();
             batch.setShader(null);
         }
 
@@ -478,6 +483,29 @@ public class RoomFight extends RoomParent {
                     hitAnimationRunning = false;
                 } else {
                     hitAnim.draw(batch, X, Y);
+                }
+            }
+        }
+
+        // Opponent starts this when hitting you
+        protected void startMissAnimation() {
+            missCritAnimationRunning = true;
+            critMissAnim.startAnimation(missAnim, 8);
+        }
+
+        // Opponent starts this when hitting you
+        protected void startCriticalHitAnimation() {
+            missCritAnimationRunning = true;
+            critMissAnim.startAnimation(criticalHitAnim, 8);
+        }
+
+        // Draw miss and crit animations
+        protected void drawCritOrMissAnimation() {
+            if (missCritAnimationRunning) {
+                if (critMissAnim.getAnimation().isAnimationFinished(critMissAnim.getStateTime())) {
+                    missCritAnimationRunning = false;
+                } else {
+                    critMissAnim.draw(batch, X, Y);
                 }
             }
         }
@@ -614,6 +642,15 @@ public class RoomFight extends RoomParent {
             }
         }
 
+        protected boolean criticalHit(int value) {
+            boolean critical = false;
+            int random = MathUtils.random(1, 100);
+
+            if (random <= value) critical = true;
+
+            return critical;
+        }
+
         protected void addCooldown(String skill, int amount) {
             /*
              +1 since cooldowns get decreased at the beginning of round and we want cooldown "3"
@@ -748,6 +785,11 @@ public class RoomFight extends RoomParent {
                 curHitAnimation = (Animation<TextureRegion>) mapAttack.get(Skills.hitAnimation);
                 curHitAnimationSpd = (Integer) mapAttack.get(Skills.hitAnimationSpd);
                 dmgAmount = defaultDmg;
+                if (criticalHit((Integer) mapAttack.get(Skills.critChance))) {
+                    dmgAmount *= 1.5;
+                    enemy.startCriticalHitAnimation();
+                }
+
                 actionState = TEMP_ANIM;
             }
             else if (action == "Defend")
@@ -783,7 +825,14 @@ public class RoomFight extends RoomParent {
                         curHitAnimation =
                                 (Animation<TextureRegion>) skillMap.get(Skills.hitAnimation);
                         curHitAnimationSpd = (Integer) skillMap.get(Skills.hitAnimationSpd);
+
+                        // If critical hit, deal 1.5x damage
                         dmgAmount = defaultDmg * (Double) skillMap.get(Skills.damage);
+                        if (criticalHit((Integer) skillMap.get(Skills.critChance))) {
+                            dmgAmount *= 1.5;
+                            enemy.startCriticalHitAnimation();
+                        }
+
                         // Damage over time
                         double value = (Double) skillMap.get(Skills.damageOverTime);
                         double dot;
@@ -899,7 +948,7 @@ public class RoomFight extends RoomParent {
         private double[] damages, damageOverTimes;
         private ArrayList<Animation<TextureRegion>> hitAnimList;
         private String[] skillNames;
-        private int[] cooldownAmount, damageOverTimeTurns;
+        private int[] critChances, cooldownAmount, damageOverTimeTurns;
         private boolean[] dotPurePercents;
 
         Enemy() {
@@ -960,6 +1009,7 @@ public class RoomFight extends RoomParent {
             hitAnimList = new ArrayList<Animation<TextureRegion>>();
             hitSpeeds = new Integer[3];
             damages = new double[3];
+            critChances = new int[3];
             cooldownAmount = new int[3];
             damageOverTimes = new double[3];
             damageOverTimeTurns = new int[3];
@@ -983,6 +1033,10 @@ public class RoomFight extends RoomParent {
                 // Retrieve skills's damage
                 double dmg = (Double) mapSkill.get(Skills.damage);
                 damages[i] = dmg;
+
+                // Retrieve skill's crit chance percent
+                int crit = (Integer) mapSkill.get(Skills.critChance);
+                critChances[i] = crit;
 
                 // Retrieve skill's cooldown
                 int cd = (Integer) mapSkill.get(Skills.cooldown);
@@ -1038,7 +1092,13 @@ public class RoomFight extends RoomParent {
                 dialog.showSkillName(skillNames[random]);
                 curHitAnimation = hitAnimList.get(random);
                 curHitAnimationSpd = hitSpeeds[random];
+
+                // If critical hit, deal 1.5x damage
                 dmgAmount = defaultDmg * damages[random];
+                if (criticalHit(critChances[random])) {
+                    dmgAmount *= 1.5;
+                    player.startCriticalHitAnimation();
+                }
 
                 // Damage over time
                 double dot;

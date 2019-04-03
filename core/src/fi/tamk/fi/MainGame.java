@@ -57,14 +57,15 @@ public class MainGame extends Game {
 	private int inventorySize; // Needed for loading inventory
 
 	// Textures
-	private Texture imgBgHall, imgBgBoss, imgTopBar, imgBottomBar, gamePlayer, escapeBg, hpBarLeft,
+	private Texture imgBgHall, imgBgBoss, imgTopBar, imgBottomBar, escapeBg, hpBarLeft,
             hpBarRight, powerUpBg, powerUpPopup, itemBg;
 	private Animating createAnims = new Animating();
 	//RoomGame
 	private Animation<TextureRegion> animGameMoving;
     //RoomFight
 	private Animation<TextureRegion> animIdle, animSkill, animDefend, animEscape,
-            animItem, animHack, animDeath, animTakeHitAnim, animHealthPlusDoT, animHealthMinusDoT;
+            animItem, animHack, animDeath, animTakeHitAnim, animHealthPlusDoT, animHealthMinusDoT,
+			animMiss, animCriticalHit;
 
 	//Stepmeter in RoomGame
     private BitmapFont fontSteps;
@@ -260,6 +261,8 @@ public class MainGame extends Game {
         Texture playerDeath = new Texture("texture/player/playerDeath.png");
         Texture healthPlus = new Texture("texture/skills/plusHealth.png");
         Texture healthMinus = new Texture("texture/skills/minusHealth.png");
+		Texture criticalHit = new Texture("texture/skills/criticalHit.png");
+		Texture miss = new Texture("texture/skills/miss.png");
 		escapeBg = new Texture("texture/escapeBackground.png");
 		hpBarLeft = new Texture("texture/hpbar_left.png");
 		hpBarRight = new Texture("texture/hpbar_right.png");
@@ -280,6 +283,8 @@ public class MainGame extends Game {
         animTakeHitAnim = createAnims.createAnimation(playerItem, 3, 1);
         animHealthPlusDoT = createAnims.createAnimation(healthPlus, 3, 1);
         animHealthMinusDoT = createAnims.createAnimation(healthMinus, 3, 1);
+        animCriticalHit = createAnims.createAnimation(criticalHit, 4, 1);
+		animMiss = createAnims.createAnimation(miss, 4, 1);
 	}
 
 	private void createBundle() {
@@ -419,10 +424,6 @@ public class MainGame extends Game {
 		return camera;
 	}
 
-	public Texture getGamePlayer() {
-		return gamePlayer;
-	}
-
 	public Stage getStage() {
 		return stage;
 	}
@@ -507,7 +508,15 @@ public class MainGame extends Game {
         return animHealthMinusDoT;
     }
 
-    public TextButton.TextButtonStyle getStyle() {
+	public Animation<TextureRegion> getAnimMiss() {
+		return animMiss;
+	}
+
+	public Animation<TextureRegion> getAnimCriticalHit() {
+		return animCriticalHit;
+	}
+
+	public TextButton.TextButtonStyle getStyle() {
 		return style;
 	}
 
