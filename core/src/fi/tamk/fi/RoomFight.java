@@ -397,8 +397,8 @@ public class RoomFight extends RoomParent {
         protected HashMap<String,Integer> cooldowns;
 
         Fighters() {
-            healthPlus = hitAnim.createAnimation(game.getHealthPlus(), 3, 1);
-            healthMinus = hitAnim.createAnimation(game.getHealthMinus(), 3, 1);
+            healthPlus = game.getAnimHealthPlusDoT();
+            healthMinus = game.getAnimHealthMinusDoT();
         }
 
         // Do this at the start of update method
@@ -706,14 +706,14 @@ public class RoomFight extends RoomParent {
             cooldowns.put("Skill1", 0);
 
             // Create animations (probably should be created in MainGame though)
-            idleAnim = anim.createAnimation(game.getPlayerIdle(), 3, 1);
-            skillAnim = anim.createAnimation(game.getPlayerAttack(), 3, 1);
-            defendAnim = anim.createAnimation(game.getPlayerDefend(), 3, 1);
-            takeHitAnim = anim.createAnimation(game.getPlayerEscape(), 3, 1);
-            escapeAnim = anim.createAnimation(game.getPlayerEscape(), 3, 1);
-            itemAnim = anim.createAnimation(game.getPlayerItem(), 3, 1);
-            hackAnim = anim.createAnimation(game.getPlayerHack(), 3, 1);
-            deathAnim = anim.createAnimation(game.getPlayerDeath(), 3, 1);
+            idleAnim = game.getAnimIdle();
+            skillAnim = game.getAnimSkill();
+            defendAnim = game.getAnimDefend();
+            takeHitAnim = game.getAnimTakeHitAnim();
+            escapeAnim = game.getAnimEscape();
+            itemAnim = game.getAnimItem();
+            hackAnim = game.getAnimHack();
+            deathAnim = game.getAnimDeath();
 
             anim.startAnimation(idleAnim, idleSpd);
         }

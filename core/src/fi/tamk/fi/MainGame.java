@@ -7,9 +7,11 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
@@ -54,9 +56,14 @@ public class MainGame extends Game {
 	private int inventorySize; // Needed for loading inventory
 
 	// Textures
-	private Texture imgBgHall, imgBgBoss, imgTopBar, imgBottomBar, gamePlayer, playerIdle,
-			playerAttack, playerDefend, playerItem, playerEscape, playerHack, playerDeath, escapeBg, hpBarLeft, hpBarRight,
-			healthPlus, healthMinus, powerUpBg, powerUpPopup, itemBg;
+	private Texture imgBgHall, imgBgBoss, imgTopBar, imgBottomBar, gamePlayer, escapeBg, hpBarLeft,
+            hpBarRight, powerUpBg, powerUpPopup, itemBg;
+	private Animating createAnims = new Animating();
+	//RoomGame
+	private Animation<TextureRegion> animGameMoving;
+    //RoomFight
+	private Animation<TextureRegion> animIdle, animSkill, animDefend, animEscape,
+            animItem, animHack, animDeath, animTakeHitAnim, animHealthPlusDoT, animHealthMinusDoT;
 
 	//Stepmeter in RoomGame
     private BitmapFont fontSteps;
@@ -133,7 +140,6 @@ public class MainGame extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
-		gamePlayer.dispose();
 		stage.dispose();
 		skin.dispose();
 		backgroundMusic.dispose();
@@ -243,22 +249,36 @@ public class MainGame extends Game {
 		imgBgBoss = new Texture("texture/bg_hall1_boss.png");
 		imgTopBar = new Texture("texture/topbar.png");
 		imgBottomBar = new Texture("texture/bottombar.png");
-		gamePlayer = new Texture("texture/player/player.png");
-        playerIdle = new Texture("texture/player/playerIdle.png");
-		playerAttack = new Texture("texture/player/playerAttack.png");
-		playerDefend = new Texture("texture/player/playerDefend.png");
-        playerItem = new Texture("texture/player/playerItem.png");
-        playerEscape = new Texture("texture/player/playerEscape.png");
-        playerHack = new Texture("texture/player/playerHack.png");
-		playerDeath = new Texture("texture/player/playerDeath.png");
+		Texture gamePlayerMoving = new Texture("texture/player/player.png");
+        Texture playerIdle = new Texture("texture/player/playerIdle.png");
+        Texture playerAttack = new Texture("texture/player/playerAttack.png");
+        Texture playerDefend = new Texture("texture/player/playerDefend.png");
+        Texture playerItem = new Texture("texture/player/playerItem.png");
+        Texture playerEscape = new Texture("texture/player/playerEscape.png");
+        Texture playerHack = new Texture("texture/player/playerHack.png");
+        Texture playerDeath = new Texture("texture/player/playerDeath.png");
+        Texture healthPlus = new Texture("texture/skills/plusHealth.png");
+        Texture healthMinus = new Texture("texture/skills/minusHealth.png");
 		escapeBg = new Texture("texture/escapeBackground.png");
 		hpBarLeft = new Texture("texture/hpbar_left.png");
 		hpBarRight = new Texture("texture/hpbar_right.png");
-		healthPlus = new Texture("texture/skills/plusHealth.png");
-		healthMinus = new Texture("texture/skills/minusHealth.png");
 		powerUpBg = new Texture("texture/powerUpBg.jpg");
 		powerUpPopup = new Texture("texture/powerUpPopup.jpg");
 		itemBg = new Texture("texture/itemBg.jpg");
+
+		// Create animations
+		animGameMoving = createAnims.createAnimation(gamePlayerMoving, 4, 1);
+
+		animIdle = createAnims.createAnimation(playerIdle, 3, 1);
+		animSkill = createAnims.createAnimation(playerAttack, 3, 1);
+		animDefend = createAnims.createAnimation(playerDefend, 3, 1);
+        animEscape = createAnims.createAnimation(playerEscape, 3, 1);
+        animItem = createAnims.createAnimation(playerItem, 3, 1);
+        animHack = createAnims.createAnimation(playerHack, 3, 1);
+        animDeath = createAnims.createAnimation(playerDeath, 3, 1);
+        animTakeHitAnim = createAnims.createAnimation(playerItem, 3, 1);
+        animHealthPlusDoT = createAnims.createAnimation(healthPlus, 3, 1);
+        animHealthMinusDoT = createAnims.createAnimation(healthMinus, 3, 1);
 	}
 
 	private void createBundle() {
@@ -442,37 +462,57 @@ public class MainGame extends Game {
 		return imgBottomBar;
 	}
 
-	public TextButton.TextButtonStyle getStyle() {
+	public Animation<TextureRegion> getAnimGameMoving() {
+		return animGameMoving;
+	}
+
+	public Animation<TextureRegion> getAnimIdle() {
+        return animIdle;
+    }
+
+    public Animation<TextureRegion> getAnimSkill() {
+        return animSkill;
+    }
+
+    public Animation<TextureRegion> getAnimDefend() {
+        return animDefend;
+    }
+
+    public Animation<TextureRegion> getAnimEscape() {
+        return animEscape;
+    }
+
+    public Animation<TextureRegion> getAnimItem() {
+        return animItem;
+    }
+
+    public Animation<TextureRegion> getAnimHack() {
+        return animHack;
+    }
+
+    public Animation<TextureRegion> getAnimDeath() {
+        return animDeath;
+    }
+
+    public Animation<TextureRegion> getAnimTakeHitAnim() {
+        return animTakeHitAnim;
+    }
+
+    public Animation<TextureRegion> getAnimHealthPlusDoT() {
+        return animHealthPlusDoT;
+    }
+
+    public Animation<TextureRegion> getAnimHealthMinusDoT() {
+        return animHealthMinusDoT;
+    }
+
+    public TextButton.TextButtonStyle getStyle() {
 		return style;
 	}
 
     public ProgressBar.ProgressBarStyle getProgBarStyle() {
         return progBarStyle;
     }
-
-    public Texture getPlayerItem() {
-        return playerItem;
-    }
-
-    public Texture getPlayerEscape() {
-        return playerEscape;
-    }
-
-    public Texture getPlayerHack() {
-        return playerHack;
-    }
-
-    public Texture getPlayerIdle() {
-        return playerIdle;
-    }
-
-	public Texture getPlayerAttack() {
-		return playerAttack;
-	}
-
-	public Texture getPlayerDefend() {
-		return playerDefend;
-	}
 
 	public BitmapFont getFontSteps() {
 	    return fontSteps;
@@ -481,10 +521,6 @@ public class MainGame extends Game {
     public BitmapFont getDescriptionFont() {
 	    return descriptionFont;
     }
-
-	public Texture getPlayerDeath() {
-		return playerDeath;
-	}
 
 	public Texture getEscapeBg() {
 		return escapeBg;
@@ -608,14 +644,6 @@ public class MainGame extends Game {
 
 	public int getPoolMult() {
 		return poolMult;
-	}
-
-	public Texture getHealthPlus() {
-		return healthPlus;
-	}
-
-	public Texture getHealthMinus() {
-		return healthMinus;
 	}
 
 	public Texture getPowerUpBg() {

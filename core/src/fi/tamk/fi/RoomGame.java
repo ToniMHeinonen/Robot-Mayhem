@@ -122,20 +122,18 @@ public class RoomGame extends RoomParent {
     Create class for player
      */
     private class Player {
-        private Texture img;
         private Animation<TextureRegion> moving;
         private Animating anim;
         private float X;
         private float Y;
 
         Player() {
-            img = game.getGamePlayer();
             anim = new Animating();
             X = 100;
             Y = 200;
 
-            // Create necessary animations and start the correct one
-            moving = anim.createAnimation(img, 4, 1);
+            // Retrieve necessary animations and start the correct one
+            moving = game.getAnimGameMoving();
             anim.startAnimation(moving, 10);
         }
 
