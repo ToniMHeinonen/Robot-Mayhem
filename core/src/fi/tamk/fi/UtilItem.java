@@ -32,6 +32,8 @@ public class UtilItem {
     private ScrollPane scrollAvailableItems;
     private ScrollPane scrollOwnedItems;
 
+    private TextButton buttonMoney;
+
     private String[] allItems;
     int buttonCounter;
 
@@ -49,6 +51,7 @@ public class UtilItem {
         createItemDialog();
         createAvailableItemsTable();
         createOwnedItemsTable();
+        showMoney();
         addActors();
     }
 
@@ -109,9 +112,16 @@ public class UtilItem {
                 dialogItems.getY() + 200);
     }
 
+    private void showMoney() {
+        buttonMoney = new TextButton("Money: " + String.valueOf(money), skin);
+        buttonMoney.setPosition(dialogItems.getWidth() - 350,
+                dialogItems.getHeight() - 200);
+    }
+
     private void addActors() {
         dialogItems.addActor(scrollAvailableItems);
         dialogItems.addActor(scrollOwnedItems);
+        dialogItems.addActor(buttonMoney);
         stage.addActor(dialogItems);
     }
 }
