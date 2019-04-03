@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class UtilItem {
     private MainGame game;
@@ -32,6 +34,9 @@ public class UtilItem {
     private ScrollPane scrollAvailableItems;
     private ScrollPane scrollOwnedItems;
 
+    private String[] allItems;
+    int buttonCounter;
+
     private float backgroundX, backgroundY;
 
     UtilItem(MainGame game) {
@@ -42,6 +47,8 @@ public class UtilItem {
         background = game.getItemBg();
         bigFont = game.getFontSteps();
         money = game.getMoney();
+
+        allItems = Item.getAllItems();
 
         backgroundX = game.pixelWidth/2f - background.getWidth()/2f;
         backgroundY = game.pixelHeight/2f - background.getHeight()/2f;
@@ -82,22 +89,18 @@ public class UtilItem {
 
     private void createAvailableItemsTable() {
         tableAvailableItems = new Table();
-        TextButton button1 = new TextButton("item1", skin);
-        TextButton button2 = new TextButton("item2", skin);
-        TextButton button3 = new TextButton("item3", skin);
-        TextButton button4 = new TextButton("item4", skin);
-        TextButton button5 = new TextButton("item5", skin);
-        TextButton button6 = new TextButton("item6", skin);
-        TextButton button7 = new TextButton("item7", skin);
-        TextButton button8 = new TextButton("item8", skin);
-        tableAvailableItems.add(button1).row();
-        tableAvailableItems.add(button2).row();
-        tableAvailableItems.add(button3).row();
-        tableAvailableItems.add(button4).row();
-        tableAvailableItems.add(button5).row();
-        tableAvailableItems.add(button6).row();
-        tableAvailableItems.add(button7).row();
-        tableAvailableItems.add(button8).row();
+        for (int i = 0; i < allItems.length; i++) {
+            buttonCounter = i;
+            TextButton button0 = new TextButton(allItems[i], skin);
+            tableAvailableItems.add(button0).row();
+            button0.addListener(new ClickListener(){
+                int i = buttonCounter;
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    System.out.println(Item.getItem(allItems[i]).get("description"));
+                }
+            });
+        }
         scrollAvailableItems = new ScrollPane(tableAvailableItems, skin);
         scrollAvailableItems.setFadeScrollBars(false);
         scrollAvailableItems.setVisible(true);

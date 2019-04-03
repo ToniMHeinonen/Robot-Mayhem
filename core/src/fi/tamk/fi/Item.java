@@ -84,4 +84,8 @@ public class Item {
 
         mapItems.put((String) map.get(name), map);
     }
+
+    public static String[] getAllItems() {
+        return allItems;
+    }
 }
