@@ -38,6 +38,7 @@ public class Hacking {
 
     public static final float WORLD_WIDTH = 19.20f;
     public static final float WORLD_HEIGHT = 10.80f;
+    private final float gridSize = WORLD_WIDTH / 16f;
 
     private World world;
     private Body shieldBody;
@@ -67,7 +68,7 @@ public class Hacking {
     private Array<Body> bodiesToBeDestroyed = new Array<Body>();
 
     // Position of the shields.
-    private float widthOfEnemy = WORLD_WIDTH - 3f;
+    private float widthOfEnemy = WORLD_WIDTH - gridSize*3.5f;
     private float heightOfEnemy = 5f;
 
     // Starting position of the bullet.

@@ -33,6 +33,7 @@ public class MainGame extends Game {
 
 	public final float pixelWidth = 1920f;
 	public final float pixelHeight = 1080f;
+	public final float gridSize = 1920f / 16f;
 	private OrthographicCamera camera;
 
 	private Stage stage;

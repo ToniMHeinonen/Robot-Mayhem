@@ -377,7 +377,7 @@ public class RoomFight extends RoomParent {
                                 DOING_ACTION = 4, END_ACTION = 5;
         protected int actionState, TEMP_ANIM = 0, HIT_ANIM = 1, LONG_ANIM = 2;
         protected boolean flashWhite, hitAnimationRunning;
-        protected float flashTime = 0.5f;
+        protected float flashTime = 0.25f;
         protected State ifDead;
         protected int ID, PLAYER = 0, ENEMY = 1;
 
@@ -494,12 +494,6 @@ public class RoomFight extends RoomParent {
         protected void checkToPause() {
             if (!hpIncorrect && !positionIncorrect) pauseStates = false;
             else pauseStates = true;
-        }
-
-        // If skill has DoT, it will be added here
-        protected void addDoT(int turns, double damage) {
-            dotTurns.add(turns);
-            dotDamage.add(damage);
         }
 
         // Add all the DoTs on top of each other and decrease their turn timers
@@ -671,13 +665,14 @@ public class RoomFight extends RoomParent {
         private HashMap<String,Object> mapAttack, mapDefend;
 
         private String curAction;
+        private Boolean reflectingShield = false;
         private ArrayList<HashMap<String,Object>> mapSkills;
         private String[] skills;
         private double[] defaultDamages = new double[] {34, 25, 20, 25, 20, 15, 20, 15, 10};
 
         Player() {
-            X = 100f;
-            Y = 300f;
+            X = game.gridSize;
+            Y = game.gridSize*2;
             maxHp = 100;
             hp = maxHp;
             targetHp = hp;
@@ -685,14 +680,14 @@ public class RoomFight extends RoomParent {
             ifDead = State.DEAD;
             ID = PLAYER;
 
-            idleSpd = 30;
-            skillSpd = 30;
-            defendSpd = 10;
-            itemSpd = 20;
-            takeHitSpd = 30;
-            hackSpd = 30;
-            deathSpd = 30;
-            escapeSpd = 10;
+            idleSpd = 8;
+            skillSpd = 8;
+            defendSpd = 8;
+            itemSpd = 8;
+            takeHitSpd = 8;
+            hackSpd = 8;
+            deathSpd = 8;
+            escapeSpd = 8;
 
             addSkillsToMap();
 
@@ -790,7 +785,12 @@ public class RoomFight extends RoomParent {
                         curHitAnimationSpd = (Integer) skillMap.get(Skills.hitAnimationSpd);
                         dmgAmount = defaultDmg * (Double) skillMap.get(Skills.damage);
                         // Damage over time
-                        double dot = (Double) skillMap.get(Skills.damageOverTime);
+                        double value = (Double) skillMap.get(Skills.damageOverTime);
+                        double dot;
+                        // If purePercent is true, then dot value 2.0 deals 2 percent of MaxHp
+                        // otherwise it deals 2.0*defaultDmg
+                        if ((Boolean) skillMap.get(Skills.dotPurePercent)) dot = value;
+                        else dot = value * defaultDmg;
                         int dotTurns = (Integer) skillMap.get(Skills.damageOverTimeTurns);
                         if (dot == 0); // Do nothing
                         else if (dot > 0) enemy.addDoT(dotTurns, dot); // Damage
@@ -848,11 +848,26 @@ public class RoomFight extends RoomParent {
         // Take hit, expect if defending, then return the damage back to the enemy.
         public void takeHit(double damage) {
             if (curAction == "Defend") {
-                enemy.takeHit(damage);
+                if (reflectingShield) {
+                    enemy.takeHit(damage);
+                } // else do nothing
             } else {
                 flashAndMove();
                 calcTargetHpSpd(damage);
                 changeToTakeHitAnimation();
+            }
+        }
+
+        // If skill has DoT, it will be added here
+        private void addDoT(int turns, double damage) {
+            if (curAction == "Defend") {
+                if (reflectingShield) {
+                    enemy.dotTurns.add(turns);
+                    enemy.dotDamage.add(damage);
+                } // else do nothing
+            } else {
+                dotTurns.add(turns);
+                dotDamage.add(damage);
             }
         }
 
@@ -876,7 +891,6 @@ public class RoomFight extends RoomParent {
      */
     class Enemy extends Fighters {
 
-        private Animation<TextureRegion> skill1_hit, skill2_hit, skill3_hit;
         private String dialogStart, dialogEnd;
         private HashMap<String,Object> mapBoss;
 
@@ -886,12 +900,14 @@ public class RoomFight extends RoomParent {
         private ArrayList<Animation<TextureRegion>> hitAnimList;
         private String[] skillNames;
         private int[] cooldownAmount, damageOverTimeTurns;
+        private boolean[] dotPurePercents;
 
         Enemy() {
             retrieveBoss();
 
-            X = game.pixelWidth - 100f - idleAnim.getKeyFrame(0f).getRegionWidth();
-            Y = 300f;
+            X = game.pixelWidth - game.gridSize -
+                    idleAnim.getKeyFrame(0f).getRegionWidth();
+            Y = game.gridSize*2;
             maxHp = 100;
             hp = maxHp;
             targetHp = hp;
@@ -947,6 +963,7 @@ public class RoomFight extends RoomParent {
             cooldownAmount = new int[3];
             damageOverTimes = new double[3];
             damageOverTimeTurns = new int[3];
+            dotPurePercents = new boolean[3];
 
             for (int i = 0; i < 3; i++) {
                 // Retrieve skill's name from boss and add it to the array
@@ -978,6 +995,10 @@ public class RoomFight extends RoomParent {
                 // Retrieve skill's damage over time turns
                 int dotTurn = (Integer) mapSkill.get(Skills.damageOverTimeTurns);
                 damageOverTimeTurns[i] = dotTurn;
+
+                // Retrieve if to deal pure percent or comparable to defaultDamage
+                boolean pure = (Boolean) mapSkill.get(Skills.dotPurePercent);
+                dotPurePercents[i] = pure;
             }
 
             // Retrieve enemy animations and speed
@@ -1020,7 +1041,9 @@ public class RoomFight extends RoomParent {
                 dmgAmount = defaultDmg * damages[random];
 
                 // Damage over time
-                double dot = damageOverTimes[random];
+                double dot;
+                if (dotPurePercents[random]) dot = damageOverTimes[random];
+                else dot = damageOverTimes[random] * defaultDmg;
                 int dotTurns = damageOverTimeTurns[random];
                 if (dot == 0); // Do nothing
                 else if (dot > 0) player.addDoT(dotTurns, dot); // Damage
@@ -1056,6 +1079,12 @@ public class RoomFight extends RoomParent {
             flashAndMove();
             calcTargetHpSpd(damage);
             changeToTakeHitAnimation();
+        }
+
+        // If skill has DoT, it will be added here
+        private void addDoT(int turns, double damage) {
+            dotTurns.add(turns);
+            dotDamage.add(damage);
         }
 
         // When the fight begins, wait for some time to start the dialogue
