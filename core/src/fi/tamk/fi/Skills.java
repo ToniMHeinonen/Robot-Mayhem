@@ -15,9 +15,8 @@ public class Skills {
     public static final String damageOverTime = "damageOverTime";
     public static final String damageOverTimeTurns = "damageOverTimeTurns";
     public static final String cooldown = "cooldown";
-    public static final String animation = "animation";
     public static final String hitAnimation = "hitAnimation";
-    public static final String speed = "speed";
+    public static final String hitAnimationSpd = "hitAnimationSpd";
 
     public static final String ATTACK = "Attack";
     public static final String DEFEND = "Defend";
@@ -32,9 +31,16 @@ public class Skills {
 
     private static HashMap<String,HashMap<String,Object>> mapSkills;
 
-    private static Texture t_attack, t_attack_hit, t_defend;
+    private static Texture t_Physical; // Remember to dispose these
     private static Animating anim = new Animating();
-    private static Animation<TextureRegion> a_attack, a_attack_hit, a_defend;
+    private static Animation<TextureRegion> a_Physical;
+
+    /* NOTE!
+    Everytime you add new skill, remember to:
+    1. Make a String for it
+    2. Add it to the allSkills array
+    3. Make a new method for it
+     */
 
     /*
     Create skills when the game starts.
@@ -76,13 +82,11 @@ public class Skills {
         map.put(name, ATTACK);
         map.put(description, "Light attack that’s usable every turn.");
         map.put(damage, 1.0);
-        map.put(damageOverTime, 0.0); // Not needed
-        map.put(damageOverTimeTurns, 0); // Not needed
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
         map.put(cooldown, 0);
-        map.put(animation, a_attack);
-        map.put(hitAnimation, a_attack_hit);
-        map.put(speed + animation, 30);
-        map.put(speed + hitAnimation, 15);
+        map.put(hitAnimation, a_Physical);
+        map.put(hitAnimationSpd, 15);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -92,14 +96,12 @@ public class Skills {
         map.put(name, DEFEND);
         map.put(description,
                 "Shield protects you completely from damage you’d receive in the next turn.");
-        map.put(damage, 0.0); // Not needed
-        map.put(damageOverTime, 0.0); // Not needed
-        map.put(damageOverTimeTurns, 0); // Not needed
+        map.put(damage, 0.0);
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
         map.put(cooldown, 3);
-        map.put(animation, a_defend);
         map.put(hitAnimation, null);
-        map.put(speed + animation, 5);
-        map.put(speed + hitAnimation, 0);
+        map.put(hitAnimationSpd, 0);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -112,10 +114,8 @@ public class Skills {
         map.put(damageOverTime, -15.0);
         map.put(damageOverTimeTurns, 2);
         map.put(cooldown, 2);
-        map.put(animation, a_defend);
         map.put(hitAnimation, null);
-        map.put(speed + animation, 30);
-        map.put(speed + hitAnimation, 0);
+        map.put(hitAnimationSpd, 0);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -127,10 +127,8 @@ public class Skills {
         map.put(damageOverTime, 0.0);
         map.put(damageOverTimeTurns, 0);
         map.put(cooldown, 3);
-        map.put(animation, a_attack);
-        map.put(hitAnimation, a_attack_hit);
-        map.put(speed + animation, 20);
-        map.put(speed + hitAnimation, 10);
+        map.put(hitAnimation, a_Physical);
+        map.put(hitAnimationSpd, 10);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -142,10 +140,8 @@ public class Skills {
         map.put(damageOverTime, 20.0);
         map.put(damageOverTimeTurns, 3);
         map.put(cooldown, 2);
-        map.put(animation, a_defend);
         map.put(hitAnimation, null);
-        map.put(speed + animation, 15);
-        map.put(speed + hitAnimation, 0);
+        map.put(hitAnimationSpd, 0);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -159,10 +155,8 @@ public class Skills {
         map.put(damageOverTime, 0.0);
         map.put(damageOverTimeTurns, 0);
         map.put(cooldown, 2);
-        map.put(animation, null);
-        map.put(hitAnimation, a_attack_hit);
-        map.put(speed + animation, 0);
-        map.put(speed + hitAnimation, 30);
+        map.put(hitAnimation, a_Physical);
+        map.put(hitAnimationSpd, 30);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -176,26 +170,18 @@ public class Skills {
         map.put(damageOverTime, 30.0);
         map.put(damageOverTimeTurns, 2);
         map.put(cooldown, 3);
-        map.put(animation, a_attack);
-        map.put(hitAnimation, a_attack_hit);
-        map.put(speed + animation, 15);
-        map.put(speed + hitAnimation, 10);
+        map.put(hitAnimation, a_Physical);
+        map.put(hitAnimationSpd, 10);
 
         mapSkills.put((String) map.get(name), map);
     }
 
     private static void createAttackAndDefend() {
-        t_attack = new Texture("texture/player/playerAttack.png");
-        a_attack = anim.createAnimation(t_attack, 3, 1);
-        t_attack_hit = new Texture("texture/player/playerAttackHit.png");
-        a_attack_hit = anim.createAnimation(t_attack_hit, 3, 1);
-        t_defend = new Texture("texture/player/playerDefend.png");
-        a_defend = anim.createAnimation(t_defend, 3, 1);
+        t_Physical = new Texture("texture/player/playerAttackHit.png");
+        a_Physical = anim.createAnimation(t_Physical, 3, 1);
     }
 
     public static void dispose() {
-        t_attack.dispose();
-        t_attack_hit.dispose();
-        t_defend.dispose();
+        t_Physical.dispose();
     }
 }

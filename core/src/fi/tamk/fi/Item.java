@@ -19,6 +19,13 @@ public class Item {
     private static String[] allItems = new String[] {BOMB, POTION, DOUBLE_STEPS};
     private static HashMap<String,HashMap<String,Object>> mapItems;
 
+    /* NOTE!
+    Everytime you add new item, remember to:
+    1. Make a String for it
+    2. Add it to the allItems array
+    3. Make a new method for it
+     */
+
     /*
     Create items when the game starts.
      */

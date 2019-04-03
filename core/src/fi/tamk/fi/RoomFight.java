@@ -635,7 +635,7 @@ public class RoomFight extends RoomParent {
                 if (value > 0) {
                     cooldowns.put(entry.getKey(), entry.getValue() - 1);
                 }
-                System.out.println(entry.getKey() + " = " + String.valueOf(entry.getValue()));
+                //System.out.println(entry.getKey() + " = " + String.valueOf(entry.getValue()));
             }
         }
 
@@ -670,8 +670,7 @@ public class RoomFight extends RoomParent {
         private Animation<TextureRegion> defendAnim, escapeAnim, itemAnim, deathAnim;
         private HashMap<String,Object> mapAttack, mapDefend;
 
-        private String s_spd, s_dmg, s_cool, s_anim, s_hitAnim, s_name, s_DoTDmg, s_DoTTurns,
-                curAction;
+        private String curAction;
         private ArrayList<HashMap<String,Object>> mapSkills;
         private String[] skills;
         private double[] defaultDamages = new double[] {34, 25, 20, 25, 20, 15, 20, 15, 10};
@@ -695,17 +694,17 @@ public class RoomFight extends RoomParent {
             deathSpd = 30;
             escapeSpd = 10;
 
-            initSkillVariables();
+            addSkillsToMap();
 
-            // Create maps for skills and cooldowns
-            mapAttack = Skills.getSkill("Attack");
-            mapDefend = Skills.getSkill("Defend");
+            // Create maps for attack and defend, create cooldowns
+            mapAttack = Skills.getSkill(Skills.ATTACK);
+            mapDefend = Skills.getSkill(Skills.DEFEND);
             cooldowns = new HashMap<String, Integer>();
             cooldowns.put("Defend", 0);
             cooldowns.put("Skill0", 0);
             cooldowns.put("Skill1", 0);
 
-            // Create animations (probably should be created in MainGame though)
+            // Retrieve animations
             idleAnim = game.getAnimIdle();
             skillAnim = game.getAnimSkill();
             defendAnim = game.getAnimDefend();
@@ -751,8 +750,8 @@ public class RoomFight extends RoomParent {
                 actionSelected = true;
                 curAnimation = skillAnim;
                 curAnimSpd =  skillSpd;
-                curHitAnimation = (Animation<TextureRegion>) mapAttack.get(s_hitAnim);
-                curHitAnimationSpd = (Integer) mapAttack.get(s_spd + s_hitAnim);
+                curHitAnimation = (Animation<TextureRegion>) mapAttack.get(Skills.hitAnimation);
+                curHitAnimationSpd = (Integer) mapAttack.get(Skills.hitAnimationSpd);
                 dmgAmount = defaultDmg;
                 actionState = TEMP_ANIM;
             }
@@ -762,7 +761,7 @@ public class RoomFight extends RoomParent {
                     actionSelected = true;
                     curAnimation = defendAnim;
                     curAnimSpd = defendSpd;
-                    addCooldown("Defend", (Integer) mapDefend.get(s_cool));
+                    addCooldown("Defend", (Integer) mapDefend.get(Skills.cooldown));
                     actionState = LONG_ANIM;
                 }
             }
@@ -783,15 +782,16 @@ public class RoomFight extends RoomParent {
                         actionSelected = true;
                         HashMap<String, Object> skillMap = mapSkills.get(i);
                         addCooldown("Skill" + String.valueOf(i),
-                                (Integer) skillMap.get(s_cool));
-                        curAnimation = (Animation<TextureRegion>) skillMap.get(s_anim);
-                        curAnimSpd = (Integer) skillMap.get(s_spd + s_anim);
-                        curHitAnimation = (Animation<TextureRegion>) skillMap.get(s_hitAnim);
-                        curHitAnimationSpd = (Integer) skillMap.get(s_spd + s_hitAnim);
-                        dmgAmount = defaultDmg * (Double) skillMap.get(s_dmg);
+                                (Integer) skillMap.get(Skills.cooldown));
+                        curAnimation = skillAnim;
+                        curAnimSpd = skillSpd;
+                        curHitAnimation =
+                                (Animation<TextureRegion>) skillMap.get(Skills.hitAnimation);
+                        curHitAnimationSpd = (Integer) skillMap.get(Skills.hitAnimationSpd);
+                        dmgAmount = defaultDmg * (Double) skillMap.get(Skills.damage);
                         // Damage over time
-                        double dot = (Double) skillMap.get(s_DoTDmg);
-                        int dotTurns = (Integer) skillMap.get(s_DoTTurns);
+                        double dot = (Double) skillMap.get(Skills.damageOverTime);
+                        int dotTurns = (Integer) skillMap.get(Skills.damageOverTimeTurns);
                         if (dot == 0); // Do nothing
                         else if (dot > 0) enemy.addDoT(dotTurns, dot); // Damage
                         else if (dot < 0) addDoT(dotTurns, dot); // Healing
@@ -835,21 +835,13 @@ public class RoomFight extends RoomParent {
             }
         }
 
-        // Initialize skill variables for easy access
-        private void initSkillVariables() {
+        // Add current skills to map
+        private void addSkillsToMap() {
             skills = new String[] {game.getSkill1(), game.getSkill2()};
             mapSkills = new ArrayList<HashMap<String, Object>>();
             for (int i = 0; i < 2; i++) {
                 if (skills[i] != "") mapSkills.add(i, Skills.getSkill(skills[i]));
             }
-            s_spd = Skills.speed;
-            s_dmg = Skills.damage;
-            s_name = Skills.name;
-            s_anim = Skills.animation;
-            s_hitAnim = Skills.hitAnimation;
-            s_cool = Skills.cooldown;
-            s_DoTDmg = Skills.damageOverTime;
-            s_DoTTurns = Skills.damageOverTimeTurns;
         }
 
 
@@ -968,7 +960,7 @@ public class RoomFight extends RoomParent {
                 Animation<TextureRegion> skillHit =
                         (Animation<TextureRegion>) mapSkill.get(Skills.hitAnimation);
                 hitAnimList.add(skillHit);
-                int skillHitSpd = (Integer) mapSkill.get(Skills.speed + Skills.hitAnimation);
+                int skillHitSpd = (Integer) mapSkill.get(Skills.hitAnimationSpd);
                 hitSpeeds[i] = skillHitSpd;
 
                 // Retrieve skills's damage
