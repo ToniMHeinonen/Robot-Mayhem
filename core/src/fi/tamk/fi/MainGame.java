@@ -691,4 +691,8 @@ public class MainGame extends Game {
     public int getMoney() {
 	    return money;
     }
+
+    public int getInventorySize() {
+	    return inventorySize;
+    }
 }
