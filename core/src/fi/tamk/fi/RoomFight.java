@@ -376,8 +376,8 @@ public class RoomFight extends RoomParent {
 
         protected int turnState, BEFORE = 0, TAKING_DOT = 1, START = 2, WAIT_FOR_ACTION = 3,
                                 DOING_ACTION = 4, END_ACTION = 5;
-        protected int actionState, TEMP_ANIM = 0, HIT_ANIM = 1, LONG_ANIM = 2;
-        protected boolean flashWhite, hitAnimationRunning, missCritAnimationRunning;
+        protected int actionState, TEMP_ANIM = 0, HIT_ANIM = 1, LONG_ANIM = 2, MISS_ANIM = 3;
+        protected boolean flashWhite, hitAnimationRunning, missCritAnimationRunning, skillMissed;
         protected float flashTime = 0.25f;
         protected State ifDead;
         protected int ID, PLAYER = 0, ENEMY = 1;
@@ -642,7 +642,7 @@ public class RoomFight extends RoomParent {
             }
         }
 
-        protected boolean criticalHit(int value) {
+        protected boolean randomChance(int value) {
             boolean critical = false;
             int random = MathUtils.random(1, 100);
 
@@ -683,6 +683,11 @@ public class RoomFight extends RoomParent {
         // Opponent uses this to check if it is time to inflict damage and pass the turn
         public boolean isHitAnimationRunning() {
             return hitAnimationRunning;
+        }
+
+        // Opponent uses this to check if it is time to pass the turn
+        public boolean isMissCritAnimationRunning() {
+            return missCritAnimationRunning;
         }
 
         // Used to check if player and enemy has finished their turn on fightersTakingDamage
@@ -774,6 +779,7 @@ public class RoomFight extends RoomParent {
         public void doAction(String action) {
             // Reset necessary values
             curHitAnimation = null;
+            skillMissed = false;
             boolean actionSelected = false;
             int curAnimSpd = 0;
 
@@ -785,7 +791,7 @@ public class RoomFight extends RoomParent {
                 curHitAnimation = (Animation<TextureRegion>) mapAttack.get(Skills.hitAnimation);
                 curHitAnimationSpd = (Integer) mapAttack.get(Skills.hitAnimationSpd);
                 dmgAmount = defaultDmg;
-                if (criticalHit((Integer) mapAttack.get(Skills.critChance))) {
+                if (randomChance((Integer) mapAttack.get(Skills.critChance))) {
                     dmgAmount *= 1.5;
                     enemy.startCriticalHitAnimation();
                 }
@@ -822,28 +828,33 @@ public class RoomFight extends RoomParent {
                                 (Integer) skillMap.get(Skills.cooldown));
                         curAnimation = skillAnim;
                         curAnimSpd = skillSpd;
-                        curHitAnimation =
-                                (Animation<TextureRegion>) skillMap.get(Skills.hitAnimation);
-                        curHitAnimationSpd = (Integer) skillMap.get(Skills.hitAnimationSpd);
 
-                        // If critical hit, deal 1.5x damage
-                        dmgAmount = defaultDmg * (Double) skillMap.get(Skills.damage);
-                        if (criticalHit((Integer) skillMap.get(Skills.critChance))) {
-                            dmgAmount *= 1.5;
-                            enemy.startCriticalHitAnimation();
+                        skillMissed = randomChance((Integer) skillMap.get(Skills.missChance));
+                        // If skill does not miss
+                        if (!skillMissed) {
+                            curHitAnimation =
+                                    (Animation<TextureRegion>) skillMap.get(Skills.hitAnimation);
+                            curHitAnimationSpd = (Integer) skillMap.get(Skills.hitAnimationSpd);
+
+                            // If critical hit, deal 1.5x damage
+                            dmgAmount = defaultDmg * (Double) skillMap.get(Skills.damage);
+                            if (randomChance((Integer) skillMap.get(Skills.critChance))) {
+                                dmgAmount *= 1.5;
+                                enemy.startCriticalHitAnimation();
+                            }
+
+                            // Damage over time
+                            double value = (Double) skillMap.get(Skills.damageOverTime);
+                            double dot;
+                            // If purePercent is true, then dot value 2.0 deals 2 percent of MaxHp
+                            // otherwise it deals 2.0*defaultDmg
+                            if ((Boolean) skillMap.get(Skills.dotPurePercent)) dot = value;
+                            else dot = value * defaultDmg;
+                            int dotTurns = (Integer) skillMap.get(Skills.damageOverTimeTurns);
+                            if (dot == 0) ; // Do nothing
+                            else if (dot > 0) enemy.addDoT(dotTurns, dot); // Damage
+                            else if (dot < 0) addDoT(dotTurns, dot); // Healing
                         }
-
-                        // Damage over time
-                        double value = (Double) skillMap.get(Skills.damageOverTime);
-                        double dot;
-                        // If purePercent is true, then dot value 2.0 deals 2 percent of MaxHp
-                        // otherwise it deals 2.0*defaultDmg
-                        if ((Boolean) skillMap.get(Skills.dotPurePercent)) dot = value;
-                        else dot = value * defaultDmg;
-                        int dotTurns = (Integer) skillMap.get(Skills.damageOverTimeTurns);
-                        if (dot == 0); // Do nothing
-                        else if (dot > 0) enemy.addDoT(dotTurns, dot); // Damage
-                        else if (dot < 0) addDoT(dotTurns, dot); // Healing
                         actionState = TEMP_ANIM;
                     }
                 }
@@ -867,6 +878,10 @@ public class RoomFight extends RoomParent {
                     if (curHitAnimation != null) {
                         enemy.startHitAnimation(curHitAnimation, curHitAnimationSpd);
                         actionState = HIT_ANIM;
+                    } else if (skillMissed){
+                        // If skill missed, then curHitAnimation is null
+                        enemy.startMissAnimation();
+                        actionState = MISS_ANIM;
                     } else {
                         turnState = END_ACTION;
                     }
@@ -881,6 +896,11 @@ public class RoomFight extends RoomParent {
             } else if (actionState == LONG_ANIM) {
                 // Animation lasts until next round
                 turnState = END_ACTION;
+            } else if (actionState == MISS_ANIM) {
+                // Miss animation is drawn on top of enemy
+                if (!enemy.isMissCritAnimationRunning()) {
+                    turnState = END_ACTION;
+                }
             }
         }
 
@@ -948,7 +968,7 @@ public class RoomFight extends RoomParent {
         private double[] damages, damageOverTimes;
         private ArrayList<Animation<TextureRegion>> hitAnimList;
         private String[] skillNames;
-        private int[] critChances, cooldownAmount, damageOverTimeTurns;
+        private int[] critChances, missChances, cooldownAmount, damageOverTimeTurns;
         private boolean[] dotPurePercents;
 
         Enemy() {
@@ -1010,6 +1030,7 @@ public class RoomFight extends RoomParent {
             hitSpeeds = new Integer[3];
             damages = new double[3];
             critChances = new int[3];
+            missChances = new int[3];
             cooldownAmount = new int[3];
             damageOverTimes = new double[3];
             damageOverTimeTurns = new int[3];
@@ -1037,6 +1058,10 @@ public class RoomFight extends RoomParent {
                 // Retrieve skill's crit chance percent
                 int crit = (Integer) mapSkill.get(Skills.critChance);
                 critChances[i] = crit;
+
+                // Retrieve skill's miss chance percent
+                int miss = (Integer) mapSkill.get(Skills.missChance);
+                missChances[i] = miss;
 
                 // Retrieve skill's cooldown
                 int cd = (Integer) mapSkill.get(Skills.cooldown);
@@ -1076,6 +1101,10 @@ public class RoomFight extends RoomParent {
             if (actionTimer > 0 || dialog.isSkillNameOn()) {
                 actionTimer--;
             } else {
+                // Reset necessary values
+                curHitAnimation = null;
+                skillMissed = false;
+
                 actionTimer = actionDelay;
                 turnState = DOING_ACTION;
                 actionState = TEMP_ANIM;
@@ -1090,24 +1119,29 @@ public class RoomFight extends RoomParent {
                     }
                 }
                 dialog.showSkillName(skillNames[random]);
-                curHitAnimation = hitAnimList.get(random);
-                curHitAnimationSpd = hitSpeeds[random];
 
-                // If critical hit, deal 1.5x damage
-                dmgAmount = defaultDmg * damages[random];
-                if (criticalHit(critChances[random])) {
-                    dmgAmount *= 1.5;
-                    player.startCriticalHitAnimation();
+                skillMissed = randomChance(missChances[random]);
+                // If skill did not miss
+                if (!skillMissed) {
+                    curHitAnimation = hitAnimList.get(random);
+                    curHitAnimationSpd = hitSpeeds[random];
+
+                    // If critical hit, deal 1.5x damage
+                    dmgAmount = defaultDmg * damages[random];
+                    if (randomChance(critChances[random])) {
+                        dmgAmount *= 1.5;
+                        player.startCriticalHitAnimation();
+                    }
+
+                    // Damage over time
+                    double dot;
+                    if (dotPurePercents[random]) dot = damageOverTimes[random];
+                    else dot = damageOverTimes[random] * defaultDmg;
+                    int dotTurns = damageOverTimeTurns[random];
+                    if (dot == 0) ; // Do nothing
+                    else if (dot > 0) player.addDoT(dotTurns, dot); // Damage
+                    else if (dot < 0) addDoT(dotTurns, dot); // Healing
                 }
-
-                // Damage over time
-                double dot;
-                if (dotPurePercents[random]) dot = damageOverTimes[random];
-                else dot = damageOverTimes[random] * defaultDmg;
-                int dotTurns = damageOverTimeTurns[random];
-                if (dot == 0); // Do nothing
-                else if (dot > 0) player.addDoT(dotTurns, dot); // Damage
-                else if (dot < 0) addDoT(dotTurns, dot); // Healing
 
                 anim.startAnimation(skillAnim, skillSpd);
             }
@@ -1117,10 +1151,12 @@ public class RoomFight extends RoomParent {
         protected void controlActionStates() {
             if (actionState == TEMP_ANIM) {
                 if (skillAnim.isAnimationFinished(anim.getStateTime())) {
-
                     if (curHitAnimation != null) {
                         player.startHitAnimation(curHitAnimation, curHitAnimationSpd);
                         actionState = HIT_ANIM;
+                    } else if (skillMissed){
+                        player.startMissAnimation();
+                        actionState = MISS_ANIM;
                     } else {
                         turnState = END_ACTION;
                     }
@@ -1129,6 +1165,10 @@ public class RoomFight extends RoomParent {
             } else if (actionState == HIT_ANIM) {
                 if (!player.isHitAnimationRunning()) {
                     player.takeHit(dmgAmount);
+                    turnState = END_ACTION;
+                }
+            } else if (actionState == MISS_ANIM) {
+                if (!player.isMissCritAnimationRunning()) {
                     turnState = END_ACTION;
                 }
             }
