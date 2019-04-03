@@ -14,6 +14,7 @@ public class Skills {
     public static final String damage = "damage";
     public static final String damageOverTime = "damageOverTime";
     public static final String damageOverTimeTurns = "damageOverTimeTurns";
+    public static final String dotPurePercent = "dotPurePercent";
     public static final String cooldown = "cooldown";
     public static final String hitAnimation = "hitAnimation";
     public static final String hitAnimationSpd = "hitAnimationSpd";
@@ -36,10 +37,25 @@ public class Skills {
     private static Animation<TextureRegion> a_Physical;
 
     /* NOTE!
-    Everytime you add new skill, remember to:
+    Every time you add new skill, remember to:
     1. Make a String for it
     2. Add it to the allSkills array
     3. Make a new method for it
+     */
+
+    /* Explanations for values:
+    - name = Name of the skill
+    - description = Description of the skill
+    - damage = The amount of damage it deals when it hits
+    - damageOverTime (DoT) = The amount of damage it deals before every round when inflicted
+    - damageOverTimeTurn = The number of turns the DoT lasts
+    - dotPurePercent = If to deal DoT in percents compared to MaxHp (example: value 20.0 deals 20
+      percent of the MaxHp) or to deal DoT compared to defaultDamage (example: value 1.5 deal 1.5
+      times the defaultDamage (1.5 * defaultDamage)
+    - cooldown = How many turns the cooldown lasts
+    - hitAnimation = What animation is played when hitting enemy
+    - hitAnimationSpd = How fast does the animation move (on default use 8, this variable might be
+      deleted in the future)
      */
 
     /*
@@ -84,9 +100,10 @@ public class Skills {
         map.put(damage, 1.0);
         map.put(damageOverTime, 0.0);
         map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, false);
         map.put(cooldown, 0);
         map.put(hitAnimation, a_Physical);
-        map.put(hitAnimationSpd, 15);
+        map.put(hitAnimationSpd, 8);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -99,6 +116,7 @@ public class Skills {
         map.put(damage, 0.0);
         map.put(damageOverTime, 0.0);
         map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, false);
         map.put(cooldown, 3);
         map.put(hitAnimation, null);
         map.put(hitAnimationSpd, 0);
@@ -113,6 +131,7 @@ public class Skills {
         map.put(damage, 0.0);
         map.put(damageOverTime, -15.0);
         map.put(damageOverTimeTurns, 2);
+        map.put(dotPurePercent, true);
         map.put(cooldown, 2);
         map.put(hitAnimation, null);
         map.put(hitAnimationSpd, 0);
@@ -126,9 +145,10 @@ public class Skills {
         map.put(damage, 4.0);
         map.put(damageOverTime, 0.0);
         map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, false);
         map.put(cooldown, 3);
         map.put(hitAnimation, a_Physical);
-        map.put(hitAnimationSpd, 10);
+        map.put(hitAnimationSpd, 8);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -139,6 +159,7 @@ public class Skills {
         map.put(damage, 0.0);
         map.put(damageOverTime, 20.0);
         map.put(damageOverTimeTurns, 3);
+        map.put(dotPurePercent, true);
         map.put(cooldown, 2);
         map.put(hitAnimation, null);
         map.put(hitAnimationSpd, 0);
@@ -154,9 +175,10 @@ public class Skills {
         map.put(damage, 1.5);
         map.put(damageOverTime, 0.0);
         map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, false);
         map.put(cooldown, 2);
         map.put(hitAnimation, a_Physical);
-        map.put(hitAnimationSpd, 30);
+        map.put(hitAnimationSpd, 8);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -167,11 +189,12 @@ public class Skills {
         map.put(description, "Dust throw releases a big amount of dust inside the robot’s fans" +
                 " and causes medium damage to the recipient over two turns.");
         map.put(damage, 0.0);
-        map.put(damageOverTime, 30.0);
+        map.put(damageOverTime, 1.0);
         map.put(damageOverTimeTurns, 2);
+        map.put(dotPurePercent, false);
         map.put(cooldown, 3);
-        map.put(hitAnimation, a_Physical);
-        map.put(hitAnimationSpd, 10);
+        map.put(hitAnimation, null);
+        map.put(hitAnimationSpd, 8);
 
         mapSkills.put((String) map.get(name), map);
     }
