@@ -377,7 +377,7 @@ public class RoomFight extends RoomParent {
                                 DOING_ACTION = 4, END_ACTION = 5;
         protected int actionState, TEMP_ANIM = 0, HIT_ANIM = 1, LONG_ANIM = 2;
         protected boolean flashWhite, hitAnimationRunning;
-        protected float flashTime = 0.5f;
+        protected float flashTime = 0.25f;
         protected State ifDead;
         protected int ID, PLAYER = 0, ENEMY = 1;
 
@@ -494,12 +494,6 @@ public class RoomFight extends RoomParent {
         protected void checkToPause() {
             if (!hpIncorrect && !positionIncorrect) pauseStates = false;
             else pauseStates = true;
-        }
-
-        // If skill has DoT, it will be added here
-        protected void addDoT(int turns, double damage) {
-            dotTurns.add(turns);
-            dotDamage.add(damage);
         }
 
         // Add all the DoTs on top of each other and decrease their turn timers
@@ -671,6 +665,7 @@ public class RoomFight extends RoomParent {
         private HashMap<String,Object> mapAttack, mapDefend;
 
         private String curAction;
+        private Boolean reflectingShield = false;
         private ArrayList<HashMap<String,Object>> mapSkills;
         private String[] skills;
         private double[] defaultDamages = new double[] {34, 25, 20, 25, 20, 15, 20, 15, 10};
@@ -853,11 +848,26 @@ public class RoomFight extends RoomParent {
         // Take hit, expect if defending, then return the damage back to the enemy.
         public void takeHit(double damage) {
             if (curAction == "Defend") {
-                enemy.takeHit(damage);
+                if (reflectingShield) {
+                    enemy.takeHit(damage);
+                } // else do nothing
             } else {
                 flashAndMove();
                 calcTargetHpSpd(damage);
                 changeToTakeHitAnimation();
+            }
+        }
+
+        // If skill has DoT, it will be added here
+        private void addDoT(int turns, double damage) {
+            if (curAction == "Defend") {
+                if (reflectingShield) {
+                    enemy.dotTurns.add(turns);
+                    enemy.dotDamage.add(damage);
+                } // else do nothing
+            } else {
+                dotTurns.add(turns);
+                dotDamage.add(damage);
             }
         }
 
@@ -1069,6 +1079,12 @@ public class RoomFight extends RoomParent {
             flashAndMove();
             calcTargetHpSpd(damage);
             changeToTakeHitAnimation();
+        }
+
+        // If skill has DoT, it will be added here
+        private void addDoT(int turns, double damage) {
+            dotTurns.add(turns);
+            dotDamage.add(damage);
         }
 
         // When the fight begins, wait for some time to start the dialogue
