@@ -13,6 +13,7 @@ public class Skills {
     public static final String description = "description";
     public static final String damage = "damage";
     public static final String critChance = "critChance";
+    public static final String missChance = "missChance";
     public static final String damageOverTime = "damageOverTime";
     public static final String damageOverTimeTurns = "damageOverTimeTurns";
     public static final String dotPurePercent = "dotPurePercent";
@@ -51,6 +52,7 @@ public class Skills {
     - description = Description of the skill
     - damage = The amount of damage it deals when it hits
     - critChance = The amount of percent chance to deal 1.5x damage
+    - missChance = The amount of percent chance to miss an attack
     - damageOverTime (DoT) = The amount of damage it deals before every round when inflicted
     - damageOverTimeTurn = The number of turns the DoT lasts
     - dotPurePercent = If to deal DoT in percents compared to MaxHp (example: value 20.0 deals 20
@@ -103,6 +105,7 @@ public class Skills {
         map.put(description, "Light attack that’s usable every turn.");
         map.put(damage, 1.0);
         map.put(critChance, defCrit);
+        map.put(missChance, 0);
         map.put(damageOverTime, 0.0);
         map.put(damageOverTimeTurns, 0);
         map.put(dotPurePercent, false);
@@ -120,6 +123,7 @@ public class Skills {
                 "Shield protects you completely from damage you’d receive in the next turn.");
         map.put(damage, 0.0);
         map.put(critChance, 0);
+        map.put(missChance, 0);
         map.put(damageOverTime, 0.0);
         map.put(damageOverTimeTurns, 0);
         map.put(dotPurePercent, false);
@@ -136,6 +140,7 @@ public class Skills {
         map.put(description, "Self-repair heals you slightly over 2 turns.");
         map.put(damage, 0.0);
         map.put(critChance, 0);
+        map.put(missChance, 0);
         map.put(damageOverTime, -15.0);
         map.put(damageOverTimeTurns, 2);
         map.put(dotPurePercent, true);
@@ -151,6 +156,7 @@ public class Skills {
         map.put(name, SHOCK);
         map.put(damage, 3.0);
         map.put(critChance, defCrit);
+        map.put(missChance, 0);
         map.put(damageOverTime, 0.0);
         map.put(damageOverTimeTurns, 0);
         map.put(dotPurePercent, false);
@@ -166,6 +172,7 @@ public class Skills {
         map.put(name, FIRE);
         map.put(damage, 0.0);
         map.put(critChance, 0);
+        map.put(missChance, 0);
         map.put(damageOverTime, 20.0);
         map.put(damageOverTimeTurns, 3);
         map.put(dotPurePercent, true);
@@ -183,6 +190,7 @@ public class Skills {
                 "(has an 10% increased chance to be a critical hit)");
         map.put(damage, 1.5);
         map.put(critChance, defCrit + 10);
+        map.put(missChance, 0);
         map.put(damageOverTime, 0.0);
         map.put(damageOverTimeTurns, 0);
         map.put(dotPurePercent, false);
@@ -200,6 +208,7 @@ public class Skills {
                 " and causes medium damage to the recipient over two turns.");
         map.put(damage, 0.0);
         map.put(critChance, 0);
+        map.put(missChance, 0);
         map.put(damageOverTime, 1.0);
         map.put(damageOverTimeTurns, 2);
         map.put(dotPurePercent, false);
@@ -211,8 +220,8 @@ public class Skills {
     }
 
     private static void createAttackAndDefend() {
-        t_Physical = new Texture("texture/player/playerAttackHit.png");
-        a_Physical = anim.createAnimation(t_Physical, 3, 1);
+        t_Physical = new Texture("texture/skills/physicalHit.png");
+        a_Physical = anim.createAnimation(t_Physical, 4, 1);
     }
 
     public static void dispose() {

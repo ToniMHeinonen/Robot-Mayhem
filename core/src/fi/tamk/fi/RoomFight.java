@@ -1002,7 +1002,7 @@ public class RoomFight extends RoomParent {
 
         // Retrieve boss's information
         private void retrieveBoss() {
-            mapBoss = Bosses.getBoss(Bosses.COPPER);
+            mapBoss = Bosses.getBoss(game.getCurrentBoss());
 
             // Use these arrays when selecting skills in attack()
             skillNames = new String[3];

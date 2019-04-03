@@ -53,8 +53,11 @@ public class MainGame extends Game {
 	private int stepCount, stepBank, stepAllCount, pool, poolMult, poolBossNumber, money;
 	private String skill1, skill2, currentBoss;
 	private boolean firstPlayTime;
+	// Stat arrays
 	private ArrayList<String> inventory = new ArrayList<String>();
-	private int inventorySize; // Needed for loading inventory
+	private int inventorySize; // Needed for loading correct amount of array items
+	private ArrayList<String> defeatedBosses = new ArrayList<String>();
+	private int defeatedBossesSize;
 
 	// Textures
 	private Texture imgBgHall, imgBgBoss, imgTopBar, imgBottomBar, escapeBg, hpBarLeft,
@@ -128,6 +131,8 @@ public class MainGame extends Game {
 		loadTextures();
 
 		createHackFiles();
+
+		currentBoss = Bosses.selectRandomBoss(); // For testing purposes, remember to remove
 
 		// Switch to first room
 		switchToRoomGame();
@@ -332,7 +337,11 @@ public class MainGame extends Game {
 		inventorySize = stats.getInteger("inventorySize", 0);
 		for (int i = 0; i < inventorySize; i++) {
 			inventory.add(i, stats.getString("inventory" + String.valueOf(i), ""));
-			System.out.println(inventory.get(i));
+		}
+		// Defeated bosses
+		defeatedBossesSize = stats.getInteger("defeatedBossesSize", 0);
+		for (int i = 0; i < defeatedBossesSize; i++) {
+			defeatedBosses.add(i, stats.getString("defeatedBosses" + String.valueOf(i), ""));
 		}
 	}
 
@@ -353,6 +362,11 @@ public class MainGame extends Game {
 		stats.putInteger("inventorySize", inventory.size());
 		for (int i = 0; i < inventory.size(); i++) {
 			stats.putString("inventory" + String.valueOf(i), inventory.get(i));
+		}
+		// Defeated bosses
+		stats.putInteger("defeatedBossesSize", defeatedBosses.size());
+		for (int i = 0; i < defeatedBosses.size(); i++) {
+			stats.putString("defeatedBosses" + String.valueOf(i), defeatedBosses.get(i));
 		}
 
 		stats.flush();

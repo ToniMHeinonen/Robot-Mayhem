@@ -90,17 +90,17 @@ public class Bosses {
         curDialogStart = "Vroom Vroom!";
         curDialogEnd = "Vroom poks!";
 
-        t_idle = new Texture("texture/enemy/enemyIdle.png");
-        a_idle = anim.createAnimation(t_idle, 3, 1);
+        t_idle = new Texture("texture/roombot/roombot_idle.png");
+        a_idle = anim.createAnimation(t_idle, 8, 2);
         s_idle = 8;
-        t_hack = new Texture("texture/enemy/enemyHack.png");
-        a_hack = anim.createAnimation(t_hack, 3, 1);
+        t_hack = new Texture("texture/roombot/roombot_stun.png");
+        a_hack = anim.createAnimation(t_hack, 8, 1);
         s_hack = 8;
-        t_skill = new Texture("texture/enemy/enemyAttack1.png");
-        a_skill = anim.createAnimation(t_skill, 3, 1);
+        t_skill = new Texture("texture/roombot/roombot_attack.png");
+        a_skill = anim.createAnimation(t_skill, 4, 1);
         s_skill = 8;
-        t_takeHit = new Texture("texture/enemy/enemyHack.png");
-        a_takeHit = anim.createAnimation(t_takeHit, 3, 1);
+        t_takeHit = new Texture("texture/roombot/roombot_damage.png");
+        a_takeHit = anim.createAnimation(t_takeHit, 4, 1);
         s_takeHit = 8;
 
         addToMap();
