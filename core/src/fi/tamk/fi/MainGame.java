@@ -282,7 +282,7 @@ public class MainGame extends Game {
         Texture playerItem = new Texture("texture/player/player_item.png");
         Texture playerEscape = new Texture("texture/player/player_flee.png");
         Texture playerHack = new Texture("texture/player/player_hack.png");
-        Texture playerDeath = new Texture("texture/player/player_damage.png");
+        Texture playerDeath = new Texture("texture/player/player_stun.png");
 		Texture playerTakeHit = new Texture("texture/player/player_damage.png");
         Texture healthPlus = new Texture("texture/skills/plusHealth.png");
         Texture healthMinus = new Texture("texture/skills/minusHealth.png");
@@ -304,7 +304,7 @@ public class MainGame extends Game {
         animEscape = createAnims.createAnimation(playerEscape, 4, 1);
         animItem = createAnims.createAnimation(playerItem, 4, 1);
         animHack = createAnims.createAnimation(playerHack, 8, 1);
-        animDeath = createAnims.createAnimation(playerDeath, 4, 1);
+        animDeath = createAnims.createAnimation(playerDeath, 8, 1);
         animTakeHitAnim = createAnims.createAnimation(playerTakeHit, 4, 1);
         animHealthPlusDoT = createAnims.createAnimation(healthPlus, 3, 1);
         animHealthMinusDoT = createAnims.createAnimation(healthMinus, 3, 1);
