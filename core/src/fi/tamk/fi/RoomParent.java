@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -25,6 +26,7 @@ public class RoomParent implements Screen {
     protected OrthographicCamera camera;
     protected Stage stage;
     protected Skin skin;
+    protected Skin testSkin;
     protected Music backgroundMusic;
     protected Music bossMusic;
     protected ProgressBar progressBar;
@@ -36,7 +38,7 @@ public class RoomParent implements Screen {
 
     protected Settings settings;
 
-    protected TextButton button; //Temporary solution
+    protected ImageButton button; //Temporary solution
 
     RoomParent(MainGame game) {
         this.batch = game.getBatch();
@@ -51,6 +53,7 @@ public class RoomParent implements Screen {
         this.fontSteps = game.getFontSteps();
         this.progressBarStyle = game.getProgBarStyle();
         this.clickedOpenSettings = game.getClickedOpenSettings();
+        this.testSkin = game.getTestSkin();
         stage.clear();
 
         dialog = game.getDialog();
@@ -118,8 +121,9 @@ public class RoomParent implements Screen {
     }
 
     public void createMenuButton() {
-        button = new TextButton("", game.getStyle());
-        button.setPosition(game.pixelWidth - button.getWidth()/2 - 100, game.pixelHeight - 120);
+        button = new ImageButton(testSkin.getDrawable("button_settings"),
+                testSkin.getDrawable("button_settings_clicked"));
+        button.setPosition(game.pixelWidth - button.getWidth()/2 - 190, game.pixelHeight - 120);
         button.addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 return true;

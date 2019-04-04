@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
@@ -297,10 +298,9 @@ public class RoomFight extends RoomParent {
 
     // Creates the upper left escape button
     private void createEscapeButton() {
-        final TextButton btn = new TextButton("Escape", skin);
-        btn.setWidth(300);
-        btn.setHeight(100);
-        btn.setPosition(100f, game.pixelHeight - 100f);
+        final ImageButton btn = new ImageButton(testSkin.getDrawable("button_escape"),
+                testSkin.getDrawable("button_escape_clicked"));
+        btn.setPosition(0, game.pixelHeight - 120);
         stage.addActor(btn);
 
         btn.addListener(new ClickListener() {
