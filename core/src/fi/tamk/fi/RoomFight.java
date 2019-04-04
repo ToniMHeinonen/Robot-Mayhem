@@ -6,10 +6,13 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Timer;
 
 import java.util.ArrayList;
@@ -952,6 +955,52 @@ public class RoomFight extends RoomParent {
                 game.switchToRoomGame();
             }
         }
+
+        /*public void createActionButtons() {
+            float space = (game.pixelWidth - 100) / 5; // Temporary solution
+            for (int i = 0; i < btnTexts.length; i++) {
+                btnCounter = i;
+                String name = btnTexts[i];
+                name = name.toLowerCase();
+                int cooldown = 0;
+                System.out.println(name);
+                try {
+                    cooldown = cooldowns.get(name);
+                } catch (Exception e) {
+                    System.out.println("error");
+                }
+
+                if (name == "") name = "empty";
+
+                Drawable normal = testSkin.getDrawable("button_" + name + cooldown);
+                Drawable clicked = testSkin.getDrawable("button_" + name + cooldown);
+                if (cooldown == 0) {
+                    clicked = testSkin.getDrawable("button_" + name + "_clicked");
+                }
+                final ImageButton imgButton = new ImageButton(normal, clicked);
+                imgButton.setPosition(50f + i*space, 100f);
+                stage.addActor(imgButton);
+                if (cooldown == 0) {
+                    imgButton.addListener(new ActorGestureListener(20, 0.4f, 0.5f, 0.15f) {
+                        int i = btnCounter;
+
+                        public boolean longPress(Actor actor, float x, float y) {
+                            System.out.println("longpress");
+                            //showTooltip(i);
+                            return true;
+                        }
+
+                        public void tap(InputEvent event, float x, float y, int count, int button) {
+                            System.out.println("tap");
+                        }
+
+                        public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                            System.out.println("touchup");
+                        }
+                    });
+                }
+            }
+        }*/
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
