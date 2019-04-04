@@ -11,6 +11,7 @@ public class Item {
     public static final String damage = "damage";
     public static final String usedInHall = "usedInHall";
     public static final String isSkill = "isSkill";
+    public static final String price = "price";
 
     public static final String BOMB = "Bomb";
     public static final String POTION = "Potion";
@@ -59,6 +60,7 @@ public class Item {
         map.put(damage, 50);
         map.put(usedInHall, false);
         map.put(isSkill, false);
+        map.put(price, 5);
 
         mapItems.put((String) map.get(name), map);
     }
@@ -70,6 +72,7 @@ public class Item {
         map.put(damage, -50);
         map.put(usedInHall, false);
         map.put(isSkill, false);
+        map.put(price, 10);
 
         mapItems.put((String) map.get(name), map);
     }
@@ -81,6 +84,7 @@ public class Item {
         map.put(damage, 0);
         map.put(usedInHall, true);
         map.put(isSkill, false);
+        map.put(price, 15);
 
         mapItems.put((String) map.get(name), map);
     }

@@ -41,6 +41,12 @@ public class UtilItem {
     private int buttonCounterAvailable;
     private int buttonCounterOwned;
 
+    private int bombAmount;
+    private int potionAmount;
+    private int polishedRotorAmount;
+
+    private int[] amounts = new int[] {bombAmount, potionAmount, polishedRotorAmount};
+
     private String room;
 
     UtilItem(MainGame game, String room) {
@@ -89,7 +95,7 @@ public class UtilItem {
         for (int i = 0; i < allItems.length; i++) {
             buttonCounterAvailable = i;
             TextButton button0 = new TextButton(allItems[i], skin);
-            tableAvailableItems.add(button0).row();
+            tableAvailableItems.add(button0).size(400, 100);
             button0.addListener(new ClickListener(){
                 int i = buttonCounterAvailable;
                 @Override
@@ -97,8 +103,11 @@ public class UtilItem {
                     popupForAvailableItem(i);
                 }
             });
+            String stringCost = String.valueOf(Item.getItem(allItems[i]).get("price"));
+            TextButton buttonPrice = new TextButton(stringCost, skin);
+            tableAvailableItems.add(buttonPrice).size(100, 100).row();
         }
-        createScrollTable(tableAvailableItems, 200, 200);
+        createScrollTable(tableAvailableItems, 0, 200);
     }
 
     private void createOwnedItemsTable() {
@@ -107,7 +116,7 @@ public class UtilItem {
             buttonCounterOwned = i;
             if (game.inventoryOrSkillsContains(allItems[i])) {
                 TextButton button = new TextButton(allItems[i], skin);
-                tableOwnedItems.add(button).row();
+                tableOwnedItems.add(button).size(400, 100).row();
                 button.addListener(new ClickListener(){
                     int i = buttonCounterOwned;
                     @Override
@@ -117,7 +126,7 @@ public class UtilItem {
                 });
             }
         }
-        createScrollTable(tableOwnedItems, 800, 200);
+        createScrollTable(tableOwnedItems, 600, 200);
     }
 
     /*
@@ -127,7 +136,7 @@ public class UtilItem {
         ScrollPane scrollPane = new ScrollPane(table, skin);
         scrollPane.setFadeScrollBars(false);
         scrollPane.setVisible(true);
-        scrollPane.setSize(dialogItems.getWidth()/4, dialogItems.getHeight()/2);
+        scrollPane.setSize(dialogItems.getWidth()/2, dialogItems.getHeight()/2);
         scrollPane.setPosition(dialogItems.getX() + x, dialogItems.getY() + y);
         dialogItems.addActor(scrollPane);
     }
@@ -149,20 +158,17 @@ public class UtilItem {
         final TextButton buttonBuy = new TextButton("Buy", skin);
         buttonBuy.setPosition(popupAvailableItem.getWidth()/2 - 200, popupAvailableItem.getHeight()/4);
         buttonBuy.addListener(new ClickListener(){
-            /*
             int i = index;
             String stringCost = String.valueOf(Item.getItem(allItems[i]).get("price"));
             int price = Integer.valueOf(stringCost);
-            */
             @Override
             public void clicked(InputEvent event, float x, float y){
-                /*
                 if (money >= price) {
                     game.decreaseMoney(price);
                     game.addToInventory(allItems[index], false);
-                    */
                     popupAvailableItem.remove();
-                //}
+                    dialogItems.remove();
+                }
             }
         });
 
