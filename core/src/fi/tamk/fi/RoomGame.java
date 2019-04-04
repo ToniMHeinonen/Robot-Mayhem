@@ -21,8 +21,10 @@ public class RoomGame extends RoomParent {
     private float bgSpd; // Cur spd that the background is moving
     private float bgAddSpd = 0.5f; // Amount to add every step
     private final float maxSpd = 15f;
-    private int curSteps;
+    private float curSteps;
     private float goalSteps;
+    private float bankSpd;
+    private float bankRetrieved = 0;
     private int changeRoomTimer = 180;
 
     RoomGame(final MainGame game) {
@@ -30,6 +32,8 @@ public class RoomGame extends RoomParent {
         createProgressBar();
         curSteps = game.getStepCount();
         goalSteps = progressBar.getMaxValue();
+
+        calculateBankSpeed();
 
         player = new Player();
 
@@ -52,6 +56,7 @@ public class RoomGame extends RoomParent {
             progressBar.setValue(curSteps); // Control progress bar
             drawSteps();
             player.update();
+            retrieveBankSteps();
             checkToChangeRoom();
             batch.end();
             stage.act(Gdx.graphics.getDeltaTime());
@@ -66,6 +71,47 @@ public class RoomGame extends RoomParent {
                 50, game.pixelHeight - fontSteps.getXHeight() - 10);
     }
 
+    // Calculates how many steps will be added every frame
+    private void calculateBankSpeed() {
+        float bank = game.getStepBank();
+        float mileStone = game.getProgressBarMilestone();
+        // If bank is bigger than mileStone, then count bankSpd using mileStone value
+        if (bank > mileStone) {
+            bank = mileStone;
+        }
+        bankSpd = bank / 400;
+    }
+
+    private void retrieveBankSteps() {
+        // If bank still has steps
+        if (game.getStepBank() > 0) {
+            // If milestone has not been reached
+            if (progressBar.getValue() < progressBar.getMaxValue()) {
+                /*
+                - Retrieve previous bankRetrieved value, for example 2.9 and floor it to value 2
+                - Add bankSpd value to retrieved then it's value is for example 3.1
+                - Then floor the current retrieved value, which is 3
+                - Now if current (3) is bigger than previous (2) then set Step count to 3, which
+                  causes the player to initialize movement in RoomGame
+                 */
+                double prevBankRetrieved = Math.floor(bankRetrieved);
+                bankRetrieved += bankSpd;
+                double curBankRetrieved = Math.floor(bankRetrieved);
+                game.retrieveFromBank(bankSpd);
+                if (curBankRetrieved > prevBankRetrieved) {
+                    game.setStepCount(bankRetrieved);
+                }
+
+                // Draw on screen retrieving steps from bank
+                int ceiledBank = (int) Math.ceil(game.getStepBank());
+                fontSteps.draw(batch, "Retrieving steps\nfrom bank:\n" +
+                                String.valueOf(ceiledBank),
+                        game.gridSize * 7, game.pixelHeight/2);
+            }
+        }
+    }
+
+    // If milestone has been reached, draw text and
     public void checkToChangeRoom() {
         if (curSteps >= goalSteps) {
             if (changeRoomTimer > 0) {

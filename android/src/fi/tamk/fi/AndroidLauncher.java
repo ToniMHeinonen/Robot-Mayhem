@@ -13,7 +13,7 @@ public class AndroidLauncher extends AndroidApplication implements SensorEventLi
 	private StepDetector simpleStepDetector;
 	private SensorManager sensorManager;
 	private Sensor accel;
-	private int numSteps;
+	private float numSteps;
 
 	// Main game class
 	private MainGame game;

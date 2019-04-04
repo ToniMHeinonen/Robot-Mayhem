@@ -60,7 +60,8 @@ public class MainGame extends Game {
 	private int saveTimerAmount = 3600;
 	private int saveTimer = saveTimerAmount;
 	private Preferences stats;
-	private int stepCount, stepBank, stepAllCount, pool, poolMult, money;
+	private float stepCount, stepBank, stepAllCount;
+	private int pool, poolMult, money;
 	private String skill1, skill2, currentBoss;
 	private boolean firstPlayTime;
 	// Stat arrays
@@ -260,9 +261,13 @@ public class MainGame extends Game {
 	    progBarStyle.knob = progBarSkin.getDrawable("tripmarker");
 	    progBarStyle.background = progBarSkin.getDrawable("tripmeter");
 
-	    // If it's the first boss, make milestone 20
-	    if (pool == 1 && poolMult == 0) progressBarMilestone = 20;
-	    else progressBarMilestone = poolMilestones[pool] / 3;
+	    chooseNextMilestone();
+    }
+
+    private void chooseNextMilestone() {
+        // If it's the first boss, make milestone 20
+        if (pool == 1 && poolMult == 0) progressBarMilestone = 20;
+        else progressBarMilestone = poolMilestones[pool] / 3;
     }
 
 	private void loadTextures() {
@@ -339,15 +344,16 @@ public class MainGame extends Game {
 		//stats.clear(); // For testing purposes
 		//stats.flush(); // Without flushing, clear does not work in Android
 		money = stats.getInteger(keyMoney, 0);
-		stepCount = stats.getInteger(keyStepCount, 0);
-		stepAllCount = stats.getInteger(keyStepAllCount, 0);
-		stepBank = stats.getInteger(keyStepBank, 0);
+		stepCount = stats.getFloat(keyStepCount, 0);
+		stepAllCount = stats.getFloat(keyStepAllCount, 0);
+		stepBank = stats.getFloat(keyStepBank, 0);
 		skill1 = stats.getString(keySkill1, "");
 		skill2 = stats.getString(keySkill2, "");
 		currentBoss = stats.getString(keyCurrentBoss, "Roombot");
 		firstPlayTime = stats.getBoolean(keyFirstPlayTime, true);
 		pool = stats.getInteger(keyPool, 1);
 		poolMult = stats.getInteger(keyPoolMult, 0);
+		System.out.println(stepCount);
 
 		// Load the size of inventory before loading inventory items
 		inventorySize = stats.getInteger(keyInventorySize, 0);
@@ -363,9 +369,9 @@ public class MainGame extends Game {
 
 	public void saveStats() {
 		stats.putInteger(keyMoney, money);
-		stats.putInteger(keyStepCount, stepCount);
-		stats.putInteger(keyStepAllCount, stepAllCount);
-		stats.putInteger(keyStepBank, stepBank);
+		stats.putFloat(keyStepCount, stepCount);
+		stats.putFloat(keyStepAllCount, stepAllCount);
+		stats.putFloat(keyStepBank, stepBank);
 		stats.putString(keySkill1, skill1);
 		stats.putString(keySkill2, skill2);
 		stats.putString(keyCurrentBoss, currentBoss);
@@ -387,14 +393,12 @@ public class MainGame extends Game {
 		stats.flush();
 	}
 
-	public void simulateStep() {
-	    stepCount++;
-    }
-
 	public void bossDefeated() {
 		// defeatedBosses.add(currentBoss); Add when all the bosses exist
 
 		stepCount = 0; // Reset step count
+		poolMult++;
+		chooseNextMilestone();
 
 		// Add bank steps in roomGame
 
@@ -444,23 +448,28 @@ public class MainGame extends Game {
         skin = new Skin( Gdx.files.internal("glassy-ui.json") );
     }
 
-    public void receiveSteps(int stepCount) {
-		this.stepCount++;
+	// Receive steps on Desktop, if milestone is not reached, else add them to stepBank
+    public void simulateStep() {
+		if (stepCount < progressBarMilestone) this.stepCount++;
+		else if (stepBank < 3000) stepBank++;
+	}
+
+    // Receive steps on Android, if milestone is not reached, else add them to stepBank
+	public void receiveSteps(float stepCount) {
+		if (this.stepCount < progressBarMilestone) this.stepCount++;
+		else stepBank++;
+	}
+
+	// Deleted steps from bank, when retrieving them on RoomGame
+	public void retrieveFromBank(float amount) {
+		stepBank -= amount;
+		if (stepBank < 0) stepBank = 0;
 	}
 
 	public void setMusicVol(float musicVol) {
 		if (musicVol > 0.0f && musicVol < 1.0f) {
 			this.musicVol = musicVol;
 		}
-	}
-
-	public void nextPool() {
-		pool++;
-		poolMult = 0;
-	}
-
-	public void increasePoolMultiplier() {
-		poolMult++;
 	}
 
 	public void addMoney(int amount) {
@@ -603,15 +612,19 @@ public class MainGame extends Game {
 		return hpBarRight;
 	}
 
-	public int getStepCount() {
+	public float getStepCount() {
 		return stepCount;
 	}
 
-	public int getStepBank() {
+	public void setStepCount(float stepCount) {
+		this.stepCount = stepCount;
+	}
+
+	public float getStepBank() {
 		return stepBank;
 	}
 
-	public int getStepAllCount() {
+	public float getStepAllCount() {
 		return stepAllCount;
 	}
 

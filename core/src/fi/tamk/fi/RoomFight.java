@@ -269,6 +269,7 @@ public class RoomFight extends RoomParent {
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
+                        game.bossDefeated();
                         game.switchToRoomGame();
                     }
                 }, 2);
