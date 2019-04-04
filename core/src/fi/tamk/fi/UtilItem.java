@@ -226,6 +226,7 @@ public class UtilItem {
                     game.addToInventory(allItems[index], false);
                     popupBuyableItem.remove();
                     dialogItems.remove();
+                    UtilItem utilItem = new UtilItem(game, room);
                 }
             }
         });
