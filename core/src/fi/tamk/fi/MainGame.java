@@ -87,6 +87,7 @@ public class MainGame extends Game {
     private TextureAtlas progBarAtlas;
     private Skin progBarSkin;
     private ProgressBar.ProgressBarStyle progBarStyle;
+    private float progressBarMilestone;
 
 	// Image button (temporary)
 	private BitmapFont font;
@@ -119,6 +120,9 @@ public class MainGame extends Game {
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, pixelWidth, pixelHeight);
+		loadSettings();
+		loadStats();
+		loadTextures();
 		createBundle();
 		// Create skills and bosses when the game launches
 		Skills.createSkills();
@@ -135,10 +139,6 @@ public class MainGame extends Game {
 		backgroundMusic.setLooping(true);
 		bossMusic = Gdx.audio.newMusic(Gdx.files.internal("music/bossmusic.mp3"));
 		bossMusic.setLooping(true);
-        loadSettings();
-        loadStats();
-
-		loadTextures();
 
 		createHackFiles();
 
@@ -259,6 +259,10 @@ public class MainGame extends Game {
 	    progBarStyle = new ProgressBar.ProgressBarStyle();
 	    progBarStyle.knob = progBarSkin.getDrawable("tripmarker");
 	    progBarStyle.background = progBarSkin.getDrawable("tripmeter");
+
+	    // If it's the first boss, make milestone 20
+	    if (pool == 1 && poolMult == 0) progressBarMilestone = 20;
+	    else progressBarMilestone = poolMilestones[pool] / 3;
     }
 
 	private void loadTextures() {
@@ -332,6 +336,8 @@ public class MainGame extends Game {
 
 	public void loadStats() {
 		stats = Gdx.app.getPreferences("Robot_Mayhem_Stats");
+		//stats.clear(); // For testing purposes
+		//stats.flush(); // Without flushing, clear does not work in Android
 		money = stats.getInteger(keyMoney, 0);
 		stepCount = stats.getInteger(keyStepCount, 0);
 		stepAllCount = stats.getInteger(keyStepAllCount, 0);
@@ -380,6 +386,10 @@ public class MainGame extends Game {
 
 		stats.flush();
 	}
+
+	public void simulateStep() {
+	    stepCount++;
+    }
 
 	public void bossDefeated() {
 		// defeatedBosses.add(currentBoss); Add when all the bosses exist
@@ -740,4 +750,8 @@ public class MainGame extends Game {
     public int getInventorySize() {
 	    return inventorySize;
     }
+
+	public float getProgressBarMilestone() {
+		return progressBarMilestone;
+	}
 }

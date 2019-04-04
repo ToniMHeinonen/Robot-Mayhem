@@ -134,17 +134,6 @@ public class RoomParent implements Screen {
         stage.addActor(button);
     }
 
-    public void createProgressBar() {
-        progressBar = new ProgressBar(0, 20, 1, false, game.getProgBarStyle());
-        progressBar.setWidth(progressBarStyle.background.getMinWidth());
-        progressBar.setHeight(progressBarStyle.background.getMinHeight());
-        progressBarStyle.background.setLeftWidth(22f);
-        progressBarStyle.background.setRightWidth(25f);
-        progressBar.setPosition(game.pixelWidth / 2 - progressBar.getWidth() / 2,
-                game.pixelHeight - progressBar.getHeight());
-        stage.addActor(progressBar);
-    }
-
     @Override
     public void resize(int width, int height) {
 

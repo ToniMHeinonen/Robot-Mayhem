@@ -1,5 +1,6 @@
 package fi.tamk.fi;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
@@ -21,15 +22,14 @@ public class RoomGame extends RoomParent {
     private float bgAddSpd = 0.5f; // Amount to add every step
     private final float maxSpd = 15f;
     private int curSteps;
-    private String currentSteps;
-    private String goalSteps;
-
-    // Testing
-    int testSteps = 0;
+    private float goalSteps;
+    private int changeRoomTimer = 180;
 
     RoomGame(final MainGame game) {
         super(game);
+        createProgressBar();
         curSteps = game.getStepCount();
+        goalSteps = progressBar.getMaxValue();
 
         player = new Player();
 
@@ -38,7 +38,6 @@ public class RoomGame extends RoomParent {
         imgBG.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 
         createMenuButton();
-        createProgressBar();
     }
 
     @Override
@@ -50,9 +49,10 @@ public class RoomGame extends RoomParent {
             batch.begin();
             controlBackground();
             drawTopAndBottomBar();
-            controlProgBar();
+            progressBar.setValue(curSteps); // Control progress bar
             drawSteps();
             player.update();
+            checkToChangeRoom();
             batch.end();
             stage.act(Gdx.graphics.getDeltaTime());
             stage.draw();
@@ -60,26 +60,39 @@ public class RoomGame extends RoomParent {
     }
 
     public void drawSteps() {
-        currentSteps = String.valueOf((int) progressBar.getValue());
-        goalSteps = String.valueOf((int) progressBar.getMaxValue());
-        fontSteps.draw(batch, currentSteps + "/" + goalSteps,
+        String strCurSteps = String.valueOf((int) progressBar.getValue());
+        String strGoalSteps = String.valueOf((int) progressBar.getMaxValue());
+        fontSteps.draw(batch,strCurSteps + "/" + strGoalSteps,
                 50, game.pixelHeight - fontSteps.getXHeight() - 10);
     }
 
-    public void controlProgBar() {
-        // For desktop
-        progressBar.setValue(testSteps);
+    public void checkToChangeRoom() {
+        if (curSteps >= goalSteps) {
+            if (changeRoomTimer > 0) {
+                changeRoomTimer--;
+                fontSteps.draw(batch, "Incoming fight!",
+                        game.gridSize * 7, game.pixelHeight/2);
+            }
+            else game.switchToRoomFight();
+        }
+    }
 
-        // For android
-        // progressBar.setValue(curSteps);
+    public void createProgressBar() {
+        progressBar = new ProgressBar(0, game.getProgressBarMilestone(),
+                1, false, game.getProgBarStyle());
+        progressBar.setWidth(progressBarStyle.background.getMinWidth());
+        progressBar.setHeight(progressBarStyle.background.getMinHeight());
+        progressBarStyle.background.setLeftWidth(22f);
+        progressBarStyle.background.setRightWidth(25f);
+        progressBar.setPosition(game.pixelWidth / 2 - progressBar.getWidth() / 2,
+                game.pixelHeight - progressBar.getHeight());
+        stage.addActor(progressBar);
     }
 
     public void controlBackground() {
         // USE THIS TO TEST THE MOVEMENT
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            bgSpd += bgAddSpd;
-            // testSteps are for testing in desktop
-            testSteps++;
+            game.simulateStep();
         }
 
         // Move every step
