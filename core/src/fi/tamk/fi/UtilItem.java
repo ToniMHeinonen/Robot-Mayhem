@@ -26,6 +26,7 @@ public class UtilItem {
     private Table tableOwnedItems;
     private Dialog dialogItems;
     private Dialog popupAvailableItem;
+    private Dialog popupOwnedItem;
     private Color fontColor;
 
     private float dialogItemWidth;
@@ -34,13 +35,11 @@ public class UtilItem {
     private float outOfScreenY;
     private float onScreenY;
 
-    private ScrollPane scrollAvailableItems;
-    private ScrollPane scrollOwnedItems;
-
     private TextButton buttonMoney;
 
     private String[] allItems;
-    int buttonCounter;
+    private int buttonCounterAvailable;
+    private int buttonCounterOwned;
 
     UtilItem(MainGame game) {
         this.game = game;
@@ -83,40 +82,46 @@ public class UtilItem {
     private void createAvailableItemsTable() {
         tableAvailableItems = new Table();
         for (int i = 0; i < allItems.length; i++) {
-            buttonCounter = i;
+            buttonCounterAvailable = i;
             TextButton button0 = new TextButton(allItems[i], skin);
             tableAvailableItems.add(button0).row();
             button0.addListener(new ClickListener(){
-                int i = buttonCounter;
+                int i = buttonCounterAvailable;
                 @Override
                 public void clicked(InputEvent event, float x, float y){
-                    System.out.println(Item.getItem(allItems[i]).get("description"));
                     popupForAvailableItem(i);
                 }
             });
         }
-        scrollAvailableItems = new ScrollPane(tableAvailableItems, skin);
-        scrollAvailableItems.setFadeScrollBars(false);
-        scrollAvailableItems.setVisible(true);
-        scrollAvailableItems.setSize(dialogItems.getWidth()/4, dialogItems.getHeight()/2);
-        scrollAvailableItems.setPosition(dialogItems.getX() + 200,
-                dialogItems.getY() + 200);
+        createScrollTable(tableAvailableItems, 200, 200);
     }
 
     private void createOwnedItemsTable() {
         tableOwnedItems = new Table();
         for (int i = 0; i < game.getInventorySize(); i++) {
+            buttonCounterOwned = i;
             if (game.inventoryOrSkillsContains(allItems[i])) {
                 TextButton button = new TextButton(allItems[i], skin);
                 tableOwnedItems.add(button).row();
+                button.addListener(new ClickListener(){
+                    int i = buttonCounterOwned;
+                    @Override
+                    public void clicked(InputEvent event, float x, float y){
+                        popupForOwnedItem(i);
+                    }
+                });
             }
         }
-        scrollOwnedItems = new ScrollPane(tableOwnedItems, skin);
-        scrollOwnedItems.setFadeScrollBars(false);
-        scrollOwnedItems.setVisible(true);
-        scrollOwnedItems.setSize(dialogItems.getWidth()/4, dialogItems.getHeight()/2);
-        scrollOwnedItems.setPosition(dialogItems.getX() + 800,
-                dialogItems.getY() + 200);
+        createScrollTable(tableOwnedItems, 800, 200);
+    }
+
+    private void createScrollTable(Table table, float x, float y) {
+        ScrollPane scrollPane = new ScrollPane(table, skin);
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.setVisible(true);
+        scrollPane.setSize(dialogItems.getWidth()/4, dialogItems.getHeight()/2);
+        scrollPane.setPosition(dialogItems.getX() + x, dialogItems.getY() + y);
+        dialogItems.addActor(scrollPane);
     }
 
     private void showMoney() {
@@ -131,14 +136,7 @@ public class UtilItem {
         popupAvailableItem.setPosition(dialogItems.getWidth()/3, dialogItems.getHeight()/4);
         popupAvailableItem.setMovable(false);
 
-        Label labelOpenedItem = new Label(allItems[index], skin);
-        labelOpenedItem.setColor(fontColor);
-        labelOpenedItem.setPosition(popupAvailableItem.getWidth()/2,
-                popupAvailableItem.getHeight() - labelOpenedItem.getHeight()*3);
-
-        Label labelDescription = new Label(String.valueOf(Item.getItem(allItems[index]).get("description")), skin);
-        labelDescription.setColor(fontColor);
-        labelDescription.setPosition(labelOpenedItem.getX(), labelOpenedItem.getY() - labelDescription.getHeight()*2);
+        createCommonVariables(index, popupAvailableItem);
 
         final TextButton buttonBuy = new TextButton("Buy", skin);
         buttonBuy.setPosition(popupAvailableItem.getWidth()/2 - 200, popupAvailableItem.getHeight()/4);
@@ -160,25 +158,50 @@ public class UtilItem {
             }
         });
 
-        TextButton buttonBack = new TextButton("Back", skin);
-        buttonBack.setPosition(popupAvailableItem.getWidth()/2 + 100, popupAvailableItem.getHeight()/4);
-        buttonBack.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                popupAvailableItem.remove();
-            }
-        });
-
-        popupAvailableItem.addActor(labelOpenedItem);
-        popupAvailableItem.addActor(labelDescription);
         popupAvailableItem.addActor(buttonBuy);
-        popupAvailableItem.addActor(buttonBack);
         stage.addActor(popupAvailableItem);
     }
 
+    private void popupForOwnedItem(int index) {
+        popupOwnedItem = new Dialog("", skin);
+        popupOwnedItem.setSize(dialogItems.getWidth()/2, dialogItems.getHeight()/2);
+        popupOwnedItem.setPosition(dialogItems.getWidth()/3, dialogItems.getHeight()/4);
+        popupOwnedItem.setMovable(false);
+
+        createCommonVariables(index, popupOwnedItem);
+
+        TextButton buttonUse = new TextButton("Use", skin);
+        buttonUse.setPosition(popupOwnedItem.getWidth()/2 - 200, popupOwnedItem.getHeight()/4);
+
+        popupOwnedItem.addActor(buttonUse);
+        stage.addActor(popupOwnedItem);
+    }
+
+    private void createCommonVariables(int index, final Dialog dialog) {
+        Label labelOpenedItem = new Label(allItems[index], skin);
+        labelOpenedItem.setColor(fontColor);
+        labelOpenedItem.setPosition(dialog.getWidth()/2,
+                dialog.getHeight() - labelOpenedItem.getHeight()*3);
+
+        Label labelDescription = new Label(String.valueOf(Item.getItem(allItems[index]).get("description")), skin);
+        labelDescription.setColor(fontColor);
+        labelDescription.setPosition(labelOpenedItem.getX(), labelOpenedItem.getY() - labelDescription.getHeight()*2);
+
+        TextButton buttonBack = new TextButton("Back", skin);
+        buttonBack.setPosition(dialog.getWidth()/2 + 100, dialog.getHeight()/4);
+        buttonBack.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                dialog.remove();
+            }
+        });
+
+        dialog.addActor(labelOpenedItem);
+        dialog.addActor(labelDescription);
+        dialog.addActor(buttonBack);
+    }
+
     private void addActors() {
-        dialogItems.addActor(scrollAvailableItems);
-        dialogItems.addActor(scrollOwnedItems);
         dialogItems.addActor(buttonMoney);
         stage.addActor(dialogItems);
     }
