@@ -43,7 +43,7 @@ public class RoomTestailua extends RoomParent {
 
         // Added for testing.
         createButtonItemTesting();
-        dialog.createDialog("player says fsfds fsdfdsfs", 200f, 200f);
+        dialog.createDialog("player says fsfds fsdfdsfs");
     }
 
     public void playMusic() {

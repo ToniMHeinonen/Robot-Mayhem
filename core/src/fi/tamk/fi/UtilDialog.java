@@ -28,16 +28,21 @@ public class UtilDialog {
         skin = game.getSkin();
     }
 
-    public void createDialog(String text, float x, float y) {
+    public void createDialog(String text) {
         dialogOn = true;
+        float areaWidth = 1000f;
+        float areaHeight = 600f;
+        float x = game.pixelWidth/2 - areaWidth/2;
+        float y = 300f;
         Label label = new Label(text, labelStyle);
         label.setWrap(true);
+        label.setAlignment(1);
         final Dialog dialog = new Dialog("", windowStyle);
-        dialog.getContentTable().add(label).prefWidth(400);
+        dialog.getContentTable().add(label).prefWidth(areaWidth);
         dialog.setPosition(x, y);
         // dialog.getBackground().getMinHeight()
         // dialog.getBackground().getMinWidth()
-        dialog.setSize(label.getWidth() + 50,label.getHeight()*4f);
+        dialog.setSize(areaWidth,areaHeight);
         stage.addActor(dialog);
         dialog.addListener(new ClickListener(){
             @Override

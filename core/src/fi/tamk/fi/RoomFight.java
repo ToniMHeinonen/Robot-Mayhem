@@ -711,6 +711,7 @@ public class RoomFight extends RoomParent {
         private HashMap<String,Object> mapAttack, mapDefend;
 
         private String curAction;
+        private ArrayList<String> descriptions = new ArrayList<String>();
         private Boolean reflectingShield = false;
         private ArrayList<HashMap<String,Object>> mapSkills;
         private String[] skills;
@@ -961,15 +962,20 @@ public class RoomFight extends RoomParent {
             for (int i = 0; i < btnTexts.length; i++) {
                 btnCounter = i;
                 String name = btnTexts[i];
-                name = name.toLowerCase();
+                if (name != "" && name != "Item") {
+                    descriptions.add(Skills.retrieveSkillDescription(name));
+                } else {
+                    descriptions.add("");
+                }
                 int cooldown = 0;
                 System.out.println(name);
                 try {
                     cooldown = cooldowns.get(name);
                 } catch (Exception e) {
-                    System.out.println("error");
+                    System.out.println("no cooldown");
                 }
 
+                name = name.toLowerCase();
                 if (name == "") name = "empty";
 
                 Drawable normal = testSkin.getDrawable("button_" + name + cooldown);
@@ -986,11 +992,13 @@ public class RoomFight extends RoomParent {
 
                         public boolean longPress(Actor actor, float x, float y) {
                             System.out.println("longpress");
-                            //showTooltip(i);
+                            System.out.println(descriptions.get(i));
+                            dialog.createDialog(descriptions.get(i));
                             return true;
                         }
 
                         public void tap(InputEvent event, float x, float y, int count, int button) {
+                            doAction(btnTexts[i]);
                             System.out.println("tap");
                         }
 
@@ -1243,7 +1251,7 @@ public class RoomFight extends RoomParent {
                 @Override
                 public void run() {
                     state = State.DIALOG_START;
-                    dialog.createDialog(dialogStart, dialogX, dialogY);
+                    dialog.createDialog(dialogStart);
                 }
             }, 1);
         }
@@ -1256,7 +1264,7 @@ public class RoomFight extends RoomParent {
                 public void run() {
                     startIdle();
                     state = State.DIALOG_END;
-                    dialog.createDialog(dialogEnd, dialogX, dialogY);
+                    dialog.createDialog(dialogEnd);
                 }
             }, 2);
         }

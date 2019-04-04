@@ -364,8 +364,8 @@ public class MainGame extends Game {
 
 	public void loadStats() {
 		stats = Gdx.app.getPreferences("Robot_Mayhem_Stats");
-		//stats.clear(); // For testing purposes
-		//stats.flush(); // Without flushing, clear does not work in Android
+		stats.clear(); // For testing purposes
+		stats.flush(); // Without flushing, clear does not work in Android
 		money = stats.getInteger(keyMoney, 0);
 		stepCount = stats.getFloat(keyStepCount, 0);
 		stepAllCount = stats.getFloat(keyStepAllCount, 0);
