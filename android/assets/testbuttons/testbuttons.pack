@@ -134,44 +134,51 @@ testbuttons2.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+button_empty_clicked
+  rotate: false
+  xy: 1, 729
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
 button_item0
   rotate: false
-  xy: 1, 609
+  xy: 1, 487
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
 button_item_clicked
   rotate: false
-  xy: 1, 367
+  xy: 387, 729
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
 cooldown
   rotate: false
-  xy: 387, 609
+  xy: 1, 245
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
 button_escape
   rotate: false
-  xy: 1, 245
+  xy: 387, 607
   size: 360, 120
   orig: 360, 120
   offset: 0, 0
   index: -1
 button_escape_clicked
   rotate: false
-  xy: 387, 487
+  xy: 1, 123
   size: 360, 120
   orig: 360, 120
   offset: 0, 0
   index: -1
 button_settings
   rotate: false
-  xy: 1, 123
+  xy: 387, 485
   size: 360, 120
   orig: 360, 120
   offset: 0, 0
