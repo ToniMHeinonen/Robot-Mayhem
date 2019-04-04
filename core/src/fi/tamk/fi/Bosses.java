@@ -34,7 +34,8 @@ public class Bosses {
 
     public static final String ROOMBOT = "Roombot";
     public static final String COPPER = "Copper";
-    private static String[] allBosses = new String[] {ROOMBOT, COPPER};
+    public static final String ROBBER = "Robber";
+    private static String[] allBosses = new String[] {ROOMBOT, COPPER, ROBBER};
 
     /* NOTE!
     Everytime you add new boss, remember to:
@@ -50,6 +51,7 @@ public class Bosses {
         mapBosses = new HashMap<String, HashMap<String,Object>>();
         bossRoombot();
         bossCopper();
+        bossRobber();
     }
 
     /*
@@ -80,6 +82,30 @@ public class Bosses {
         }
 
         return skills;
+    }
+
+    private static void bossRobber() {
+        curName = ROBBER;
+        curSkillName0 = Skills.ATTACK;
+        curSkillName1 = Skills.SUCTION;
+        curSkillName2 = Skills.DUST;
+        curDialogStart = "I WILL ROB YOU NOW!!!";
+        curDialogEnd = "Wish I hadn't deleted Subtle.exe...";
+
+        t_idle = new Texture("texture/robber/robber_idle.png");
+        a_idle = anim.createAnimation(t_idle, 8, 2);
+        s_idle = 8;
+        t_hack = new Texture("texture/robber/robber_stun.png");
+        a_hack = anim.createAnimation(t_hack, 8, 1);
+        s_hack = 8;
+        t_skill = new Texture("texture/robber/robber_attack.png");
+        a_skill = anim.createAnimation(t_skill, 4, 1);
+        s_skill = 8;
+        t_takeHit = new Texture("texture/robber/robber_damage.png");
+        a_takeHit = anim.createAnimation(t_takeHit, 4, 1);
+        s_takeHit = 8;
+
+        addToMap();
     }
 
     private static void bossRoombot() {
