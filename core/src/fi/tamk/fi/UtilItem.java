@@ -48,7 +48,6 @@ public class UtilItem {
     private int bombAmount;
     private int potionAmount;
     private int polishedRotorAmount;
-
     private int[] amounts = new int[] {bombAmount, potionAmount, polishedRotorAmount};
 
     private ArrayList<String> inventory;
@@ -140,7 +139,7 @@ public class UtilItem {
         tableOwnedItems = new Table();
         // Get the amount of owned items.
         for (int i = 0; i < allItems.length; i++) {
-            for (int j = 0; j < game.getInventorySize(); j++) {
+            for (int j = 0; j < inventory.size(); j++) {
                 if (inventory.get(j).contains(allItems[i])) {
                     amounts[i]++;
                 }
