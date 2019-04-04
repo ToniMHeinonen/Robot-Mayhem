@@ -40,6 +40,9 @@ public class UtilItem {
     private TextButton buttonMoney;
     private TextButton buttonBuyItem;
     private TextButton buttonOwnedItems;
+    private TextButton buttonPrice;
+    private TextButton buttonAmount;
+    private TextButton buttonClose;
 
     private String[] allItems;
     private int buttonCounterBuyable;
@@ -92,10 +95,27 @@ public class UtilItem {
 
     private void createHeaders() {
         buttonBuyItem = new TextButton("Buy item", skin);
-        buttonBuyItem.setPosition(dialogItems.getX() + 100, dialogItems.getY() + 500);
+        buttonBuyItem.setPosition(dialogItems.getX()+ 100, dialogItems.getY() + 500);
 
         buttonOwnedItems = new TextButton("Owned items", skin);
-        buttonOwnedItems.setPosition(dialogItems.getX() + 800, dialogItems.getY() + 500);
+        buttonOwnedItems.setPosition(dialogItems.getX() + 750, dialogItems.getY() + 500);
+
+        buttonPrice = new TextButton("Price", skin);
+        buttonPrice.setSize(200, 100);
+        buttonPrice.setPosition(dialogItems.getX() + 400, dialogItems.getY() + 500);
+
+        buttonAmount = new TextButton("#", skin);
+        buttonAmount.setSize(100, 100);
+        buttonAmount.setPosition(dialogItems.getX() + 1150, dialogItems.getY() + 500);
+
+        buttonClose = new TextButton("Close", skin);
+        buttonClose.setPosition(dialogItems.getX() + 475, dialogItems.getY());
+        buttonClose.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                dialogItems.remove();
+            }
+        });
     }
 
     /*
@@ -277,6 +297,9 @@ public class UtilItem {
         dialogItems.addActor(buttonMoney);
         dialogItems.addActor(buttonBuyItem);
         dialogItems.addActor(buttonOwnedItems);
+        dialogItems.addActor(buttonPrice);
+        dialogItems.addActor(buttonAmount);
+        dialogItems.addActor(buttonClose);
         stage.addActor(dialogItems);
     }
 }
