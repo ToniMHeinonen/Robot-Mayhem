@@ -41,16 +41,26 @@ public class MainGame extends Game {
 	private Music backgroundMusic;
 	private Music bossMusic;
 
-	//Settings
+	// Pools and tiers
+	private int[] poolMilestones = new int[] {0, 9000, 18000, 27000, 36000};
+
+	// Settings
 	private Preferences settings;
 	private float musicVol;
     private boolean clickedOpenSettings = false;
 
-	//Stats
+	// Stats
+	// Keys (use these to decrease error chance)
+	private String keyMoney = "money", keyStepCount = "stepCount", keyStepAllCount = "stepAllCount",
+	keyStepBank = "stepBank", keySkill1 = "skill1", keySkill2 = "skill2",
+	keyCurrentBoss = "currentBoss", keyFirstPlayTime = "firstPlayTime", keyPool = "pool",
+	keyPoolMult = "poolMult", keyInventorySize = "inventorySize", keyInventory = "inventory",
+	keyDefeatedBossesSize = "defeatedBossesSize", keyDefeatedBosses = "defeatedBosses";
+	// Values
 	private int saveTimerAmount = 3600;
 	private int saveTimer = saveTimerAmount;
 	private Preferences stats;
-	private int stepCount, stepBank, stepAllCount, pool, poolMult, poolBossNumber, money;
+	private int stepCount, stepBank, stepAllCount, pool, poolMult, money;
 	private String skill1, skill2, currentBoss;
 	private boolean firstPlayTime;
 	// Stat arrays
@@ -63,28 +73,28 @@ public class MainGame extends Game {
 	private Texture imgBgHall, imgBgBoss, imgTopBar, imgBottomBar, escapeBg, hpBarLeft,
             hpBarRight, powerUpBg, powerUpPopup, itemBg;
 	private Animating createAnims = new Animating();
-	//RoomGame
+	// RoomGame
 	private Animation<TextureRegion> animGameMoving;
-    //RoomFight
+    // RoomFight
 	private Animation<TextureRegion> animIdle, animSkill, animDefend, animEscape,
             animItem, animHack, animDeath, animTakeHitAnim, animHealthPlusDoT, animHealthMinusDoT,
 			animMiss, animCriticalHit;
 
-	//Stepmeter in RoomGame
+	// Stepmeter in RoomGame
     private BitmapFont fontSteps;
 
-	//Progressbar
+	// Progressbar
     private TextureAtlas progBarAtlas;
     private Skin progBarSkin;
     private ProgressBar.ProgressBarStyle progBarStyle;
 
-	//Image button (temporary)
+	// Image button (temporary)
 	private BitmapFont font;
 	private TextureAtlas buttonsAtlas; //** image of buttons **//
 	private Skin buttonSkin; //** images are used as skins of the button **//
 	private TextButton.TextButtonStyle style;
 
-	//Dialog
+	// Dialog
 	private UtilDialog dialog;
 	private TextureAtlas testButtonAtlas;
 	private Skin testSkin;
@@ -95,7 +105,7 @@ public class MainGame extends Game {
 	private com.badlogic.gdx.graphics.Color fontColor = com.badlogic.gdx.graphics.Color.BLACK;
 	private BitmapFont descriptionFont;
 
-	//Hacking
+	// Hacking
     private FloatArray hackPosX;
     private FloatArray hackPosY;
     private int hackShieldAmount;
@@ -322,55 +332,75 @@ public class MainGame extends Game {
 
 	public void loadStats() {
 		stats = Gdx.app.getPreferences("Robot_Mayhem_Stats");
-		money = stats.getInteger("money", 0);
-		stepCount = stats.getInteger("stepCount", 0);
-		stepAllCount = stats.getInteger("stepAllCount", 0);
-		stepBank = stats.getInteger("stepBank", 0);
-		skill1 = stats.getString("skill1", "");
-		skill2 = stats.getString("skill2", "");
-		currentBoss = stats.getString("boss", "Roombot");
-		firstPlayTime = stats.getBoolean("firstPlayTime", true);
-		pool = stats.getInteger("pool", 1);
-		poolMult = stats.getInteger("poolMult", 0);
-		poolBossNumber = stats.getInteger("poolBossNumber", 0);
+		money = stats.getInteger(keyMoney, 0);
+		stepCount = stats.getInteger(keyStepCount, 0);
+		stepAllCount = stats.getInteger(keyStepAllCount, 0);
+		stepBank = stats.getInteger(keyStepBank, 0);
+		skill1 = stats.getString(keySkill1, "");
+		skill2 = stats.getString(keySkill2, "");
+		currentBoss = stats.getString(keyCurrentBoss, "Roombot");
+		firstPlayTime = stats.getBoolean(keyFirstPlayTime, true);
+		pool = stats.getInteger(keyPool, 1);
+		poolMult = stats.getInteger(keyPoolMult, 0);
 
 		// Load the size of inventory before loading inventory items
-		inventorySize = stats.getInteger("inventorySize", 0);
+		inventorySize = stats.getInteger(keyInventorySize, 0);
 		for (int i = 0; i < inventorySize; i++) {
-			inventory.add(i, stats.getString("inventory" + String.valueOf(i), ""));
+			inventory.add(i, stats.getString(keyInventory + String.valueOf(i), ""));
 		}
 		// Defeated bosses
-		defeatedBossesSize = stats.getInteger("defeatedBossesSize", 0);
+		defeatedBossesSize = stats.getInteger(keyDefeatedBossesSize, 0);
 		for (int i = 0; i < defeatedBossesSize; i++) {
-			defeatedBosses.add(i, stats.getString("defeatedBosses" + String.valueOf(i), ""));
+			defeatedBosses.add(i, stats.getString(keyDefeatedBosses + String.valueOf(i), ""));
 		}
 	}
 
 	public void saveStats() {
-		stats.putInteger("money", money);
-		stats.putInteger("stepCount", stepCount);
-		stats.putInteger("stepAllCount", stepAllCount);
-		stats.putInteger("stepBank", stepBank);
-		stats.putString("skill1", skill1);
-		stats.putString("skill2", skill2);
-		stats.putString("boss", currentBoss);
-		stats.putBoolean("firstPlayTime", firstPlayTime);
-		stats.putInteger("pool", pool);
-		stats.putInteger("poolMult", poolMult);
-		stats.putInteger("poolBossNumber", poolBossNumber);
+		stats.putInteger(keyMoney, money);
+		stats.putInteger(keyStepCount, stepCount);
+		stats.putInteger(keyStepAllCount, stepAllCount);
+		stats.putInteger(keyStepBank, stepBank);
+		stats.putString(keySkill1, skill1);
+		stats.putString(keySkill2, skill2);
+		stats.putString(keyCurrentBoss, currentBoss);
+		stats.putBoolean(keyFirstPlayTime, firstPlayTime);
+		stats.putInteger(keyPool, pool);
+		stats.putInteger(keyPoolMult, poolMult);
 
 		// Save inventory's current size on inventorySize key
-		stats.putInteger("inventorySize", inventory.size());
+		stats.putInteger(keyInventorySize, inventory.size());
 		for (int i = 0; i < inventory.size(); i++) {
-			stats.putString("inventory" + String.valueOf(i), inventory.get(i));
+			stats.putString(keyInventory + String.valueOf(i), inventory.get(i));
 		}
 		// Defeated bosses
-		stats.putInteger("defeatedBossesSize", defeatedBosses.size());
+		stats.putInteger(keyDefeatedBossesSize, defeatedBosses.size());
 		for (int i = 0; i < defeatedBosses.size(); i++) {
-			stats.putString("defeatedBosses" + String.valueOf(i), defeatedBosses.get(i));
+			stats.putString(keyDefeatedBosses + String.valueOf(i), defeatedBosses.get(i));
 		}
 
 		stats.flush();
+	}
+
+	public void bossDefeated() {
+		// defeatedBosses.add(currentBoss); Add when all the bosses exist
+
+		stepCount = 0; // Reset step count
+
+		// Add bank steps in roomGame
+
+		currentBoss = Bosses.selectRandomBoss(); // Randomize new boss
+
+		// Add when all the bosses exist
+		/*while (defeatedBosses.contains(currentBoss)) {
+			currentBoss = Bosses.selectRandomBoss();
+		}
+		// If all the bosses of the pool defeated, reset bosses, else add number++
+		if (poolMult < 8) poolMult++;
+		else {
+			pool++;
+			poolMult = 0;
+		}
+		*/
 	}
 
 	public void addToInventory(String name, boolean isSkill) {
@@ -697,10 +727,6 @@ public class MainGame extends Game {
 
 	public String getCurrentBoss() {
 		return currentBoss;
-	}
-
-	public int getPoolBossNumber() {
-		return poolBossNumber;
 	}
 
 	public Texture getItemBg() {

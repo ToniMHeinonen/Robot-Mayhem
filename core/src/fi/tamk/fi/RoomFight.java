@@ -718,7 +718,7 @@ public class RoomFight extends RoomParent {
             maxHp = 100;
             hp = maxHp;
             targetHp = hp;
-            defaultDmg = defaultDamages[game.getPoolBossNumber()];
+            defaultDmg = defaultDamages[game.getPoolMult()];
             ifDead = State.DEAD;
             ID = PLAYER;
 
