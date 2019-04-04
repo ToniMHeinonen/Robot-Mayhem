@@ -71,6 +71,7 @@ public class UtilItem {
         showMoney();
         addActors();
         System.out.println("Item-dialog opened from room: " + room);
+        System.out.println("Inventory size: " + inventory.size());
     }
 
     public void update() {
@@ -256,6 +257,9 @@ public class UtilItem {
                 if ((room.equals("hall") && usedInHall.equals("true")) ||
                         (room.equals("fight") && usedInHall.equals("false"))) {
                     System.out.println(allItems[i] + " can be used in this room");
+                    game.removeFromInventory(allItems[i]);
+                    popupOwnedItem.remove();
+                    dialogItems.remove();
                 } else {
                     System.out.println(allItems[i] + " can't be used in this room");
                 }

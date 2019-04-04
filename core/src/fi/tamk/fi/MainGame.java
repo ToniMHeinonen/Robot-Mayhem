@@ -429,6 +429,11 @@ public class MainGame extends Game {
 		saveStats();
 	}
 
+	public void removeFromInventory(String name) {
+        inventory.remove(name);
+        saveStats();
+    }
+
 	public boolean inventoryOrSkillsContains(String name) {
 		boolean contains = false;
 
