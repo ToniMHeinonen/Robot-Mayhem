@@ -129,8 +129,8 @@ public class RoomGame extends RoomParent {
 
         Player() {
             anim = new Animating();
-            X = 100;
-            Y = 200;
+            X = game.gridSize;
+            Y = game.gridSize*2;
 
             // Retrieve necessary animations and start the correct one
             moving = game.getAnimGameMoving();

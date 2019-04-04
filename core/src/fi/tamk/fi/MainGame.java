@@ -256,14 +256,15 @@ public class MainGame extends Game {
 		imgBgBoss = new Texture("texture/bg_hall1_boss.png");
 		imgTopBar = new Texture("texture/topbar.png");
 		imgBottomBar = new Texture("texture/bottombar.png");
-		Texture gamePlayerMoving = new Texture("texture/player/player.png");
-        Texture playerIdle = new Texture("texture/player/playerIdle.png");
-        Texture playerAttack = new Texture("texture/player/playerAttack.png");
-        Texture playerDefend = new Texture("texture/player/playerDefend.png");
-        Texture playerItem = new Texture("texture/player/playerItem.png");
-        Texture playerEscape = new Texture("texture/player/playerEscape.png");
-        Texture playerHack = new Texture("texture/player/playerHack.png");
-        Texture playerDeath = new Texture("texture/player/playerDeath.png");
+		Texture gamePlayerMoving = new Texture("texture/player/player_move.png");
+        Texture playerIdle = new Texture("texture/player/player_idle.png");
+        Texture playerAttack = new Texture("texture/player/player_attack.png");
+        Texture playerDefend = new Texture("texture/player/player_defend.png");
+        Texture playerItem = new Texture("texture/player/player_item.png");
+        Texture playerEscape = new Texture("texture/player/player_flee.png");
+        Texture playerHack = new Texture("texture/player/player_hack.png");
+        Texture playerDeath = new Texture("texture/player/player_damage.png");
+		Texture playerTakeHit = new Texture("texture/player/player_damage.png");
         Texture healthPlus = new Texture("texture/skills/plusHealth.png");
         Texture healthMinus = new Texture("texture/skills/minusHealth.png");
 		Texture criticalHit = new Texture("texture/skills/criticalHit.png");
@@ -278,14 +279,14 @@ public class MainGame extends Game {
 		// Create animations
 		animGameMoving = createAnims.createAnimation(gamePlayerMoving, 4, 1);
 
-		animIdle = createAnims.createAnimation(playerIdle, 3, 1);
-		animSkill = createAnims.createAnimation(playerAttack, 3, 1);
-		animDefend = createAnims.createAnimation(playerDefend, 3, 1);
-        animEscape = createAnims.createAnimation(playerEscape, 3, 1);
-        animItem = createAnims.createAnimation(playerItem, 3, 1);
-        animHack = createAnims.createAnimation(playerHack, 3, 1);
-        animDeath = createAnims.createAnimation(playerDeath, 3, 1);
-        animTakeHitAnim = createAnims.createAnimation(playerItem, 3, 1);
+		animIdle = createAnims.createAnimation(playerIdle, 8, 2);
+		animSkill = createAnims.createAnimation(playerAttack, 4, 1);
+		animDefend = createAnims.createAnimation(playerDefend, 8, 1);
+        animEscape = createAnims.createAnimation(playerEscape, 4, 1);
+        animItem = createAnims.createAnimation(playerItem, 4, 1);
+        animHack = createAnims.createAnimation(playerHack, 8, 1);
+        animDeath = createAnims.createAnimation(playerDeath, 4, 1);
+        animTakeHitAnim = createAnims.createAnimation(playerTakeHit, 4, 1);
         animHealthPlusDoT = createAnims.createAnimation(healthPlus, 3, 1);
         animHealthMinusDoT = createAnims.createAnimation(healthMinus, 3, 1);
         animCriticalHit = createAnims.createAnimation(criticalHit, 4, 1);
