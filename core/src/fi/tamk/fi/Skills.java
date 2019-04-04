@@ -154,6 +154,7 @@ public class Skills {
     private static void skillShock() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, SHOCK);
+        map.put(description, "Shock the opponent with amazing damage!");
         map.put(damage, 3.0);
         map.put(critChance, defCrit);
         map.put(missChance, 0);
@@ -170,6 +171,7 @@ public class Skills {
     private static void skillFire() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, FIRE);
+        map.put(description, "Burn your enemy for 3 turns.");
         map.put(damage, 0.0);
         map.put(critChance, 0);
         map.put(missChance, 0);
