@@ -136,15 +136,43 @@ filter: Nearest,Nearest
 repeat: none
 button_item_clicked
   rotate: false
-  xy: 1, 1
+  xy: 1, 247
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
 cooldown
   rotate: false
-  xy: 387, 1
+  xy: 1, 5
   size: 384, 240
   orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_escape
+  rotate: false
+  xy: 387, 367
+  size: 360, 120
+  orig: 360, 120
+  offset: 0, 0
+  index: -1
+button_escape_clicked
+  rotate: false
+  xy: 387, 245
+  size: 360, 120
+  orig: 360, 120
+  offset: 0, 0
+  index: -1
+button_settings
+  rotate: false
+  xy: 387, 123
+  size: 360, 120
+  orig: 360, 120
+  offset: 0, 0
+  index: -1
+button_settings_clicked
+  rotate: false
+  xy: 387, 1
+  size: 360, 120
+  orig: 360, 120
   offset: 0, 0
   index: -1
