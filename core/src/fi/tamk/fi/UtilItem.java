@@ -71,6 +71,7 @@ public class UtilItem {
         showMoney();
         addActors();
         System.out.println("Item-dialog opened from room: " + room);
+        System.out.println("Inventory size: " + inventory.size());
     }
 
     public void update() {
@@ -248,19 +249,31 @@ public class UtilItem {
 
         createCommonVariables(index, popupOwnedItem);
 
+        /*
+        When we have finished our skin, this will be:
+        TextButton buttonUse = new TextButton("Use", skin, "StyleUseOn")
+        and moved inside the if-statement.
+        */
         TextButton buttonUse = new TextButton("Use", skin);
         buttonUse.setPosition(popupOwnedItem.getWidth()/2 - 300, popupOwnedItem.getHeight()/4);
-        buttonUse.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                if ((room.equals("hall") && usedInHall.equals("true")) ||
-                        (room.equals("fight") && usedInHall.equals("false"))) {
-                    System.out.println(allItems[i] + " can be used in this room");
-                } else {
-                    System.out.println(allItems[i] + " can't be used in this room");
+        if ((room.equals("hall") && usedInHall.equals("true")) ||
+            (room.equals("fight") && usedInHall.equals("false"))) {
+            buttonUse.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    game.removeFromInventory(allItems[i]);
+                    popupOwnedItem.remove();
+                    dialogItems.remove();
                 }
-            }
-        });
+            });
+        }
+        /*
+        When we have finished our skin, this will be:
+        else {
+        TextButton buttonUse = new TextButton("Use", skin, "StyleUseOff")
+        }
+        And not include listener.
+        */
 
         popupOwnedItem.addActor(buttonUse);
         stage.addActor(popupOwnedItem);
