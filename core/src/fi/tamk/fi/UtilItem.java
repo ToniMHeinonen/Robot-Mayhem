@@ -41,7 +41,9 @@ public class UtilItem {
     private int buttonCounterAvailable;
     private int buttonCounterOwned;
 
-    UtilItem(MainGame game) {
+    private String room;
+
+    UtilItem(MainGame game, String room) {
         this.game = game;
         batch = game.getBatch();
         stage = game.getStage();
@@ -49,8 +51,11 @@ public class UtilItem {
         money = game.getMoney();
         fontColor = game.getFontColor();
         //game.addToInventory("Bomb", false);
+        //game.addToInventory("Polished Rotor", false);
 
         allItems = Item.getAllItems();
+
+        this.room = room;
 
         setValues();
         createItemDialog();
@@ -98,7 +103,7 @@ public class UtilItem {
 
     private void createOwnedItemsTable() {
         tableOwnedItems = new Table();
-        for (int i = 0; i < game.getInventorySize(); i++) {
+        for (int i = 0; i < allItems.length; i++) {
             buttonCounterOwned = i;
             if (game.inventoryOrSkillsContains(allItems[i])) {
                 TextButton button = new TextButton(allItems[i], skin);
@@ -115,6 +120,9 @@ public class UtilItem {
         createScrollTable(tableOwnedItems, 800, 200);
     }
 
+    /*
+    Scrollpane is used so that the tables can have scrollbar.
+     */
     private void createScrollTable(Table table, float x, float y) {
         ScrollPane scrollPane = new ScrollPane(table, skin);
         scrollPane.setFadeScrollBars(false);
@@ -168,15 +176,32 @@ public class UtilItem {
         popupOwnedItem.setPosition(dialogItems.getWidth()/3, dialogItems.getHeight()/4);
         popupOwnedItem.setMovable(false);
 
+        final String usedInHall = String.valueOf(Item.getItem(allItems[index]).get("usedInHall"));
+        final int i = index;
+
         createCommonVariables(index, popupOwnedItem);
 
         TextButton buttonUse = new TextButton("Use", skin);
         buttonUse.setPosition(popupOwnedItem.getWidth()/2 - 200, popupOwnedItem.getHeight()/4);
+        buttonUse.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                if (room == "hall" && usedInHall == "true") {
+                    System.out.println(allItems[i] + " can be used in hall");
+                }
+                if (room == "fight" && usedInHall == "false") {
+                    System.out.println(allItems[i] + " can be used in fight");
+                }
+            }
+        });
 
         popupOwnedItem.addActor(buttonUse);
         stage.addActor(popupOwnedItem);
     }
 
+    /*
+    Common variables: Opened itemtext, description of item and back-button.
+     */
     private void createCommonVariables(int index, final Dialog dialog) {
         Label labelOpenedItem = new Label(allItems[index], skin);
         labelOpenedItem.setColor(fontColor);

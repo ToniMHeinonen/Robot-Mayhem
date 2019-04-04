@@ -171,7 +171,7 @@ public class RoomSettings extends RoomParent {
         buttonFight.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                item = new UtilItem(game);
+                item = new UtilItem(game, "fight");
                 startItem = true;
             }
         });
