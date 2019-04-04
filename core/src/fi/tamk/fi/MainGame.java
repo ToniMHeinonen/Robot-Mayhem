@@ -40,6 +40,7 @@ public class MainGame extends Game {
 	private Skin skin;
 	private Music backgroundMusic;
 	private Music bossMusic;
+	private Music[] allMusic;
 
 	// Pools and tiers
 	private int[] poolMilestones = new int[] {0, 9000, 18000, 27000, 36000};
@@ -136,10 +137,7 @@ public class MainGame extends Game {
 		createButtonFiles();
 		createProgressBarFiles();
 		createDialogConstants();
-		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("music/fansu_1.mp3"));
-		backgroundMusic.setLooping(true);
-		bossMusic = Gdx.audio.newMusic(Gdx.files.internal("music/bossmusic.mp3"));
-		bossMusic.setLooping(true);
+		createMusic();
 
 		createHackFiles();
 
@@ -161,6 +159,7 @@ public class MainGame extends Game {
 		stage.dispose();
 		skin.dispose();
 		backgroundMusic.dispose();
+		bossMusic.dispose();
 		Bosses.dispose();
 		Skills.dispose();
 		saveStats();
@@ -172,39 +171,63 @@ public class MainGame extends Game {
 
 	public void switchToRoomTestailua() {
 		transition();
+		startMusic(backgroundMusic);
 	    RoomTestailua room = new RoomTestailua(this);
 	    setScreen(room);
     }
 
     public void switchToRoomSettings() {
 		transition();
+		startMusic(backgroundMusic);
 		RoomSettings room = new RoomSettings(this);
 		setScreen(room);
     }
 
     public void switchToRoomGame() {
 		transition();
+		startMusic(backgroundMusic);
 	    RoomGame room = new RoomGame(this);
         setScreen(room);
     }
 
     public void switchToRoomFight() {
 		transition();
+		startMusic(bossMusic);
 	    RoomFight room = new RoomFight(this);
 	    setScreen(room);
     }
 
 	public void switchToPowerUps() {
 		transition();
+		startMusic(backgroundMusic);
 		PowerUps room = new PowerUps(this);
 		setScreen(room);
 	}
 
 	public void switchToRoomItemTest() {
-
+		startMusic(backgroundMusic);
 		transition();
 		//RoomItemTest room = new RoomItemTest(this);
 		//setScreen(room);
+	}
+
+	private void createMusic() {
+		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("music/fansu_1.mp3"));
+		backgroundMusic.setLooping(true);
+		bossMusic = Gdx.audio.newMusic(Gdx.files.internal("music/bossmusic.mp3"));
+		bossMusic.setLooping(true);
+
+		// Remember to add all new music here
+		allMusic = new Music[] {backgroundMusic, bossMusic};
+	}
+
+	private void startMusic(Music file) {
+		if (!file.isPlaying()) {
+			for (Music m : allMusic) {
+				if (m.isPlaying()) m.stop();
+			}
+			file.play();
+		}
 	}
 
     private void createHackFiles() {

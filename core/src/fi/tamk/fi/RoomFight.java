@@ -70,8 +70,6 @@ public class RoomFight extends RoomParent {
 
         player = new Player();
         enemy = new Enemy();
-        backgroundMusic.pause();
-        bossMusic.play();
     }
 
     @Override
@@ -169,10 +167,7 @@ public class RoomFight extends RoomParent {
 
     @Override
     public void hide() {
-        // These need to be optimized better, removed from here and used in MainGame
-        backgroundMusic.play();
-        bossMusic.stop();
-        // hacking.dispose() Lisää myöhemmin
+        if (hacking != null) hacking.dispose();
     }
 
     private void createHealthBars() {
