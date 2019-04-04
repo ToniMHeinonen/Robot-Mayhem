@@ -22,10 +22,10 @@ public class UtilItem {
     private Skin skin;
     private int money;
 
-    private Table tableAvailableItems;
+    private Table tableBuyableItems;
     private Table tableOwnedItems;
     private Dialog dialogItems;
-    private Dialog popupAvailableItem;
+    private Dialog popupBuyableItem;
     private Dialog popupOwnedItem;
     private Color fontColor;
 
@@ -38,7 +38,7 @@ public class UtilItem {
     private TextButton buttonMoney;
 
     private String[] allItems;
-    private int buttonCounterAvailable;
+    private int buttonCounterBuyable;
     private int buttonCounterOwned;
 
     private int bombAmount;
@@ -65,7 +65,7 @@ public class UtilItem {
 
         setValues();
         createItemDialog();
-        createAvailableItemsTable();
+        createBuyableItemsTable();
         createOwnedItemsTable();
         showMoney();
         addActors();
@@ -82,6 +82,9 @@ public class UtilItem {
         onScreenY = 0;
     }
 
+    /*
+    The whole area, where are buyable and owned items.
+     */
     private void createItemDialog() {
         dialogItems = new Dialog("Items", skin);
         dialogItems.setMovable(false);
@@ -90,26 +93,32 @@ public class UtilItem {
         dialogItems.setSize(dialogItemWidth, dialogItemHeight);
     }
 
-    private void createAvailableItemsTable() {
-        tableAvailableItems = new Table();
+    /*
+    Table, which contains all items.
+     */
+    private void createBuyableItemsTable() {
+        tableBuyableItems = new Table();
         for (int i = 0; i < allItems.length; i++) {
-            buttonCounterAvailable = i;
+            buttonCounterBuyable = i;
             TextButton button0 = new TextButton(allItems[i], skin);
-            tableAvailableItems.add(button0).size(400, 100);
+            tableBuyableItems.add(button0).size(400, 100);
             button0.addListener(new ClickListener(){
-                int i = buttonCounterAvailable;
+                int i = buttonCounterBuyable;
                 @Override
                 public void clicked(InputEvent event, float x, float y){
-                    popupForAvailableItem(i);
+                    popupForBuyableItem(i);
                 }
             });
             String stringCost = String.valueOf(Item.getItem(allItems[i]).get("price"));
             TextButton buttonPrice = new TextButton(stringCost, skin);
-            tableAvailableItems.add(buttonPrice).size(100, 100).row();
+            tableBuyableItems.add(buttonPrice).size(100, 100).row();
         }
-        createScrollTable(tableAvailableItems, 0, 200);
+        createScrollTable(tableBuyableItems, 0, 200);
     }
 
+    /*
+    Table, which contains owned items.
+     */
     private void createOwnedItemsTable() {
         tableOwnedItems = new Table();
         for (int i = 0; i < allItems.length; i++) {
@@ -147,16 +156,19 @@ public class UtilItem {
                 dialogItems.getHeight() - 200);
     }
 
-    private void popupForAvailableItem(final int index) {
-        popupAvailableItem = new Dialog("", skin);
-        popupAvailableItem.setSize(dialogItems.getWidth()/2, dialogItems.getHeight()/2);
-        popupAvailableItem.setPosition(dialogItems.getWidth()/3, dialogItems.getHeight()/4);
-        popupAvailableItem.setMovable(false);
+    /*
+    This will open, when player has clicked one of the buyable items.
+     */
+    private void popupForBuyableItem(final int index) {
+        popupBuyableItem = new Dialog("", skin);
+        popupBuyableItem.setSize(dialogItems.getWidth()/2, dialogItems.getHeight()/2);
+        popupBuyableItem.setPosition(dialogItems.getWidth()/3, dialogItems.getHeight()/4);
+        popupBuyableItem.setMovable(false);
 
-        createCommonVariables(index, popupAvailableItem);
+        createCommonVariables(index, popupBuyableItem);
 
         final TextButton buttonBuy = new TextButton("Buy", skin);
-        buttonBuy.setPosition(popupAvailableItem.getWidth()/2 - 200, popupAvailableItem.getHeight()/4);
+        buttonBuy.setPosition(popupBuyableItem.getWidth()/2 - 200, popupBuyableItem.getHeight()/4);
         buttonBuy.addListener(new ClickListener(){
             int i = index;
             String stringCost = String.valueOf(Item.getItem(allItems[i]).get("price"));
@@ -166,16 +178,19 @@ public class UtilItem {
                 if (money >= price) {
                     game.decreaseMoney(price);
                     game.addToInventory(allItems[index], false);
-                    popupAvailableItem.remove();
+                    popupBuyableItem.remove();
                     dialogItems.remove();
                 }
             }
         });
 
-        popupAvailableItem.addActor(buttonBuy);
-        stage.addActor(popupAvailableItem);
+        popupBuyableItem.addActor(buttonBuy);
+        stage.addActor(popupBuyableItem);
     }
 
+    /*
+    This will open, when player has clicked one of owned items.
+     */
     private void popupForOwnedItem(int index) {
         popupOwnedItem = new Dialog("", skin);
         popupOwnedItem.setSize(dialogItems.getWidth()/2, dialogItems.getHeight()/2);
