@@ -754,4 +754,8 @@ public class MainGame extends Game {
 	public float getProgressBarMilestone() {
 		return progressBarMilestone;
 	}
+
+    public ArrayList<String> getInventory() {
+        return inventory;
+    }
 }

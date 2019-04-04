@@ -15,6 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+import java.util.ArrayList;
+
 public class UtilItem {
     private MainGame game;
     private SpriteBatch batch;
@@ -36,6 +38,8 @@ public class UtilItem {
     private float onScreenY;
 
     private TextButton buttonMoney;
+    private TextButton buttonBuyItem;
+    private TextButton buttonOwnedItems;
 
     private String[] allItems;
     private int buttonCounterBuyable;
@@ -46,6 +50,8 @@ public class UtilItem {
     private int polishedRotorAmount;
 
     private int[] amounts = new int[] {bombAmount, potionAmount, polishedRotorAmount};
+
+    private ArrayList<String> inventory;
 
     private String room;
 
@@ -61,12 +67,15 @@ public class UtilItem {
 
         allItems = Item.getAllItems();
 
+        inventory = game.getInventory();
+
         this.room = room;
 
         setValues();
         createItemDialog();
         createBuyableItemsTable();
         createOwnedItemsTable();
+        createHeaders();
         showMoney();
         addActors();
     }
@@ -77,9 +86,17 @@ public class UtilItem {
     private void setValues() {
         dialogItemWidth = game.pixelWidth / 1.2f;
         dialogItemHeight = game.pixelHeight / 1.2f;
-        posX = 200;
+        posX = 150;
         outOfScreenY = game.pixelHeight;
-        onScreenY = 0;
+        onScreenY = game.pixelHeight/9;
+    }
+
+    private void createHeaders() {
+        buttonBuyItem = new TextButton("Buy item", skin);
+        buttonBuyItem.setPosition(dialogItems.getX() + 100, dialogItems.getY() + 500);
+
+        buttonOwnedItems = new TextButton("Owned items", skin);
+        buttonOwnedItems.setPosition(dialogItems.getX() + 800, dialogItems.getY() + 500);
     }
 
     /*
@@ -94,7 +111,7 @@ public class UtilItem {
     }
 
     /*
-    Table, which contains all items.
+    Table, which contains buyable items.
      */
     private void createBuyableItemsTable() {
         tableBuyableItems = new Table();
@@ -113,7 +130,7 @@ public class UtilItem {
             TextButton buttonPrice = new TextButton(stringCost, skin);
             tableBuyableItems.add(buttonPrice).size(100, 100).row();
         }
-        createScrollTable(tableBuyableItems, 0, 200);
+        createScrollTable(tableBuyableItems, -100, 100);
     }
 
     /*
@@ -121,12 +138,22 @@ public class UtilItem {
      */
     private void createOwnedItemsTable() {
         tableOwnedItems = new Table();
+        // Get the amount of owned items.
+        for (int i = 0; i < allItems.length; i++) {
+            for (int j = 0; j < game.getInventorySize(); j++) {
+                if (inventory.get(j).contains(allItems[i])) {
+                    amounts[i]++;
+                }
+            }
+        }
         for (int i = 0; i < allItems.length; i++) {
             buttonCounterOwned = i;
             if (game.inventoryOrSkillsContains(allItems[i])) {
-                TextButton button = new TextButton(allItems[i], skin);
-                tableOwnedItems.add(button).size(400, 100).row();
-                button.addListener(new ClickListener(){
+                TextButton buttonItem = new TextButton(allItems[i], skin);
+                TextButton buttonAmount = new TextButton(String.valueOf(amounts[i]), skin);
+                tableOwnedItems.add(buttonItem).size(400, 100);
+                tableOwnedItems.add(buttonAmount).size(100, 100).row();
+                buttonItem.addListener(new ClickListener(){
                     int i = buttonCounterOwned;
                     @Override
                     public void clicked(InputEvent event, float x, float y){
@@ -135,7 +162,7 @@ public class UtilItem {
                 });
             }
         }
-        createScrollTable(tableOwnedItems, 600, 200);
+        createScrollTable(tableOwnedItems, 600, 100);
     }
 
     /*
@@ -153,7 +180,7 @@ public class UtilItem {
     private void showMoney() {
         buttonMoney = new TextButton("Money: " + String.valueOf(money), skin);
         buttonMoney.setPosition(dialogItems.getWidth() - 350,
-                dialogItems.getHeight() - 200);
+                dialogItems.getHeight() - 150);
     }
 
     /*
@@ -162,13 +189,13 @@ public class UtilItem {
     private void popupForBuyableItem(final int index) {
         popupBuyableItem = new Dialog("", skin);
         popupBuyableItem.setSize(dialogItems.getWidth()/2, dialogItems.getHeight()/2);
-        popupBuyableItem.setPosition(dialogItems.getWidth()/3, dialogItems.getHeight()/4);
+        popupBuyableItem.setPosition(dialogItems.getWidth()/3, dialogItems.getHeight()/2);
         popupBuyableItem.setMovable(false);
 
         createCommonVariables(index, popupBuyableItem);
 
         final TextButton buttonBuy = new TextButton("Buy", skin);
-        buttonBuy.setPosition(popupBuyableItem.getWidth()/2 - 200, popupBuyableItem.getHeight()/4);
+        buttonBuy.setPosition(popupBuyableItem.getWidth()/2 - 300, popupBuyableItem.getHeight()/4);
         buttonBuy.addListener(new ClickListener(){
             int i = index;
             String stringCost = String.valueOf(Item.getItem(allItems[i]).get("price"));
@@ -194,7 +221,7 @@ public class UtilItem {
     private void popupForOwnedItem(int index) {
         popupOwnedItem = new Dialog("", skin);
         popupOwnedItem.setSize(dialogItems.getWidth()/2, dialogItems.getHeight()/2);
-        popupOwnedItem.setPosition(dialogItems.getWidth()/3, dialogItems.getHeight()/4);
+        popupOwnedItem.setPosition(dialogItems.getWidth()/3, dialogItems.getHeight()/2);
         popupOwnedItem.setMovable(false);
 
         final String usedInHall = String.valueOf(Item.getItem(allItems[index]).get("usedInHall"));
@@ -203,7 +230,7 @@ public class UtilItem {
         createCommonVariables(index, popupOwnedItem);
 
         TextButton buttonUse = new TextButton("Use", skin);
-        buttonUse.setPosition(popupOwnedItem.getWidth()/2 - 200, popupOwnedItem.getHeight()/4);
+        buttonUse.setPosition(popupOwnedItem.getWidth()/2 - 300, popupOwnedItem.getHeight()/4);
         buttonUse.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
@@ -226,7 +253,7 @@ public class UtilItem {
     private void createCommonVariables(int index, final Dialog dialog) {
         Label labelOpenedItem = new Label(allItems[index], skin);
         labelOpenedItem.setColor(fontColor);
-        labelOpenedItem.setPosition(dialog.getWidth()/2,
+        labelOpenedItem.setPosition(dialog.getWidth()/2 - 300,
                 dialog.getHeight() - labelOpenedItem.getHeight()*3);
 
         Label labelDescription = new Label(String.valueOf(Item.getItem(allItems[index]).get("description")), skin);
@@ -234,7 +261,7 @@ public class UtilItem {
         labelDescription.setPosition(labelOpenedItem.getX(), labelOpenedItem.getY() - labelDescription.getHeight()*2);
 
         TextButton buttonBack = new TextButton("Back", skin);
-        buttonBack.setPosition(dialog.getWidth()/2 + 100, dialog.getHeight()/4);
+        buttonBack.setPosition(dialog.getWidth()/2, dialog.getHeight()/4);
         buttonBack.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
@@ -249,6 +276,8 @@ public class UtilItem {
 
     private void addActors() {
         dialogItems.addActor(buttonMoney);
+        dialogItems.addActor(buttonBuyItem);
+        dialogItems.addActor(buttonOwnedItems);
         stage.addActor(dialogItems);
     }
 }
