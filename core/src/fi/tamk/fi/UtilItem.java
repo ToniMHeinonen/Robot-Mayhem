@@ -1,10 +1,6 @@
 package fi.tamk.fi;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -19,17 +15,17 @@ import java.util.ArrayList;
 
 public class UtilItem {
     private MainGame game;
-    private SpriteBatch batch;
     private Stage stage;
     private Skin skin;
     private int money;
+    private String room;
+    private Color fontColor;
 
     private Table tableBuyableItems;
     private Table tableOwnedItems;
     private Dialog dialogItems;
     private Dialog popupBuyableItem;
     private Dialog popupOwnedItem;
-    private Color fontColor;
 
     private float dialogItemWidth;
     private float dialogItemHeight;
@@ -45,33 +41,27 @@ public class UtilItem {
     private TextButton buttonClose;
 
     private String[] allItems;
+    private ArrayList<String> inventory;
+
     private int buttonCounterBuyable;
     private int buttonCounterOwned;
 
+    // Add here, if more items are added in Item-class.
+    // Could be maybe automated in a method..?
     private int bombAmount;
     private int potionAmount;
     private int polishedRotorAmount;
     private int[] amounts = new int[] {bombAmount, potionAmount, polishedRotorAmount};
 
-    private ArrayList<String> inventory;
-
-    private String room;
-
     UtilItem(MainGame game, String room) {
         this.game = game;
-        batch = game.getBatch();
+        this.room = room;
         stage = game.getStage();
         skin = game.getSkin();
         money = game.getMoney();
         fontColor = game.getFontColor();
-        //game.addToInventory("Bomb", false);
-        //game.addToInventory("Polished Rotor", false);
-
-        allItems = Item.getAllItems();
-
         inventory = game.getInventory();
-
-        this.room = room;
+        allItems = Item.getAllItems();
 
         setValues();
         createItemDialog();
@@ -80,6 +70,7 @@ public class UtilItem {
         createHeaders();
         showMoney();
         addActors();
+        System.out.println("Item-dialog opened from room: " + room);
     }
 
     public void update() {
@@ -91,6 +82,92 @@ public class UtilItem {
         posX = 150;
         outOfScreenY = game.pixelHeight;
         onScreenY = game.pixelHeight/9;
+    }
+
+    /*
+    The whole area, where are buyable and owned items.
+     */
+    private void createItemDialog() {
+        dialogItems = new Dialog("Items", skin);
+        dialogItems.setMovable(false);
+        dialogItems.setKeepWithinStage(false);
+        dialogItems.setPosition(posX, onScreenY);
+        dialogItems.setSize(dialogItemWidth, dialogItemHeight);
+    }
+
+    /*
+    Table, which contains buyable items.
+     */
+    private void createBuyableItemsTable() {
+        tableBuyableItems = new Table();
+
+        for (int i = 0; i < allItems.length; i++) {
+            buttonCounterBuyable = i;
+            TextButton button0 = new TextButton(allItems[i], skin);
+            tableBuyableItems.add(button0).size(400, 100);
+
+            button0.addListener(new ClickListener(){
+                int i = buttonCounterBuyable;
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    popupForBuyableItem(i);
+                }
+            });
+
+            String stringCost = String.valueOf(Item.getItem(allItems[i]).get("price"));
+            TextButton buttonPrice = new TextButton(stringCost, skin);
+            tableBuyableItems.add(buttonPrice).size(100, 100).row();
+        }
+
+        createScrollTable(tableBuyableItems, -100, 100);
+    }
+
+    /*
+    Table, which contains owned items.
+     */
+    private void createOwnedItemsTable() {
+        tableOwnedItems = new Table();
+
+        // Get the amount of owned items.
+        for (int i = 0; i < allItems.length; i++) {
+            for (int j = 0; j < inventory.size(); j++) {
+                if (inventory.get(j).contains(allItems[i])) {
+                    amounts[i]++;
+                }
+            }
+        }
+
+        for (int i = 0; i < allItems.length; i++) {
+            buttonCounterOwned = i;
+            if (game.inventoryOrSkillsContains(allItems[i])) {
+                TextButton buttonItem = new TextButton(allItems[i], skin);
+                TextButton buttonAmount = new TextButton(String.valueOf(amounts[i]), skin);
+                tableOwnedItems.add(buttonItem).size(400, 100);
+                tableOwnedItems.add(buttonAmount).size(100, 100).row();
+
+                buttonItem.addListener(new ClickListener(){
+                    int i = buttonCounterOwned;
+                    @Override
+                    public void clicked(InputEvent event, float x, float y){
+                        popupForOwnedItem(i);
+                    }
+                });
+            }
+        }
+
+        createScrollTable(tableOwnedItems, 600, 100);
+    }
+
+    /*
+    Scrollpane is used so that the tables can have scrollbar.
+     */
+    private void createScrollTable(Table table, float x, float y) {
+        ScrollPane scrollPane = new ScrollPane(table, skin);
+        scrollPane.setFadeScrollBars(false);
+        scrollPane.setVisible(true);
+        scrollPane.setSize(dialogItems.getWidth()/2, dialogItems.getHeight()/2);
+        scrollPane.setPosition(dialogItems.getX() + x, dialogItems.getY() + y);
+        dialogItems.addActor(scrollPane);
     }
 
     private void createHeaders() {
@@ -118,84 +195,6 @@ public class UtilItem {
         });
     }
 
-    /*
-    The whole area, where are buyable and owned items.
-     */
-    private void createItemDialog() {
-        dialogItems = new Dialog("Items", skin);
-        dialogItems.setMovable(false);
-        dialogItems.setKeepWithinStage(false);
-        dialogItems.setPosition(posX, onScreenY);
-        dialogItems.setSize(dialogItemWidth, dialogItemHeight);
-    }
-
-    /*
-    Table, which contains buyable items.
-     */
-    private void createBuyableItemsTable() {
-        tableBuyableItems = new Table();
-        for (int i = 0; i < allItems.length; i++) {
-            buttonCounterBuyable = i;
-            TextButton button0 = new TextButton(allItems[i], skin);
-            tableBuyableItems.add(button0).size(400, 100);
-            button0.addListener(new ClickListener(){
-                int i = buttonCounterBuyable;
-                @Override
-                public void clicked(InputEvent event, float x, float y){
-                    popupForBuyableItem(i);
-                }
-            });
-            String stringCost = String.valueOf(Item.getItem(allItems[i]).get("price"));
-            TextButton buttonPrice = new TextButton(stringCost, skin);
-            tableBuyableItems.add(buttonPrice).size(100, 100).row();
-        }
-        createScrollTable(tableBuyableItems, -100, 100);
-    }
-
-    /*
-    Table, which contains owned items.
-     */
-    private void createOwnedItemsTable() {
-        tableOwnedItems = new Table();
-        // Get the amount of owned items.
-        for (int i = 0; i < allItems.length; i++) {
-            for (int j = 0; j < inventory.size(); j++) {
-                if (inventory.get(j).contains(allItems[i])) {
-                    amounts[i]++;
-                }
-            }
-        }
-        for (int i = 0; i < allItems.length; i++) {
-            buttonCounterOwned = i;
-            if (game.inventoryOrSkillsContains(allItems[i])) {
-                TextButton buttonItem = new TextButton(allItems[i], skin);
-                TextButton buttonAmount = new TextButton(String.valueOf(amounts[i]), skin);
-                tableOwnedItems.add(buttonItem).size(400, 100);
-                tableOwnedItems.add(buttonAmount).size(100, 100).row();
-                buttonItem.addListener(new ClickListener(){
-                    int i = buttonCounterOwned;
-                    @Override
-                    public void clicked(InputEvent event, float x, float y){
-                        popupForOwnedItem(i);
-                    }
-                });
-            }
-        }
-        createScrollTable(tableOwnedItems, 600, 100);
-    }
-
-    /*
-    Scrollpane is used so that the tables can have scrollbar.
-     */
-    private void createScrollTable(Table table, float x, float y) {
-        ScrollPane scrollPane = new ScrollPane(table, skin);
-        scrollPane.setFadeScrollBars(false);
-        scrollPane.setVisible(true);
-        scrollPane.setSize(dialogItems.getWidth()/2, dialogItems.getHeight()/2);
-        scrollPane.setPosition(dialogItems.getX() + x, dialogItems.getY() + y);
-        dialogItems.addActor(scrollPane);
-    }
-
     private void showMoney() {
         buttonMoney = new TextButton("Money: " + String.valueOf(money), skin);
         buttonMoney.setPosition(dialogItems.getWidth() - 350,
@@ -210,11 +209,11 @@ public class UtilItem {
         popupBuyableItem.setSize(dialogItems.getWidth()/2, dialogItems.getHeight()/2);
         popupBuyableItem.setPosition(dialogItems.getWidth()/3, dialogItems.getHeight()/2);
         popupBuyableItem.setMovable(false);
-
         createCommonVariables(index, popupBuyableItem);
 
         final TextButton buttonBuy = new TextButton("Buy", skin);
         buttonBuy.setPosition(popupBuyableItem.getWidth()/2 - 300, popupBuyableItem.getHeight()/4);
+
         buttonBuy.addListener(new ClickListener(){
             int i = index;
             String stringCost = String.valueOf(Item.getItem(allItems[i]).get("price"));
@@ -254,11 +253,11 @@ public class UtilItem {
         buttonUse.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                if (room == "hall" && usedInHall == "true") {
-                    System.out.println(allItems[i] + " can be used in hall");
-                }
-                if (room == "fight" && usedInHall == "false") {
-                    System.out.println(allItems[i] + " can be used in fight");
+                if ((room.equals("hall") && usedInHall.equals("true")) ||
+                        (room.equals("fight") && usedInHall.equals("false"))) {
+                    System.out.println(allItems[i] + " can be used in this room");
+                } else {
+                    System.out.println(allItems[i] + " can't be used in this room");
                 }
             }
         });
