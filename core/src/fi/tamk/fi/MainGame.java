@@ -427,6 +427,10 @@ public class MainGame extends Game {
 		money += amount;
 	}
 
+	public void decreaseMoney(int amount) {
+	    money -= amount;
+    }
+
 	/*
 	GETTERS
 	 */
