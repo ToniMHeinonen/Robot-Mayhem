@@ -33,6 +33,8 @@ public class UtilItem {
     private float outOfScreenY;
     private float onScreenY;
 
+    UtilDialog utilDialog;
+
     private TextButton buttonMoney;
     private TextButton buttonBuyItem;
     private TextButton buttonOwnedItems;
@@ -62,6 +64,7 @@ public class UtilItem {
         fontColor = game.getFontColor();
         inventory = game.getInventory();
         allItems = Item.getAllItems();
+        utilDialog = game.getDialog();
 
         setValues();
         createItemDialog();
@@ -248,6 +251,25 @@ public class UtilItem {
         final int i = index;
 
         createCommonVariables(index, popupOwnedItem);
+
+        /*
+        String stringDescription = String.valueOf(Item.getItem(allItems[index]).get("description"));
+
+        Dialog popupOwnedItem2 = utilDialog.createNewDialog(dialogItems.getWidth()/3,
+                dialogItems.getHeight()/2);
+
+        Label header = utilDialog.createHeader(allItems[index],
+                popupOwnedItem.getWidth()/2 - 300,
+                popupOwnedItem.getHeight() - 100);
+
+        Label description = utilDialog.createDescription(stringDescription + stringDescription + stringDescription,
+                popupOwnedItem.getWidth()/2 - 300,
+                popupOwnedItem.getHeight() - 200);
+
+        popupOwnedItem2.addActor(header);
+        popupOwnedItem2.addActor(description);
+        stage.addActor(popupOwnedItem2);
+        */
 
         /*
         When we have finished our skin, this will be:
