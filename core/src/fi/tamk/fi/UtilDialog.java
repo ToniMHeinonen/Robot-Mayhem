@@ -47,18 +47,19 @@ public class UtilDialog {
 
     public void showSkillName(String text) {
         skillNameOn = true;
-        float x = game.pixelWidth/2 - 500f;
+        float areaSize = 800f;
+        float x = game.pixelWidth/2 - areaSize/2;
         float y = game.pixelHeight - 350f;
         Label label = new Label(text, labelStyle);
         label.setWrap(true);
         label.setAlignment(1);
 
         final Dialog dialog = new Dialog("", windowStyle);
-        dialog.getContentTable().add(label).prefWidth(1000f);
+        dialog.getContentTable().add(label).prefWidth(areaSize);
 
         // dialog.getBackground().getMinHeight()
         // dialog.getBackground().getMinWidth()
-        dialog.setSize(1000f,label.getHeight()*2);
+        dialog.setSize(areaSize,label.getHeight()*2);
         dialog.setPosition(x,y);
         stage.addActor(dialog);
         Timer.schedule(new Timer.Task() {

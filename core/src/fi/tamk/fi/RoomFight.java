@@ -137,6 +137,7 @@ public class RoomFight extends RoomParent {
             // If dead, wait some time and then exit back to corridor
             case DEAD: {
                 deathTimer--;
+                game.setStepCount(game.getProgressBarMilestone()*0.5f);
                 if (deathTimer <= 0) {
                     game.switchToRoomGame();
                 }
@@ -293,8 +294,11 @@ public class RoomFight extends RoomParent {
         frame = (int) Math.ceil(spot);
         animHealthEnemy.setStateTime(enemyHealthBar.getFrameDuration() * frame);
 
-        animHealthPlayer.draw(batch, 400, game.pixelHeight - 115);
-        animHealthEnemy.draw(batch, 1000, game.pixelHeight - 115);
+        float x1 = game.gridSize*3;
+        float x2 = game.pixelWidth - game.gridSize*3 -
+                enemyHealthBar.getKeyFrame(0f).getRegionWidth();
+        animHealthPlayer.draw(batch, x1, game.pixelHeight - 115);
+        animHealthEnemy.draw(batch, x2, game.pixelHeight - 115);
     }
 
     // Creates the upper left escape button
@@ -327,6 +331,7 @@ public class RoomFight extends RoomParent {
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                game.setStepCount(game.getProgressBarMilestone()*0.75f);
                 state = State.ESCAPE;
                 escapePopup = false;
                 stage.clear();
@@ -1201,9 +1206,11 @@ public class RoomFight extends RoomParent {
 
         // Room calls this after hack is successful
         public void endDialogTimer() {
+            anim.startAnimation(takeHitAnim, takeHitSpd);
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
+                    startIdle();
                     state = State.DIALOG_END;
                     dialog.createDialog(dialogEnd, dialogX, dialogY);
                 }

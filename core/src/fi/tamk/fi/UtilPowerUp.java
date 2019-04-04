@@ -228,6 +228,7 @@ public class UtilPowerUp {
     private void createDescription(String text) {
         Label label = new Label(text, descriptionLabelStyle);
         label.setWrap(true);
+        label.setAlignment(1);
         final Dialog dialog = new Dialog("", emptyWindowsStyle);
         dialog.getContentTable().add(label).prefWidth(popup.getWidth()-50);
         dialog.setPosition(popupX, popupY + popup.getHeight()/3);

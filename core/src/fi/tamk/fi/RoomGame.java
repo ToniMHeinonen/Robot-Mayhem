@@ -24,7 +24,7 @@ public class RoomGame extends RoomParent {
     private float curSteps;
     private float goalSteps;
     private float bankSpd;
-    private float bankRetrieved = 0;
+    private float bankRetrieved = game.getStepCount();
     private int changeRoomTimer = 180;
 
     RoomGame(final MainGame game) {
