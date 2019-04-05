@@ -44,6 +44,7 @@ public class RoomTestailua extends RoomParent {
 
     protected static String name;
     protected static Preferences prefs;
+    static ArrayList<String> names = new ArrayList<String>();
 
     RoomTestailua(MainGame game) {
         super(game);
@@ -94,11 +95,11 @@ public class RoomTestailua extends RoomParent {
     public boolean setName(String n) {
         boolean legal = true;
         prefs = Gdx.app.getPreferences("FreeGamePreferences");
-        ArrayList<String> names = new ArrayList<String>();
+
 
         if (name != null) {
 
-            dialog.createDialog(name + "Auygaiuygdsiuya");
+            dialog.createDialog(name + " is your name");
         } else if (n.length() <= 10 && !n.equals("")) {
             this.name = n;
             dialog.createDialog(name);
@@ -304,5 +305,5 @@ public class RoomTestailua extends RoomParent {
     public static Preferences getPrefs() {
         return prefs;
     }
-    public static String getName() { return name; }
+    public static ArrayList<String> getName() { return names; }
 }
