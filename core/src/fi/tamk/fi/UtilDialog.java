@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 
 public class UtilDialog {
@@ -53,61 +54,37 @@ public class UtilDialog {
         });
     }
 
-    // Start of 3 different methods.
-    public Label createHeader(String header, float x, float y) {
-        Label labelHeader = new Label(header, skin);
-        labelHeader.setColor(fontColor);
-        labelHeader.setPosition(x, y);
-
-        return labelHeader;
-    }
-
-    public Label createDescription(String description, float x, float y) {
-        Label labelDescription = new Label(description, skin);
-        labelDescription.setWrap(true);
-        labelDescription.setWidth(300);
-        labelDescription.setHeight(labelDescription.getPrefHeight());
-        labelDescription.setColor(fontColor);
-        labelDescription.setPosition(x, y);
-
-        return labelDescription;
-    }
-
-    public Dialog createNewDialog(float x, float y) {
-        Dialog dialog = new Dialog("", skin);
-        dialog.setMovable(false);
-        dialog.setPosition(x, y);
-
-        return dialog;
-    }
-    // End of 3 different methods.
-
     // Start of all-in-one method.
-    public Dialog createCombined(String header, float headerX, float headerY,
-                                 String description, float descriptionX, float descriptionY,
-                                 float dialogX, float dialogY) {
+    public Dialog createPopupItemAndPowerUp(String header, String description) {
 
         Dialog dialog = new Dialog("", skin);
         dialog.setMovable(false);
-        dialog.setPosition(dialogX, dialogY);
+        dialog.setSize(game.pixelWidth/2,
+                game.pixelHeight/2);
+        dialog.setPosition(game.pixelWidth/4,
+                game.pixelHeight/3);
 
         Label labelHeader = new Label(header, skin);
         labelHeader.setColor(fontColor);
-        labelHeader.setPosition(headerX, headerY);
+        labelHeader.setPosition(dialog.getWidth()/2 - labelHeader.getWidth()/2, dialog.getHeight() - 100);
 
         Label labelDescription = new Label(description, skin);
         labelDescription.setWrap(true);
-        labelDescription.setWidth(300);
+        labelDescription.setWidth(dialog.getWidth() - 100);
         labelDescription.setHeight(labelDescription.getPrefHeight());
         labelDescription.setColor(fontColor);
-        labelDescription.setPosition(descriptionX, descriptionY);
+        labelDescription.setPosition(dialog.getWidth() - dialog.getWidth() + 50,
+                labelHeader.getY() - 100);
 
         dialog.addActor(labelHeader);
         dialog.addActor(labelDescription);
 
+        System.out.println(dialog.getWidth() + " " + dialog.getHeight());
+        System.out.println(labelHeader.getX() + " " + labelHeader.getY());
+        System.out.println(labelDescription.getX() + " " + labelDescription.getY());
+
         return dialog;
     }
-    // End of all-ine-one method.
 
     public void showSkillName(String text) {
         skillNameOn = true;

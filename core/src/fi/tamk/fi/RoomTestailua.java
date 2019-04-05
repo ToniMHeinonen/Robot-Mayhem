@@ -36,14 +36,18 @@ public class RoomTestailua extends RoomParent {
     private Hacking hacking;
     private boolean startHack = false;
 
+    private UtilDialog utilDialog;
+
     RoomTestailua(MainGame game) {
         super(game);
         testSkin = game.getTestSkin();
+        utilDialog = game.getDialog();
         createButtonSettings();
         createConstants();
         createButtons();
         createButtonHacking();
         createButtonHacking2();
+        createButtonDialog();
         // playMusic();
 
         // Added for testing.
@@ -86,6 +90,25 @@ public class RoomTestailua extends RoomParent {
             public void clicked(InputEvent event, float x, float y){
                 hacking = new Hacking(game, false);
                 startHack = true;
+            }
+        });
+    }
+
+    public void createButtonDialog() {
+        final TextButton buttonSettings = new TextButton("Dialog", skin);
+        buttonSettings.setWidth(300f);
+        buttonSettings.setHeight(100f);
+        buttonSettings.setPosition(game.pixelWidth /2 - buttonSettings.getWidth() *2,
+                (game.pixelHeight/3) *2 - buttonSettings.getHeight() /2);
+        stage.addActor(buttonSettings);
+
+        buttonSettings.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                Dialog popup = utilDialog.createPopupItemAndPowerUp("Item/PowerUp", "Description " +
+                        "Description Description Description Description Description Description " +
+                        "Descriptionnnn nnn Description Description Description");
+                stage.addActor(popup);
             }
         });
     }
