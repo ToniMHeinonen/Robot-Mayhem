@@ -79,10 +79,6 @@ public class UtilDialog {
         dialog.addActor(labelHeader);
         dialog.addActor(labelDescription);
 
-        System.out.println(dialog.getWidth() + " " + dialog.getHeight());
-        System.out.println(labelHeader.getX() + " " + labelHeader.getY());
-        System.out.println(labelDescription.getX() + " " + labelDescription.getY());
-
         return dialog;
     }
 

@@ -33,7 +33,7 @@ public class UtilItem {
     private float outOfScreenY;
     private float onScreenY;
 
-    UtilDialog utilDialog;
+    private UtilDialog utilDialog;
 
     private TextButton buttonMoney;
     private TextButton buttonBuyItem;
@@ -209,19 +209,17 @@ public class UtilItem {
     This will open, when player has clicked one of the buyable items.
      */
     private void popupForBuyableItem(final int index) {
-        popupBuyableItem = new Dialog("", skin);
-        popupBuyableItem.setSize(dialogItems.getWidth()/2, dialogItems.getHeight()/2);
-        popupBuyableItem.setPosition(dialogItems.getWidth()/3, dialogItems.getHeight()/2);
-        popupBuyableItem.setMovable(false);
-        createCommonVariables(index, popupBuyableItem);
+        String openedItem = allItems[index];
+        String description = String.valueOf(Item.getItem(openedItem).get("description"));
+        final String stringCost = String.valueOf(Item.getItem(allItems[index]).get("price"));
+        final int price = Integer.valueOf(stringCost);
+
+        popupBuyableItem = utilDialog.createPopupItemAndPowerUp(openedItem, description);
+        createBackButton(popupBuyableItem);
 
         final TextButton buttonBuy = new TextButton("Buy", skin);
         buttonBuy.setPosition(popupBuyableItem.getWidth()/2 - 300, popupBuyableItem.getHeight()/4);
-
         buttonBuy.addListener(new ClickListener(){
-            int i = index;
-            String stringCost = String.valueOf(Item.getItem(allItems[i]).get("price"));
-            int price = Integer.valueOf(stringCost);
             @Override
             public void clicked(InputEvent event, float x, float y){
                 if (money >= price) {
@@ -241,35 +239,13 @@ public class UtilItem {
     /*
     This will open, when player has clicked one of owned items.
      */
-    private void popupForOwnedItem(int index) {
-        popupOwnedItem = new Dialog("", skin);
-        popupOwnedItem.setSize(dialogItems.getWidth()/2, dialogItems.getHeight()/2);
-        popupOwnedItem.setPosition(dialogItems.getWidth()/3, dialogItems.getHeight()/2);
-        popupOwnedItem.setMovable(false);
-
+    private void popupForOwnedItem(final int index) {
+        String openedItem = allItems[index];
+        String description = String.valueOf(Item.getItem(openedItem).get("description"));
         final String usedInHall = String.valueOf(Item.getItem(allItems[index]).get("usedInHall"));
-        final int i = index;
 
-        createCommonVariables(index, popupOwnedItem);
-
-        /*
-        String stringDescription = String.valueOf(Item.getItem(allItems[index]).get("description"));
-
-        Dialog popupOwnedItem2 = utilDialog.createNewDialog(dialogItems.getWidth()/3,
-                dialogItems.getHeight()/2);
-
-        Label header = utilDialog.createHeader(allItems[index],
-                popupOwnedItem.getWidth()/2 - 300,
-                popupOwnedItem.getHeight() - 100);
-
-        Label description = utilDialog.createDescription(stringDescription + stringDescription + stringDescription,
-                popupOwnedItem.getWidth()/2 - 300,
-                popupOwnedItem.getHeight() - 200);
-
-        popupOwnedItem2.addActor(header);
-        popupOwnedItem2.addActor(description);
-        stage.addActor(popupOwnedItem2);
-        */
+        popupOwnedItem = utilDialog.createPopupItemAndPowerUp(openedItem, description);
+        createBackButton(popupOwnedItem);
 
         /*
         When we have finished our skin, this will be:
@@ -283,7 +259,7 @@ public class UtilItem {
             buttonUse.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    game.removeFromInventory(allItems[i]);
+                    game.removeFromInventory(allItems[index]);
                     popupOwnedItem.remove();
                     dialogItems.remove();
                 }
@@ -301,31 +277,16 @@ public class UtilItem {
         stage.addActor(popupOwnedItem);
     }
 
-    /*
-    Common variables: Opened itemtext, description of item and back-button.
-     */
-    private void createCommonVariables(int index, final Dialog dialog) {
-        Label labelOpenedItem = new Label(allItems[index], skin);
-        labelOpenedItem.setColor(fontColor);
-        labelOpenedItem.setPosition(dialog.getWidth()/2 - 300,
-                dialog.getHeight() - labelOpenedItem.getHeight()*3);
-
-        Label labelDescription = new Label(String.valueOf(Item.getItem(allItems[index]).get("description")), skin);
-        labelDescription.setColor(fontColor);
-        labelDescription.setPosition(labelOpenedItem.getX(), labelOpenedItem.getY() - labelDescription.getHeight()*2);
-
+    private void createBackButton(final Dialog dialog) {
         TextButton buttonBack = new TextButton("Back", skin);
         buttonBack.setPosition(dialog.getWidth()/2, dialog.getHeight()/4);
+        dialog.addActor(buttonBack);
         buttonBack.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
                 dialog.remove();
             }
         });
-
-        dialog.addActor(labelOpenedItem);
-        dialog.addActor(labelDescription);
-        dialog.addActor(buttonBack);
     }
 
     private void addActors() {
