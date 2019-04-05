@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class RoomGame extends RoomParent {
 
@@ -42,6 +43,7 @@ public class RoomGame extends RoomParent {
         imgBG.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 
         createMenuButton();
+        createButtonFight(); // For playtesting
     }
 
     @Override
@@ -62,6 +64,22 @@ public class RoomGame extends RoomParent {
             stage.act(Gdx.graphics.getDeltaTime());
             stage.draw();
         }
+    }
+
+    public void createButtonFight() {
+        final TextButton buttonFight = new TextButton("Skip walking", skin);
+        buttonFight.setWidth(350f);
+        buttonFight.setHeight(100f);
+        buttonFight.setPosition(game.pixelWidth - buttonFight.getWidth() - 25,
+                buttonFight.getHeight());
+        stage.addActor(buttonFight);
+
+        buttonFight.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                game.switchToRoomFight();
+            }
+        });
     }
 
     public void drawSteps() {
