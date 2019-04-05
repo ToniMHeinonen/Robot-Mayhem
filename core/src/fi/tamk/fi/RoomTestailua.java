@@ -66,6 +66,7 @@ public class RoomTestailua extends RoomParent {
         // Name testing.
         askForName();
         dialog.createDialog("player says fsfds fsdfdsfs");
+        dialog.createDialog(name);
     }
 
     // Methods for name start.
@@ -101,8 +102,8 @@ public class RoomTestailua extends RoomParent {
         } else if (n.length() <= 10 && !n.equals("")) {
             this.name = n;
             dialog.createDialog(name);
-            prefs.putString("name" + String.valueOf(0), "Nobody");
             names.add(name);
+            prefs.putString("name" + String.valueOf(names), "Nobody");
         } else {
             legal = false;
         }
