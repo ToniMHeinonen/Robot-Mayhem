@@ -33,12 +33,17 @@ public class RoomTestailua extends RoomParent {
     private float space = 300f;
     private float tooltipDelay = 2;
 
+    private Hacking hacking;
+    private boolean startHack = false;
+
     RoomTestailua(MainGame game) {
         super(game);
         testSkin = game.getTestSkin();
         createButtonSettings();
         createConstants();
         createButtons();
+        createButtonHacking();
+        createButtonHacking2();
         // playMusic();
 
         // Added for testing.
@@ -49,6 +54,40 @@ public class RoomTestailua extends RoomParent {
     public void playMusic() {
         // backgroundMusic.setVolume(game.getMusicVol());
         // backgroundMusic.play();
+    }
+
+    public void createButtonHacking() {
+        TextButton buttonHacking = new TextButton("FirstHack", skin);
+        buttonHacking.setWidth(300f);
+        buttonHacking.setHeight(100f);
+        buttonHacking.setPosition(game.pixelWidth /2 - buttonHacking.getWidth() /2,
+                (game.pixelHeight/3) *2 + buttonHacking.getHeight());
+        stage.addActor(buttonHacking);
+
+        buttonHacking.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                hacking = new Hacking(game, true);
+                startHack = true;
+            }
+        });
+    }
+
+    public void createButtonHacking2() {
+        TextButton buttonHacking = new TextButton("Hack", skin);
+        buttonHacking.setWidth(300f);
+        buttonHacking.setHeight(100f);
+        buttonHacking.setPosition(game.pixelWidth /2 - buttonHacking.getWidth() /2,
+                (game.pixelHeight/3) *2 + buttonHacking.getHeight() * 2);
+        stage.addActor(buttonHacking);
+
+        buttonHacking.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                hacking = new Hacking(game, false);
+                startHack = true;
+            }
+        });
     }
 
     public void createButtonSettings() {
@@ -151,5 +190,8 @@ public class RoomTestailua extends RoomParent {
     public void render(float delta) {
         super.render(delta);
         stage.draw();
+        if (startHack) {
+            hacking.update();
+        }
     }
 }
