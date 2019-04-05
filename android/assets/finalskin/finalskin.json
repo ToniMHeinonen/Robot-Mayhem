@@ -1,0 +1,72 @@
+{
+com.badlogic.gdx.graphics.g2d.BitmapFont: {
+	descriptionfont: {
+		file: descriptionfont.fnt
+	}
+}
+com.badlogic.gdx.graphics.Color: {
+	black: {
+		r: 0
+		g: 0
+		b: 0
+		a: 1
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
+	default: {
+		imageUp: button_empty0
+		imageDown: button_empty_clicked
+		imageDisabled: cooldown
+	}
+	attack: {
+		imageUp: button_attack0
+		imageDown: button_attack_clicked
+		imageDisabled: cooldown
+	}
+	defend: {
+		imageUp: button_attack0
+		imageDown: button_attack_clicked
+		imageDisabled: cooldown
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+	default: {
+		font: descriptionfont
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+	default: {
+		font: descriptionfont
+		fontColor: black
+		up: button_empty0
+		down: button_empty_clicked
+	}
+	item: {
+		font: descriptionfont
+		up: textbuttonitem
+		down: textbuttonitem
+		disabled: textbuttondisabled
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
+	default: {
+		label: default
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
+	default: {
+		background: defaultbg
+		titleFont: descriptionfont
+	}
+	powerup: {
+		background: dialogbg
+		titleFont: descriptionfont
+		titleFontColor: black
+	}
+	item: {
+		background: itembg
+		titleFont: descriptionfont
+		titleFontColor: black
+	}
+}
+}
