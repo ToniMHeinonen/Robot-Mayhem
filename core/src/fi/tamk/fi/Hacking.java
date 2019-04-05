@@ -49,8 +49,11 @@ public class Hacking {
     private float shieldRadius;
     private float shieldSpeed;
     private float shieldLength;
+    // Size of bullet's hitbox
+    private float bulletHitboxRadius = 0.1f;
+    // Size of bullet's texture
     private float bulletRadius = 0.3f;
-    private int bulletSpeed = 5;
+    private float bulletSpeed = 0.6f;
 
     private double accumulator = 0;
     private float TIME_STEP = 1 / 60f;
@@ -496,7 +499,7 @@ public class Hacking {
         bulletFixtureDef.restitution = 0f;
         bulletFixtureDef.friction = 0f;
         CircleShape circleshape = new CircleShape();
-        circleshape.setRadius(bulletRadius);
+        circleshape.setRadius(bulletHitboxRadius);
         bulletFixtureDef.shape = circleshape;
         return bulletFixtureDef;
     }
