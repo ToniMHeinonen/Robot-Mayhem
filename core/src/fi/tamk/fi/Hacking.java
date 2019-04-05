@@ -36,8 +36,8 @@ public class Hacking {
     private Texture shieldTexture;
     private Texture bulletTexture;
 
-    public static final float WORLD_WIDTH = 19.20f;
-    public static final float WORLD_HEIGHT = 10.80f;
+    private final float WORLD_WIDTH = 19.20f;
+    private final float WORLD_HEIGHT = 10.80f;
     private final float gridSize = WORLD_WIDTH / 16f;
 
     private World world;
