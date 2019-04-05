@@ -41,7 +41,7 @@ public class Settings {
         createSettingsDialog();
         createMusicVolume();
         createCloseButton();
-        //createSettingsRoomButton(); Disabled for playtesting
+        createSettingsRoomButton();
         addActors();
     }
 
@@ -121,7 +121,7 @@ public class Settings {
         settingsDialog.addActor(musicVolSlider);
         settingsDialog.addActor(musicVolLabel);
         settingsDialog.addActor(closeSettingsButton);
-        // settingsDialog.addActor(settingsRoomButton); Disabled for playtesting
+        settingsDialog.addActor(settingsRoomButton);
         stage.addActor(settingsDialog);
     }
 }
