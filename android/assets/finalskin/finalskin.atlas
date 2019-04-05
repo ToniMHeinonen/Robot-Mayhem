@@ -1,0 +1,103 @@
+
+finalskin.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+button_empty0
+  rotate: false
+  xy: 403, 1
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+cooldown
+  rotate: false
+  xy: 403, 243
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+defaultbg
+  rotate: false
+  xy: 403, 485
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+dialogbg
+  rotate: false
+  xy: 1, 485
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+itembg
+  rotate: false
+  xy: 1, 83
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+
+finalskin2.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+button_attack0
+  rotate: false
+  xy: 387, 731
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_attack_clicked
+  rotate: false
+  xy: 1, 489
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_defend0
+  rotate: false
+  xy: 387, 489
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_defend_clicked
+  rotate: false
+  xy: 1, 247
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_empty_clicked
+  rotate: false
+  xy: 1, 731
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+descriptionfont
+  rotate: false
+  xy: 773, 408
+  size: 158, 511
+  orig: 158, 511
+  offset: 0, 0
+  index: -1
+textbuttondisabled
+  rotate: false
+  xy: 1, 195
+  size: 200, 50
+  orig: 200, 50
+  offset: 0, 0
+  index: -1
+textbuttonitem
+  rotate: false
+  xy: 773, 921
+  size: 200, 50
+  orig: 200, 50
+  offset: 0, 0
+  index: -1
