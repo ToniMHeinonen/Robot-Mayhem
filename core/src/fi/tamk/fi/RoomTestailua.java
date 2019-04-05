@@ -94,7 +94,11 @@ public class RoomTestailua extends RoomParent {
         boolean legal = true;
         prefs = Gdx.app.getPreferences("FreeGamePreferences");
         ArrayList<String> names = new ArrayList<String>();
-        if (n.length() <= 10 && !n.equals("")) {
+
+        if (name != null) {
+
+            dialog.createDialog(name + "Auygaiuygdsiuya");
+        } else if (n.length() <= 10 && !n.equals("")) {
             this.name = n;
             dialog.createDialog(name);
             prefs.putString("name", "Nobody");

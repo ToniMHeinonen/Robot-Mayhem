@@ -91,7 +91,7 @@ public class Bosses {
         curSkillName2 = Skills.DUST;
 
         if (RoomTestailua.getName() == null) {
-            
+
         }
         curDialogStart = "I WILL ROB YOU NOW" + RoomTestailua.getName() + "!!!";
         curDialogEnd = "Wish I hadn't deleted Subtle.exe...";
