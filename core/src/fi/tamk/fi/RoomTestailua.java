@@ -101,7 +101,7 @@ public class RoomTestailua extends RoomParent {
         } else if (n.length() <= 10 && !n.equals("")) {
             this.name = n;
             dialog.createDialog(name);
-            prefs.putString("name", "Nobody");
+            prefs.putString("name" + String.valueOf(0), "Nobody");
             names.add(name);
         } else {
             legal = false;
