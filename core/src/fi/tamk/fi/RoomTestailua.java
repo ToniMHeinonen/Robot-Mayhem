@@ -1,5 +1,8 @@
 package fi.tamk.fi;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -15,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Timer;
 
 import java.awt.SystemTray;
+import java.util.ArrayList;
 
 public class RoomTestailua extends RoomParent {
     private Skin testSkin;
@@ -38,6 +42,9 @@ public class RoomTestailua extends RoomParent {
 
     private UtilDialog utilDialog;
 
+    protected static String name;
+    protected static Preferences prefs;
+
     RoomTestailua(MainGame game) {
         super(game);
         testSkin = game.getTestSkin();
@@ -55,8 +62,51 @@ public class RoomTestailua extends RoomParent {
 
         // Added for testing.
         createButtonItemTesting();
+
+        // Name testing.
+        askForName();
         dialog.createDialog("player says fsfds fsdfdsfs");
     }
+
+    // Methods for name start.
+    public class MyTextInputListener implements Input.TextInputListener {
+        @Override
+        public void input (String text) {
+            boolean legal = setName(text);
+            if (!legal) {
+                askForName();
+            }
+        }
+
+        @Override
+        public void canceled () {
+            askForName();
+        }
+    }
+
+    public void askForName() {
+        MyTextInputListener listener = new MyTextInputListener();
+        Gdx.input.getTextInput(listener, "Enter name", "", "Max 10 characters");
+    }
+
+    // Next up code for the name:
+    public boolean setName(String n) {
+        boolean legal = true;
+        prefs = Gdx.app.getPreferences("FreeGamePreferences");
+        ArrayList<String> names = new ArrayList<String>();
+        if (n.length() <= 10 && !n.equals("")) {
+            this.name = n;
+            dialog.createDialog(name);
+            prefs.putString("name", "Nobody");
+            names.add(name);
+        } else {
+            legal = false;
+        }
+        prefs.flush();
+        return legal;
+    }
+
+    // Methods for name end.
 
     public void playMusic() {
         // backgroundMusic.setVolume(game.getMusicVol());
@@ -245,4 +295,9 @@ public class RoomTestailua extends RoomParent {
             hacking.update();
         }
     }
+
+    public static Preferences getPrefs() {
+        return prefs;
+    }
+    public static String getName() { return name; }
 }
