@@ -38,6 +38,7 @@ public class MainGame extends Game {
 
 	private Stage stage;
 	private Skin skin;
+	private Skin finalSkin;
 	private Music backgroundMusic;
 	private Music bossMusic;
 	private Music[] allMusic;
@@ -474,6 +475,7 @@ public class MainGame extends Game {
         // font-big-export.fnt, font-export.fnt, glassy-ui.atlas,
         // glassy-ui.json, glassy-ui.png
         skin = new Skin( Gdx.files.internal("glassy-ui.json") );
+        finalSkin = new Skin(Gdx.files.internal("finalskin/finalskin.json"));
     }
 
 	// Receive steps on Desktop, if milestone is not reached, else add them to stepBank
@@ -798,5 +800,9 @@ public class MainGame extends Game {
 
     public ArrayList<String> getInventory() {
         return inventory;
+    }
+
+    public Skin getFinalSkin() {
+	    return finalSkin;
     }
 }

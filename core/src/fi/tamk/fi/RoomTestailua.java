@@ -50,6 +50,9 @@ public class RoomTestailua extends RoomParent {
         createButtonDialog();
         // playMusic();
 
+        // Testing final skin.
+        createFinalSkinButtons();
+
         // Added for testing.
         createButtonItemTesting();
         dialog.createDialog("player says fsfds fsdfdsfs");
@@ -207,6 +210,31 @@ public class RoomTestailua extends RoomParent {
                 ttBtn.remove();
             }
         }, tooltipDelay);
+    }
+
+    // Testing the final skin.
+    public void createFinalSkinButtons() {
+        TextButton button1 = new TextButton("Final Skin 1", finalSkin, "item");
+        button1.setWidth(300f);
+        button1.setHeight(100f);
+        button1.setPosition(game.pixelWidth /2 + button1.getWidth(),
+                (game.pixelHeight/3) *2 - button1.getHeight() *2);
+        stage.addActor(button1);
+        button1.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                Dialog d = new Dialog("", finalSkin, "item");
+                d.setPosition(game.pixelWidth/2, game.pixelHeight/2);
+                d.setSize(300, 300);
+                d.text("Testing 123");
+                stage.addActor(d);
+            }
+        });
+
+        TextButton button2 = new TextButton("Final Skin 2", finalSkin);
+        button2.setPosition(game.pixelWidth /2 + button2.getWidth(),
+                (game.pixelHeight/3) *2);
+        stage.addActor(button2);
     }
 
     @Override

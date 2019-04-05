@@ -27,6 +27,7 @@ public class RoomParent implements Screen {
     protected Stage stage;
     protected Skin skin;
     protected Skin testSkin;
+    protected Skin finalSkin;
     protected Music backgroundMusic;
     protected Music bossMusic;
     protected ProgressBar progressBar;
@@ -54,6 +55,7 @@ public class RoomParent implements Screen {
         this.progressBarStyle = game.getProgBarStyle();
         this.clickedOpenSettings = game.getClickedOpenSettings();
         this.testSkin = game.getTestSkin();
+        this.finalSkin = game.getFinalSkin();
         stage.clear();
 
         dialog = game.getDialog();
