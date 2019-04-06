@@ -60,9 +60,9 @@ public class UtilDialog {
         Dialog dialog = new Dialog("", skin);
         dialog.setMovable(false);
         dialog.setSize(game.pixelWidth/2,
-                game.pixelHeight/2);
+                game.pixelHeight/2 + game.pixelHeight/4);
         dialog.setPosition(game.pixelWidth/4,
-                game.pixelHeight/3);
+                game.pixelHeight/3 - game.pixelHeight/4);
 
         Label labelHeader = new Label(header, skin);
         labelHeader.setColor(fontColor);

@@ -218,13 +218,21 @@ public class UtilPowerUp {
                 showDesc = true;
                 chosenName = name;
                 chosenType = type;
+                /*
                 createDescription(desc);
+                 */
+                createDescription(name, desc);
                 createConfirmationButtons();
             }
         });
     }
 
     // Draw description for powerup's info
+    private void createDescription(String name, String text) {
+        final Dialog dialog1 = dialog.createPopupItemAndPowerUp(name, text);
+        descriptionBox.addActor(dialog1);
+
+    /*
     private void createDescription(String text) {
         Label label = new Label(text, descriptionLabelStyle);
         label.setWrap(true);
@@ -233,7 +241,10 @@ public class UtilPowerUp {
         dialog.getContentTable().add(label).prefWidth(popup.getWidth()-50);
         dialog.setPosition(popupX, popupY + popup.getHeight()/3);
         dialog.setSize(popup.getWidth(),popup.getHeight()/3 * 2);
+
         descriptionBox.addActor(dialog);
+    ]
+    */
     }
 
     // If powerup is selected, spawn buttons to select it or go back
