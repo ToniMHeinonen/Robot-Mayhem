@@ -44,16 +44,10 @@ public class UtilItem {
 
     private String[] allItems;
     private ArrayList<String> inventory;
+    private int[] amounts;
 
     private int buttonCounterBuyable;
     private int buttonCounterOwned;
-
-    // Add here, if more items are added in Item-class.
-    // Could be maybe automated in a method..?
-    private int bombAmount;
-    private int potionAmount;
-    private int polishedRotorAmount;
-    private int[] amounts = new int[] {bombAmount, potionAmount, polishedRotorAmount};
 
     UtilItem(MainGame game, String room) {
         this.game = game;
@@ -65,6 +59,7 @@ public class UtilItem {
         inventory = game.getInventory();
         allItems = Item.getAllItems();
         utilDialog = game.getDialog();
+        amounts = new int[allItems.length];
 
         setValues();
         createItemDialog();
