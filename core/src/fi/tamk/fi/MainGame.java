@@ -430,7 +430,7 @@ public class MainGame extends Game {
 	}
 
 	// Methods for name start.
-	public static class MyTextInputListener implements Input.TextInputListener {
+	public class MyTextInputListener implements Input.TextInputListener {
 		@Override
 		public void input (String text) {
 			boolean legal = setName(text);
@@ -445,13 +445,13 @@ public class MainGame extends Game {
 		}
 	}
 
-	public static void askForName() {
+	public void askForName() {
 		MyTextInputListener listener = new MyTextInputListener();
 		Gdx.input.getTextInput(listener, "Enter name", "", "Max 10 characters");
 	}
 
 	// Next up code for the name:
-	public static boolean setName(String n) {
+	public boolean setName(String n) {
 		boolean legal = true;
 
 		if (n.length() <= 10 && !n.equals("name")) {
@@ -461,6 +461,8 @@ public class MainGame extends Game {
 		} else {
 			legal = false;
 		}
+
+		stats.flush();
 		return legal;
 	}
 
@@ -723,7 +725,7 @@ public class MainGame extends Game {
 		}
 	}*/
 
-	public static String getName() {
+	public String getName() {
 
 		if (keyName == "name") {
 
