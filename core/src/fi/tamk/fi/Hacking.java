@@ -45,6 +45,7 @@ public class Hacking {
     private Array<DistanceJointDef> innerDistanceJointDefs = new Array<DistanceJointDef>();
     private float ipos1x, ipos1y, ipos2x, ipos2y, ipos3x, ipos3y, ipos4x, ipos4y, ipos5x, ipos5y,
     ipos6x, ipos6y, ipos7x, ipos7y, ipos8x, ipos8y;
+    private boolean checkInnerNeighbor = false;
 
     private Texture shieldTexture;
     private Texture bulletTexture;
@@ -172,7 +173,7 @@ public class Hacking {
         //this.poolMult = game.getPoolMult();
 
         // Change these to test the effects of different pools/poolmultipliers.
-        pool = 2;
+        pool = 3;
         poolMult = 0;
     }
 
@@ -214,7 +215,7 @@ public class Hacking {
             hackPosX.clear();
             hackPosY.clear();
             if (pool == 1) {
-                hackShieldAmount = pool2HackShieldAmount;
+                hackShieldAmount = pool1HackShieldAmount;
                 pos1x = widthOfEnemy + 1;
                 pos1y = heightOfEnemy;
                 pos2x = widthOfEnemy + 0.71f;
@@ -235,7 +236,7 @@ public class Hacking {
                 hackPosY.addAll(pos1y, pos2y, pos3y, pos4y, pos5y, pos6y, pos7y, pos8y);
             }
             if (pool == 2) {
-                hackShieldAmount = pool3HackShieldAmount;
+                hackShieldAmount = pool2HackShieldAmount;
                 pos1x = widthOfEnemy + 1;
                 pos1y = heightOfEnemy;
                 pos2x = widthOfEnemy + 0.92f;
@@ -276,6 +277,8 @@ public class Hacking {
             game.setHackPosX(hackPosX);
             game.setHackPosY(hackPosY);
             if (pool == 3) {
+                innerPosX.clear();
+                innerPosY.clear();
                 hackShieldAmount = pool3HackShieldAmount;
                 pos1x = widthOfEnemy + 1;
                 pos1y = heightOfEnemy;
@@ -463,6 +466,14 @@ public class Hacking {
                     collisionBulletShield(body2, body1);
                 }
 
+                if (body1.getUserData() == BodyData.INNERSHIELD && body2.getUserData() == BodyData.BULLET) {
+                    collisionBulletInnerShield(body1, body2);
+                }
+
+                if (body2.getUserData() == BodyData.INNERSHIELD && body1.getUserData() == BodyData.BULLET) {
+                    collisionBulletInnerShield(body2, body1);
+                }
+
                 if (body1.getUserData() == BodyData.BULLET && body2.getUserData() == BodyData.ENEMY) {
                     collisionBulletEnemy(body1);
                 }
@@ -507,6 +518,18 @@ public class Hacking {
         checkNeighbor = true;
     }
 
+    private void collisionBulletInnerShield(Body body1, Body body2) {
+        // body1 = innershield
+        // body2 = bullet
+        hitPosX = body2.getPosition().x + poolHitAreaX.get(0);
+        hitPosStartY = body2.getPosition().y - poolHitAreaY.get(0);
+        hitPosEndY = body2.getPosition().y + poolHitAreaY.get(0);
+        bodiesToBeDestroyed.add(body2);
+        bodiesToBeDestroyed.add(body1);
+
+        checkInnerNeighbor = true;
+    }
+
     /*
     When checkNeighbor has been set to true, it checks which bullets are in the collision
     area and puts them to bodiesToBeDestroyed-array.
@@ -531,6 +554,21 @@ public class Hacking {
             bulletHitShield = true;
             checkNeighbor = false;
         }
+
+        if (checkInnerNeighbor) {
+            for (Body body : innerBodyShields) {
+                if (body.getUserData() != null) {
+                    if (body.getPosition().x < hitPosX &&
+                            body.getPosition().y > hitPosStartY &&
+                            body.getPosition().y < hitPosEndY && destroyedNeighbors < 2) {
+                        destroyedNeighbors++;
+                        bodiesToBeDestroyed.add(body);
+                    }
+                }
+            }
+            bulletHitShield = true;
+            checkInnerNeighbor = false;
+        }
         destroyedNeighbors = 0;
     }
 
@@ -543,6 +581,7 @@ public class Hacking {
      */
     private void checkBulletHitShield() {
         int i = 0;
+        int j = 0;
         if (bulletHitShield) {
             for (Body body : shieldBodies) {
                 if (body.getUserData() != null) {
@@ -555,10 +594,26 @@ public class Hacking {
             game.setHackPosX(hackPosX);
             game.setHackPosY(hackPosY);
 
+            for (Body body : innerBodyShields) {
+                if (body.getUserData() != null) {
+                    innerPosX.set(j, body.getPosition().x);
+                    innerPosY.set(j, body.getPosition().y);
+                    j++;
+                }
+            }
+            game.setInnerHackShieldAmount(j);
+            game.setInnerPosX(innerPosX);
+            game.setInnerPosY(innerPosY);
+
             Timer.schedule(new Timer.Task(){
                 @Override
                 public void run() {
                     for (Body body : shieldBodies) {
+                        if (body.getUserData() != null) {
+                            bodiesToBeDestroyed.add(body);
+                        }
+                    }
+                    for (Body body : innerBodyShields) {
                         if (body.getUserData() != null) {
                             bodiesToBeDestroyed.add(body);
                         }
@@ -580,6 +635,11 @@ public class Hacking {
         for (Body b : shieldBodies) {
             if (b.getUserData() != null) {
                 bodiesToBeDestroyed.add(b);
+            }
+        }
+        for (Body c : innerBodyShields) {
+            if (c.getUserData() != null) {
+                bodiesToBeDestroyed.add(c);
             }
         }
     }
