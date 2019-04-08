@@ -97,10 +97,10 @@ public class Bosses {
         curDialogEnd = "Wish I hadn't deleted Subtle.exe...";
 
         t_idle = new Texture("texture/robber/robber_idle.png");
-        a_idle = anim.createAnimation(t_idle, 8, 2);
+        a_idle = anim.createAnimation(t_idle, 4, 4);
         s_idle = 8;
         t_hack = new Texture("texture/robber/robber_stun.png");
-        a_hack = anim.createAnimation(t_hack, 8, 1);
+        a_hack = anim.createAnimation(t_hack, 4, 2);
         s_hack = 8;
         t_skill = new Texture("texture/robber/robber_attack.png");
         a_skill = anim.createAnimation(t_skill, 4, 1);
@@ -121,10 +121,10 @@ public class Bosses {
         curDialogEnd = "Vroom poks!";
 
         t_idle = new Texture("texture/roombot/roombot_idle.png");
-        a_idle = anim.createAnimation(t_idle, 8, 2);
+        a_idle = anim.createAnimation(t_idle, 4, 4);
         s_idle = 8;
         t_hack = new Texture("texture/roombot/roombot_stun.png");
-        a_hack = anim.createAnimation(t_hack, 8, 1);
+        a_hack = anim.createAnimation(t_hack, 4, 2);
         s_hack = 8;
         t_skill = new Texture("texture/roombot/roombot_attack.png");
         a_skill = anim.createAnimation(t_skill, 4, 1);
@@ -145,15 +145,15 @@ public class Bosses {
         curDialogEnd = "I'll pay your ticket!";
 
         t_idle = new Texture("texture/copper/copper_idle.png");
-        a_idle = anim.createAnimation(t_idle, 8, 2);
+        a_idle = anim.createAnimation(t_idle, 4, 4);
         s_idle = 8;
         t_hack = new Texture("texture/copper/copper_stun.png");
-        a_hack = anim.createAnimation(t_hack, 8, 1);
+        a_hack = anim.createAnimation(t_hack, 4, 2);
         s_hack = 8;
         t_skill = new Texture("texture/copper/copper_attack.png");
         a_skill = anim.createAnimation(t_skill, 4, 1);
         s_skill = 8;
-        t_takeHit = new Texture("texture/copper/copper_take_hit.png");
+        t_takeHit = new Texture("texture/copper/copper_damage.png");
         a_takeHit = anim.createAnimation(t_takeHit, 4, 1);
         s_takeHit = 8;
 

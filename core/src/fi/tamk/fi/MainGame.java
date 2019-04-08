@@ -309,13 +309,13 @@ public class MainGame extends Game {
 		// Create animations
 		animGameMoving = createAnims.createAnimation(gamePlayerMoving, 4, 1);
 
-		animIdle = createAnims.createAnimation(playerIdle, 8, 2);
+		animIdle = createAnims.createAnimation(playerIdle, 4, 4);
 		animSkill = createAnims.createAnimation(playerAttack, 4, 1);
-		animDefend = createAnims.createAnimation(playerDefend, 8, 1);
+		animDefend = createAnims.createAnimation(playerDefend, 4, 2);
         animEscape = createAnims.createAnimation(playerEscape, 4, 1);
         animItem = createAnims.createAnimation(playerItem, 4, 1);
-        animHack = createAnims.createAnimation(playerHack, 8, 1);
-        animDeath = createAnims.createAnimation(playerDeath, 8, 1);
+        animHack = createAnims.createAnimation(playerHack, 4, 2);
+        animDeath = createAnims.createAnimation(playerDeath, 4, 2);
         animTakeHitAnim = createAnims.createAnimation(playerTakeHit, 4, 1);
         animHealthPlusDoT = createAnims.createAnimation(healthPlus, 3, 1);
         animHealthMinusDoT = createAnims.createAnimation(healthMinus, 3, 1);
