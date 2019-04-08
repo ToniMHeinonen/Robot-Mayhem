@@ -2,6 +2,7 @@ package fi.tamk.fi;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
@@ -53,11 +54,21 @@ public class MainGame extends Game {
 
 	// Stats
 	// Keys (use these to decrease error chance)
-	private String keyMoney = "money", keyStepCount = "stepCount", keyStepAllCount = "stepAllCount",
-	keyStepBank = "stepBank", keySkill1 = "skill1", keySkill2 = "skill2",
-	keyCurrentBoss = "currentBoss", keyFirstPlayTime = "firstPlayTime", keyPool = "pool",
-	keyPoolMult = "poolMult", keyInventorySize = "inventorySize", keyInventory = "inventory",
-	keyDefeatedBossesSize = "defeatedBossesSize", keyDefeatedBosses = "defeatedBosses";
+	private String keyMoney = "money";
+	private String keyStepCount = "stepCount";
+	private String keyStepAllCount = "stepAllCount";
+	private String keyStepBank = "stepBank";
+	private String keySkill1 = "skill1";
+	private String keySkill2 = "skill2";
+	private String keyCurrentBoss = "currentBoss";
+	private String keyFirstPlayTime = "firstPlayTime";
+	private String keyPool = "pool";
+	private String keyPoolMult = "poolMult";
+	private String keyInventorySize = "inventorySize";
+	private String keyInventory = "inventory";
+	private String keyDefeatedBossesSize = "defeatedBossesSize";
+	private String keyDefeatedBosses = "defeatedBosses";
+	protected static String keyName = "name";
 	// Values
 	private int saveTimerAmount = 3600;
 	private int saveTimer = saveTimerAmount;
@@ -71,6 +82,8 @@ public class MainGame extends Game {
 	private int inventorySize; // Needed for loading correct amount of array items
 	private ArrayList<String> defeatedBosses = new ArrayList<String>();
 	private int defeatedBossesSize;
+	protected static ArrayList<String> nameList = new ArrayList<String>();
+	private int nameSize;
 
 	// Textures
 	private Texture imgBgHall, imgBgBoss, imgTopBar, imgBottomBar, escapeBg, hpBarLeft,
@@ -140,6 +153,9 @@ public class MainGame extends Game {
 		createHackFiles();
 
 		currentBoss = Bosses.selectRandomBoss(); // For testing purposes, remember to remove
+
+		askForName();
+		dialog.createDialog(keyName);
 
 		// Switch to first room
 		switchToRoomGame();
@@ -376,6 +392,11 @@ public class MainGame extends Game {
 		for (int i = 0; i < defeatedBossesSize; i++) {
 			defeatedBosses.add(i, stats.getString(keyDefeatedBosses + String.valueOf(i), ""));
 		}
+
+		nameSize = stats.getInteger(keyName, 0);
+		for (int i = 0; i < nameSize; i++) {
+			nameList.add(i, stats.getString(keyName + String.valueOf(i), ""));
+		}
 	}
 
 	public void saveStats() {
@@ -401,8 +422,55 @@ public class MainGame extends Game {
 			stats.putString(keyDefeatedBosses + String.valueOf(i), defeatedBosses.get(i));
 		}
 
+		stats.putInteger(keyName, nameList.size());
+		for (int i = 0; i < nameSize; i++) {
+			stats.putString(keyName + String.valueOf(i), nameList.get(i));
+		}
+
+		System.out.println(keyName);
+
 		stats.flush();
 	}
+
+	// Methods for name start.
+	public class MyTextInputListener implements Input.TextInputListener {
+		@Override
+		public void input (String text) {
+			boolean legal = setName(text);
+			if (!legal) {
+				askForName();
+			}
+		}
+
+		@Override
+		public void canceled () {
+			askForName();
+		}
+	}
+
+	public void askForName() {
+		MyTextInputListener listener = new MyTextInputListener();
+		Gdx.input.getTextInput(listener, "Enter name", "", "Max 10 characters");
+	}
+
+	// Next up code for the name:
+	public boolean setName(String n) {
+		boolean legal = true;
+
+		if (keyName != "name") {
+
+			dialog.createDialog(keyName + " is your name");
+		} else if (n.length() <= 10 && !n.equals("name")) {
+			this.keyName = n;
+			dialog.createDialog(keyName + "is your name");
+			nameList.add(keyName);
+		} else {
+			legal = false;
+		}
+		return legal;
+	}
+
+	// Methods for name end.
 
 	public void bossDefeated() {
 		// defeatedBosses.add(currentBoss); Add when all the bosses exist
