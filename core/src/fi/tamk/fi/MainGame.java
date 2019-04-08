@@ -92,12 +92,6 @@ public class MainGame extends Game {
     private ProgressBar.ProgressBarStyle progBarStyle;
     private float progressBarMilestone;
 
-	// Image button (temporary)
-	private BitmapFont font;
-	private TextureAtlas buttonsAtlas; //** image of buttons **//
-	private Skin buttonSkin; //** images are used as skins of the button **//
-	private TextButton.TextButtonStyle style;
-
 	// Dialog
 	private UtilDialog dialog;
 	private TextureAtlas testButtonAtlas;
@@ -135,7 +129,6 @@ public class MainGame extends Game {
 		Item.createItems();
 
 		createSkinAndStage();
-		createButtonFiles();
 		createProgressBarFiles();
 		createDialogConstants();
 		createMusic();
@@ -261,19 +254,6 @@ public class MainGame extends Game {
 		labelStyle = new Label.LabelStyle(fontSteps, fontColor);
 		descriptionLabelStyle = new Label.LabelStyle(descriptionFont, fontColor);
 		dialog = new UtilDialog(this);
-	}
-
-    private void createButtonFiles() {
-		buttonsAtlas = new TextureAtlas("test/button.pack"); //**button atlas image **//
-		buttonSkin = new Skin();
-		buttonSkin.addRegions(buttonsAtlas); //** skins for on and off **//
-		font = new BitmapFont(Gdx.files.internal("test/new.fnt"), false); //** font **//
-
-		style = new TextButton.TextButtonStyle(); //** Button properties **//
-		style.up = buttonSkin.getDrawable("buttonOff");
-		style.down = buttonSkin.getDrawable("buttonOn");
-
-		style.font = font;
 	}
 
 	private void createProgressBarFiles() {
@@ -612,10 +592,6 @@ public class MainGame extends Game {
 
 	public Animation<TextureRegion> getAnimCriticalHit() {
 		return animCriticalHit;
-	}
-
-	public TextButton.TextButtonStyle getStyle() {
-		return style;
 	}
 
     public ProgressBar.ProgressBarStyle getProgBarStyle() {
