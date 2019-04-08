@@ -51,8 +51,8 @@ public class RoomTestailua extends RoomParent {
         testSkin = game.getTestSkin();
         utilDialog = game.getDialog();
         createButtonSettings();
-        createConstants();
-        createButtons();
+        //createConstants();
+        //createButtons();
         createButtonHacking();
         createButtonHacking2();
         createButtonDialog();
@@ -188,6 +188,7 @@ public class RoomTestailua extends RoomParent {
         });
     }
 
+    /*
     public void createConstants() {
         tooltipAttack = testSkin.getDrawable("tooltip_attack");
         tooltipDefend = testSkin.getDrawable("tooltip_defend");
@@ -233,6 +234,7 @@ public class RoomTestailua extends RoomParent {
             }
         }
     }
+    */
 
     // Added for item testing.
     public void createButtonItemTesting() {
@@ -255,6 +257,7 @@ public class RoomTestailua extends RoomParent {
         });
     }
 
+    /*
     // Show tooltip for 2 seconds(tooltipDelay) and then remove it from the stage.
     public void showTooltip(int index) {
         final ImageButton ttBtn = new ImageButton(tooltips[index]);
@@ -267,6 +270,7 @@ public class RoomTestailua extends RoomParent {
             }
         }, tooltipDelay);
     }
+    */
 
     // Testing the final skin.
     public void createFinalSkinButtons() {
