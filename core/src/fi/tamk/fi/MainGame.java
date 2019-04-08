@@ -17,15 +17,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.I18NBundle;
-import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.Locale;
 
 public class MainGame extends Game {
@@ -106,7 +103,7 @@ public class MainGame extends Game {
     private float progressBarMilestone;
 
 	// Dialog
-	private UtilDialog dialog;
+	private static UtilDialog dialog;
 	private TextureAtlas testButtonAtlas;
 	private Skin testSkin;
 	private Label.LabelStyle labelStyle;
@@ -433,7 +430,7 @@ public class MainGame extends Game {
 	}
 
 	// Methods for name start.
-	public class MyTextInputListener implements Input.TextInputListener {
+	public static class MyTextInputListener implements Input.TextInputListener {
 		@Override
 		public void input (String text) {
 			boolean legal = setName(text);
@@ -448,20 +445,17 @@ public class MainGame extends Game {
 		}
 	}
 
-	public void askForName() {
+	public static void askForName() {
 		MyTextInputListener listener = new MyTextInputListener();
 		Gdx.input.getTextInput(listener, "Enter name", "", "Max 10 characters");
 	}
 
 	// Next up code for the name:
-	public boolean setName(String n) {
+	public static boolean setName(String n) {
 		boolean legal = true;
 
-		if (keyName != "name") {
-
-			dialog.createDialog(keyName + " is your name");
-		} else if (n.length() <= 10 && !n.equals("name")) {
-			this.keyName = n;
+		if (n.length() <= 10 && !n.equals("name")) {
+			keyName = n;
 			dialog.createDialog(keyName + "is your name");
 			nameList.add(keyName);
 		} else {
@@ -719,6 +713,18 @@ public class MainGame extends Game {
 
 	public String getSkill2() {
 		return skill2;
+	}
+
+	public static String getName() {
+
+		if (keyName == "name") {
+
+			askForName();
+			return keyName;
+		} else {
+
+			return keyName;
+		}
 	}
 
 	public void setSkill2(String skill2) {

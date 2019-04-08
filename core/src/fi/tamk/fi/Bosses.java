@@ -90,7 +90,7 @@ public class Bosses {
         curSkillName1 = Skills.SUCTION;
         curSkillName2 = Skills.DUST;
 
-        curDialogStart = "I WILL ROB YOU NOW " + MainGame.keyName + " !!!";
+        curDialogStart = "I WILL ROB YOU NOW " + MainGame.getName() + " !!!";
         curDialogEnd = "Wish I hadn't deleted Subtle.exe...";
 
         t_idle = new Texture("texture/robber/robber_idle.png");
@@ -114,7 +114,7 @@ public class Bosses {
         curSkillName0 = Skills.ATTACK;
         curSkillName1 = Skills.SUCTION;
         curSkillName2 = Skills.DUST;
-        curDialogStart = "Vroom Vroom! " + MainGame.keyName;
+        curDialogStart = "Vroom Vroom! " + MainGame.getName();
         curDialogEnd = "Vroom poks!";
 
         t_idle = new Texture("texture/roombot/roombot_idle.png");
@@ -138,7 +138,7 @@ public class Bosses {
         curSkillName0 = Skills.ATTACK;
         curSkillName1 = Skills.SHOCK;
         curSkillName2 = Skills.DUST;
-        curDialogStart = "Here, have a 500 ticket " + MainGame.keyName + " !";
+        curDialogStart = "Here, have a 500 ticket " + MainGame.getName() + " !";
         curDialogEnd = "I'll pay your ticket!";
 
         t_idle = new Texture("texture/copper/copper_idle.png");
