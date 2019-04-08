@@ -715,16 +715,22 @@ public class MainGame extends Game {
 		return skill2;
 	}
 
+	/*public static void setName() {
+
+		if (keyName == "name") {
+
+			askForName();
+		}
+	}*/
+
 	public static String getName() {
 
 		if (keyName == "name") {
 
 			askForName();
-			return keyName;
-		} else {
-
-			return keyName;
 		}
+
+		return keyName;
 	}
 
 	public void setSkill2(String skill2) {
