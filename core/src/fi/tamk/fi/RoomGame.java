@@ -10,10 +10,12 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 public class RoomGame extends RoomParent {
 
@@ -26,7 +28,7 @@ public class RoomGame extends RoomParent {
     private float goalSteps;
     private float bankSpd;
     private float bankRetrieved = game.getStepCount();
-    private int changeRoomTimer = 180;
+    private boolean fightSpawned;
 
     RoomGame(final MainGame game) {
         super(game);
@@ -43,7 +45,7 @@ public class RoomGame extends RoomParent {
         imgBG.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 
         createMenuButton();
-        createButtonFight(); // For playtesting
+        //createButtonFight(); // For playtesting
     }
 
     @Override
@@ -67,14 +69,15 @@ public class RoomGame extends RoomParent {
     }
 
     public void createButtonFight() {
-        final TextButton buttonFight = new TextButton("Skip walking", skin);
-        buttonFight.setWidth(350f);
-        buttonFight.setHeight(100f);
-        buttonFight.setPosition(game.pixelWidth - buttonFight.getWidth() - 25,
-                buttonFight.getHeight());
-        stage.addActor(buttonFight);
+        fightSpawned = true;
+        Drawable normal = testSkin.getDrawable("button_attack");
+        Drawable clicked = testSkin.getDrawable("button_clicked");
+        final ImageButton btn = new ImageButton(normal, clicked);
+        btn.setPosition(game.pixelWidth/2 - btn.getWidth()/2,
+                game.pixelHeight/2 - btn.getHeight()/2);
+        stage.addActor(btn);
 
-        buttonFight.addListener(new ClickListener(){
+        btn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
                 game.switchToRoomFight();
@@ -132,12 +135,7 @@ public class RoomGame extends RoomParent {
     // If milestone has been reached, draw text and
     public void checkToChangeRoom() {
         if (curSteps >= goalSteps) {
-            if (changeRoomTimer > 0) {
-                changeRoomTimer--;
-                fontSteps.draw(batch, "Incoming fight!",
-                        game.gridSize * 7, game.pixelHeight/2);
-            }
-            else game.switchToRoomFight();
+            if (!fightSpawned) createButtonFight();
         }
     }
 
