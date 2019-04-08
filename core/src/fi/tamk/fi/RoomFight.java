@@ -628,9 +628,9 @@ public class RoomFight extends RoomParent {
                     positionTimer--;
                 } else {
                     if (positionOffset > 0) {
-                        positionOffset--;
+                        positionOffset --;
                     } else if (positionOffset < 0) {
-                        positionOffset++;
+                        positionOffset ++;
                     } else {
                         positionIncorrect = false;
                         positionTimer = positionTime;

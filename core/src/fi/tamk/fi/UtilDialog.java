@@ -105,7 +105,7 @@ public class UtilDialog {
                 skillNameOn = false;
                 dialog.remove();
             }
-        }, 2f);
+        }, 1f);
     }
 
     public boolean isDialogOn() {
