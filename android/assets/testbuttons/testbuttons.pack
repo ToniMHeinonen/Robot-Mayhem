@@ -3,84 +3,42 @@ testbuttons.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-button_attack0
+button_attack
   rotate: false
   xy: 1, 727
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
-button_attack1
-  rotate: false
-  xy: 1, 485
-  size: 384, 240
-  orig: 384, 240
-  offset: 0, 0
-  index: -1
-button_defend1
-  rotate: false
-  xy: 1, 485
-  size: 384, 240
-  orig: 384, 240
-  offset: 0, 0
-  index: -1
-button_item1
-  rotate: false
-  xy: 1, 485
-  size: 384, 240
-  orig: 384, 240
-  offset: 0, 0
-  index: -1
-button_attack2
-  rotate: false
-  xy: 387, 727
-  size: 384, 240
-  orig: 384, 240
-  offset: 0, 0
-  index: -1
-button_defend2
-  rotate: false
-  xy: 387, 727
-  size: 384, 240
-  orig: 384, 240
-  offset: 0, 0
-  index: -1
-button_item2
-  rotate: false
-  xy: 387, 727
-  size: 384, 240
-  orig: 384, 240
-  offset: 0, 0
-  index: -1
-button_attack3
-  rotate: false
-  xy: 1, 243
-  size: 384, 240
-  orig: 384, 240
-  offset: 0, 0
-  index: -1
-button_defend3
-  rotate: false
-  xy: 1, 243
-  size: 384, 240
-  orig: 384, 240
-  offset: 0, 0
-  index: -1
-button_item3
-  rotate: false
-  xy: 1, 243
-  size: 384, 240
-  orig: 384, 240
-  offset: 0, 0
-  index: -1
 button_attack_clicked
+  rotate: false
+  xy: 1, 485
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_cooldown1
+  rotate: false
+  xy: 387, 727
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_cooldown2
+  rotate: false
+  xy: 1, 243
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_cooldown3
   rotate: false
   xy: 387, 485
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
-button_defend0
+button_defend
   rotate: false
   xy: 1, 1
   size: 384, 240
@@ -94,7 +52,7 @@ button_defend_clicked
   orig: 384, 240
   offset: 0, 0
   index: -1
-button_empty0
+button_empty
   rotate: false
   xy: 387, 1
   size: 384, 240
@@ -141,7 +99,7 @@ button_empty_clicked
   orig: 384, 240
   offset: 0, 0
   index: -1
-button_item0
+button_item
   rotate: false
   xy: 1, 487
   size: 384, 240

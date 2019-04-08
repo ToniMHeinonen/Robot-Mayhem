@@ -289,6 +289,7 @@ public class Hacking {
             shieldBody = world.createBody(myBodyDef);
             shieldBody.createFixture(getShieldFixtureDefinition());
             shieldBody.setUserData(BodyData.SHIELD);
+            shieldBody.setAngularVelocity(-2f);
             shieldBodies.add(shieldBody);
         }
     }
