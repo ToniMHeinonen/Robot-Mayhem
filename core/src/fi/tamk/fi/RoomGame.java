@@ -199,7 +199,7 @@ public class RoomGame extends RoomParent {
     Create class for player
      */
     private class Player {
-        private Animation<TextureRegion> moving;
+        private Animation<TextureRegion> idle, moving;
         private Animating anim;
         private float X;
         private float Y;
@@ -210,20 +210,22 @@ public class RoomGame extends RoomParent {
             Y = game.gridSize*2;
 
             // Retrieve necessary animations and start the correct one
+            idle = game.getAnimIdle();
             moving = game.getAnimGameMoving();
-            anim.startAnimation(moving, 10);
+            anim.startAnimation(idle, 8);
         }
 
         public void update() {
             // If moving, animate sprite
             // Else, return to state 0
             if (bgSpd > 0f) {
+                if (anim.getAnimation() != moving) anim.startAnimation(moving, 8);
                 anim.setFrameSpeed((int)maxSpd - (int)bgSpd);
-                anim.animate();
             } else {
-                anim.setStateTime(0f);
+                if (anim.getAnimation() != idle) anim.startAnimation(idle, 8);
             }
 
+            anim.animate();
             anim.draw(batch, X, Y);
         }
     }
