@@ -1,0 +1,129 @@
+
+actionButtons.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+button_attack
+  rotate: false
+  xy: 1, 727
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_clicked
+  rotate: false
+  xy: 1, 485
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_cooldown1
+  rotate: false
+  xy: 387, 727
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_cooldown2
+  rotate: false
+  xy: 1, 243
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_cooldown3
+  rotate: false
+  xy: 387, 485
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_defend
+  rotate: false
+  xy: 1, 1
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_dust throw
+  rotate: false
+  xy: 387, 243
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_empty
+  rotate: false
+  xy: 387, 1
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+dialog_bg
+  rotate: false
+  xy: 773, 767
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+
+actionButtons2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+button_item
+  rotate: false
+  xy: 1, 729
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_self-repair
+  rotate: false
+  xy: 1, 487
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_shock
+  rotate: false
+  xy: 387, 729
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_suction
+  rotate: false
+  xy: 1, 245
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_escape
+  rotate: false
+  xy: 387, 607
+  size: 360, 120
+  orig: 360, 120
+  offset: 0, 0
+  index: -1
+button_escape_clicked
+  rotate: false
+  xy: 1, 123
+  size: 360, 120
+  orig: 360, 120
+  offset: 0, 0
+  index: -1
+button_settings
+  rotate: false
+  xy: 387, 485
+  size: 360, 120
+  orig: 360, 120
+  offset: 0, 0
+  index: -1
+button_settings_clicked
+  rotate: false
+  xy: 1, 1
+  size: 360, 120
+  orig: 360, 120
+  offset: 0, 0
+  index: -1
