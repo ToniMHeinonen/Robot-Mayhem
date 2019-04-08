@@ -951,7 +951,7 @@ public class RoomFight extends RoomParent {
             if (anim.getAnimation() != escapeAnim) anim.startAnimation(escapeAnim, escapeSpd);
 
             if (X > - 400) {
-                X -= Gdx.graphics.getDeltaTime() * 150f;
+                X -= Gdx.graphics.getDeltaTime() * 300f;
             } else {
                 game.switchToRoomGame();
             }

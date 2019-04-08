@@ -20,9 +20,11 @@ import com.badlogic.gdx.physics.box2d.joints.DistanceJoint;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.Timer;
@@ -116,7 +118,7 @@ public class Hacking {
     private SpriteBatch batch;
     private OrthographicCamera hackingCamera;
     MainGame game;
-    private Skin skin;
+    private Skin testSkin;
     private Stage stage;
 
     private int destroyedNeighbors = 0;
@@ -126,7 +128,7 @@ public class Hacking {
         this.hackFirstTry = firstTry;
         batch = game.getBatch();
         hackingCamera = new OrthographicCamera();
-        skin = game.getSkin();
+        testSkin = game.getTestSkin();
         stage = game.getStage();
         createConstants();
         setShieldAttributes();
@@ -173,7 +175,7 @@ public class Hacking {
         //this.poolMult = game.getPoolMult();
 
         // Change these to test the effects of different pools/poolmultipliers.
-        pool = 3;
+        pool = 2;
         poolMult = 0;
     }
 
@@ -416,18 +418,18 @@ public class Hacking {
     }
 
     private void createButtonShoot() {
-        final TextButton buttonShoot = new TextButton("Shoot", skin);
-        buttonShoot.setWidth(300f);
-        buttonShoot.setHeight(100f);
-        buttonShoot.setPosition(game.pixelWidth /2 - buttonShoot.getWidth() /2,
-                (game.pixelHeight/2) - buttonShoot.getHeight()/2);
-        stage.addActor(buttonShoot);
+        Drawable normal = testSkin.getDrawable("button_shock");
+        Drawable clicked = testSkin.getDrawable("button_clicked");
+        final ImageButton btn = new ImageButton(normal, clicked);
+        btn.setPosition(game.pixelWidth /2 - btn.getWidth() /2,
+                0);
+        stage.addActor(btn);
 
-        buttonShoot.addListener(new ClickListener(){
+        btn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
                 fireBullet();
-                buttonShoot.remove();
+                btn.remove();
             }
         });
     }
