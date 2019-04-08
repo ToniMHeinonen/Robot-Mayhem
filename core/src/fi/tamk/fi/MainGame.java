@@ -391,6 +391,9 @@ public class MainGame extends Game {
 			defeatedBosses.add(i, stats.getString(keyDefeatedBosses + String.valueOf(i), ""));
 		}
 
+		/*
+		Where do you need an array, when you are going to store only 1 name?
+		 */
 		nameSize = stats.getInteger(keyName, 0);
 		for (int i = 0; i < nameSize; i++) {
 			nameList.add(i, stats.getString(keyName + String.valueOf(i), ""));
@@ -463,6 +466,9 @@ public class MainGame extends Game {
 			legal = false;
 		}
 
+		/*
+		You are flushing stats, even though you have not added anything new in it.
+		 */
 		stats.flush();
 		return legal;
 	}
