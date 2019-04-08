@@ -23,6 +23,7 @@ public class Skills {
 
     public static final String ATTACK = "Attack";
     public static final String DEFEND = "Defend";
+    public static final String ITEM = "Item";
     public static final String REPAIR = "Self-repair";
     public static final String SHOCK = "Shock";
     public static final String FIRE = "Fire";
@@ -72,6 +73,7 @@ public class Skills {
         createAttackAndDefend();
         skillAttack();
         skillDefend();
+        skillItem();
         skillRepair();
         skillShock();
         skillFire();
@@ -128,6 +130,24 @@ public class Skills {
         map.put(damageOverTimeTurns, 0);
         map.put(dotPurePercent, false);
         map.put(cooldown, 3);
+        map.put(hitAnimation, null);
+        map.put(hitAnimationSpd, 0);
+
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private static void skillItem() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, ITEM);
+        map.put(description,
+                "Buy and use items.");
+        map.put(damage, 0.0);
+        map.put(critChance, 0);
+        map.put(missChance, 0);
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, false);
+        map.put(cooldown, 0);
         map.put(hitAnimation, null);
         map.put(hitAnimationSpd, 0);
 

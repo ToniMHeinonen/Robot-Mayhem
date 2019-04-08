@@ -140,7 +140,7 @@ public class Bosses {
         curName = COPPER;
         curSkillName0 = Skills.ATTACK;
         curSkillName1 = Skills.SHOCK;
-        curSkillName2 = Skills.FIRE;
+        curSkillName2 = Skills.DUST;
         curDialogStart = "Here, have a 500 ticket" + RoomTestailua.getName() + "!";
         curDialogEnd = "I'll pay your ticket!";
 

@@ -190,7 +190,7 @@ public class RoomFight extends RoomParent {
         actionButtonsOn = true;
         createMenuButton();
         createEscapeButton();
-        createActionButtons();
+        player.createActionButtons();
     }
 
     // When player has selected action, remove buttons
@@ -199,7 +199,7 @@ public class RoomFight extends RoomParent {
         stage.clear();
     }
 
-    // This array has to be in same order than in Player's action array
+    /*// This array has to be in same order than in Player's action array
     private void createActionButtons() {
         float space = (game.pixelWidth - 100) / 5; // Temporary solution
         for (int i = 0; i < btnTexts.length; i++) {
@@ -218,7 +218,7 @@ public class RoomFight extends RoomParent {
                 }
             });
         }
-    }
+    }*/
 
     // Controls the escape button's popup
     private void escaping() {
@@ -743,8 +743,8 @@ public class RoomFight extends RoomParent {
             mapDefend = Skills.getSkill(Skills.DEFEND);
             cooldowns = new HashMap<String, Integer>();
             cooldowns.put("Defend", 0);
-            cooldowns.put("Skill0", 0);
-            cooldowns.put("Skill1", 0);
+            cooldowns.put(skills[0], 0);
+            cooldowns.put(skills[1], 0);
 
             // Retrieve animations
             idleAnim = game.getAnimIdle();
@@ -826,10 +826,10 @@ public class RoomFight extends RoomParent {
                     If selected action is this skill, if skill is not empty and if cooldown is 0
                      */
                     if (action == skills[i] && skills[i] != "" &&
-                            cooldowns.get("Skill" + String.valueOf(i)) == 0) {
+                            cooldowns.get(skills[i]) == 0) {
                         actionSelected = true;
                         HashMap<String, Object> skillMap = mapSkills.get(i);
-                        addCooldown("Skill" + String.valueOf(i),
+                        addCooldown(skills[i],
                                 (Integer) skillMap.get(Skills.cooldown));
                         curAnimation = skillAnim;
                         curAnimSpd = skillSpd;
@@ -957,58 +957,56 @@ public class RoomFight extends RoomParent {
             }
         }
 
-        /*public void createActionButtons() {
-            float space = (game.pixelWidth - 100) / 5; // Temporary solution
+        public void createActionButtons() {
+            float space = game.pixelWidth / 5; // Temporary solution
             for (int i = 0; i < btnTexts.length; i++) {
                 btnCounter = i;
                 String name = btnTexts[i];
-                if (name != "" && name != "Item") {
+                if (name != "") {
                     descriptions.add(Skills.retrieveSkillDescription(name));
                 } else {
                     descriptions.add("");
                 }
                 int cooldown = 0;
-                System.out.println(name);
                 try {
                     cooldown = cooldowns.get(name);
                 } catch (Exception e) {
-                    System.out.println("no cooldown");
+                    // This catch need to exist, otherwise it will crash
                 }
 
                 name = name.toLowerCase();
                 if (name == "") name = "empty";
 
-                Drawable normal = testSkin.getDrawable("button_" + name + cooldown);
-                Drawable clicked = testSkin.getDrawable("button_" + name + cooldown);
-                if (cooldown == 0) {
-                    clicked = testSkin.getDrawable("button_" + name + "_clicked");
+                Drawable normal, clicked;
+                if (name == "empty") {
+                    normal = testSkin.getDrawable("button_" + name);
+                    clicked = testSkin.getDrawable("button_" + name);
+                } else if (cooldown == 0) {
+                    normal = testSkin.getDrawable("button_" + name);
+                    clicked = testSkin.getDrawable("button_clicked");
+                } else {
+                    normal = testSkin.getDrawable("button_cooldown" + cooldown);
+                    clicked = testSkin.getDrawable("button_cooldown" + cooldown);
                 }
                 final ImageButton imgButton = new ImageButton(normal, clicked);
-                imgButton.setPosition(50f + i*space, 100f);
+                imgButton.setPosition(i*space, 0f);
                 stage.addActor(imgButton);
-                if (cooldown == 0) {
+                if (cooldown == 0 && name != "empty") {
                     imgButton.addListener(new ActorGestureListener(20, 0.4f, 0.5f, 0.15f) {
                         int i = btnCounter;
 
                         public boolean longPress(Actor actor, float x, float y) {
-                            System.out.println("longpress");
-                            System.out.println(descriptions.get(i));
                             dialog.createDialog(descriptions.get(i));
                             return true;
                         }
 
                         public void tap(InputEvent event, float x, float y, int count, int button) {
                             doAction(btnTexts[i]);
-                            System.out.println("tap");
-                        }
-
-                        public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                            System.out.println("touchup");
                         }
                     });
                 }
             }
-        }*/
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////

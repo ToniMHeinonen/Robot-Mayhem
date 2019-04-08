@@ -254,7 +254,7 @@ public class MainGame extends Game {
 		descriptionFont = new BitmapFont(Gdx.files.internal("descriptionfont/descriptionfont.fnt"),
                 Gdx.files.internal("descriptionfont/descriptionfont.png"),
                 false);
-		testButtonAtlas = new TextureAtlas("testbuttons/testbuttons.pack");
+		testButtonAtlas = new TextureAtlas("testbuttons/actionButtons.pack");
 		testSkin = new Skin(testButtonAtlas);
 		windowStyle = new Window.WindowStyle(fontSteps, fontColor, testSkin.getDrawable("dialog_bg"));
 		emptyWindowStyle = new Window.WindowStyle(fontSteps, fontColor, null);
@@ -358,7 +358,7 @@ public class MainGame extends Game {
 		stepCount = stats.getFloat(keyStepCount, 0);
 		stepAllCount = stats.getFloat(keyStepAllCount, 0);
 		stepBank = stats.getFloat(keyStepBank, 0);
-		skill1 = stats.getString(keySkill1, "");
+		skill1 = stats.getString(keySkill1, Skills.REPAIR);
 		skill2 = stats.getString(keySkill2, "");
 		currentBoss = stats.getString(keyCurrentBoss, "Roombot");
 		firstPlayTime = stats.getBoolean(keyFirstPlayTime, true);
