@@ -27,11 +27,24 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.Timer;
 
+import static fi.tamk.fi.Hacking.BodyData.INNERSHIELD;
+
 public class Hacking {
 
     enum BodyData {
-        SHIELD, BULLET, ENEMY
+        SHIELD, BULLET, ENEMY, INNERSHIELD
     }
+
+    // Inner circle
+    private Array<Body> innerBodyShields = new Array<Body>();
+    private Body innerBody;
+    private int innerHackShieldAmount;
+    private int pool3InnerHackShieldAmount;
+    private FloatArray innerPosX;
+    private FloatArray innerPosY;
+    private Array<DistanceJointDef> innerDistanceJointDefs = new Array<DistanceJointDef>();
+    private float ipos1x, ipos1y, ipos2x, ipos2y, ipos3x, ipos3y, ipos4x, ipos4y, ipos5x, ipos5y,
+    ipos6x, ipos6y, ipos7x, ipos7y, ipos8x, ipos8y;
 
     private Texture shieldTexture;
     private Texture bulletTexture;
@@ -50,10 +63,10 @@ public class Hacking {
     private float shieldSpeed;
     private float shieldLength;
     // Size of bullet's hitbox
-    private float bulletHitboxRadius = 0.1f;
+    private float bulletHitboxRadius = 0.3f;
     // Size of bullet's texture
     private float bulletRadius = 0.3f;
-    private float bulletSpeed = 0.6f;
+    private float bulletSpeed = 5f;
 
     private double accumulator = 0;
     private float TIME_STEP = 1 / 60f;
@@ -118,6 +131,7 @@ public class Hacking {
         setShieldAttributes();
         createPositions();
         createShields();
+        createInnerShields();
         createJoints();
         createButtonShoot();
         createCollisionChecking();
@@ -146,16 +160,19 @@ public class Hacking {
         enemyBody.setUserData(BodyData.ENEMY);
         debugRenderer = new Box2DDebugRenderer();
         center = enemyBody.getPosition();
+        this.innerPosX = game.getInnerPosX();
+        this.innerPosY = game.getInnerPosY();
         this.hackPosX = game.getHackPosX();
         this.hackPosY = game.getHackPosY();
         this.pool1HackShieldAmount = game.getPool1HackShieldAmount();
         this.pool2HackShieldAmount = game.getPool2HackShieldAmount();
         this.pool3HackShieldAmount = game.getPool3HackShieldAmount();
+        this.pool3InnerHackShieldAmount = game.getPool3InnerHackShieldAmount();
         //this.pool = game.getPool();
         //this.poolMult = game.getPoolMult();
 
         // Change these to test the effects of different pools/poolmultipliers.
-        pool = 3;
+        pool = 2;
         poolMult = 0;
     }
 
@@ -169,10 +186,10 @@ public class Hacking {
      */
     private void setShieldAttributes() {
         FloatArray poolSpeeds = new FloatArray();
-        poolSpeeds.add(8, 6, 4);
+        poolSpeeds.add(6, 4, 4);
 
         FloatArray poolSizes = new FloatArray();
-        poolSizes.add(1.5f, 0.5f, 0.3f);
+        poolSizes.add(0.5f, 0.3f, 0.3f);
 
         float increasedSpeed = poolMult * 0.2f;
 
@@ -183,8 +200,8 @@ public class Hacking {
         // These may have to be adjusted a bit, if we are going to change shieldLength.
         poolHitAreaX = new FloatArray();
         poolHitAreaY = new FloatArray();
-        poolHitAreaX.add(6f, 2f, 1.1f);
-        poolHitAreaY.add(5f, 3f, 1.7f);
+        poolHitAreaX.add(2f, 1.1f, 1.1f);
+        poolHitAreaY.add(3f, 1.7f, 1.7f);
     }
 
     /*
@@ -197,19 +214,6 @@ public class Hacking {
             hackPosX.clear();
             hackPosY.clear();
             if (pool == 1) {
-                hackShieldAmount = pool1HackShieldAmount;
-                pos1x = widthOfEnemy;
-                pos1y = heightOfEnemy + 1;
-                pos2x = widthOfEnemy + 1;
-                pos2y = heightOfEnemy;
-                pos3x = widthOfEnemy;
-                pos3y = heightOfEnemy - 1;
-                pos4x = widthOfEnemy - 1;
-                pos4y = heightOfEnemy;
-                hackPosX.addAll(pos1x, pos2x, pos3x, pos4x);
-                hackPosY.addAll(pos1y, pos2y, pos3y, pos4y);
-            }
-            if (pool == 2) {
                 hackShieldAmount = pool2HackShieldAmount;
                 pos1x = widthOfEnemy + 1;
                 pos1y = heightOfEnemy;
@@ -230,7 +234,7 @@ public class Hacking {
                 hackPosX.addAll(pos1x, pos2x, pos3x, pos4x, pos5x, pos6x, pos7x, pos8x);
                 hackPosY.addAll(pos1y, pos2y, pos3y, pos4y, pos5y, pos6y, pos7y, pos8y);
             }
-            if (pool == 3) {
+            if (pool == 2) {
                 hackShieldAmount = pool3HackShieldAmount;
                 pos1x = widthOfEnemy + 1;
                 pos1y = heightOfEnemy;
@@ -271,10 +275,78 @@ public class Hacking {
             }
             game.setHackPosX(hackPosX);
             game.setHackPosY(hackPosY);
+            if (pool == 3) {
+                hackShieldAmount = pool3HackShieldAmount;
+                pos1x = widthOfEnemy + 1;
+                pos1y = heightOfEnemy;
+                pos2x = widthOfEnemy + 0.92f;
+                pos2y = heightOfEnemy + 0.38f;
+                pos3x = widthOfEnemy + 0.71f;
+                pos3y = heightOfEnemy + 0.71f;
+                pos4x = widthOfEnemy + 0.38f;
+                pos4y = heightOfEnemy + 0.92f;
+                pos5x = widthOfEnemy;
+                pos5y = heightOfEnemy + 1;
+                pos6x = widthOfEnemy - 0.38f;
+                pos6y = heightOfEnemy + 0.92f;
+                pos7x = widthOfEnemy - 0.71f;
+                pos7y = heightOfEnemy + 0.71f;
+                pos8x = widthOfEnemy - 0.92f;
+                pos8y = heightOfEnemy + 0.38f;
+                pos9x = widthOfEnemy - 1;
+                pos9y = heightOfEnemy;
+                pos10x = widthOfEnemy - 0.92f;
+                pos10y = heightOfEnemy - 0.38f;
+                pos11x = widthOfEnemy - 0.71f;
+                pos11y = heightOfEnemy - 0.71f;
+                pos12x = widthOfEnemy - 0.38f;
+                pos12y = heightOfEnemy - 0.92f;
+                pos13x = widthOfEnemy;
+                pos13y = heightOfEnemy - 1;
+                pos14x = widthOfEnemy + 0.38f;
+                pos14y = heightOfEnemy - 0.92f;
+                pos15x = widthOfEnemy + 0.71f;
+                pos15y = heightOfEnemy - 0.71f;
+                pos16x = widthOfEnemy + 0.92f;
+                pos16y = heightOfEnemy - 0.38f;
+                hackPosX.addAll(pos1x, pos2x, pos3x, pos4x, pos5x, pos6x, pos7x, pos8x,
+                        pos9x, pos10x, pos11x, pos12x, pos13x, pos14x, pos15x, pos16x);
+                hackPosY.addAll(pos1y, pos2y, pos3y, pos4y, pos5y, pos6y, pos7y, pos8y,
+                        pos9y, pos10y, pos11y, pos12y, pos13y, pos14y, pos15y, pos16y);
+
+                innerHackShieldAmount = pool3InnerHackShieldAmount;
+                ipos1x = widthOfEnemy + 0.5f;
+                ipos1y = heightOfEnemy;
+                ipos2x = widthOfEnemy + 0.21f;
+                ipos2y = heightOfEnemy + 0.21f;
+                ipos3x = widthOfEnemy;
+                ipos3y = heightOfEnemy + 0.5f;
+                ipos4x = widthOfEnemy - 0.21f;
+                ipos4y = heightOfEnemy + 0.21f;
+                ipos5x = widthOfEnemy - 0.5f;
+                ipos5y = heightOfEnemy;
+                ipos6x = widthOfEnemy - 0.21f;
+                ipos6y = heightOfEnemy - 0.21f;
+                ipos7x = widthOfEnemy;
+                ipos7y = heightOfEnemy - 0.5f;
+                ipos8x = widthOfEnemy + 0.21f;
+                ipos8y = heightOfEnemy - 0.21f;
+                innerPosX.addAll(ipos1x, ipos2x, ipos3x, ipos4x, ipos5x, ipos6x, ipos7x, ipos8x);
+                innerPosY.addAll(ipos1y, ipos2y, ipos3y, ipos4y, ipos5y, ipos6y, ipos7y, ipos8y);
+                game.setInnerPosX(innerPosX);
+                game.setInnerPosY(innerPosY);
+            }
+            game.setHackPosX(hackPosX);
+            game.setHackPosY(hackPosY);
         } else {
             hackPosX = game.getHackPosX();
             hackPosY = game.getHackPosY();
             hackShieldAmount = game.getHackShieldAmount();
+            if (pool == 3) {
+                innerPosX = game.getInnerPosX();
+                innerPosY = game.getInnerPosY();
+                innerHackShieldAmount = game.getInnerHackShieldAmount();
+            }
         }
     }
 
@@ -294,6 +366,21 @@ public class Hacking {
         }
     }
 
+    private void createInnerShields() {
+        if (pool == 3) {
+            BodyDef innerBodyDef = new BodyDef();
+            innerBodyDef.type = BodyDef.BodyType.DynamicBody;
+            for (int i = 0; i < innerHackShieldAmount; i++) {
+                innerBodyDef.position.set(innerPosX.get(i), innerPosY.get(i));
+                innerBody = world.createBody(innerBodyDef);
+                innerBody.createFixture(getShieldFixtureDefinition());
+                innerBody.setUserData(INNERSHIELD);
+                innerBody.setAngularVelocity(-2f);
+                innerBodyShields.add(innerBody);
+            }
+        }
+    }
+
     /*
     Creates the joints between shields and enemy.
      */
@@ -308,6 +395,20 @@ public class Hacking {
             distanceJointDefs.add(distanceJointDef);
 
             DistanceJoint distanceJoint = (DistanceJoint) world.createJoint(distanceJointDefs.get(i));
+        }
+
+        if (pool == 3) {
+            DistanceJointDef innerDistanceJointDef = new DistanceJointDef();
+            innerDistanceJointDef.bodyB = enemyBody;
+            innerDistanceJointDef.length = 2f;
+            innerDistanceJointDef.frequencyHz = 3;
+            innerDistanceJointDef.dampingRatio = 0.1f;
+            for (int i = 0; i < innerHackShieldAmount; i++) {
+                innerDistanceJointDef.bodyA = innerBodyShields.get(i);
+                innerDistanceJointDefs.add(innerDistanceJointDef);
+
+                DistanceJoint distanceJoint = (DistanceJoint) world.createJoint(innerDistanceJointDefs.get(i));
+            }
         }
     }
 
@@ -485,7 +586,7 @@ public class Hacking {
 
     private FixtureDef getShieldFixtureDefinition() {
         FixtureDef shieldFixtureDef = new FixtureDef();
-        shieldFixtureDef.density = 1;
+        shieldFixtureDef.density = 0f;
         shieldFixtureDef.restitution = 0f;
         shieldFixtureDef.friction = 0f;
         CircleShape circleshape = new CircleShape();
@@ -542,6 +643,13 @@ public class Hacking {
                 body.setLinearVelocity(force.x, force.y);
             }
         }
+        for (Body body : innerBodyShields) {
+            if (body.getUserData() != null) {
+                Vector2 radius = center.cpy().sub(body.getPosition());
+                Vector2 force = radius.rotate90(-1).nor().scl(shieldSpeed);
+                body.setLinearVelocity(force.x, force.y);
+            }
+        }
     }
 
     /*
@@ -556,6 +664,26 @@ public class Hacking {
 
     private void drawBodies() {
         for (Body body : shieldBodies) {
+            if (body.getUserData() != null) {
+                batch.draw(shieldTexture,
+                        body.getPosition().x - shieldRadius,
+                        body.getPosition().y - shieldRadius,
+                        shieldRadius, // originX
+                        shieldRadius, // originY
+                        shieldRadius * 2, // width
+                        shieldRadius * 2, // height
+                        1.0f, // scaleX
+                        1.0f, // scaleY
+                        body.getTransform().getRotation() * MathUtils.radiansToDegrees,
+                        0, // Start drawing from x = 0
+                        0, // Start drawing from y = 0
+                        shieldTexture.getWidth(), // End drawing x
+                        shieldTexture.getHeight(), // End drawing y
+                        false, // flipX
+                        false); // flipY
+            }
+        }
+        for (Body body : innerBodyShields) {
             if (body.getUserData() != null) {
                 batch.draw(shieldTexture,
                         body.getPosition().x - shieldRadius,

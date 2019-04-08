@@ -106,11 +106,15 @@ public class MainGame extends Game {
 	// Hacking
     private FloatArray hackPosX;
     private FloatArray hackPosY;
+    private FloatArray innerPosX;
+    private FloatArray innerPosY;
+    private int innerHackShieldAmount;
     private int hackShieldAmount;
     private boolean hackFirstTry = true;
-    private final int pool1HackShieldAmount = 4;
-    private final int pool2HackShieldAmount = 8;
+    private final int pool1HackShieldAmount = 8;
+    private final int pool2HackShieldAmount = 16;
     private final int pool3HackShieldAmount = 16;
+    private final int pool3InnerHackShieldAmount = 8;
 
 	@Override
 	public void create () {
@@ -227,6 +231,8 @@ public class MainGame extends Game {
     private void createHackFiles() {
         hackPosX = new FloatArray();
         hackPosY = new FloatArray();
+        innerPosX = new FloatArray();
+        innerPosY = new FloatArray();
         if (hackFirstTry) {
             if (pool == 1) {
                 hackShieldAmount = pool1HackShieldAmount;
@@ -236,6 +242,7 @@ public class MainGame extends Game {
             }
             if (pool == 3) {
                 hackShieldAmount = pool3HackShieldAmount;
+                innerHackShieldAmount = pool3InnerHackShieldAmount;
             }
         }
     }
@@ -690,6 +697,18 @@ public class MainGame extends Game {
 	    this.hackPosY = hackPosY;
     }
 
+    public void setInnerPosX(FloatArray innerPosX) {
+	    this.innerPosX = innerPosX;
+    }
+
+    public void setInnerPosY(FloatArray innerPosY) {
+	    this.innerPosY = innerPosY;
+    }
+
+    public void setInnerHackShieldAmount(int innerHackShieldAmount) {
+	    this.innerHackShieldAmount = innerHackShieldAmount;
+    }
+
     public void setHackShieldAmount(int hackShieldAmount) {
 	    this.hackShieldAmount = hackShieldAmount;
     }
@@ -710,8 +729,20 @@ public class MainGame extends Game {
         return hackPosY;
     }
 
+    public FloatArray getInnerPosX() {
+	    return innerPosX;
+    }
+
+    public FloatArray getInnerPosY() {
+	    return innerPosY;
+    }
+
     public int getHackShieldAmount() {
 	    return hackShieldAmount;
+    }
+
+    public int getInnerHackShieldAmount() {
+	    return innerHackShieldAmount;
     }
 
     public int getPool1HackShieldAmount() {
@@ -724,6 +755,10 @@ public class MainGame extends Game {
 
     public int getPool3HackShieldAmount() {
 	    return pool3HackShieldAmount;
+    }
+
+    public int getPool3InnerHackShieldAmount() {
+	    return pool3InnerHackShieldAmount;
     }
 
 	public int getPool() {
