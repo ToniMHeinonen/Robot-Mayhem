@@ -91,7 +91,7 @@ public class MainGame extends Game {
     // RoomFight
 	private Animation<TextureRegion> animIdle, animSkill, animDefend, animEscape,
             animItem, animHack, animDeath, animTakeHitAnim, animHealthPlusDoT, animHealthMinusDoT,
-			animMiss, animCriticalHit;
+			animMiss, animCriticalHit, animHealing;
 
 	// Stepmeter in RoomGame
     private BitmapFont fontSteps;
@@ -312,6 +312,7 @@ public class MainGame extends Game {
         Texture healthMinus = new Texture("texture/skills/minusHealth.png");
 		Texture criticalHit = new Texture("texture/skills/criticalHit.png");
 		Texture miss = new Texture("texture/skills/miss.png");
+		Texture healing = new Texture("texture/skills/healing.png");
 		escapeBg = new Texture("texture/escapeBackground.png");
 		hpBarLeft = new Texture("texture/hpbar_left.png");
 		hpBarRight = new Texture("texture/hpbar_right.png");
@@ -334,6 +335,7 @@ public class MainGame extends Game {
         animHealthMinusDoT = createAnims.createAnimation(healthMinus, 3, 1);
         animCriticalHit = createAnims.createAnimation(criticalHit, 4, 1);
 		animMiss = createAnims.createAnimation(miss, 4, 1);
+		animHealing = createAnims.createAnimation(healing, 4, 1);
 	}
 
 	private void createBundle() {
@@ -373,11 +375,10 @@ public class MainGame extends Game {
 		stepBank = stats.getFloat(keyStepBank, 0);
 		skill1 = stats.getString(keySkill1, Skills.REPAIR);
 		skill2 = stats.getString(keySkill2, "");
-		currentBoss = stats.getString(keyCurrentBoss, "Roombot");
+		currentBoss = stats.getString(keyCurrentBoss, Bosses.ROOMBOT);
 		firstPlayTime = stats.getBoolean(keyFirstPlayTime, true);
 		pool = stats.getInteger(keyPool, 1);
 		poolMult = stats.getInteger(keyPoolMult, 0);
-		System.out.println(stepCount);
 
 		// Load the size of inventory before loading inventory items
 		inventorySize = stats.getInteger(keyInventorySize, 0);
@@ -424,7 +425,7 @@ public class MainGame extends Game {
 			stats.putString(keyName + String.valueOf(i), nameList.get(i));
 		}
 
-		System.out.println(keyName);
+		//System.out.println(keyName);
 
 		stats.flush();
 	}
@@ -665,7 +666,11 @@ public class MainGame extends Game {
 		return animCriticalHit;
 	}
 
-    public ProgressBar.ProgressBarStyle getProgBarStyle() {
+	public Animation<TextureRegion> getAnimHealing() {
+		return animHealing;
+	}
+
+	public ProgressBar.ProgressBarStyle getProgBarStyle() {
         return progBarStyle;
     }
 
