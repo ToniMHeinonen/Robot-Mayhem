@@ -25,9 +25,6 @@ public class RoomSettings extends RoomParent {
         createButtonItem();
 
         createButtonPowerUps();
-
-        backgroundMusic.setVolume(game.getMusicVol());
-        backgroundMusic.play();
     }
 
     @Override
@@ -104,7 +101,6 @@ public class RoomSettings extends RoomParent {
             @Override
             public void clicked(InputEvent event, float x, float y){
                     game.setMusicVol(game.getMusicVol() + 0.2f);
-                    backgroundMusic.setVolume(game.getMusicVol());
                 }
         });
     }
@@ -121,7 +117,6 @@ public class RoomSettings extends RoomParent {
             @Override
             public void clicked(InputEvent event, float x, float y){
                     game.setMusicVol(game.getMusicVol() - 0.2f);
-                    backgroundMusic.setVolume(game.getMusicVol());
             }
         });
     }

@@ -28,8 +28,6 @@ public class RoomParent implements Screen {
     protected Skin skin;
     protected Skin testSkin;
     protected Skin finalSkin;
-    protected Music backgroundMusic;
-    protected Music bossMusic;
     protected ProgressBar progressBar;
     protected ProgressBar.ProgressBarStyle progressBarStyle;
     protected BitmapFont fontSteps;
@@ -49,8 +47,6 @@ public class RoomParent implements Screen {
         this.stage = game.getStage();
         this.skin = game.getSkin();
         Gdx.input.setInputProcessor(this.stage);
-        this.backgroundMusic = game.getBackgroundMusic();
-        this.bossMusic = game.getBossMusic();
         this.fontSteps = game.getFontSteps();
         this.progressBarStyle = game.getProgBarStyle();
         this.clickedOpenSettings = game.getClickedOpenSettings();

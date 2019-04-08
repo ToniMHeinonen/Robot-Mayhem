@@ -37,8 +37,9 @@ public class MainGame extends Game {
 	private Stage stage;
 	private Skin skin;
 	private Skin finalSkin;
-	private Music backgroundMusic;
-	private Music bossMusic;
+	private Music musMainTheme;
+	private Music musBossRobo;
+	private Music musBossFuturistic;
 	private Music[] allMusic;
 
 	// Pools and tiers
@@ -169,8 +170,9 @@ public class MainGame extends Game {
 		batch.dispose();
 		stage.dispose();
 		skin.dispose();
-		backgroundMusic.dispose();
-		bossMusic.dispose();
+		musMainTheme.dispose();
+		musBossRobo.dispose();
+		musBossFuturistic.dispose();
 		Bosses.dispose();
 		Skills.dispose();
 		saveStats();
@@ -182,54 +184,56 @@ public class MainGame extends Game {
 
 	public void switchToRoomTestailua() {
 		transition();
-		startMusic(backgroundMusic);
+		startMusic(musMainTheme);
 	    RoomTestailua room = new RoomTestailua(this);
 	    setScreen(room);
     }
 
     public void switchToRoomSettings() {
 		transition();
-		startMusic(backgroundMusic);
+		startMusic(musMainTheme);
 		RoomSettings room = new RoomSettings(this);
 		setScreen(room);
     }
 
     public void switchToRoomGame() {
 		transition();
-		startMusic(backgroundMusic);
+		startMusic(musMainTheme);
 	    RoomGame room = new RoomGame(this);
         setScreen(room);
     }
 
     public void switchToRoomFight() {
 		transition();
-		startMusic(bossMusic);
+		startMusic(musBossRobo);
 	    RoomFight room = new RoomFight(this);
 	    setScreen(room);
     }
 
 	public void switchToPowerUps() {
 		transition();
-		startMusic(backgroundMusic);
+		startMusic(musMainTheme);
 		PowerUps room = new PowerUps(this);
 		setScreen(room);
 	}
 
 	public void switchToRoomItemTest() {
-		startMusic(backgroundMusic);
+		startMusic(musMainTheme);
 		transition();
 		//RoomItemTest room = new RoomItemTest(this);
 		//setScreen(room);
 	}
 
 	private void createMusic() {
-		backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("music/fansu_1.mp3"));
-		backgroundMusic.setLooping(true);
-		bossMusic = Gdx.audio.newMusic(Gdx.files.internal("music/bossmusic.mp3"));
-		bossMusic.setLooping(true);
+		musMainTheme = Gdx.audio.newMusic(Gdx.files.internal("music/mainTheme.mp3"));
+		musMainTheme.setLooping(true);
+		musBossRobo = Gdx.audio.newMusic(Gdx.files.internal("music/bossRobo.mp3"));
+		musBossRobo.setLooping(true);
+		musBossFuturistic = Gdx.audio.newMusic(Gdx.files.internal("music/bossFuturistic.mp3"));
+		musBossFuturistic.setLooping(true);
 
 		// Remember to add all new music here
-		allMusic = new Music[] {backgroundMusic, bossMusic};
+		allMusic = new Music[] {musMainTheme, musBossRobo, musBossFuturistic};
 	}
 
 	private void startMusic(Music file) {
@@ -588,17 +592,9 @@ public class MainGame extends Game {
 		return skin;
 	}
 
-	public Music getBackgroundMusic() {
-		return backgroundMusic;
-	}
-
 	public float getMusicVol() {
 		return musicVol;
 	}
-
-	public Music getBossMusic() {
-	    return bossMusic;
-    }
 
 	public I18NBundle getMyBundle() {
 		return myBundle;
@@ -909,4 +905,8 @@ public class MainGame extends Game {
     public Skin getFinalSkin() {
 	    return finalSkin;
     }
+
+	public Music getMusMainTheme() {
+		return musMainTheme;
+	}
 }

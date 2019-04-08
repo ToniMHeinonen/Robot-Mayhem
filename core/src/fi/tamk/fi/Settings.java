@@ -81,7 +81,7 @@ public class Settings {
         musicVolSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.getBackgroundMusic().setVolume(musicVolSlider.getValue());
+                game.getMusMainTheme().setVolume(musicVolSlider.getValue());
                 game.setMusicVol(musicVolSlider.getValue());
             }
         });
