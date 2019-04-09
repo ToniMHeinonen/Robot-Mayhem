@@ -80,8 +80,6 @@ public class MainGame extends Game {
 	private int inventorySize; // Needed for loading correct amount of array items
 	private ArrayList<String> defeatedBosses = new ArrayList<String>();
 	private int defeatedBossesSize;
-	protected static ArrayList<String> nameList = new ArrayList<String>();
-	private int nameSize;
 
 	// Textures
 	private Texture imgBgHall, imgBgBoss, imgTopBar, imgBottomBar, escapeBg, hpBarLeft,
@@ -153,7 +151,6 @@ public class MainGame extends Game {
 		currentBoss = Bosses.selectRandomBoss(); // For testing purposes, remember to remove
 
 		askForName();
-		dialog.createDialog(keyName);
 
 		// Switch to first room
 		switchToRoomGame();
@@ -400,10 +397,7 @@ public class MainGame extends Game {
 		 */
 
 		// Comment: Was not sure how else to do it.
-		nameSize = stats.getInteger(keyName, 0);
-		for (int i = 0; i < nameSize; i++) {
-			nameList.add(i, stats.getString(keyName + String.valueOf(i), ""));
-		}
+		playerName = stats.getString(keyName, playerName);
 	}
 
 	public void saveStats() {
@@ -429,12 +423,8 @@ public class MainGame extends Game {
 			stats.putString(keyDefeatedBosses + String.valueOf(i), defeatedBosses.get(i));
 		}
 
-		stats.putInteger(keyName, nameList.size());
-		for (int i = 0; i < nameSize; i++) {
-			stats.putString(keyName + String.valueOf(i), nameList.get(i));
-		}
-
-		//System.out.println(keyName);
+		stats.putString(keyName, playerName);
+		//System.out.println(playerName);
 
 		stats.flush();
 	}
@@ -464,10 +454,10 @@ public class MainGame extends Game {
 	public boolean setName(String n) {
 		boolean legal = true;
 
-		if (n.length() <= 10 && !n.equals("name")) {
+		if (n.length() <= 10 && !n.equals("defaultDodo")) {
 			playerName = n;
-			dialog.createDialog(playerName + "is your name");
-			nameList.add(playerName);
+			dialog.createDialog(playerName + " is your name");
+			changeName(n);
 		} else {
 			legal = false;
 		}
@@ -477,9 +467,15 @@ public class MainGame extends Game {
 		 */
 
 		// Comment: Thought this saved the name. :( Don't know what does.
-		stats.flush();
+		//stats.flush();
 		return legal;
 	}
+
+	public String changeName(String newName) {
+
+		return newName;
+	}
+	// ^Doesn't do anything useful? :I
 
 	// Methods for name end.
 
@@ -728,18 +724,9 @@ public class MainGame extends Game {
 		return skill2;
 	}
 
-	/*public static void setName() {
-
-		if (keyName == "name") {
-
-			askForName();
-		}
-	}*/
-
-	static String playerName;
+	static String playerName = "defaultDodo";
 
 	public static String getName() {
-
 		return playerName;
 	}
 
