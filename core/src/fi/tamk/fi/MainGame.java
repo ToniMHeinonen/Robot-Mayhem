@@ -465,9 +465,9 @@ public class MainGame extends Game {
 		boolean legal = true;
 
 		if (n.length() <= 10 && !n.equals("name")) {
-			keyName = n;
-			dialog.createDialog(keyName + "is your name");
-			nameList.add(keyName);
+			playerName = n;
+			dialog.createDialog(playerName + "is your name");
+			nameList.add(playerName);
 		} else {
 			legal = false;
 		}
@@ -736,12 +736,11 @@ public class MainGame extends Game {
 		}
 	}*/
 
-	static String name;
+	static String playerName;
 
 	public static String getName() {
 
-		name = keyName;
-		return name;
+		return playerName;
 	}
 
 	public void setSkill2(String skill2) {
