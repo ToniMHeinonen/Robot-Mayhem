@@ -122,10 +122,10 @@ public class MainGame extends Game {
     private int innerHackShieldAmount;
     private int hackShieldAmount;
     private boolean hackFirstTry = true;
-    private final int pool1HackShieldAmount = 8;
-    private final int pool2HackShieldAmount = 16;
-    private final int pool3HackShieldAmount = 16;
-    private final int pool3InnerHackShieldAmount = 8;
+    private final int pool1HackShieldAmount = 7;
+    private final int pool2HackShieldAmount = 15;
+    private final int pool3HackShieldAmount = 15;
+    private final int pool3InnerHackShieldAmount = 7;
 
 	@Override
 	public void create () {

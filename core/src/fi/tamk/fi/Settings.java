@@ -17,6 +17,7 @@ public class Settings {
     MainGame game;
     private Skin skin;
     private Stage stage;
+    private Skin finalSkin;
 
     private float settingsWidth;
     private float settingsHeight;
@@ -36,6 +37,7 @@ public class Settings {
         this.game = game;
         skin = game.getSkin();
         stage = game.getStage();
+        finalSkin = game.getFinalSkin();
 
         setValues();
         createSettingsDialog();
@@ -74,10 +76,11 @@ public class Settings {
     }
 
     private void createMusicVolume() {
-        musicVolSlider = new Slider(0.1f, 0.9f, 0.1f, false, skin);
+        musicVolSlider = new Slider(0.1f, 0.9f, 0.1f, false, finalSkin);
         musicVolSlider.setValue(game.getMusicVol());
-        musicVolSlider.setPosition(settingsDialog.getWidth() / 2,
+        musicVolSlider.setPosition(settingsDialog.getX() - settingsDialog.getX(),
                 settingsDialog.getHeight() / 2);
+        musicVolSlider.setSize(900, 120);
         musicVolSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -86,10 +89,9 @@ public class Settings {
             }
         });
 
-        musicVolLabel = new Label("Music volume", skin);
-        musicVolLabel.setColor(Color.BLACK);
-        musicVolLabel.setPosition(musicVolSlider.getX() - musicVolSlider.getWidth(),
-                musicVolSlider.getY());
+        musicVolLabel = new Label("Music volume", finalSkin);
+        musicVolLabel.setPosition(musicVolSlider.getX() + 100,
+                musicVolSlider.getY() + 100);
     }
 
     private void createSettingsRoomButton() {

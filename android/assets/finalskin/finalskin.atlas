@@ -4,39 +4,18 @@ size: 1024,1024
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-button_empty0
+popup_bg_small
   rotate: false
-  xy: 403, 1
-  size: 384, 240
-  orig: 384, 240
+  xy: 1, 239
+  size: 984, 744
+  orig: 984, 744
   offset: 0, 0
   index: -1
-cooldown
+volumebar
   rotate: false
-  xy: 403, 243
-  size: 384, 240
-  orig: 384, 240
-  offset: 0, 0
-  index: -1
-defaultbg
-  rotate: false
-  xy: 403, 485
-  size: 400, 400
-  orig: 400, 400
-  offset: 0, 0
-  index: -1
-dialogbg
-  rotate: false
-  xy: 1, 485
-  size: 400, 400
-  orig: 400, 400
-  offset: 0, 0
-  index: -1
-itembg
-  rotate: false
-  xy: 1, 83
-  size: 400, 400
-  orig: 400, 400
+  xy: 1, 117
+  size: 900, 120
+  orig: 900, 120
   offset: 0, 0
   index: -1
 
@@ -45,59 +24,122 @@ size: 1024,1024
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-button_attack0
+button
   rotate: false
-  xy: 387, 731
+  xy: 1, 761
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
-button_attack_clicked
+button_clicked
   rotate: false
-  xy: 1, 489
+  xy: 1, 519
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
-button_defend0
+confirm
   rotate: false
-  xy: 387, 489
-  size: 384, 240
-  orig: 384, 240
+  xy: 387, 759
+  size: 360, 120
+  orig: 360, 120
   offset: 0, 0
   index: -1
-button_defend_clicked
+confirm_clicked
   rotate: false
-  xy: 1, 247
-  size: 384, 240
-  orig: 384, 240
+  xy: 1, 275
+  size: 360, 120
+  orig: 360, 120
   offset: 0, 0
   index: -1
-button_empty_clicked
+diff1
   rotate: false
-  xy: 1, 731
-  size: 384, 240
-  orig: 384, 240
+  xy: 387, 637
+  size: 300, 120
+  orig: 300, 120
   offset: 0, 0
   index: -1
-descriptionfont
+diff1_clicked
   rotate: false
-  xy: 773, 408
-  size: 158, 511
-  orig: 158, 511
+  xy: 1, 153
+  size: 300, 120
+  orig: 300, 120
   offset: 0, 0
   index: -1
-textbuttondisabled
+diff2
   rotate: false
-  xy: 1, 195
-  size: 200, 50
-  orig: 200, 50
+  xy: 1, 31
+  size: 300, 120
+  orig: 300, 120
   offset: 0, 0
   index: -1
-textbuttonitem
+diff2_clicked
   rotate: false
-  xy: 773, 921
-  size: 200, 50
-  orig: 200, 50
+  xy: 387, 515
+  size: 300, 120
+  orig: 300, 120
+  offset: 0, 0
+  index: -1
+diff3
+  rotate: false
+  xy: 363, 393
+  size: 300, 120
+  orig: 300, 120
+  offset: 0, 0
+  index: -1
+diff3_clicked
+  rotate: false
+  xy: 363, 271
+  size: 300, 120
+  orig: 300, 120
+  offset: 0, 0
+  index: -1
+exit
+  rotate: false
+  xy: 387, 881
+  size: 360, 120
+  orig: 360, 120
+  offset: 0, 0
+  index: -1
+exit_clicked
+  rotate: false
+  xy: 1, 397
+  size: 360, 120
+  orig: 360, 120
+  offset: 0, 0
+  index: -1
+font-big
+  rotate: false
+  xy: 689, 376
+  size: 106, 381
+  orig: 106, 381
+  offset: 0, 0
+  index: -1
+font-normal
+  rotate: false
+  xy: 303, 1
+  size: 102, 268
+  orig: 102, 268
+  offset: 0, 0
+  index: -1
+scrollbar
+  rotate: false
+  xy: 797, 24
+  size: 60, 855
+  orig: 60, 855
+  offset: 0, 0
+  index: -1
+scrollslider
+  rotate: false
+  xy: 871, 911
+  size: 60, 90
+  orig: 60, 90
+  offset: 0, 0
+  index: -1
+volumeslider
+  rotate: false
+  xy: 749, 881
+  size: 120, 120
+  orig: 120, 120
   offset: 0, 0
   index: -1
