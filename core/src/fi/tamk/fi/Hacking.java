@@ -46,7 +46,7 @@ public class Hacking {
     private FloatArray innerPosY;
     private Array<DistanceJointDef> innerDistanceJointDefs = new Array<DistanceJointDef>();
     private float ipos1x, ipos1y, ipos2x, ipos2y, ipos3x, ipos3y, ipos4x, ipos4y, ipos5x, ipos5y,
-    ipos6x, ipos6y, ipos7x, ipos7y, ipos8x, ipos8y;
+    ipos6x, ipos6y, ipos7x, ipos7y;
     private boolean checkInnerNeighbor = false;
 
     private Texture shieldTexture;
@@ -77,9 +77,9 @@ public class Hacking {
     private Vector2 center;
 
     private float pos1x, pos2x, pos3x, pos4x, pos5x, pos6x, pos7x, pos8x, pos9x, pos10x, pos11x,
-            pos12x, pos13x, pos14x, pos15x, pos16x;
+            pos12x, pos13x, pos14x, pos15x;
     private float pos1y, pos2y, pos3y, pos4y, pos5y, pos6y, pos7y, pos8y, pos9y, pos10y, pos11y,
-            pos12y, pos13y, pos14y, pos15y, pos16y;
+            pos12y, pos13y, pos14y, pos15y;
 
     private Array<Body> shieldBodies = new Array<Body>();
     private Array<DistanceJointDef> distanceJointDefs = new Array<DistanceJointDef>();
@@ -237,7 +237,7 @@ public class Hacking {
                 hackPosX.addAll(pos1x, pos2x, pos3x, pos4x, pos5x, pos6x, pos7x, pos8x);
                 hackPosY.addAll(pos1y, pos2y, pos3y, pos4y, pos5y, pos6y, pos7y, pos8y);
             }
-            if (pool == 2) {
+            if (pool == 2 || pool == 3) {
                 hackShieldAmount = pool2HackShieldAmount;
                 pos1x = widthOfEnemy + 1;
                 pos1y = heightOfEnemy;
@@ -269,56 +269,14 @@ public class Hacking {
                 pos14y = heightOfEnemy - 0.92f;
                 pos15x = widthOfEnemy + 0.71f;
                 pos15y = heightOfEnemy - 0.71f;
-                pos16x = widthOfEnemy + 0.92f;
-                pos16y = heightOfEnemy - 0.38f;
                 hackPosX.addAll(pos1x, pos2x, pos3x, pos4x, pos5x, pos6x, pos7x, pos8x,
-                        pos9x, pos10x, pos11x, pos12x, pos13x, pos14x, pos15x, pos16x);
+                        pos9x, pos10x, pos11x, pos12x, pos13x, pos14x, pos15x);
                 hackPosY.addAll(pos1y, pos2y, pos3y, pos4y, pos5y, pos6y, pos7y, pos8y,
-                        pos9y, pos10y, pos11y, pos12y, pos13y, pos14y, pos15y, pos16y);
+                        pos9y, pos10y, pos11y, pos12y, pos13y, pos14y, pos15y);
             }
-            game.setHackPosX(hackPosX);
-            game.setHackPosY(hackPosY);
             if (pool == 3) {
                 innerPosX.clear();
                 innerPosY.clear();
-                hackShieldAmount = pool3HackShieldAmount;
-                pos1x = widthOfEnemy + 1;
-                pos1y = heightOfEnemy;
-                pos2x = widthOfEnemy + 0.92f;
-                pos2y = heightOfEnemy + 0.38f;
-                pos3x = widthOfEnemy + 0.71f;
-                pos3y = heightOfEnemy + 0.71f;
-                pos4x = widthOfEnemy + 0.38f;
-                pos4y = heightOfEnemy + 0.92f;
-                pos5x = widthOfEnemy;
-                pos5y = heightOfEnemy + 1;
-                pos6x = widthOfEnemy - 0.38f;
-                pos6y = heightOfEnemy + 0.92f;
-                pos7x = widthOfEnemy - 0.71f;
-                pos7y = heightOfEnemy + 0.71f;
-                pos8x = widthOfEnemy - 0.92f;
-                pos8y = heightOfEnemy + 0.38f;
-                pos9x = widthOfEnemy - 1;
-                pos9y = heightOfEnemy;
-                pos10x = widthOfEnemy - 0.92f;
-                pos10y = heightOfEnemy - 0.38f;
-                pos11x = widthOfEnemy - 0.71f;
-                pos11y = heightOfEnemy - 0.71f;
-                pos12x = widthOfEnemy - 0.38f;
-                pos12y = heightOfEnemy - 0.92f;
-                pos13x = widthOfEnemy;
-                pos13y = heightOfEnemy - 1;
-                pos14x = widthOfEnemy + 0.38f;
-                pos14y = heightOfEnemy - 0.92f;
-                pos15x = widthOfEnemy + 0.71f;
-                pos15y = heightOfEnemy - 0.71f;
-                pos16x = widthOfEnemy + 0.92f;
-                pos16y = heightOfEnemy - 0.38f;
-                hackPosX.addAll(pos1x, pos2x, pos3x, pos4x, pos5x, pos6x, pos7x, pos8x,
-                        pos9x, pos10x, pos11x, pos12x, pos13x, pos14x, pos15x, pos16x);
-                hackPosY.addAll(pos1y, pos2y, pos3y, pos4y, pos5y, pos6y, pos7y, pos8y,
-                        pos9y, pos10y, pos11y, pos12y, pos13y, pos14y, pos15y, pos16y);
-
                 innerHackShieldAmount = pool3InnerHackShieldAmount;
                 ipos1x = widthOfEnemy + 0.5f;
                 ipos1y = heightOfEnemy;
@@ -334,10 +292,8 @@ public class Hacking {
                 ipos6y = heightOfEnemy - 0.21f;
                 ipos7x = widthOfEnemy;
                 ipos7y = heightOfEnemy - 0.5f;
-                ipos8x = widthOfEnemy + 0.21f;
-                ipos8y = heightOfEnemy - 0.21f;
-                innerPosX.addAll(ipos1x, ipos2x, ipos3x, ipos4x, ipos5x, ipos6x, ipos7x, ipos8x);
-                innerPosY.addAll(ipos1y, ipos2y, ipos3y, ipos4y, ipos5y, ipos6y, ipos7y, ipos8y);
+                innerPosX.addAll(ipos1x, ipos2x, ipos3x, ipos4x, ipos5x, ipos6x, ipos7x);
+                innerPosY.addAll(ipos1y, ipos2y, ipos3y, ipos4y, ipos5y, ipos6y, ipos7y);
                 game.setInnerPosX(innerPosX);
                 game.setInnerPosY(innerPosY);
             }
