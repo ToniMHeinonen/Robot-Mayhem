@@ -82,9 +82,11 @@ public class RoomParent implements Screen {
             stage.act(Gdx.graphics.getDeltaTime());
         }
 
+        /*
         if (clickedOpenSettings) {
             settings.update();
         }
+        */
     }
 
     public void transitionColor() {
