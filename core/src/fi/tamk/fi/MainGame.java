@@ -90,7 +90,7 @@ public class MainGame extends Game {
     // RoomFight
 	private Animation<TextureRegion> animIdle, animSkill, animDefend, animEscape,
             animItem, animHack, animDeath, animTakeHitAnim, animHealthPlusDoT, animHealthMinusDoT,
-			animMiss, animCriticalHit, animHealing;
+			animMiss, animCriticalHit, animHealing, animDoTPlus, animDoTMinus;
 
 	// Stepmeter in RoomGame
     private BitmapFont fontSteps;
@@ -312,6 +312,8 @@ public class MainGame extends Game {
 		Texture criticalHit = new Texture("texture/skills/criticalHit.png");
 		Texture miss = new Texture("texture/skills/miss.png");
 		Texture healing = new Texture("texture/skills/healing.png");
+		Texture dotMinus = new Texture("texture/skills/dotMinus.png");
+		Texture dotPlus = new Texture("texture/skills/dotPlus.png");
 		escapeBg = new Texture("texture/escapeBackground.png");
 		hpBarLeft = new Texture("texture/hpbar_left.png");
 		hpBarRight = new Texture("texture/hpbar_right.png");
@@ -335,6 +337,8 @@ public class MainGame extends Game {
         animCriticalHit = createAnims.createAnimation(criticalHit, 4, 1);
 		animMiss = createAnims.createAnimation(miss, 4, 1);
 		animHealing = createAnims.createAnimation(healing, 4, 1);
+		animDoTPlus = createAnims.createAnimation(dotPlus, 4, 1);
+		animDoTMinus = createAnims.createAnimation(dotMinus, 4, 1);
 	}
 
 	private void createBundle() {
@@ -661,6 +665,14 @@ public class MainGame extends Game {
 
 	public Animation<TextureRegion> getAnimHealing() {
 		return animHealing;
+	}
+
+	public Animation<TextureRegion> getAnimDoTPlus() {
+		return animDoTPlus;
+	}
+
+	public Animation<TextureRegion> getAnimDoTMinus() {
+		return animDoTMinus;
 	}
 
 	public ProgressBar.ProgressBarStyle getProgBarStyle() {
