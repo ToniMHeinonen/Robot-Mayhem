@@ -55,8 +55,8 @@ public class RoomParent implements Screen {
         stage.clear();
 
         dialog = game.getDialog();
-        imgTopBar = game.getImgTopBar();
-        imgBottomBar = game.getImgBottomBar();
+        imgTopBar = Files.imgTopBar;
+        imgBottomBar = Files.imgBottomBar;
     }
 
     @Override

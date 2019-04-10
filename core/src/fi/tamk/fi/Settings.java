@@ -132,7 +132,7 @@ public class Settings {
         musicVolSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.getMusMainTheme().setVolume(musicVolSlider.getValue());
+                Files.musMainTheme.setVolume(musicVolSlider.getValue());
                 game.setMusicVol(musicVolSlider.getValue());
             }
         });
@@ -154,7 +154,7 @@ public class Settings {
         soundVolSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.getMusMainTheme().setVolume(musicVolSlider.getValue());
+                Files.musMainTheme.setVolume(musicVolSlider.getValue());
                 game.setMusicVol(musicVolSlider.getValue());
             }
         });
