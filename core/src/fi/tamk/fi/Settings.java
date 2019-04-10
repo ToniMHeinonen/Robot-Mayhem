@@ -20,18 +20,14 @@ public class Settings {
     private Skin skin;
     private Stage stage;
     private Skin finalSkin;
+    private String room;
 
-    private float settingsWidth;
-    private float settingsHeight;
     private float posX;
-    private float outOfScreenY;
     private float onScreenY;
 
-    private TextButton closeSettingsButton;
     private TextButton settingsRoomButton;
 
     private Dialog settingsDialog;
-
     private Label header;
 
     // Music
@@ -63,10 +59,9 @@ public class Settings {
     // Exit
     private ImageButton buttonExit;
 
-    private boolean closeDialog = false;
-
-    Settings(MainGame game) {
+    Settings(MainGame game, String room) {
         this.game = game;
+        this.room = room;
         files = game.getFiles();
         skin = game.getSkin();
         stage = game.getStage();
@@ -84,28 +79,11 @@ public class Settings {
         createExitButton();
         createSettingsRoomButton();
         stage.addActor(settingsDialog);
-    }
-
-    public void update() {
-        if (!closeDialog && settingsDialog.getY() >= onScreenY) {
-            settingsDialog.setY(settingsDialog.getY() - Gdx.graphics.getDeltaTime()*1000);
-        }
-        if (closeDialog && settingsDialog.getY() < outOfScreenY) {
-            settingsDialog.setY(settingsDialog.getY() + Gdx.graphics.getDeltaTime()*1000);
-        } if (closeDialog && settingsDialog.getY() >= outOfScreenY) {
-            game.setClickedOpenSettings(false);
-            settingsDialog.remove();
-        }
+        System.out.println("Setting-dialog opened from room: " + room);
     }
 
     private void setValues() {
-        settingsWidth = game.pixelWidth / 2;
-        settingsHeight = game.pixelHeight / 2;
-        //posX = game.pixelWidth / 4;
-        //outOfScreenY = game.pixelHeight;
-        //onScreenY = game.pixelHeight / 2;
         posX = 0;
-        outOfScreenY = 0;
         onScreenY = 0;
     }
 
@@ -113,7 +91,7 @@ public class Settings {
         settingsDialog = new Dialog("Settings", finalSkin, "settings");
         settingsDialog.setMovable(false);
         settingsDialog.setKeepWithinStage(false);
-        settingsDialog.setPosition(posX, outOfScreenY);
+        settingsDialog.setPosition(posX, onScreenY);
         settingsDialog.setSize(game.pixelWidth, game.pixelHeight);
     }
 
@@ -214,6 +192,13 @@ public class Settings {
         buttonInventory = new ImageButton(finalSkin.getDrawable("menu_items1"));
         buttonInventory.setPosition(buttonSettings.getX(),
                 buttonSettings.getY() - 150);
+        buttonInventory.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                UtilItem utilItem = new UtilItem(game, room);
+                settingsDialog.remove();
+            }
+        });
 
         buttonStats = new ImageButton(finalSkin.getDrawable("menu_stats1"));
         buttonStats.setPosition(buttonSettings.getX(),

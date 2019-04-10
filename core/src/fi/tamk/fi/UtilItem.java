@@ -32,10 +32,7 @@ public class UtilItem {
     private ScrollPane scrollBuyable;
     private ScrollPane scrollOwned;
 
-    private float dialogItemWidth;
-    private float dialogItemHeight;
     private float posX;
-    private float outOfScreenY;
     private float onScreenY;
 
     private UtilDialog utilDialog;
@@ -56,6 +53,11 @@ public class UtilItem {
     // Money
     Label labelMoney;
 
+    // Menu
+    ImageButton buttonSettings;
+    ImageButton buttonInventory;
+    ImageButton buttonStats;
+
     UtilItem(MainGame game, String room) {
         this.game = game;
         this.room = room;
@@ -75,6 +77,7 @@ public class UtilItem {
         createOwnedItemsTable();
         showMoney();
         createExitButton();
+        createMenuButtons();
         stage.addActor(dialogItems);
         System.out.println("Item-dialog opened from room: " + room);
         System.out.println("Inventory size: " + inventory.size());
@@ -84,13 +87,7 @@ public class UtilItem {
     }
 
     private void setValues() {
-        dialogItemWidth = game.pixelWidth / 1.2f;
-        dialogItemHeight = game.pixelHeight / 1.2f;
-        //posX = 150;
-        //outOfScreenY = game.pixelHeight;
-        //onScreenY = game.pixelHeight/9;
         posX = 0;
-        outOfScreenY = 0;
         onScreenY = 0;
     }
 
@@ -219,6 +216,30 @@ public class UtilItem {
         labelMoney.setPosition(1650, 100);
         labelMoney.setAlignment(1);
         dialogItems.addActor(labelMoney);
+    }
+
+    private void createMenuButtons() {
+        buttonSettings = new ImageButton(finalSkin.getDrawable("menu_settings1"));
+        buttonSettings.setPosition(1441, 720);
+        buttonSettings.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                Settings settings = new Settings(game, room);
+                dialogItems.remove();
+            }
+        });
+
+        buttonInventory = new ImageButton(finalSkin, "inventory");
+        buttonInventory.setPosition(buttonSettings.getX(),
+                buttonSettings.getY() - 150);
+
+        buttonStats = new ImageButton(finalSkin.getDrawable("menu_stats1"));
+        buttonStats.setPosition(buttonSettings.getX(),
+                buttonInventory.getY() - 150);
+
+        dialogItems.addActor(buttonSettings);
+        dialogItems.addActor(buttonInventory);
+        dialogItems.addActor(buttonStats);
     }
 
     /*

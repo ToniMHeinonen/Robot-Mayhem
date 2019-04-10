@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
@@ -68,6 +69,7 @@ public class RoomFight extends RoomParent {
         imgBg = files.imgBgBoss;
         escapeBg = files.escapeBg;
 
+        createMenuButton();
         createHealthBars();
         createShader(); // Used for flashing white
 
@@ -96,6 +98,23 @@ public class RoomFight extends RoomParent {
             hackingPhase();
             powerUpPhase();
         }
+    }
+
+    public void createMenuButton() {
+        ImageButton button = new ImageButton(testSkin.getDrawable("button_settings"),
+                testSkin.getDrawable("button_settings_clicked"));
+        button.setPosition(game.pixelWidth - button.getWidth()/2 - 190, game.pixelHeight - 120);
+        button.addListener(new InputListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                settings = new Settings(game, "fight");
+            }
+        });
+
+        stage.addActor(button);
     }
 
     // Creates the upper left escape button
