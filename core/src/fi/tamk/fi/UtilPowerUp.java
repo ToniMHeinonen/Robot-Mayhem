@@ -45,8 +45,8 @@ public class UtilPowerUp {
         batch = game.getBatch();
         stage = game.getStage();
         dialog = game.getDialog();
-        background = game.getPowerUpBg();
-        popup = game.getPowerUpPopup();
+        background = Files.powerUpBg;
+        popup = Files.powerUpPopup;
 
         // Create constants for text
         descriptionLabelStyle = game.getDescriptionLabelStyle();

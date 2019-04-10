@@ -41,8 +41,8 @@ public class RoomFight extends RoomParent {
         TIMER
     }
 
-    private Texture hpBarLeft = game.getHpBarLeft();
-    private Texture hpBarRight = game.getHpBarRight();
+    private Texture hpBarLeft = Files.hpBarLeft;
+    private Texture hpBarRight = Files.hpBarRight;
     private Texture imgBg, escapeBg;
     private Animation<TextureRegion> playerHealthBar, enemyHealthBar;
     private Animating animHealthPlayer = new Animating();
@@ -65,8 +65,8 @@ public class RoomFight extends RoomParent {
 
     RoomFight(MainGame game) {
         super(game);
-        imgBg = game.getImgBgBoss();
-        escapeBg = game.getEscapeBg();
+        imgBg = Files.imgBgBoss;
+        escapeBg = Files.escapeBg;
 
         createHealthBars();
         createShader(); // Used for flashing white
@@ -411,13 +411,13 @@ public class RoomFight extends RoomParent {
         protected HashMap<String,Integer> cooldowns;
 
         Fighters() {
-            healthPlus = game.getAnimHealthPlusDoT();
-            healthMinus = game.getAnimHealthMinusDoT();
-            dotMinus = game.getAnimDoTMinus();
-            dotPlus = game.getAnimDoTPlus();
-            criticalHitAnim = game.getAnimCriticalHit();
-            missAnim = game.getAnimMiss();
-            healAnim = game.getAnimHealing();
+            healthPlus = Files.animHealthPlusDoT;
+            healthMinus = Files.animHealthMinusDoT;
+            dotMinus = Files.animDoTMinus;
+            dotPlus = Files.animDoTPlus;
+            criticalHitAnim = Files.animCriticalHit;
+            missAnim = Files.animMiss;
+            healAnim = Files.animHealing;
         }
 
         // Do this at the start of update method
@@ -876,14 +876,14 @@ public class RoomFight extends RoomParent {
             cooldowns.put(skills[1], 0);
 
             // Retrieve animations
-            idleAnim = game.getAnimIdle();
-            skillAnim = game.getAnimSkill();
-            defendAnim = game.getAnimDefend();
-            takeHitAnim = game.getAnimTakeHitAnim();
-            escapeAnim = game.getAnimEscape();
-            itemAnim = game.getAnimItem();
-            hackAnim = game.getAnimHack();
-            deathAnim = game.getAnimDeath();
+            idleAnim = Files.animIdle;
+            skillAnim = Files.animSkill;
+            defendAnim = Files.animDefend;
+            takeHitAnim = Files.animTakeHitAnim;
+            escapeAnim = Files.animEscape;
+            itemAnim = Files.animItem;
+            hackAnim = Files.animHack;
+            deathAnim = Files.animDeath;
 
             anim.startAnimation(idleAnim, idleSpd);
         }

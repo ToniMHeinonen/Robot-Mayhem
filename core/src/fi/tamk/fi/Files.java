@@ -91,4 +91,8 @@ public class Files {
         // Remember to add all new music here
         allMusic = new Music[] {musMainTheme, musBossRobo, musBossFuturistic};
     }
+
+    public static void dispose() {
+
+    }
 }

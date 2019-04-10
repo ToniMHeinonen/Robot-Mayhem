@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -77,17 +78,6 @@ public class MainGame extends Game {
 	private ArrayList<String> defeatedBosses = new ArrayList<String>();
 	private int defeatedBossesSize;
 
-	// Textures
-	private Texture imgBgHall, imgBgBoss, imgTopBar, imgBottomBar, escapeBg, hpBarLeft,
-            hpBarRight, powerUpBg, powerUpPopup, itemBg;
-	private Animating createAnims = new Animating();
-	// RoomGame
-	private Animation<TextureRegion> animGameMoving;
-    // RoomFight
-	private Animation<TextureRegion> animIdle, animSkill, animDefend, animEscape,
-            animItem, animHack, animDeath, animTakeHitAnim, animHealthPlusDoT, animHealthMinusDoT,
-			animMiss, animCriticalHit, animHealing, animDoTPlus, animDoTMinus;
-
 	// Stepmeter in RoomGame
     private BitmapFont fontSteps;
 
@@ -121,6 +111,8 @@ public class MainGame extends Game {
     private final int pool3HackShieldAmount = 15;
     private final int pool3InnerHackShieldAmount = 7;
 
+	private AssetManager manager;
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -128,8 +120,8 @@ public class MainGame extends Game {
 		camera.setToOrtho(false, pixelWidth, pixelHeight);
 		loadSettings();
 		loadStats();
-		loadTextures();
 		createBundle();
+		manager = new AssetManager();
 		// Create skills and bosses when the game launches
 		Skills.createSkills();
 		Bosses.createBosses();
@@ -162,6 +154,7 @@ public class MainGame extends Game {
 		skin.dispose();
 		Bosses.dispose();
 		Skills.dispose();
+		Files.dispose();
 		saveStats();
 	}
 
@@ -272,54 +265,6 @@ public class MainGame extends Game {
         if (pool == 1 && poolMult == 0) progressBarMilestone = 20;
         else progressBarMilestone = poolMilestones[pool] / 3;
     }
-
-	private void loadTextures() {
-		imgBgHall = new Texture("texture/bg_hall1.png");
-		imgBgBoss = new Texture("texture/bg_hall1_boss.png");
-		imgTopBar = new Texture("texture/topbar.png");
-		imgBottomBar = new Texture("texture/bottombar.png");
-		Texture gamePlayerMoving = new Texture("texture/player/player_move.png");
-        Texture playerIdle = new Texture("texture/player/player_idle.png");
-        Texture playerAttack = new Texture("texture/player/player_attack.png");
-        Texture playerDefend = new Texture("texture/player/player_defend.png");
-        Texture playerItem = new Texture("texture/player/player_item.png");
-        Texture playerEscape = new Texture("texture/player/player_flee.png");
-        Texture playerHack = new Texture("texture/player/player_hack.png");
-        Texture playerDeath = new Texture("texture/player/player_stun.png");
-		Texture playerTakeHit = new Texture("texture/player/player_damage.png");
-        Texture healthPlus = new Texture("texture/skills/plusHealth.png");
-        Texture healthMinus = new Texture("texture/skills/minusHealth.png");
-		Texture criticalHit = new Texture("texture/skills/criticalHit.png");
-		Texture miss = new Texture("texture/skills/miss.png");
-		Texture healing = new Texture("texture/skills/healing.png");
-		Texture dotMinus = new Texture("texture/skills/dotMinus.png");
-		Texture dotPlus = new Texture("texture/skills/dotPlus.png");
-		escapeBg = new Texture("texture/escapeBackground.png");
-		hpBarLeft = new Texture("texture/hpbar_left.png");
-		hpBarRight = new Texture("texture/hpbar_right.png");
-		powerUpBg = new Texture("texture/powerUpBg.jpg");
-		powerUpPopup = new Texture("texture/powerUpPopup.jpg");
-		itemBg = new Texture("texture/itemBg.jpg");
-
-		// Create animations
-		animGameMoving = createAnims.createAnimation(gamePlayerMoving, 4, 1);
-
-		animIdle = createAnims.createAnimation(playerIdle, 4, 4);
-		animSkill = createAnims.createAnimation(playerAttack, 4, 1);
-		animDefend = createAnims.createAnimation(playerDefend, 4, 2);
-        animEscape = createAnims.createAnimation(playerEscape, 4, 1);
-        animItem = createAnims.createAnimation(playerItem, 4, 1);
-        animHack = createAnims.createAnimation(playerHack, 4, 2);
-        animDeath = createAnims.createAnimation(playerDeath, 4, 2);
-        animTakeHitAnim = createAnims.createAnimation(playerTakeHit, 4, 1);
-        animHealthPlusDoT = createAnims.createAnimation(healthPlus, 3, 1);
-        animHealthMinusDoT = createAnims.createAnimation(healthMinus, 3, 1);
-        animCriticalHit = createAnims.createAnimation(criticalHit, 4, 1);
-		animMiss = createAnims.createAnimation(miss, 4, 1);
-		animHealing = createAnims.createAnimation(healing, 4, 1);
-		animDoTPlus = createAnims.createAnimation(dotPlus, 4, 1);
-		animDoTMinus = createAnims.createAnimation(dotMinus, 4, 1);
-	}
 
 	private void createBundle() {
 		Locale locale = Locale.getDefault();
@@ -575,86 +520,6 @@ public class MainGame extends Game {
 		return myBundle;
 	}
 
-	public Texture getImgBgHall() {
-		return imgBgHall;
-	}
-
-	public Texture getImgBgBoss() {
-		return imgBgBoss;
-	}
-
-	public Texture getImgTopBar() {
-		return imgTopBar;
-	}
-
-	public Texture getImgBottomBar() {
-		return imgBottomBar;
-	}
-
-	public Animation<TextureRegion> getAnimGameMoving() {
-		return animGameMoving;
-	}
-
-	public Animation<TextureRegion> getAnimIdle() {
-        return animIdle;
-    }
-
-    public Animation<TextureRegion> getAnimSkill() {
-        return animSkill;
-    }
-
-    public Animation<TextureRegion> getAnimDefend() {
-        return animDefend;
-    }
-
-    public Animation<TextureRegion> getAnimEscape() {
-        return animEscape;
-    }
-
-    public Animation<TextureRegion> getAnimItem() {
-        return animItem;
-    }
-
-    public Animation<TextureRegion> getAnimHack() {
-        return animHack;
-    }
-
-    public Animation<TextureRegion> getAnimDeath() {
-        return animDeath;
-    }
-
-    public Animation<TextureRegion> getAnimTakeHitAnim() {
-        return animTakeHitAnim;
-    }
-
-    public Animation<TextureRegion> getAnimHealthPlusDoT() {
-        return animHealthPlusDoT;
-    }
-
-    public Animation<TextureRegion> getAnimHealthMinusDoT() {
-        return animHealthMinusDoT;
-    }
-
-	public Animation<TextureRegion> getAnimMiss() {
-		return animMiss;
-	}
-
-	public Animation<TextureRegion> getAnimCriticalHit() {
-		return animCriticalHit;
-	}
-
-	public Animation<TextureRegion> getAnimHealing() {
-		return animHealing;
-	}
-
-	public Animation<TextureRegion> getAnimDoTPlus() {
-		return animDoTPlus;
-	}
-
-	public Animation<TextureRegion> getAnimDoTMinus() {
-		return animDoTMinus;
-	}
-
 	public ProgressBar.ProgressBarStyle getProgBarStyle() {
         return progBarStyle;
     }
@@ -666,18 +531,6 @@ public class MainGame extends Game {
     public BitmapFont getDescriptionFont() {
 	    return descriptionFont;
     }
-
-	public Texture getEscapeBg() {
-		return escapeBg;
-	}
-
-	public Texture getHpBarLeft() {
-		return hpBarLeft;
-	}
-
-	public Texture getHpBarRight() {
-		return hpBarRight;
-	}
 
 	public float getStepCount() {
 		return stepCount;
@@ -827,14 +680,6 @@ public class MainGame extends Game {
 		return poolMult;
 	}
 
-	public Texture getPowerUpBg() {
-		return powerUpBg;
-	}
-
-	public Texture getPowerUpPopup() {
-		return powerUpPopup;
-	}
-
 	public Window.WindowStyle getEmptyWindowStyle() {
 		return emptyWindowStyle;
 	}
@@ -850,10 +695,6 @@ public class MainGame extends Game {
 	public String getCurrentBoss() {
 		return currentBoss;
 	}
-
-	public Texture getItemBg() {
-	    return itemBg;
-    }
 
     public int getMoney() {
 	    return money;
