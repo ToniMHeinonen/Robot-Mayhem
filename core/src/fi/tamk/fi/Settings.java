@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
@@ -25,13 +26,33 @@ public class Settings {
     private float outOfScreenY;
     private float onScreenY;
 
-    private Dialog settingsDialog;
-    private Slider musicVolSlider;
-    private Label musicVolLabel;
     private TextButton closeSettingsButton;
     private TextButton settingsRoomButton;
 
+    private Dialog settingsDialog;
+
     private Label header;
+
+    // Music
+    private Slider musicVolSlider;
+    private Label musicVolLabel;
+
+    // Sound
+    private Slider soundVolSlider;
+    private Label soundVolLabel;
+
+    // Difficulty
+    private Label difficultyLabel;
+    private String[] difficulties = new String[] {"0", "1", "2"};
+    private int space = 300;
+
+    // Quit and Reset
+    private ImageButton buttonQuit;
+    private ImageButton buttonReset;
+
+    // Language
+    private ImageButton buttonFi;
+    private ImageButton buttonEn;
 
     private boolean closeDialog = false;
 
@@ -45,6 +66,10 @@ public class Settings {
         createSettingsDialog();
         createHeader();
         createMusicVolume();
+        createSoundVolume();
+        createDifficultyButtons();
+        createQuitAndResetButtons();
+        createLanguageButtons();
         createCloseButton();
         createSettingsRoomButton();
         addActors();
@@ -83,14 +108,14 @@ public class Settings {
 
     private void createHeader() {
         header = new Label("Settings", finalSkin, "big");
-        header.setPosition(settingsDialog.getWidth() / 3 + 50, settingsDialog.getHeight() - 200);
+        header.setPosition(settingsDialog.getWidth() / 3 - 70, settingsDialog.getHeight() - 200);
     }
 
     private void createMusicVolume() {
         musicVolSlider = new Slider(0.1f, 0.9f, 0.1f, false, finalSkin);
         musicVolSlider.setValue(game.getMusicVol());
-        musicVolSlider.setPosition(header.getX() - 200,
-                header.getY() - 200);
+        musicVolSlider.setPosition(header.getX() - 110,
+                header.getY() - 160);
         musicVolSlider.setSize(900, 120);
         musicVolSlider.addListener(new ChangeListener() {
             @Override
@@ -101,8 +126,57 @@ public class Settings {
         });
 
         musicVolLabel = new Label("Music:", finalSkin);
-        musicVolLabel.setPosition(musicVolSlider.getX() - 150,
-                musicVolSlider.getY() + 50);
+        musicVolLabel.setPosition(musicVolSlider.getX() - 205,
+                musicVolSlider.getY() + 25);
+    }
+
+    private void createSoundVolume() {
+        soundVolSlider = new Slider(0.1f, 0.9f, 0.1f, false, finalSkin);
+        soundVolSlider.setValue(game.getMusicVol());
+        soundVolSlider.setPosition(musicVolSlider.getX(),
+                musicVolSlider.getY() - 120);
+        soundVolSlider.setSize(900, 120);
+        soundVolSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.getMusMainTheme().setVolume(musicVolSlider.getValue());
+                game.setMusicVol(musicVolSlider.getValue());
+            }
+        });
+
+        soundVolLabel = new Label("Sound:", finalSkin);
+        soundVolLabel.setPosition(soundVolSlider.getX() - 205,
+                soundVolSlider.getY() + 25);
+    }
+
+    private void createDifficultyButtons() {
+        for (int i = 0; i < difficulties.length; i++) {
+            ImageButton difficulty = new ImageButton(finalSkin, "diff" + difficulties[i]);
+            difficulty.setPosition(musicVolSlider.getX() + 15 + i* space,
+                    soundVolSlider.getY() - 125);
+            settingsDialog.addActor(difficulty);
+        }
+        difficultyLabel = new Label("Difficulty:", finalSkin);
+        difficultyLabel.setPosition(soundVolLabel.getX() - 105,
+                soundVolLabel.getY() - 120);
+    }
+
+    private void createQuitAndResetButtons() {
+        buttonQuit = new ImageButton(finalSkin, "quit_en");
+        buttonQuit.setPosition(difficultyLabel.getX() - 20,
+                120);
+
+        buttonReset = new ImageButton(finalSkin, "reset_en");
+        buttonReset.setPosition(buttonQuit.getX() + buttonReset.getWidth(),
+                buttonQuit.getY());
+    }
+
+    private void createLanguageButtons() {
+        buttonFi = new ImageButton(finalSkin, "finnish");
+        buttonFi.setPosition(945, 240);
+
+        buttonEn = new ImageButton(finalSkin, "english");
+        buttonEn.setPosition(buttonFi.getX(), buttonFi.getY() - 120);
     }
 
     private void createSettingsRoomButton() {
@@ -134,6 +208,13 @@ public class Settings {
         settingsDialog.addActor(header);
         settingsDialog.addActor(musicVolSlider);
         settingsDialog.addActor(musicVolLabel);
+        settingsDialog.addActor(soundVolSlider);
+        settingsDialog.addActor(soundVolLabel);
+        settingsDialog.addActor(difficultyLabel);
+        settingsDialog.addActor(buttonQuit);
+        settingsDialog.addActor(buttonReset);
+        settingsDialog.addActor(buttonFi);
+        settingsDialog.addActor(buttonEn);
         settingsDialog.addActor(closeSettingsButton);
         settingsDialog.addActor(settingsRoomButton);
         stage.addActor(settingsDialog);

@@ -42,15 +42,15 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
 		up: lang_fi1
 		down: lang_fi2
 	}
-	diff1: {
+	diff0: {
 		up: diff1_1
 		down: diff1_2
 	}
-	diff2: {
+	diff1: {
 		up: diff2_1
 		down: diff2_2
 	}
-	diff3: {
+	diff2: {
 		up: diff3_1
 		down: diff3_2
 	}
