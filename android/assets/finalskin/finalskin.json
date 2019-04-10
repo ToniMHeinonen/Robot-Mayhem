@@ -7,26 +7,68 @@ com.badlogic.gdx.graphics.g2d.BitmapFont: {
 		file: font-normal.fnt
 	}
 }
+com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+	default: {
+		up: topbarbutton1
+		down: topbarbutton2
+	}
+}
 com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
 	default: {
-		up: button
-		down: button_clicked
+		up: topbarbutton1
+		down: topbarbutton2
+	}
+	quit_en: {
+		up: quit1_en
+		down: quit2_en
+	}
+	quit_fi: {
+		up: quit1_fi
+		down: quit2_fi
+	}
+	reset_en: {
+		up: reset1_en
+		down: reset2_en
+	}
+	reset_fi: {
+		up: reset1_fi
+		down: reset2_fi
+	}
+	english: {
+		up: lang_en1
+		down: lang_en2
+	}
+	finnish: {
+		up: lang_fi1
+		down: lang_fi2
 	}
 	diff1: {
-		up: diff1
-		down: diff1_clicked
+		up: diff1_1
+		down: diff1_2
 	}
 	diff2: {
-		up: diff2
-		down: diff2_clicked
+		up: diff2_1
+		down: diff2_2
 	}
 	diff3: {
-		up: diff3
-		down: diff3_clicked
+		up: diff3_1
+		down: diff3_2
 	}
-	exit: {
-		up: exit
-		down: exit_clicked
+	x: {
+		up: exit1
+		down: exit2
+	}
+	inventory: {
+		up: menu_items2
+		down: menu_items1
+	}
+	stats: {
+		up: menu_stats2
+		down: menu_stats1
+	}
+	settings: {
+		up: menu_settings2
+		down: menu_settings1
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
@@ -46,13 +88,8 @@ com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
 com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 	default: {
 		font: font-normal
-		up: button
-		down: button_clicked
-	}
-	confirm: {
-		font: font-normal
-		up: confirm
-		down: confirm_clicked
+		up: topbarbutton1
+		down: topbarbutton2
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
@@ -62,8 +99,16 @@ com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
 }
 com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
 	default: {
-		background: popup_bg_small
-		titleFont: font-big
+		background: bg_powerup
+		titleFont: font-normal
+	}
+	settings: {
+		background: bg_settings_flat
+		titleFont: font-normal
+	}
+	inventory: {
+		background: bg_items_flat
+		titleFont: font-normal
 	}
 }
 }

@@ -31,6 +31,8 @@ public class Settings {
     private TextButton closeSettingsButton;
     private TextButton settingsRoomButton;
 
+    private Label header;
+
     private boolean closeDialog = false;
 
     Settings(MainGame game) {
@@ -41,6 +43,7 @@ public class Settings {
 
         setValues();
         createSettingsDialog();
+        createHeader();
         createMusicVolume();
         createCloseButton();
         createSettingsRoomButton();
@@ -62,17 +65,25 @@ public class Settings {
     private void setValues() {
         settingsWidth = game.pixelWidth / 2;
         settingsHeight = game.pixelHeight / 2;
-        posX = game.pixelWidth / 4;
-        outOfScreenY = game.pixelHeight;
-        onScreenY = game.pixelHeight / 2;
+        //posX = game.pixelWidth / 4;
+        //outOfScreenY = game.pixelHeight;
+        //onScreenY = game.pixelHeight / 2;
+        posX = 0;
+        outOfScreenY = 0;
+        onScreenY = 0;
     }
 
     private void createSettingsDialog() {
-        settingsDialog = new Dialog("Settings", skin);
+        settingsDialog = new Dialog("Settings", finalSkin, "settings");
         settingsDialog.setMovable(false);
         settingsDialog.setKeepWithinStage(false);
         settingsDialog.setPosition(posX, outOfScreenY);
-        settingsDialog.setSize(settingsWidth, settingsHeight);
+        settingsDialog.setSize(game.pixelWidth, game.pixelHeight);
+    }
+
+    private void createHeader() {
+        header = new Label("Settings", finalSkin, "big");
+        header.setPosition(settingsDialog.getWidth() / 2, settingsDialog.getHeight() - 300);
     }
 
     private void createMusicVolume() {
@@ -89,7 +100,7 @@ public class Settings {
             }
         });
 
-        musicVolLabel = new Label("Music volume", finalSkin);
+        musicVolLabel = new Label("Music", finalSkin);
         musicVolLabel.setPosition(musicVolSlider.getX() + 100,
                 musicVolSlider.getY() + 100);
     }
@@ -120,6 +131,7 @@ public class Settings {
     }
 
     private void addActors() {
+        settingsDialog.addActor(header);
         settingsDialog.addActor(musicVolSlider);
         settingsDialog.addActor(musicVolLabel);
         settingsDialog.addActor(closeSettingsButton);
