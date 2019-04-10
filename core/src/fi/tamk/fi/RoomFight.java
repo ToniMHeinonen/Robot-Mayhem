@@ -382,6 +382,7 @@ public class RoomFight extends RoomParent {
                                 DOING_ACTION = 4, END_ACTION = 5;
         protected int actionState, TEMP_ANIM = 0, HIT_ANIM = 1, LONG_ANIM = 2, MISS_ANIM = 3,
                         HEAL_ANIM = 4;
+        protected int skillState, SKILL_RESET = 0, SKILL_DAMAGE = 1, SKILL_HEAL = 2, SKILL_MISS = 3;
         protected boolean flashWhite, hitAnimationRunning, missCritAnimationRunning, skillMissed,
                             skillHeals;
         protected float flashTime = 0.25f;
@@ -788,13 +789,13 @@ public class RoomFight extends RoomParent {
         public void doAction(String action) {
             // Reset necessary values
             curHitAnimation = null;
-            skillMissed = false;
-            skillHeals = false;
+            skillState = SKILL_RESET;
             boolean actionSelected = false;
             int curAnimSpd = 0;
 
             if (action == "Attack")
             {
+                skillState = SKILL_DAMAGE;
                 actionSelected = true;
                 curAnimation = skillAnim;
                 curAnimSpd =  skillSpd;
@@ -839,38 +840,43 @@ public class RoomFight extends RoomParent {
                         curAnimation = skillAnim;
                         curAnimSpd = skillSpd;
 
-                        skillMissed = randomChance((Integer) skillMap.get(Skills.missChance));
+                        // If skill misses, skip everything
+                        boolean miss = randomChance((Integer) skillMap.get(Skills.missChance));
+                        if (miss) skillState = SKILL_MISS;
+                        else {
+                            // Check if skill heals, else do damage
+                            if ((Double) skillMap.get(Skills.damage) < 0) {
+                                skillState = SKILL_HEAL;
+                                dmgAmount = (Double) skillMap.get(Skills.damage);
+                            } else {
+                                curHitAnimation =
+                                        (Animation<TextureRegion>) skillMap.get(Skills.hitAnimation);
+                                // If skill does not have animation, then it does not do damage
+                                if (curHitAnimation != null) {
+                                    skillState = SKILL_DAMAGE;
+                                    curHitAnimationSpd = (Integer) skillMap.get(Skills.hitAnimationSpd);
 
-                        // If skill heals
-                        if ((Double) skillMap.get(Skills.damage) < 0) {
-                            skillHeals = true;
-                            dmgAmount = (Double) skillMap.get(Skills.damage);
-                        }
-                        // If skill does not miss
-                        if (!skillMissed && !skillHeals) {
-                            curHitAnimation =
-                                    (Animation<TextureRegion>) skillMap.get(Skills.hitAnimation);
-                            curHitAnimationSpd = (Integer) skillMap.get(Skills.hitAnimationSpd);
-
-                            // If critical hit, deal 1.5x damage
-                            dmgAmount = defaultDmg * (Double) skillMap.get(Skills.damage);
-                            if (randomChance((Integer) skillMap.get(Skills.critChance))) {
-                                dmgAmount *= 1.5;
-                                enemy.startCriticalHitAnimation();
+                                    // If critical hit, deal 1.5x damage
+                                    dmgAmount = defaultDmg * (Double) skillMap.get(Skills.damage);
+                                    if (randomChance((Integer) skillMap.get(Skills.critChance))) {
+                                        dmgAmount *= 1.5;
+                                        enemy.startCriticalHitAnimation();
+                                    }
+                                }
                             }
-                        }
 
-                        // Damage over time
-                        double value = (Double) skillMap.get(Skills.damageOverTime);
-                        double dot;
-                        // If purePercent is true, then dot value 2.0 deals 2 percent of MaxHp
-                        // otherwise it deals 2.0*defaultDmg
-                        if ((Boolean) skillMap.get(Skills.dotPurePercent)) dot = value;
-                        else dot = value * defaultDmg;
-                        int dotTurns = (Integer) skillMap.get(Skills.damageOverTimeTurns);
-                        if (dot == 0) ; // Do nothing
-                        else if (dot > 0) enemy.addDoT(dotTurns, dot); // Damage
-                        else if (dot < 0) addDoT(dotTurns, dot); // Healing
+                            // Damage over time can happen with healing and damage
+                            double value = (Double) skillMap.get(Skills.damageOverTime);
+                            double dot;
+                            // If purePercent is true, then dot value 2.0 deals 2 percent of MaxHp
+                            // otherwise it deals 2.0*defaultDmg
+                            if ((Boolean) skillMap.get(Skills.dotPurePercent)) dot = value;
+                            else dot = value * defaultDmg;
+                            int dotTurns = (Integer) skillMap.get(Skills.damageOverTimeTurns);
+                            if (dot == 0) ; // Do nothing
+                            else if (dot > 0) enemy.addDoT(dotTurns, dot); // Damage
+                            else if (dot < 0) addDoT(dotTurns, dot); // Healing
+                        }
 
                         actionState = TEMP_ANIM;
                     }
@@ -889,21 +895,20 @@ public class RoomFight extends RoomParent {
 
         protected void controlActionStates() {
             if (actionState == TEMP_ANIM) {
-                // If temporary animation is finished, and hitAnimation exists, draw hit animation
-                // on enemy's draw method. If not causeDamage, start enemy's turn
+                // If temp animation is finished, check skillState for type
                 if (curAnimation.isAnimationFinished(anim.getStateTime())) {
-                    if (curHitAnimation != null) {
+                    if (skillState == SKILL_DAMAGE) {
                         enemy.startHitAnimation(curHitAnimation, curHitAnimationSpd);
                         actionState = HIT_ANIM;
-                    } else if (skillMissed){
-                        // If skill missed, then curHitAnimation is null
-                        enemy.startMissAnimation();
-                        actionState = MISS_ANIM;
-                    } else if (skillHeals) {
+                    } else if (skillState == SKILL_HEAL){
                         takeHeal(dmgAmount);
                         startHitAnimation(healAnim, 8);
                         actionState = HEAL_ANIM;
+                    } else if (skillState == SKILL_MISS) {
+                        enemy.startMissAnimation();
+                        actionState = MISS_ANIM;
                     } else {
+                        // Else it's only DoT move
                         turnState = END_ACTION;
                     }
                     startIdle();
@@ -918,7 +923,6 @@ public class RoomFight extends RoomParent {
                 // Animation lasts until next round
                 turnState = END_ACTION;
             } else if (actionState == HEAL_ANIM) {
-                System.out.println("heal");
                 if (!isHitAnimationRunning()) {
                     turnState = END_ACTION;
                 }
