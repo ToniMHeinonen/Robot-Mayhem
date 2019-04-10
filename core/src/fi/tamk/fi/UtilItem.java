@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 
 import java.util.ArrayList;
 
@@ -17,6 +18,7 @@ public class UtilItem {
     private MainGame game;
     private Stage stage;
     private Skin skin;
+    private Skin finalSkin;
     private int money;
     private String room;
     private Color fontColor;
@@ -27,6 +29,9 @@ public class UtilItem {
     private Dialog popupBuyableItem;
     private Dialog popupOwnedItem;
 
+    private ScrollPane scrollBuyable;
+    private ScrollPane scrollOwned;
+
     private float dialogItemWidth;
     private float dialogItemHeight;
     private float posX;
@@ -36,10 +41,6 @@ public class UtilItem {
     private UtilDialog utilDialog;
 
     private TextButton buttonMoney;
-    private TextButton buttonBuyItem;
-    private TextButton buttonOwnedItems;
-    private TextButton buttonPrice;
-    private TextButton buttonAmount;
     private TextButton buttonClose;
 
     private String[] allItems;
@@ -49,11 +50,15 @@ public class UtilItem {
     private int buttonCounterBuyable;
     private int buttonCounterOwned;
 
+    private Label labelShop;
+    private Label labelInventory;
+
     UtilItem(MainGame game, String room) {
         this.game = game;
         this.room = room;
         stage = game.getStage();
         skin = game.getSkin();
+        finalSkin = game.getFinalSkin();
         money = game.getMoney();
         fontColor = game.getFontColor();
         inventory = game.getInventory();
@@ -63,9 +68,9 @@ public class UtilItem {
 
         setValues();
         createItemDialog();
+        createHeaders();
         createBuyableItemsTable();
         createOwnedItemsTable();
-        createHeaders();
         showMoney();
         addActors();
         System.out.println("Item-dialog opened from room: " + room);
@@ -78,34 +83,39 @@ public class UtilItem {
     private void setValues() {
         dialogItemWidth = game.pixelWidth / 1.2f;
         dialogItemHeight = game.pixelHeight / 1.2f;
-        posX = 150;
-        outOfScreenY = game.pixelHeight;
-        onScreenY = game.pixelHeight/9;
+        //posX = 150;
+        //outOfScreenY = game.pixelHeight;
+        //onScreenY = game.pixelHeight/9;
+        posX = 0;
+        outOfScreenY = 0;
+        onScreenY = 0;
     }
 
     /*
     The whole area, where are buyable and owned items.
      */
     private void createItemDialog() {
-        dialogItems = new Dialog("Items", skin);
+        dialogItems = new Dialog("", finalSkin, "inventory");
         dialogItems.setMovable(false);
         dialogItems.setKeepWithinStage(false);
         dialogItems.setPosition(posX, onScreenY);
-        dialogItems.setSize(dialogItemWidth, dialogItemHeight);
+        dialogItems.setSize(game.pixelWidth, game.pixelHeight);
     }
 
     /*
     Table, which contains buyable items.
      */
     private void createBuyableItemsTable() {
+        int buyableItems = 0;
         tableBuyableItems = new Table();
 
         for (int i = 0; i < allItems.length; i++) {
             buttonCounterBuyable = i;
-            TextButton button0 = new TextButton(allItems[i], skin);
-            tableBuyableItems.add(button0).size(400, 100);
+            Label shopItems = new Label(allItems[i], finalSkin);
+            tableBuyableItems.add(shopItems).size(550, 75).row();
+            buyableItems++;
 
-            button0.addListener(new ClickListener(){
+            shopItems.addListener(new ClickListener(){
                 int i = buttonCounterBuyable;
                 @Override
                 public void clicked(InputEvent event, float x, float y){
@@ -113,12 +123,29 @@ public class UtilItem {
                 }
             });
 
+            /*
             String stringCost = String.valueOf(Item.getItem(allItems[i]).get("price"));
             TextButton buttonPrice = new TextButton(stringCost, skin);
             tableBuyableItems.add(buttonPrice).size(100, 100).row();
+            */
         }
 
-        createScrollTable(tableBuyableItems, -100, 100);
+        if (buyableItems > 11) {
+            createScrollTableBuyable(tableBuyableItems);
+        } else {
+            tableBuyableItems.setPosition(400, 845 - (buyableItems-1)*75/2);
+            dialogItems.addActor(tableBuyableItems);
+        }
+    }
+
+    private void createScrollTableBuyable(Table table) {
+        scrollBuyable = new ScrollPane(table, finalSkin);
+        scrollBuyable.setFadeScrollBars(false);
+        scrollBuyable.setVisible(true);
+        scrollBuyable.setVariableSizeKnobs(false);
+        scrollBuyable.setSize(660, 810);
+        scrollBuyable.setPosition(105, 75);
+        dialogItems.addActor(scrollBuyable);
     }
 
     /*
@@ -126,6 +153,7 @@ public class UtilItem {
      */
     private void createOwnedItemsTable() {
         tableOwnedItems = new Table();
+        int ownedItems = 0;
 
         // Get the amount of owned items.
         for (int i = 0; i < allItems.length; i++) {
@@ -136,15 +164,16 @@ public class UtilItem {
             }
         }
 
+        // (String.valueOf(amounts[i]), skin);
+
         for (int i = 0; i < allItems.length; i++) {
             buttonCounterOwned = i;
             if (game.inventoryOrSkillsContains(allItems[i])) {
-                TextButton buttonItem = new TextButton(allItems[i], skin);
-                TextButton buttonAmount = new TextButton(String.valueOf(amounts[i]), skin);
-                tableOwnedItems.add(buttonItem).size(400, 100);
-                tableOwnedItems.add(buttonAmount).size(100, 100).row();
+                Label ownedItem = new Label(allItems[i], finalSkin);
+                tableOwnedItems.add(ownedItem).size(550, 75).row();
+                ownedItems++;
 
-                buttonItem.addListener(new ClickListener(){
+                ownedItem.addListener(new ClickListener(){
                     int i = buttonCounterOwned;
                     @Override
                     public void clicked(InputEvent event, float x, float y){
@@ -154,35 +183,32 @@ public class UtilItem {
             }
         }
 
-        createScrollTable(tableOwnedItems, 600, 100);
+        if (ownedItems > 11) {
+            createScrollTableOwned(tableOwnedItems);
+        } else {
+            tableOwnedItems.setPosition(1120, 845 - (ownedItems-1)*75/2);
+            dialogItems.addActor(tableOwnedItems);
+        }
     }
 
-    /*
-    Scrollpane is used so that the tables can have scrollbar.
-     */
-    private void createScrollTable(Table table, float x, float y) {
-        ScrollPane scrollPane = new ScrollPane(table, skin);
-        scrollPane.setFadeScrollBars(false);
-        scrollPane.setVisible(true);
-        scrollPane.setSize(dialogItems.getWidth()/2, dialogItems.getHeight()/2);
-        scrollPane.setPosition(dialogItems.getX() + x, dialogItems.getY() + y);
-        dialogItems.addActor(scrollPane);
+    private void createScrollTableOwned(Table table) {
+        scrollOwned = new ScrollPane(table, finalSkin);
+        scrollOwned.setFadeScrollBars(false);
+        scrollOwned.setVisible(true);
+        scrollOwned.setVariableSizeKnobs(false);
+        scrollOwned.setSize(660, 810);
+        scrollOwned.setPosition(825, 75);
+        dialogItems.addActor(scrollOwned);
     }
 
     private void createHeaders() {
-        buttonBuyItem = new TextButton("Buy item", skin);
-        buttonBuyItem.setPosition(dialogItems.getX()+ 100, dialogItems.getY() + 500);
+        labelShop = new Label("Shop", finalSkin, "big");
+        labelShop.setPosition(300, 900);
+        dialogItems.addActor(labelShop);
 
-        buttonOwnedItems = new TextButton("Owned items", skin);
-        buttonOwnedItems.setPosition(dialogItems.getX() + 750, dialogItems.getY() + 500);
-
-        buttonPrice = new TextButton("Price", skin);
-        buttonPrice.setSize(200, 100);
-        buttonPrice.setPosition(dialogItems.getX() + 400, dialogItems.getY() + 500);
-
-        buttonAmount = new TextButton("#", skin);
-        buttonAmount.setSize(100, 100);
-        buttonAmount.setPosition(dialogItems.getX() + 1150, dialogItems.getY() + 500);
+        labelInventory = new Label("Inventory", finalSkin, "big");
+        labelInventory.setPosition(labelShop.getX() + 650, labelShop.getY());
+        dialogItems.addActor(labelInventory);
 
         buttonClose = new TextButton("Close", skin);
         buttonClose.setPosition(dialogItems.getX() + 475, dialogItems.getY());
@@ -286,10 +312,6 @@ public class UtilItem {
 
     private void addActors() {
         dialogItems.addActor(buttonMoney);
-        dialogItems.addActor(buttonBuyItem);
-        dialogItems.addActor(buttonOwnedItems);
-        dialogItems.addActor(buttonPrice);
-        dialogItems.addActor(buttonAmount);
         dialogItems.addActor(buttonClose);
         stage.addActor(dialogItems);
     }
