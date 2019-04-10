@@ -1,10 +1,10 @@
 {
 com.badlogic.gdx.graphics.g2d.BitmapFont: {
-	font-big: {
-		file: font-big.fnt
+	font-average: {
+		file: font-average.fnt
 	}
-	font-normal: {
-		file: font-normal.fnt
+	font-large: {
+		file: font-large.fnt
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
@@ -73,10 +73,10 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
 }
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	default: {
-		font: font-normal
+		font: font-average
 	}
 	big: {
-		font: font-big
+		font: font-large
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
@@ -93,7 +93,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 	default: {
-		font: font-normal
+		font: font-average
 		up: topbarbutton1
 		down: topbarbutton2
 	}
@@ -106,15 +106,15 @@ com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
 com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
 	default: {
 		background: bg_powerup
-		titleFont: font-normal
+		titleFont: font-average
 	}
 	settings: {
 		background: bg_settings_flat
-		titleFont: font-normal
+		titleFont: font-average
 	}
 	inventory: {
 		background: bg_items_flat
-		titleFont: font-normal
+		titleFont: font-average
 	}
 }
 }

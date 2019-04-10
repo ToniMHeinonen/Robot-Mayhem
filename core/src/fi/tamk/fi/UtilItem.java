@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -21,7 +22,6 @@ public class UtilItem {
     private Skin finalSkin;
     private int money;
     private String room;
-    private Color fontColor;
 
     private Table tableBuyableItems;
     private Table tableOwnedItems;
@@ -40,9 +40,6 @@ public class UtilItem {
 
     private UtilDialog utilDialog;
 
-    private TextButton buttonMoney;
-    private TextButton buttonClose;
-
     private String[] allItems;
     private ArrayList<String> inventory;
     private int[] amounts;
@@ -53,6 +50,12 @@ public class UtilItem {
     private Label labelShop;
     private Label labelInventory;
 
+    // Exit
+    ImageButton buttonExit;
+
+    // Money
+    Label labelMoney;
+
     UtilItem(MainGame game, String room) {
         this.game = game;
         this.room = room;
@@ -60,7 +63,6 @@ public class UtilItem {
         skin = game.getSkin();
         finalSkin = game.getFinalSkin();
         money = game.getMoney();
-        fontColor = game.getFontColor();
         inventory = game.getInventory();
         allItems = Item.getAllItems();
         utilDialog = game.getDialog();
@@ -72,7 +74,8 @@ public class UtilItem {
         createBuyableItemsTable();
         createOwnedItemsTable();
         showMoney();
-        addActors();
+        createExitButton();
+        stage.addActor(dialogItems);
         System.out.println("Item-dialog opened from room: " + room);
         System.out.println("Inventory size: " + inventory.size());
     }
@@ -209,21 +212,13 @@ public class UtilItem {
         labelInventory = new Label("Inventory", finalSkin, "big");
         labelInventory.setPosition(labelShop.getX() + 650, labelShop.getY());
         dialogItems.addActor(labelInventory);
-
-        buttonClose = new TextButton("Close", skin);
-        buttonClose.setPosition(dialogItems.getX() + 475, dialogItems.getY());
-        buttonClose.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                dialogItems.remove();
-            }
-        });
     }
 
     private void showMoney() {
-        buttonMoney = new TextButton("Money: " + String.valueOf(money), skin);
-        buttonMoney.setPosition(dialogItems.getWidth() - 350,
-                dialogItems.getHeight() - 150);
+        labelMoney = new Label("Money:\n" + String.valueOf(money), finalSkin);
+        labelMoney.setPosition(1650, 100);
+        labelMoney.setAlignment(1);
+        dialogItems.addActor(labelMoney);
     }
 
     /*
@@ -310,9 +305,16 @@ public class UtilItem {
         });
     }
 
-    private void addActors() {
-        dialogItems.addActor(buttonMoney);
-        dialogItems.addActor(buttonClose);
-        stage.addActor(dialogItems);
+    private void createExitButton() {
+        buttonExit = new ImageButton(finalSkin, "x");
+        buttonExit.setPosition(1550, 960);
+        buttonExit.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                dialogItems.remove();
+            }
+        });
+
+        dialogItems.addActor(buttonExit);
     }
 }
