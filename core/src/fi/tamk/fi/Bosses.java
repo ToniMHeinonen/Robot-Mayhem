@@ -8,6 +8,8 @@ import com.badlogic.gdx.math.MathUtils;
 import java.util.HashMap;
 
 public class Bosses {
+
+    private static Files files;
     /*
     Use these, since if you need to change the name to something else, you then only need
     to change it in here.
@@ -47,7 +49,8 @@ public class Bosses {
     /*
     Create bosses when the game starts.
      */
-    public static void createBosses() {
+    public static void createBosses(MainGame game) {
+        files = game.getFiles();
         mapBosses = new HashMap<String, HashMap<String,Object>>();
         bossRoombot();
         bossCopper();
@@ -118,16 +121,16 @@ public class Bosses {
         curDialogEnd = "Vroom poks!";
 
         t_idle = new Texture("texture/roombot/roombot_idle.png");
-        a_idle = anim.createAnimation(t_idle, 4, 4);
+        a_idle = files.a_roombotIdle;
         s_idle = 8;
         t_hack = new Texture("texture/roombot/roombot_stun.png");
-        a_hack = anim.createAnimation(t_hack, 4, 2);
+        a_hack = files.a_roombotHack;
         s_hack = 8;
         t_skill = new Texture("texture/roombot/roombot_attack.png");
-        a_skill = anim.createAnimation(t_skill, 4, 1);
+        a_skill = files.a_roombotSkill;
         s_skill = 8;
         t_takeHit = new Texture("texture/roombot/roombot_damage.png");
-        a_takeHit = anim.createAnimation(t_takeHit, 4, 1);
+        a_takeHit = files.a_roombotDamage;
         s_takeHit = 8;
 
         addToMap();

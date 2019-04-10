@@ -8,21 +8,24 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Files {
     public final AssetManager manager = new AssetManager();
+    private final Animating createAnims = new Animating();
 
-    // Player textures
-    public final Texture playerIdle, playerAttack, playerDefend, playerItem, playerEscape,
+    // Player textures and animations
+    private final Texture playerIdle, playerAttack, playerDefend, playerItem, playerEscape,
     playerHack, playerDeath, playerTakeHit, healthPlus, healthMinus, criticalHit, miss, healing,
     dotMinus, dotPlus, playerGameMoving;
+    public final Animation<TextureRegion> animIdle, animSkill, animDefend, animEscape,
+            animItem, animHack, animDeath, animTakeHitAnim, animHealthPlusDoT, animHealthMinusDoT,
+            animMiss, animCriticalHit, animHealing, animDoTPlus, animDoTMinus, animGameMoving;
+
+    // Roombot textures and animations
+    private final Texture t_roombotIdle, t_roombotSkill, t_roombotDamage, t_roombotHack;
+    public final Animation<TextureRegion> a_roombotIdle, a_roombotSkill, a_roombotDamage,
+                                        a_roombotHack;
 
     // Other textures
     public final Texture imgBgHall, imgBgBoss, imgTopBar, imgBottomBar, escapeBg, hpBarLeft,
             hpBarRight, powerUpBg, powerUpPopup, itemBg;
-
-    // Player animations
-    private final Animating createAnims = new Animating();
-    public final Animation<TextureRegion> animIdle, animSkill, animDefend, animEscape,
-            animItem, animHack, animDeath, animTakeHitAnim, animHealthPlusDoT, animHealthMinusDoT,
-            animMiss, animCriticalHit, animHealing, animDoTPlus, animDoTMinus, animGameMoving;
 
     // Music
     public final Music[] allMusic;
@@ -33,7 +36,7 @@ public class Files {
         manager.finishLoading();
 
         /*
-        Textures
+        Textures and animations
          */
         // Player
         playerIdle = manager.get("texture/player/player_idle.png");
@@ -86,6 +89,20 @@ public class Files {
         animGameMoving = createAnims.createAnimation(playerGameMoving, 4, 1);
 
         /*
+        Bosses Textures and animations
+         */
+        // Roombot
+        t_roombotIdle = manager.get("texture/roombot/roombot_idle.png");
+        t_roombotSkill = manager.get("texture/roombot/roombot_attack.png");
+        t_roombotDamage = manager.get("texture/roombot/roombot_damage.png");
+        t_roombotHack = manager.get("texture/roombot/roombot_stun.png");
+        a_roombotIdle = createAnims.createAnimation(t_roombotIdle, 4, 4);
+        a_roombotSkill = createAnims.createAnimation(t_roombotSkill, 4, 1);
+        a_roombotDamage = createAnims.createAnimation(t_roombotDamage, 4, 1);
+        a_roombotHack = createAnims.createAnimation(t_roombotHack, 4, 2);
+        // Copper
+
+        /*
         Music
          */
         musMainTheme = manager.get("music/mainTheme.mp3");
@@ -131,6 +148,11 @@ public class Files {
         manager.load("texture/powerUpBg.jpg", Texture.class);
         manager.load("texture/powerUpPopup.jpg", Texture.class);
         manager.load("texture/itemBg.jpg", Texture.class);
+        // Bosses
+        manager.load("texture/roombot/roombot_idle.png", Texture.class);
+        manager.load("texture/roombot/roombot_attack.png", Texture.class);
+        manager.load("texture/roombot/roombot_damage.png", Texture.class);
+        manager.load("texture/roombot/roombot_stun.png", Texture.class);
 
         /*
         Music
