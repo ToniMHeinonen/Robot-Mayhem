@@ -123,7 +123,7 @@ public class MainGame extends Game {
 		files = new Files();
 		// Create skills and bosses when the game launches
 		Skills.createSkills();
-		Bosses.createBosses();
+		Bosses.createBosses(this);
 
 		// Create items
 		Item.createItems();
