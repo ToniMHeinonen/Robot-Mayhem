@@ -41,7 +41,7 @@ public class RoomGame extends RoomParent {
         player = new Player();
 
         // Wrapping enables looping
-        imgBG = Files.imgBgHall;
+        imgBG = files.imgBgHall;
         imgBG.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 
         createMenuButton();
@@ -208,8 +208,8 @@ public class RoomGame extends RoomParent {
             Y = game.gridSize*2;
 
             // Retrieve necessary animations and start the correct one
-            idle = Files.animIdle;
-            moving = Files.animGameMoving;
+            idle = files.animIdle;
+            moving = files.animGameMoving;
             anim.startAnimation(idle, 8);
         }
 

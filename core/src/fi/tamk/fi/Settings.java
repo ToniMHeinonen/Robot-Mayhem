@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class Settings {
     MainGame game;
+    private Files files;
     private Skin skin;
     private Stage stage;
     private Skin finalSkin;
@@ -66,6 +67,7 @@ public class Settings {
 
     Settings(MainGame game) {
         this.game = game;
+        files = game.getFiles();
         skin = game.getSkin();
         stage = game.getStage();
         finalSkin = game.getFinalSkin();
@@ -132,7 +134,7 @@ public class Settings {
         musicVolSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Files.musMainTheme.setVolume(musicVolSlider.getValue());
+                files.musMainTheme.setVolume(musicVolSlider.getValue());
                 game.setMusicVol(musicVolSlider.getValue());
             }
         });
@@ -154,7 +156,7 @@ public class Settings {
         soundVolSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Files.musMainTheme.setVolume(musicVolSlider.getValue());
+                files.musMainTheme.setVolume(musicVolSlider.getValue());
                 game.setMusicVol(musicVolSlider.getValue());
             }
         });

@@ -23,6 +23,7 @@ public class RoomParent implements Screen {
     protected Texture imgBG, imgTopBar, imgBottomBar;
     protected I18NBundle myBundle;
     protected MainGame game;
+    protected Files files;
     protected OrthographicCamera camera;
     protected Stage stage;
     protected Skin skin;
@@ -43,6 +44,7 @@ public class RoomParent implements Screen {
         this.batch = game.getBatch();
         this.myBundle = game.getMyBundle();
         this.game = game;
+        this.files = game.getFiles();
         this.camera = game.getCamera();
         this.stage = game.getStage();
         this.skin = game.getSkin();
@@ -55,8 +57,8 @@ public class RoomParent implements Screen {
         stage.clear();
 
         dialog = game.getDialog();
-        imgTopBar = Files.imgTopBar;
-        imgBottomBar = Files.imgBottomBar;
+        imgTopBar = files.imgTopBar;
+        imgBottomBar = files.imgBottomBar;
     }
 
     @Override

@@ -21,6 +21,7 @@ import java.util.HashMap;
 public class UtilPowerUp {
     private MainGame game;
     private SpriteBatch batch;
+    private Files files;
     private Stage stage;
     private Skin skin;
     private Texture background, popup;
@@ -42,11 +43,12 @@ public class UtilPowerUp {
 
     UtilPowerUp(MainGame game) {
         this.game = game;
+        files = game.getFiles();
         batch = game.getBatch();
         stage = game.getStage();
         dialog = game.getDialog();
-        background = Files.powerUpBg;
-        popup = Files.powerUpPopup;
+        background = files.powerUpBg;
+        popup = files.powerUpPopup;
 
         // Create constants for text
         descriptionLabelStyle = game.getDescriptionLabelStyle();

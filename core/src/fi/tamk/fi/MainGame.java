@@ -29,6 +29,7 @@ import java.util.Locale;
 public class MainGame extends Game {
 	private SpriteBatch batch;
 	private I18NBundle myBundle;
+	private Files files;
 
 	public final float pixelWidth = 1920f;
 	public final float pixelHeight = 1080f;
@@ -111,8 +112,6 @@ public class MainGame extends Game {
     private final int pool3HackShieldAmount = 15;
     private final int pool3InnerHackShieldAmount = 7;
 
-	private AssetManager manager;
-
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -121,7 +120,7 @@ public class MainGame extends Game {
 		loadSettings();
 		loadStats();
 		createBundle();
-		manager = new AssetManager();
+		files = new Files();
 		// Create skills and bosses when the game launches
 		Skills.createSkills();
 		Bosses.createBosses();
@@ -154,7 +153,7 @@ public class MainGame extends Game {
 		skin.dispose();
 		Bosses.dispose();
 		Skills.dispose();
-		Files.dispose();
+		files.manager.dispose();
 		saveStats();
 	}
 
@@ -164,41 +163,41 @@ public class MainGame extends Game {
 
 	public void switchToRoomTestailua() {
 		transition();
-		startMusic(Files.musMainTheme);
+		startMusic(files.musMainTheme);
 	    RoomTestailua room = new RoomTestailua(this);
 	    setScreen(room);
     }
 
     public void switchToRoomSettings() {
 		transition();
-		startMusic(Files.musMainTheme);
+		startMusic(files.musMainTheme);
 		RoomSettings room = new RoomSettings(this);
 		setScreen(room);
     }
 
     public void switchToRoomGame() {
 		transition();
-		startMusic(Files.musMainTheme);
+		startMusic(files.musMainTheme);
 	    RoomGame room = new RoomGame(this);
         setScreen(room);
     }
 
     public void switchToRoomFight() {
 		transition();
-		startMusic(Files.musBossRobo);
+		startMusic(files.musBossRobo);
 	    RoomFight room = new RoomFight(this);
 	    setScreen(room);
     }
 
 	public void switchToPowerUps() {
 		transition();
-		startMusic(Files.musMainTheme);
+		startMusic(files.musMainTheme);
 		PowerUps room = new PowerUps(this);
 		setScreen(room);
 	}
 
 	public void switchToRoomItemTest() {
-		startMusic(Files.musMainTheme);
+		startMusic(files.musMainTheme);
 		transition();
 		//RoomItemTest room = new RoomItemTest(this);
 		//setScreen(room);
@@ -206,7 +205,7 @@ public class MainGame extends Game {
 
 	private void startMusic(Music file) {
 		if (!file.isPlaying()) {
-			for (Music m : Files.allMusic) {
+			for (Music m : files.allMusic) {
 				if (m.isPlaying()) m.stop();
 			}
 			file.play();
@@ -715,4 +714,8 @@ public class MainGame extends Game {
     public Skin getFinalSkin() {
 	    return finalSkin;
     }
+
+	public Files getFiles() {
+		return files;
+	}
 }

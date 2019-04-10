@@ -41,8 +41,8 @@ public class RoomFight extends RoomParent {
         TIMER
     }
 
-    private Texture hpBarLeft = Files.hpBarLeft;
-    private Texture hpBarRight = Files.hpBarRight;
+    private Texture hpBarLeft = files.hpBarLeft;
+    private Texture hpBarRight = files.hpBarRight;
     private Texture imgBg, escapeBg;
     private Animation<TextureRegion> playerHealthBar, enemyHealthBar;
     private Animating animHealthPlayer = new Animating();
@@ -65,8 +65,8 @@ public class RoomFight extends RoomParent {
 
     RoomFight(MainGame game) {
         super(game);
-        imgBg = Files.imgBgBoss;
-        escapeBg = Files.escapeBg;
+        imgBg = files.imgBgBoss;
+        escapeBg = files.escapeBg;
 
         createHealthBars();
         createShader(); // Used for flashing white
@@ -411,13 +411,13 @@ public class RoomFight extends RoomParent {
         protected HashMap<String,Integer> cooldowns;
 
         Fighters() {
-            healthPlus = Files.animHealthPlusDoT;
-            healthMinus = Files.animHealthMinusDoT;
-            dotMinus = Files.animDoTMinus;
-            dotPlus = Files.animDoTPlus;
-            criticalHitAnim = Files.animCriticalHit;
-            missAnim = Files.animMiss;
-            healAnim = Files.animHealing;
+            healthPlus = files.animHealthPlusDoT;
+            healthMinus = files.animHealthMinusDoT;
+            dotMinus = files.animDoTMinus;
+            dotPlus = files.animDoTPlus;
+            criticalHitAnim = files.animCriticalHit;
+            missAnim = files.animMiss;
+            healAnim = files.animHealing;
         }
 
         // Do this at the start of update method
@@ -876,14 +876,14 @@ public class RoomFight extends RoomParent {
             cooldowns.put(skills[1], 0);
 
             // Retrieve animations
-            idleAnim = Files.animIdle;
-            skillAnim = Files.animSkill;
-            defendAnim = Files.animDefend;
-            takeHitAnim = Files.animTakeHitAnim;
-            escapeAnim = Files.animEscape;
-            itemAnim = Files.animItem;
-            hackAnim = Files.animHack;
-            deathAnim = Files.animDeath;
+            idleAnim = files.animIdle;
+            skillAnim = files.animSkill;
+            defendAnim = files.animDefend;
+            takeHitAnim = files.animTakeHitAnim;
+            escapeAnim = files.animEscape;
+            itemAnim = files.animItem;
+            hackAnim = files.animHack;
+            deathAnim = files.animDeath;
 
             anim.startAnimation(idleAnim, idleSpd);
         }

@@ -1,63 +1,69 @@
 package fi.tamk.fi;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Files {
+    public final AssetManager manager = new AssetManager();
+
     // Player textures
-    public static final Texture playerIdle, playerAttack, playerDefend, playerItem, playerEscape,
+    public final Texture playerIdle, playerAttack, playerDefend, playerItem, playerEscape,
     playerHack, playerDeath, playerTakeHit, healthPlus, healthMinus, criticalHit, miss, healing,
     dotMinus, dotPlus, playerGameMoving;
 
     // Other textures
-    public static final Texture imgBgHall, imgBgBoss, imgTopBar, imgBottomBar, escapeBg, hpBarLeft,
+    public final Texture imgBgHall, imgBgBoss, imgTopBar, imgBottomBar, escapeBg, hpBarLeft,
             hpBarRight, powerUpBg, powerUpPopup, itemBg;
 
     // Player animations
-    private static final Animating createAnims = new Animating();
-    public static final Animation<TextureRegion> animIdle, animSkill, animDefend, animEscape,
+    private final Animating createAnims = new Animating();
+    public final Animation<TextureRegion> animIdle, animSkill, animDefend, animEscape,
             animItem, animHack, animDeath, animTakeHitAnim, animHealthPlusDoT, animHealthMinusDoT,
             animMiss, animCriticalHit, animHealing, animDoTPlus, animDoTMinus, animGameMoving;
 
     // Music
-    public static final Music[] allMusic;
-    public static final Music musMainTheme, musBossRobo, musBossFuturistic;
+    public final Music[] allMusic;
+    public final Music musMainTheme, musBossRobo, musBossFuturistic;
 
-    static{
+    Files () {
+        loadAssets();
+        manager.finishLoading();
+
         /*
         Textures
          */
         // Player
-        playerIdle = new Texture("texture/player/player_idle.png");
-        playerAttack = new Texture("texture/player/player_attack.png");
-        playerDefend = new Texture("texture/player/player_defend.png");
-        playerItem = new Texture("texture/player/player_item.png");
-        playerEscape = new Texture("texture/player/player_flee.png");
-        playerHack = new Texture("texture/player/player_hack.png");
-        playerDeath = new Texture("texture/player/player_stun.png");
-        playerTakeHit = new Texture("texture/player/player_damage.png");
-        healthPlus = new Texture("texture/skills/plusHealth.png");
-        healthMinus = new Texture("texture/skills/minusHealth.png");
-        criticalHit = new Texture("texture/skills/criticalHit.png");
-        miss = new Texture("texture/skills/miss.png");
-        healing = new Texture("texture/skills/healing.png");
-        dotMinus = new Texture("texture/skills/dotMinus.png");
-        dotPlus = new Texture("texture/skills/dotPlus.png");
-        playerGameMoving = new Texture("texture/player/player_move.png");
+        playerIdle = manager.get("texture/player/player_idle.png");
+        playerAttack = manager.get("texture/player/player_attack.png");
+        playerDefend = manager.get("texture/player/player_defend.png");
+        playerItem = manager.get("texture/player/player_item.png");
+        playerEscape = manager.get("texture/player/player_flee.png");
+        playerHack = manager.get("texture/player/player_hack.png");
+        playerDeath = manager.get("texture/player/player_stun.png");
+        playerTakeHit = manager.get("texture/player/player_damage.png");
+        playerGameMoving = manager.get("texture/player/player_move.png");
+        // Skills
+        healthPlus = manager.get("texture/skills/plusHealth.png");
+        healthMinus = manager.get("texture/skills/minusHealth.png");
+        criticalHit = manager.get("texture/skills/criticalHit.png");
+        miss = manager.get("texture/skills/miss.png");
+        healing = manager.get("texture/skills/healing.png");
+        dotMinus = manager.get("texture/skills/dotMinus.png");
+        dotPlus = manager.get("texture/skills/dotPlus.png");
         // Other
-        imgBgHall = new Texture("texture/bg_hall1.png");
-        imgBgBoss = new Texture("texture/bg_hall1_boss.png");
-        imgTopBar = new Texture("texture/topbar.png");
-        imgBottomBar = new Texture("texture/bottombar.png");
-        escapeBg = new Texture("texture/escapeBackground.png");
-        hpBarLeft = new Texture("texture/hpbar_left.png");
-        hpBarRight = new Texture("texture/hpbar_right.png");
-        powerUpBg = new Texture("texture/powerUpBg.jpg");
-        powerUpPopup = new Texture("texture/powerUpPopup.jpg");
-        itemBg = new Texture("texture/itemBg.jpg");
+        imgBgHall = manager.get("texture/bg_hall1.png");
+        imgBgBoss = manager.get("texture/bg_hall1_boss.png");
+        imgTopBar = manager.get("texture/topbar.png");
+        imgBottomBar = manager.get("texture/bottombar.png");
+        escapeBg = manager.get("texture/escapeBackground.png");
+        hpBarLeft = manager.get("texture/hpbar_left.png");
+        hpBarRight = manager.get("texture/hpbar_right.png");
+        powerUpBg = manager.get("texture/powerUpBg.jpg");
+        powerUpPopup = manager.get("texture/powerUpPopup.jpg");
+        itemBg = manager.get("texture/itemBg.jpg");
 
         /*
         Animations
@@ -82,17 +88,55 @@ public class Files {
         /*
         Music
          */
-        musMainTheme = Gdx.audio.newMusic(Gdx.files.internal("music/mainTheme.mp3"));
+        musMainTheme = manager.get("music/mainTheme.mp3");
         musMainTheme.setLooping(true);
-        musBossRobo = Gdx.audio.newMusic(Gdx.files.internal("music/bossRobo.mp3"));
+        musBossRobo = manager.get("music/bossRobo.mp3");
         musBossRobo.setLooping(true);
-        musBossFuturistic = Gdx.audio.newMusic(Gdx.files.internal("music/bossFuturistic.mp3"));
+        musBossFuturistic = manager.get("music/bossFuturistic.mp3");
         musBossFuturistic.setLooping(true);
         // Remember to add all new music here
         allMusic = new Music[] {musMainTheme, musBossRobo, musBossFuturistic};
     }
 
-    public static void dispose() {
+    private void loadAssets() {
+        /*
+        Textures
+         */
+        // Player
+        manager.load("texture/player/player_idle.png", Texture.class);
+        manager.load("texture/player/player_attack.png", Texture.class);
+        manager.load("texture/player/player_defend.png", Texture.class);
+        manager.load("texture/player/player_item.png", Texture.class);
+        manager.load("texture/player/player_flee.png", Texture.class);
+        manager.load("texture/player/player_hack.png", Texture.class);
+        manager.load("texture/player/player_stun.png", Texture.class);
+        manager.load("texture/player/player_damage.png", Texture.class);
+        manager.load("texture/player/player_move.png", Texture.class);
+        // Skills
+        manager.load("texture/skills/plusHealth.png", Texture.class);
+        manager.load("texture/skills/minusHealth.png", Texture.class);
+        manager.load("texture/skills/criticalHit.png", Texture.class);
+        manager.load("texture/skills/miss.png", Texture.class);
+        manager.load("texture/skills/healing.png", Texture.class);
+        manager.load("texture/skills/dotMinus.png", Texture.class);
+        manager.load("texture/skills/dotPlus.png", Texture.class);
+        // Other
+        manager.load("texture/bg_hall1.png", Texture.class);
+        manager.load("texture/bg_hall1_boss.png", Texture.class);
+        manager.load("texture/topbar.png", Texture.class);
+        manager.load("texture/bottombar.png", Texture.class);
+        manager.load("texture/escapeBackground.png", Texture.class);
+        manager.load("texture/hpbar_left.png", Texture.class);
+        manager.load("texture/hpbar_right.png", Texture.class);
+        manager.load("texture/powerUpBg.jpg", Texture.class);
+        manager.load("texture/powerUpPopup.jpg", Texture.class);
+        manager.load("texture/itemBg.jpg", Texture.class);
 
+        /*
+        Music
+         */
+        manager.load("music/mainTheme.mp3", Music.class);
+        manager.load("music/bossRobo.mp3", Music.class);
+        manager.load("music/bossFuturistic.mp3", Music.class);
     }
 }
