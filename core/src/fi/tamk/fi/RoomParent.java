@@ -105,7 +105,22 @@ public class RoomParent implements Screen {
         }
     }
 
+    public void createMenuButton(final String room) {
+        ImageButton button = new ImageButton(testSkin.getDrawable("button_settings"),
+                testSkin.getDrawable("button_settings_clicked"));
+        button.setPosition(game.pixelWidth - button.getWidth()/2 - 190, game.pixelHeight - 120);
+        button.addListener(new InputListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
 
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                settings = new Settings(game, room);
+            }
+        });
+
+        stage.addActor(button);
+    }
 
     public void drawTopAndBottomBar() {
         batch.draw(imgTopBar, 0,game.pixelHeight - imgTopBar.getHeight(),
