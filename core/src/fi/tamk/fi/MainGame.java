@@ -73,7 +73,7 @@ public class MainGame extends Game {
 	private Preferences stats;
 	private float stepCount, stepBank, stepAllCount;
 	private int pool, poolMult, money;
-	private String skill1, skill2, currentBoss;
+	private String skill1, skill2, currentBoss, playerName;
 	private boolean firstPlayTime;
 	// Stat arrays
 	private ArrayList<String> inventory = new ArrayList<String>();
@@ -147,8 +147,6 @@ public class MainGame extends Game {
 		createMusic();
 
 		createHackFiles();
-
-		currentBoss = Bosses.selectRandomBoss(); // For testing purposes, remember to remove
 
 		askForName();
 
@@ -397,7 +395,7 @@ public class MainGame extends Game {
 		 */
 
 		// Comment: Was not sure how else to do it.
-		playerName = stats.getString(keyName, playerName);
+		playerName = stats.getString(keyName, "");
 	}
 
 	public void saveStats() {
@@ -457,7 +455,6 @@ public class MainGame extends Game {
 		if (n.length() <= 10 && !n.equals("defaultDodo")) {
 			playerName = n;
 			dialog.createDialog(playerName + " is your name");
-			changeName(n);
 		} else {
 			legal = false;
 		}
@@ -470,12 +467,6 @@ public class MainGame extends Game {
 		//stats.flush();
 		return legal;
 	}
-
-	public String changeName(String newName) {
-
-		return newName;
-	}
-	// ^Doesn't do anything useful? :I
 
 	// Methods for name end.
 
@@ -724,9 +715,7 @@ public class MainGame extends Game {
 		return skill2;
 	}
 
-	static String playerName = "defaultDodo";
-
-	public static String getName() {
+	public String getPlayerName() {
 		return playerName;
 	}
 
