@@ -383,11 +383,11 @@ public class RoomFight extends RoomParent {
         protected int actionState, TEMP_ANIM = 0, HIT_ANIM = 1, LONG_ANIM = 2, MISS_ANIM = 3,
                         HEAL_ANIM = 4;
         protected int skillState, SKILL_RESET = 0, SKILL_DAMAGE = 1, SKILL_HEAL = 2, SKILL_MISS = 3;
-        protected boolean flashWhite, hitAnimationRunning, missCritAnimationRunning, skillMissed,
-                            skillHeals;
+        protected boolean flashWhite, hitAnimationRunning, missCritAnimationRunning;
         protected float flashTime = 0.25f;
         protected State ifDead;
         protected int ID, PLAYER = 0, ENEMY = 1;
+        protected Fighters opponent;
 
         protected float positionOffset;
         protected boolean positionIncorrect;
@@ -415,6 +415,7 @@ public class RoomFight extends RoomParent {
 
         // Do this at the start of update method
         protected void updateStart() {
+            retrieveOpponent();
             returnPosition();
             hpToTarget();
             checkToPause();
@@ -430,6 +431,18 @@ public class RoomFight extends RoomParent {
             drawHitAnimation();
             drawCritOrMissAnimation();
             batch.setShader(null);
+        }
+
+        protected void retrieveOpponent() {
+            /*
+            This needs to be declared in update event, since it can not be declared at the start.
+            When player gets created, enemy is still null, since player is created before enemy.
+             */
+            if (ID == PLAYER) {
+                if (opponent == null) opponent = enemy;
+            } else {
+                if (opponent == null) opponent = player;
+            }
         }
 
         // Turn's agenda
@@ -679,6 +692,14 @@ public class RoomFight extends RoomParent {
             }
         }
 
+        protected void takeHit(double damage) {
+            // Needed for opponent to work correctly
+        }
+
+        protected void takeHeal(double damage) {
+            calcTargetHpSpd(damage);
+        }
+
         // Health bar uses this
         public double getHp() {
             return hp;
@@ -898,14 +919,14 @@ public class RoomFight extends RoomParent {
                 // If temp animation is finished, check skillState for type
                 if (curAnimation.isAnimationFinished(anim.getStateTime())) {
                     if (skillState == SKILL_DAMAGE) {
-                        enemy.startHitAnimation(curHitAnimation, curHitAnimationSpd);
+                        opponent.startHitAnimation(curHitAnimation, curHitAnimationSpd);
                         actionState = HIT_ANIM;
                     } else if (skillState == SKILL_HEAL){
                         takeHeal(dmgAmount);
                         startHitAnimation(healAnim, 8);
                         actionState = HEAL_ANIM;
                     } else if (skillState == SKILL_MISS) {
-                        enemy.startMissAnimation();
+                        opponent.startMissAnimation();
                         actionState = MISS_ANIM;
                     } else {
                         // Else it's only DoT move
@@ -915,8 +936,8 @@ public class RoomFight extends RoomParent {
                 }
             } else if (actionState == HIT_ANIM) {
                 // Hit animation is drawn on top of enemy
-                if (!enemy.isHitAnimationRunning()) {
-                    enemy.takeHit(dmgAmount);
+                if (!opponent.isHitAnimationRunning()) {
+                    opponent.takeHit(dmgAmount);
                     turnState = END_ACTION;
                 }
             } else if (actionState == LONG_ANIM) {
@@ -928,7 +949,7 @@ public class RoomFight extends RoomParent {
                 }
             } else if (actionState == MISS_ANIM) {
                 // Miss animation is drawn on top of enemy
-                if (!enemy.isMissCritAnimationRunning()) {
+                if (!opponent.isMissCritAnimationRunning()) {
                     turnState = END_ACTION;
                 }
             }
@@ -955,10 +976,6 @@ public class RoomFight extends RoomParent {
                 calcTargetHpSpd(damage);
                 changeToTakeHitAnimation();
             }
-        }
-
-        public void takeHeal(double damage) {
-            calcTargetHpSpd(damage);
         }
 
         // If skill has DoT, it will be added here
@@ -1188,7 +1205,7 @@ public class RoomFight extends RoomParent {
             } else {
                 // Reset necessary values
                 curHitAnimation = null;
-                skillMissed = false;
+                skillState = SKILL_RESET;
 
                 actionTimer = actionDelay;
                 turnState = DOING_ACTION;
@@ -1205,20 +1222,31 @@ public class RoomFight extends RoomParent {
                 }
                 dialog.showSkillName(skillNames[random]);
 
-                skillMissed = randomChance(missChances[random]);
-                // If skill did not miss
-                if (!skillMissed) {
-                    curHitAnimation = hitAnimList.get(random);
-                    curHitAnimationSpd = hitSpeeds[random];
+                boolean miss = randomChance(missChances[random]);
+                if (miss) skillState = SKILL_MISS;
+                else {
+                    // Check if skill heals, else do damage
+                    if (damages[random] < 0) {
+                        skillState = SKILL_HEAL;
+                        dmgAmount = damages[random];
+                    } else {
+                        // If skill does not heal, get hitAnimation
+                        curHitAnimation = hitAnimList.get(random);
+                        // If hitAnimation is null, then it does no damage
+                        if (curHitAnimation != null) {
+                            skillState = SKILL_DAMAGE;
+                            curHitAnimationSpd = hitSpeeds[random];
 
-                    // If critical hit, deal 1.5x damage
-                    dmgAmount = defaultDmg * damages[random];
-                    if (randomChance(critChances[random])) {
-                        dmgAmount *= 1.5;
-                        player.startCriticalHitAnimation();
+                            // If critical hit, deal 1.5x damage
+                            dmgAmount = defaultDmg * damages[random];
+                            if (randomChance(critChances[random])) {
+                                dmgAmount *= 1.5;
+                                player.startCriticalHitAnimation();
+                            }
+                        }
                     }
 
-                    // Damage over time
+                    // Damage over time (can happen with healing and damage)
                     double dot;
                     if (dotPurePercents[random]) dot = damageOverTimes[random];
                     else dot = damageOverTimes[random] * defaultDmg;
@@ -1236,10 +1264,14 @@ public class RoomFight extends RoomParent {
         protected void controlActionStates() {
             if (actionState == TEMP_ANIM) {
                 if (skillAnim.isAnimationFinished(anim.getStateTime())) {
-                    if (curHitAnimation != null) {
+                    if (skillState == SKILL_DAMAGE) {
                         player.startHitAnimation(curHitAnimation, curHitAnimationSpd);
                         actionState = HIT_ANIM;
-                    } else if (skillMissed){
+                    } else if (skillState == SKILL_HEAL){
+                        takeHeal(dmgAmount);
+                        startHitAnimation(healAnim, 8);
+                        actionState = HEAL_ANIM;
+                    } else if (skillState == SKILL_MISS) {
                         player.startMissAnimation();
                         actionState = MISS_ANIM;
                     } else {
@@ -1250,6 +1282,10 @@ public class RoomFight extends RoomParent {
             } else if (actionState == HIT_ANIM) {
                 if (!player.isHitAnimationRunning()) {
                     player.takeHit(dmgAmount);
+                    turnState = END_ACTION;
+                }
+            } else if (actionState == HEAL_ANIM) {
+                if (!isHitAnimationRunning()) {
                     turnState = END_ACTION;
                 }
             } else if (actionState == MISS_ANIM) {

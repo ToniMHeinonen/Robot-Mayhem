@@ -158,7 +158,7 @@ public class Skills {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, REPAIR);
         map.put(description, "Self-repair heals you slightly over 2 turns.");
-        map.put(damage, -30.0);
+        map.put(damage, 0.0);
         map.put(critChance, 0);
         map.put(missChance, 0);
         map.put(damageOverTime, -15.0);
