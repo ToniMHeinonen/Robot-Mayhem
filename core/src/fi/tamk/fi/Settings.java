@@ -83,14 +83,14 @@ public class Settings {
 
     private void createHeader() {
         header = new Label("Settings", finalSkin, "big");
-        header.setPosition(settingsDialog.getWidth() / 2, settingsDialog.getHeight() - 300);
+        header.setPosition(settingsDialog.getWidth() / 3 + 50, settingsDialog.getHeight() - 200);
     }
 
     private void createMusicVolume() {
         musicVolSlider = new Slider(0.1f, 0.9f, 0.1f, false, finalSkin);
         musicVolSlider.setValue(game.getMusicVol());
-        musicVolSlider.setPosition(settingsDialog.getX() - settingsDialog.getX(),
-                settingsDialog.getHeight() / 2);
+        musicVolSlider.setPosition(header.getX() - 200,
+                header.getY() - 200);
         musicVolSlider.setSize(900, 120);
         musicVolSlider.addListener(new ChangeListener() {
             @Override
@@ -100,9 +100,9 @@ public class Settings {
             }
         });
 
-        musicVolLabel = new Label("Music", finalSkin);
-        musicVolLabel.setPosition(musicVolSlider.getX() + 100,
-                musicVolSlider.getY() + 100);
+        musicVolLabel = new Label("Music:", finalSkin);
+        musicVolLabel.setPosition(musicVolSlider.getX() - 150,
+                musicVolSlider.getY() + 50);
     }
 
     private void createSettingsRoomButton() {
@@ -125,7 +125,7 @@ public class Settings {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 game.saveSettings();
-                closeDialog = true;
+                settingsDialog.remove();
             }
         });
     }
