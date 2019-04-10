@@ -44,7 +44,7 @@ public class Settings {
     // Difficulty
     private Label difficultyLabel;
     private String[] difficulties = new String[] {"0", "1", "2"};
-    private int space = 300;
+    private int space = 310;
 
     // Quit and Reset
     private ImageButton buttonQuit;
@@ -53,6 +53,14 @@ public class Settings {
     // Language
     private ImageButton buttonFi;
     private ImageButton buttonEn;
+
+    // Menu
+    private ImageButton buttonSettings;
+    private ImageButton buttonInventory;
+    private ImageButton buttonStats;
+
+    // Exit
+    private ImageButton buttonExit;
 
     private boolean closeDialog = false;
 
@@ -70,9 +78,10 @@ public class Settings {
         createDifficultyButtons();
         createQuitAndResetButtons();
         createLanguageButtons();
-        createCloseButton();
+        createMenuButtons();
+        createExitButton();
         createSettingsRoomButton();
-        addActors();
+        stage.addActor(settingsDialog);
     }
 
     public void update() {
@@ -108,7 +117,10 @@ public class Settings {
 
     private void createHeader() {
         header = new Label("Settings", finalSkin, "big");
-        header.setPosition(settingsDialog.getWidth() / 3 - 70, settingsDialog.getHeight() - 200);
+        header.setPosition(settingsDialog.getWidth() / 3 - 70,
+                settingsDialog.getHeight() - 200);
+
+        settingsDialog.addActor(header);
     }
 
     private void createMusicVolume() {
@@ -128,6 +140,9 @@ public class Settings {
         musicVolLabel = new Label("Music:", finalSkin);
         musicVolLabel.setPosition(musicVolSlider.getX() - 205,
                 musicVolSlider.getY() + 25);
+
+        settingsDialog.addActor(musicVolSlider);
+        settingsDialog.addActor(musicVolLabel);
     }
 
     private void createSoundVolume() {
@@ -147,6 +162,9 @@ public class Settings {
         soundVolLabel = new Label("Sound:", finalSkin);
         soundVolLabel.setPosition(soundVolSlider.getX() - 205,
                 soundVolSlider.getY() + 25);
+
+        settingsDialog.addActor(soundVolSlider);
+        settingsDialog.addActor(soundVolLabel);
     }
 
     private void createDifficultyButtons() {
@@ -159,6 +177,8 @@ public class Settings {
         difficultyLabel = new Label("Difficulty:", finalSkin);
         difficultyLabel.setPosition(soundVolLabel.getX() - 105,
                 soundVolLabel.getY() - 120);
+
+        settingsDialog.addActor(difficultyLabel);
     }
 
     private void createQuitAndResetButtons() {
@@ -169,6 +189,9 @@ public class Settings {
         buttonReset = new ImageButton(finalSkin, "reset_en");
         buttonReset.setPosition(buttonQuit.getX() + buttonReset.getWidth(),
                 buttonQuit.getY());
+
+        settingsDialog.addActor(buttonQuit);
+        settingsDialog.addActor(buttonReset);
     }
 
     private void createLanguageButtons() {
@@ -177,46 +200,52 @@ public class Settings {
 
         buttonEn = new ImageButton(finalSkin, "english");
         buttonEn.setPosition(buttonFi.getX(), buttonFi.getY() - 120);
+
+        settingsDialog.addActor(buttonFi);
+        settingsDialog.addActor(buttonEn);
     }
 
-    private void createSettingsRoomButton() {
-        settingsRoomButton = new TextButton("SettingsRoom", skin);
-        settingsRoomButton.setPosition(settingsDialog.getWidth() / 2 - settingsRoomButton.getWidth(),
-                settingsDialog.getHeight()/2 - settingsRoomButton.getHeight() * 2);
-        settingsRoomButton.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                game.switchToRoomSettings();
-            }
-        });
+    private void createMenuButtons() {
+        buttonSettings = new ImageButton(finalSkin, "settings");
+        buttonSettings.setPosition(1441, 720);
+
+        buttonInventory = new ImageButton(finalSkin.getDrawable("menu_items1"));
+        buttonInventory.setPosition(buttonSettings.getX(),
+                buttonSettings.getY() - 150);
+
+        buttonStats = new ImageButton(finalSkin.getDrawable("menu_stats1"));
+        buttonStats.setPosition(buttonSettings.getX(),
+                buttonInventory.getY() - 150);
+
+        settingsDialog.addActor(buttonSettings);
+        settingsDialog.addActor(buttonInventory);
+        settingsDialog.addActor(buttonStats);
     }
 
-    private void createCloseButton() {
-        closeSettingsButton = new TextButton("Close", skin);
-        closeSettingsButton.setPosition(settingsDialog.getWidth() / 2 + closeSettingsButton.getWidth()/2,
-                settingsDialog.getHeight()/2 - closeSettingsButton.getHeight() * 2);
-        closeSettingsButton.addListener(new ClickListener(){
+    private void createExitButton() {
+        buttonExit = new ImageButton(finalSkin, "x");
+        buttonExit.setPosition(1550, 960);
+        buttonExit.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
                 game.saveSettings();
                 settingsDialog.remove();
             }
         });
+
+        settingsDialog.addActor(buttonExit);
     }
 
-    private void addActors() {
-        settingsDialog.addActor(header);
-        settingsDialog.addActor(musicVolSlider);
-        settingsDialog.addActor(musicVolLabel);
-        settingsDialog.addActor(soundVolSlider);
-        settingsDialog.addActor(soundVolLabel);
-        settingsDialog.addActor(difficultyLabel);
-        settingsDialog.addActor(buttonQuit);
-        settingsDialog.addActor(buttonReset);
-        settingsDialog.addActor(buttonFi);
-        settingsDialog.addActor(buttonEn);
-        settingsDialog.addActor(closeSettingsButton);
+    private void createSettingsRoomButton() {
+        settingsRoomButton = new TextButton("SettingsRoom", skin);
+        settingsRoomButton.setPosition(1450, 200);
+        settingsRoomButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                game.switchToRoomSettings();
+            }
+        });
+
         settingsDialog.addActor(settingsRoomButton);
-        stage.addActor(settingsDialog);
     }
 }
