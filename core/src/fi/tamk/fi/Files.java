@@ -2,9 +2,9 @@ package fi.tamk.fi;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
@@ -48,6 +48,10 @@ public class Files {
     // Music
     public final Music[] allMusic;
     public final Music musMainTheme, musBossRobo, musBossFuturistic;
+
+    // Sound effects
+    public final Sound sndHealOverTime, sndFastHeal, sndLoseToBoss, sndMissedHit, sndCriticalHit,
+    sndDamageOverTime, sndBreakShield, sndMilestoneAchieved, sndPurchaseItem;
 
     Files () {
         loadAssets();
@@ -156,6 +160,19 @@ public class Files {
         musBossFuturistic.setLooping(true);
         // Remember to add all new music here
         allMusic = new Music[] {musMainTheme, musBossRobo, musBossFuturistic};
+
+        /*
+        Sound effects
+         */
+        sndFastHeal = manager.get("sound/FastHeal.mp3");
+        sndHealOverTime = manager.get("sound/HealOverTime.mp3");
+        sndLoseToBoss = manager.get("sound/LoseToBoss.mp3");
+        sndMissedHit = manager.get("sound/MissedHit.mp3");
+        sndCriticalHit = manager.get("sound/ReceiveCriticalHit.mp3");
+        sndDamageOverTime = manager.get("sound/ReceiveDot.mp3");
+        sndBreakShield = manager.get("sound/BreakFireballOrb.mp3");
+        sndMilestoneAchieved = manager.get("sound/MileStoneAchieved.mp3");
+        sndPurchaseItem = manager.get("sound/PurchaseItemFromShop.mp3");
     }
 
     private void loadAssets() {
@@ -218,5 +235,18 @@ public class Files {
         manager.load("music/mainTheme.mp3", Music.class);
         manager.load("music/bossRobo.mp3", Music.class);
         manager.load("music/bossFuturistic.mp3", Music.class);
+
+        /*
+        Sound effects
+         */
+        manager.load("sound/FastHeal.mp3", Sound.class);
+        manager.load("sound/HealOverTime.mp3", Sound.class);
+        manager.load("sound/LoseToBoss.mp3", Sound.class);
+        manager.load("sound/MissedHit.mp3", Sound.class);
+        manager.load("sound/ReceiveCriticalHit.mp3", Sound.class);
+        manager.load("sound/ReceiveDot.mp3", Sound.class);
+        manager.load("sound/BreakFireballOrb.mp3", Sound.class);
+        manager.load("sound/MileStoneAchieved.mp3", Sound.class);
+        manager.load("sound/PurchaseItemFromShop.mp3", Sound.class);
     }
 }

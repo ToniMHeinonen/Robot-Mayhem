@@ -28,7 +28,7 @@ public class RoomGame extends RoomParent {
     private float goalSteps;
     private float bankSpd;
     private float bankRetrieved = game.getStepCount();
-    private boolean fightSpawned;
+    private boolean milestoneReached;
 
     RoomGame(final MainGame game) {
         super(game);
@@ -69,7 +69,7 @@ public class RoomGame extends RoomParent {
     }
 
     public void createButtonFight() {
-        fightSpawned = true;
+        milestoneReached = true;
         Drawable normal = testSkin.getDrawable("button_attack");
         Drawable clicked = testSkin.getDrawable("button_clicked");
         final ImageButton btn = new ImageButton(normal, clicked);
@@ -135,7 +135,10 @@ public class RoomGame extends RoomParent {
     // If milestone has been reached, draw text and
     public void checkToChangeRoom() {
         if (curSteps >= goalSteps) {
-            if (!fightSpawned) createButtonFight();
+            if (!milestoneReached) {
+                createButtonFight();
+                files.sndMilestoneAchieved.play();
+            }
         }
     }
 

@@ -117,7 +117,8 @@ public class Hacking {
 
     private SpriteBatch batch;
     private OrthographicCamera hackingCamera;
-    MainGame game;
+    private MainGame game;
+    private Files files;
     private Skin testSkin;
     private Stage stage;
 
@@ -126,6 +127,7 @@ public class Hacking {
     Hacking(MainGame game, boolean firstTry) {
         this.game = game;
         this.hackFirstTry = firstTry;
+        files = game.getFiles();
         batch = game.getBatch();
         hackingCamera = new OrthographicCamera();
         testSkin = game.getTestSkin();
@@ -541,6 +543,7 @@ public class Hacking {
         int i = 0;
         int j = 0;
         if (bulletHitShield) {
+            files.sndBreakShield.play();
             for (Body body : shieldBodies) {
                 if (body.getUserData() != null) {
                     hackPosX.set(i, body.getPosition().x);

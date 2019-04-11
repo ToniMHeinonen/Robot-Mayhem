@@ -53,10 +53,11 @@ public class RoomFight extends RoomParent {
     private String[] btnTexts = new String[] {"Attack", "Defend", "Item",
                                 game.getSkill1(), game.getSkill2()};
     private int btnCounter; // Used for button classes to get the correct value
-    private int deathTimer = 240;
     private State state = State.START_ROOM;
     private boolean escapePopup, spawnHacking, actionButtonsOn, spawnPowerUp;
     private boolean firstHack = true;
+    private int deathTimer = 240;
+    private boolean startDeathTimer;
     private ShaderProgram shFlashWhite;
     private Hacking hacking;
     private UtilPowerUp powerUp;
@@ -138,12 +139,14 @@ public class RoomFight extends RoomParent {
             }
             // If dead, wait some time and then exit back to corridor
             case DEAD: {
-                deathTimer--;
-                game.setStepCount(game.getProgressBarMilestone()*0.5f);
-                if (deathTimer <= 0) {
-                    game.switchToRoomGame();
+                if (!startDeathTimer) {
+                    startDeathTimer = true;
+                    game.setStepCount(game.getProgressBarMilestone()*0.5f);
+                    files.sndLoseToBoss.play();
                 }
-                break;
+
+                if (deathTimer > 0) deathTimer--;
+                else game.switchToRoomGame();
             }
         }
     }
@@ -577,12 +580,14 @@ public class RoomFight extends RoomParent {
         // Opponent starts this when hitting you
         protected void startMissAnimation() {
             missCritAnimationRunning = true;
+            files.sndMissedHit.play();
             critMissAnim.startAnimation(missAnim, 8);
         }
 
         // Opponent starts this when hitting you
         protected void startCriticalHitAnimation() {
             missCritAnimationRunning = true;
+            files.sndCriticalHit.play();
             critMissAnim.startAnimation(criticalHitAnim, 8);
         }
 
@@ -628,10 +633,12 @@ public class RoomFight extends RoomParent {
             if (takeDoT > 0) {
                 calcTargetHpSpd(takeDoT);
                 startHitAnimation(healthMinus, 15);
+                files.sndDamageOverTime.play();
                 turnState = TAKING_DOT;
             } else if (takeDoT < 0) {
                 calcTargetHpSpd(takeDoT);
                 startHitAnimation(healthPlus, 15);
+                files.sndHealOverTime.play();
                 turnState = TAKING_DOT;
             } else {
                 turnState = START;
@@ -808,6 +815,7 @@ public class RoomFight extends RoomParent {
         }
 
         protected void takeHeal(double damage) {
+            files.sndFastHeal.play();
             calcTargetHpSpd(damage);
         }
 
