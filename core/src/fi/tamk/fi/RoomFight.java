@@ -232,7 +232,6 @@ public class RoomFight extends RoomParent {
                     escapeBg.getWidth(), escapeBg.getHeight());
 
             Label escapeLabel = new Label("Do you want to escape?", finalSkin);
-            escapeLabel.debug();
             escapeLabel.setWrap(true);
             escapeLabel.setWidth(530);
             escapeLabel.setAlignment(1);
