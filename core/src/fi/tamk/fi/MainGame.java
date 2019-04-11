@@ -161,6 +161,7 @@ public class MainGame extends Game {
 		progBarSkin.dispose();
 		files.manager.dispose();
 		saveStats();
+		saveSettings();
 	}
 
 	boolean haveWeChangedTheRoom = false;
@@ -273,6 +274,7 @@ public class MainGame extends Game {
 
 	private void createBundle() {
 		Locale locale;
+		// If language is not either, then the game gets software's default language
 		if (language.equals("fi")) locale = new Locale("fi", "FI");
 		else if (language.equals("en")) locale = Locale.US;
 		else locale = Locale.getDefault();
@@ -280,14 +282,17 @@ public class MainGame extends Game {
 		localize = I18NBundle.createBundle(Gdx.files.internal("MyBundle"),
 				locale,"ISO-8859-1");
 
+		// After initializing localize, make language variable the chosen one
 		if (locale == Locale.US) language = "en";
 		else language = "fi";
 	}
 
     public void loadSettings() {
 		settings = Gdx.app.getPreferences("Robot_Mayhem_Settings");
+		settings.clear(); // For testing purposes
+		settings.flush(); // Without flushing, clear does not work in Android
 		musicVol = settings.getFloat(keyMusicVol, 0.8f);
-		language = settings.getString(keyLanguage, "fi");
+		language = settings.getString(keyLanguage, "");
     }
 
     public void saveSettings() {
