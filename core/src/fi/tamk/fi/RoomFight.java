@@ -1189,7 +1189,7 @@ public class RoomFight extends RoomParent {
 
         // Retrieve boss's information
         private void retrieveBoss() {
-            mapBoss = Bosses.getBoss(game.getCurrentBoss());
+            mapBoss = bosses.getBoss(game.getCurrentBoss());
 
             // Use these arrays when selecting skills in attack()
             skillNames = new String[3];
@@ -1205,7 +1205,7 @@ public class RoomFight extends RoomParent {
 
             for (int i = 0; i < 3; i++) {
                 // Retrieve skill's name from boss and add it to the array
-                String skillName = (String) mapBoss.get(Bosses.skillName + String.valueOf(i));
+                String skillName = (String) mapBoss.get(bosses.skillName + String.valueOf(i));
                 skillNames[i] = skillName;
 
                 // Retrieve the skills map from Skills class which contains skill values
@@ -1250,14 +1250,14 @@ public class RoomFight extends RoomParent {
             }
 
             // Retrieve enemy animations and speed
-            idleAnim = (Animation<TextureRegion>) mapBoss.get(Bosses.idle);
-            skillAnim = (Animation<TextureRegion>) mapBoss.get(Bosses.skill);
-            hackAnim = (Animation<TextureRegion>) mapBoss.get(Bosses.hack);
-            takeHitAnim = (Animation<TextureRegion>) mapBoss.get(Bosses.takeHit);
+            idleAnim = (Animation<TextureRegion>) mapBoss.get(bosses.idle);
+            skillAnim = (Animation<TextureRegion>) mapBoss.get(bosses.skill);
+            hackAnim = (Animation<TextureRegion>) mapBoss.get(bosses.hack);
+            takeHitAnim = (Animation<TextureRegion>) mapBoss.get(bosses.takeHit);
 
             // Retrieve dialog start and end from Boss
-            dialogStart = (String) mapBoss.get(Bosses.dialogStart);
-            dialogEnd = (String) mapBoss.get(Bosses.dialogEnd);
+            dialogStart = (String) mapBoss.get(bosses.dialogStart);
+            dialogEnd = (String) mapBoss.get(bosses.dialogEnd);
         }
 
         // Select skill

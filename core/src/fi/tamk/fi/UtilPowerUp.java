@@ -25,6 +25,7 @@ public class UtilPowerUp {
     private Files files;
     private Skills skills;
     private Item items;
+    private Bosses bosses;
     private Stage stage;
     private Skin skin;
     private Skin finalSkin;
@@ -50,6 +51,7 @@ public class UtilPowerUp {
         files = game.getFiles();
         skills = game.getSkills();
         items = game.getItems();
+        bosses = game.getBosses();
         batch = game.getBatch();
         stage = game.getStage();
         dialog = game.getDialog();
@@ -172,7 +174,7 @@ public class UtilPowerUp {
 
     // Spawn enemy's skill if player does not own it
     private void spawnEnemyPowerUp() {
-        String[] bossSkills = Bosses.retrieveBossSkills(game.getCurrentBoss());
+        String[] bossSkills = bosses.retrieveBossSkills(game.getCurrentBoss());
         // Choose from 1 and 2, since 0 is normal attack
         boolean skill1Owned, skill2Owned;
         String chosenSkill = "";

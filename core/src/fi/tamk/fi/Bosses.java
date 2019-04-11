@@ -10,34 +10,33 @@ import java.util.HashMap;
 
 public class Bosses {
 
-    private static Files files;
-    private static I18NBundle localize;
-    private static Skills skills;
+    private Files files;
+    private I18NBundle localize;
+    private Skills skills;
     /*
     Use these, since if you need to change the name to something else, you then only need
     to change it in here.
      */
-    public static final String name = "name";
-    public static final String idle = "idle";
-    public static final String hack = "hack";
-    public static final String skill = "skill";
-    public static final String takeHit = "takeHit";
-    public static final String speed = "speed";
-    public static final String skillName = "skillName";
-    public static final String dialogStart = "dialogstart";
-    public static final String dialogEnd = "dialogend";
+    public final String name = "name";
+    public final String idle = "idle";
+    public final String hack = "hack";
+    public final String skill = "skill";
+    public final String takeHit = "takeHit";
+    public final String skillName = "skillName";
+    public final String dialogStart = "dialogstart";
+    public final String dialogEnd = "dialogend";
 
-    private static HashMap<String, HashMap<String,Object>> mapBosses;
+    private HashMap<String, HashMap<String,Object>> mapBosses;
 
-    private static Animation<TextureRegion> animIdle, animStun, animAttack, animDamage;
+    private Animation<TextureRegion> animIdle, animStun, animAttack, animDamage;
 
-    private static String curName, curSkillName0, curSkillName1, curSkillName2,
+    private String curName, curSkillName0, curSkillName1, curSkillName2,
                             curDialogStart, curDialogEnd;
 
-    public static final String ROOMBOT = "Roombot";
-    public static final String COPPER = "Copper";
-    public static final String ROBBER = "Robber";
-    private static String[] allBosses = new String[] {ROOMBOT, COPPER, ROBBER};
+    public final String ROOMBOT = "Roombot";
+    public final String COPPER = "Copper";
+    public final String ROBBER = "Robber";
+    private String[] allBosses = new String[] {ROOMBOT, COPPER, ROBBER};
 
     /* NOTE!
     Everytime you add new boss, remember to:
@@ -49,7 +48,7 @@ public class Bosses {
     /*
     Create bosses when the game starts.
      */
-    public static void createBosses(MainGame game) {
+    Bosses(MainGame game) {
         files = game.getFiles();
         localize = game.getLocalize();
         skills = game.getSkills();
@@ -62,7 +61,7 @@ public class Bosses {
     /*
     Retrieve correct boss map by using string value.
      */
-    public static HashMap<String, Object> getBoss(String boss) {
+    public HashMap<String, Object> getBoss(String boss) {
         HashMap<String, Object> chosenBoss;
 
         chosenBoss = mapBosses.get(boss);
@@ -70,7 +69,7 @@ public class Bosses {
         return chosenBoss;
     }
 
-    public static String selectRandomBoss() {
+    public String selectRandomBoss() {
         String selected = "";
         int random = MathUtils.random(0, allBosses.length - 1);
         selected = allBosses[random];
@@ -78,7 +77,7 @@ public class Bosses {
         return selected;
     }
 
-    public static String[] retrieveBossSkills(String boss) {
+    public String[] retrieveBossSkills(String boss) {
         String[] skills = new String[3];
         HashMap<String, Object> bossMap = getBoss(boss);
 
@@ -89,7 +88,7 @@ public class Bosses {
         return skills;
     }
 
-    private static void bossRobber() {
+    private void bossRobber() {
         curName = ROBBER;
         curSkillName0 = skills.ATTACK;
         curSkillName1 = skills.SUCTION;
@@ -106,7 +105,7 @@ public class Bosses {
         addToMap();
     }
 
-    private static void bossRoombot() {
+    private void bossRoombot() {
         curName = ROOMBOT;
         curSkillName0 = skills.ATTACK;
         curSkillName1 = skills.SUCTION;
@@ -122,7 +121,7 @@ public class Bosses {
         addToMap();
     }
 
-    private static void bossCopper() {
+    private void bossCopper() {
         curName = COPPER;
         curSkillName0 = skills.ATTACK;
         curSkillName1 = skills.SHOCK;
@@ -138,7 +137,7 @@ public class Bosses {
         addToMap();
     }
 
-    private static void addToMap() {
+    private void addToMap() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, curName);
         map.put(idle, animIdle);

@@ -32,6 +32,7 @@ public class MainGame extends Game {
 	private Files files;
 	private Skills skills;
 	private Item items;
+	private Bosses bosses;
 
 	public final float pixelWidth = 1920f;
 	public final float pixelHeight = 1080f;
@@ -120,7 +121,7 @@ public class MainGame extends Game {
 		createBundle();
 		// Create skills and bosses when the game launches
 		skills = new Skills(this);
-		Bosses.createBosses(this);
+		bosses = new Bosses(this);
 		items = new Item(this);
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
@@ -139,7 +140,7 @@ public class MainGame extends Game {
 		// Switch to first room
 		switchToRoomGame();
 
-		currentBoss = Bosses.selectRandomBoss(); // For testing purposes, remember to remove
+		currentBoss = bosses.selectRandomBoss(); // For testing purposes, remember to remove
 	}
 
 	@Override
@@ -302,7 +303,7 @@ public class MainGame extends Game {
 		stepBank = stats.getFloat(keyStepBank, 0);
 		skill1 = stats.getString(keySkill1, skills.REPAIR);
 		skill2 = stats.getString(keySkill2, "");
-		currentBoss = stats.getString(keyCurrentBoss, Bosses.ROOMBOT);
+		currentBoss = stats.getString(keyCurrentBoss, bosses.ROOMBOT);
 		firstPlayTime = stats.getBoolean(keyFirstPlayTime, true);
 		pool = stats.getInteger(keyPool, 1);
 		poolMult = stats.getInteger(keyPoolMult, 0);
@@ -407,7 +408,7 @@ public class MainGame extends Game {
 
 		// Add bank steps in roomGame
 
-		currentBoss = Bosses.selectRandomBoss(); // Randomize new boss
+		currentBoss = bosses.selectRandomBoss(); // Randomize new boss
 
 		// Add when all the bosses exist
 		/*while (defeatedBosses.contains(currentBoss)) {
@@ -730,5 +731,9 @@ public class MainGame extends Game {
 
 	public Item getItems() {
 		return items;
+	}
+
+	public Bosses getBosses() {
+		return bosses;
 	}
 }

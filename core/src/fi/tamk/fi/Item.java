@@ -24,8 +24,10 @@ public class Item {
     /* NOTE!
     Everytime you add new item, remember to:
     1. Make a String for it
-    2. Add it to the allItems array
-    3. Make a new method for it
+    2. Make a new method for it
+    3. Add it's name and description to MyBundle file
+    4. Retrieve it's localized name
+    5. Add it to the allItems array
      */
 
     /*

@@ -26,6 +26,7 @@ public class RoomParent implements Screen {
     protected Files files;
     protected Skills skills;
     protected Item items;
+    protected Bosses bosses;
     protected OrthographicCamera camera;
     protected Stage stage;
     protected Skin skin;
@@ -46,6 +47,7 @@ public class RoomParent implements Screen {
         localize = game.getLocalize();
         skills = game.getSkills();
         items = game.getItems();
+        bosses = game.getBosses();
         files = game.getFiles();
         camera = game.getCamera();
         stage = game.getStage();
