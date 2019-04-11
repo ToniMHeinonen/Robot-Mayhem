@@ -381,7 +381,7 @@ public class MainGame extends Game {
 
 		if (n.length() <= 10 && !n.equals("defaultDodo")) {
 			playerName = n;
-			dialog.createDialog(playerName + " is your name");
+			dialog.createDialog(playerName + " is your name", "skilldescription");
 		} else {
 			legal = false;
 		}

@@ -22,7 +22,7 @@ public class UtilDialog {
         finalSkin = game.getFinalSkin();
     }
 
-    public void createDialog(String text) {
+    public void createDialog(String text, String style) {
         dialogOn = true;
         float areaWidth = 780f;
         float areaHeight = 540f;
@@ -33,7 +33,7 @@ public class UtilDialog {
         label.setWrap(true);
         label.setAlignment(1);
 
-        final Dialog dialog = new Dialog("", finalSkin, "skilldescription");
+        final Dialog dialog = new Dialog("", finalSkin, style);
         dialog.getContentTable().add(label).prefWidth(areaWidth);
         dialog.setPosition(x, y);
         dialog.setSize(areaWidth,areaHeight);

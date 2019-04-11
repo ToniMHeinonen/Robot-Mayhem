@@ -173,5 +173,13 @@ com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
 		background: window_small
 		titleFont: font-average
 	}
+	dialog_enemy: {
+		background: dialog_right
+		titleFont: font-average
+	}
+	dialog_player: {
+		background: dialog_left
+		titleFont: font-average
+	}
 }
 }

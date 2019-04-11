@@ -1104,7 +1104,7 @@ public class RoomFight extends RoomParent {
                         int i = btnCounter;
 
                         public boolean longPress(Actor actor, float x, float y) {
-                            dialog.createDialog(descriptions.get(i));
+                            dialog.createDialog(descriptions.get(i), "skilldescription");
                             return true;
                         }
 
@@ -1331,7 +1331,7 @@ public class RoomFight extends RoomParent {
                 @Override
                 public void run() {
                     state = State.DIALOG_START;
-                    dialog.createDialog(dialogStart);
+                    dialog.createDialog(dialogStart, "dialog_enemy");
                 }
             }, 1);
         }
@@ -1344,7 +1344,7 @@ public class RoomFight extends RoomParent {
                 public void run() {
                     startIdle();
                     state = State.DIALOG_END;
-                    dialog.createDialog(dialogEnd);
+                    dialog.createDialog(dialogEnd, "dialog_enemy");
                 }
             }, 2);
         }
