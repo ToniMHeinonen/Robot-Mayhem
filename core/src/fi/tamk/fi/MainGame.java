@@ -434,8 +434,8 @@ public class MainGame extends Game {
 	public void addToInventory(String name, boolean isSkill) {
 		// If it's skill and either skill1 or 2 is empty, add it instantly
 		if (isSkill) {
-			if (skill1 == "") skill1 = name;
-			else if (skill2 == "") skill2 = name;
+			if (skill1.equals("")) skill1 = name;
+			else if (skill2.equals("")) skill2 = name;
 			else inventory.add(name);
 		} else {
 			inventory.add(name);
@@ -452,7 +452,7 @@ public class MainGame extends Game {
 		boolean contains = false;
 
 		if (inventory.contains(name)) contains = true;
-		if (skill1 == name || skill2 == name) contains = true;
+		if (skill1.equals(name) || skill2.equals(name)) contains = true;
 
 		return contains;
 	}

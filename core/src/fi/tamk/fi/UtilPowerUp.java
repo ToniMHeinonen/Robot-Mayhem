@@ -170,7 +170,7 @@ public class UtilPowerUp {
 
         // If power up is same as 1 or 2, do this method again
         // (I know, not the best way of doing this)
-        if (name == spawnedPowerups[0] || name == spawnedPowerups[1]) {
+        if (name.equals(spawnedPowerups[0]) || name.equals(spawnedPowerups[1])) {
             spawnRandomPowerUpRight();
         } else {
             // pos 2 equals right

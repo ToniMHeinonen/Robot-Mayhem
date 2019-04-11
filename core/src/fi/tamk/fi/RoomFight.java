@@ -932,7 +932,7 @@ public class RoomFight extends RoomParent {
             boolean actionSelected = false;
             int curAnimSpd = 0;
 
-            if (action == skills.ATTACK)
+            if (action.equals(skills.ATTACK))
             {
                 skillState = SKILL_DAMAGE;
                 actionSelected = true;
@@ -949,7 +949,7 @@ public class RoomFight extends RoomParent {
 
                 actionState = TEMP_ANIM;
             }
-            else if (action == skills.DEFEND)
+            else if (action.equals(skills.DEFEND))
             {
                 if (cooldowns.get(skills.DEFEND) == 0) {
                     actionSelected = true;
@@ -960,7 +960,7 @@ public class RoomFight extends RoomParent {
                     actionState = LONG_ANIM;
                 }
             }
-            else if (action == skills.ITEM)
+            else if (action.equals(skills.ITEM))
             {
                 actionSelected = true;
                 files.sndUseItem.play();
@@ -972,7 +972,7 @@ public class RoomFight extends RoomParent {
                     /*
                     If selected action is this skill, if skill is not empty and if cooldown is 0
                      */
-                    if (action == skillNames[i] && skillNames[i] != "" &&
+                    if (action.equals(skillNames[i]) && !skillNames[i].equals("") &&
                             cooldowns.get(skillNames[i]) == 0) {
                         actionSelected = true;
                         HashMap<String, Object> skillMap = mapSkills.get(i);
@@ -1079,11 +1079,11 @@ public class RoomFight extends RoomParent {
                 }
 
                 // Retrieve correct button using the keyname of the action
-                if (action == "") button = "empty";
+                if (action.equals("")) button = "empty";
                 else button = (String) skillMap.get(skills.button);
 
                 Drawable normal, clicked;
-                if (button == "empty") {
+                if (button.equals("empty")) {
                     // If button is empty, get empty button
                     normal = testSkin.getDrawable("button_" + button);
                     clicked = testSkin.getDrawable("button_" + button);
@@ -1100,7 +1100,7 @@ public class RoomFight extends RoomParent {
                 imgButton.setPosition(i*space, 0f);
                 stage.addActor(imgButton);
                 // If skill does not have cooldown and is not empty, add button listener
-                if (cooldown == 0 && button != "empty") {
+                if (cooldown == 0 && !button.equals("empty")) {
                     imgButton.addListener(new ActorGestureListener(20,
                             0.4f, 0.5f, 0.15f) {
                         int i = btnCounter;
