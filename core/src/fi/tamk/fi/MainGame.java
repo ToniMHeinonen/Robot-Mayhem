@@ -139,6 +139,8 @@ public class MainGame extends Game {
 
 		// Switch to first room
 		switchToRoomGame();
+
+		currentBoss = Bosses.selectRandomBoss(); // For testing purposes, remember to remove
 	}
 
 	@Override
