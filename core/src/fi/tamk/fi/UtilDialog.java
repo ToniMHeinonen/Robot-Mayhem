@@ -34,7 +34,7 @@ public class UtilDialog {
         label.setAlignment(1);
 
         final Dialog dialog = new Dialog("", finalSkin, style);
-        dialog.getContentTable().add(label).prefWidth(areaWidth);
+        dialog.getContentTable().add(label).prefWidth(areaWidth - 80);
         dialog.setPosition(x, y);
         dialog.setSize(areaWidth,areaHeight);
         stage.addActor(dialog);
