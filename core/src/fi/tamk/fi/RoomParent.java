@@ -25,6 +25,7 @@ public class RoomParent implements Screen {
     protected MainGame game;
     protected Files files;
     protected Skills skills;
+    protected Item items;
     protected OrthographicCamera camera;
     protected Stage stage;
     protected Skin skin;
@@ -40,20 +41,21 @@ public class RoomParent implements Screen {
     protected Settings settings;
 
     RoomParent(MainGame game) {
-        this.batch = game.getBatch();
-        this.localize = game.getLocalize();
-        this.skills = game.getSkills();
         this.game = game;
-        this.files = game.getFiles();
-        this.camera = game.getCamera();
-        this.stage = game.getStage();
-        this.skin = game.getSkin();
-        Gdx.input.setInputProcessor(this.stage);
-        this.fontSteps = game.getFontSteps();
-        this.progressBarStyle = game.getProgBarStyle();
-        this.clickedOpenSettings = game.getClickedOpenSettings();
-        this.testSkin = game.getTestSkin();
-        this.finalSkin = game.getFinalSkin();
+        batch = game.getBatch();
+        localize = game.getLocalize();
+        skills = game.getSkills();
+        items = game.getItems();
+        files = game.getFiles();
+        camera = game.getCamera();
+        stage = game.getStage();
+        Gdx.input.setInputProcessor(stage);
+        skin = game.getSkin();
+        fontSteps = game.getFontSteps();
+        progressBarStyle = game.getProgBarStyle();
+        clickedOpenSettings = game.getClickedOpenSettings();
+        testSkin = game.getTestSkin();
+        finalSkin = game.getFinalSkin();
         stage.clear();
 
         dialog = game.getDialog();

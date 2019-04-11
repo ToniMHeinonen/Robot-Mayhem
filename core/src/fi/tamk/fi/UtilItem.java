@@ -23,6 +23,7 @@ public class UtilItem {
     private int money;
     private String room;
     private Files files;
+    private Item items;
 
     private Table tableBuyableItems;
     private Table tableOwnedItems;
@@ -67,7 +68,8 @@ public class UtilItem {
         finalSkin = game.getFinalSkin();
         money = game.getMoney();
         inventory = game.getInventory();
-        allItems = Item.getAllItems();
+        items = game.getItems();
+        allItems = items.getAllItems();
         utilDialog = game.getDialog();
         files = game.getFiles();
         amounts = new int[allItems.length];
@@ -117,7 +119,7 @@ public class UtilItem {
             tableBuyableItems.add(shopItems).size(520, 75);
             buyableItems++;
 
-            final String stringCost = String.valueOf(Item.getItem(allItems[i]).get("price"));
+            final String stringCost = String.valueOf(items.getItem(allItems[i]).get("price"));
             Label labelPrice = new Label(stringCost, finalSkin);
             tableBuyableItems.add(labelPrice).size(35, 75).row();
 
@@ -247,8 +249,8 @@ public class UtilItem {
      */
     private void popupForBuyableItem(final int index) {
         String openedItem = allItems[index];
-        String description = String.valueOf(Item.getItem(openedItem).get("description"));
-        final String stringCost = String.valueOf(Item.getItem(allItems[index]).get("price"));
+        String description = String.valueOf(items.getItem(openedItem).get("description"));
+        final String stringCost = String.valueOf(items.getItem(allItems[index]).get("price"));
         final int price = Integer.valueOf(stringCost);
 
         popupBuyableItem = utilDialog.createPopupItemAndPowerUp(openedItem, description, "popup_item");
@@ -288,8 +290,8 @@ public class UtilItem {
      */
     private void popupForOwnedItem(final int index) {
         String openedItem = allItems[index];
-        String description = String.valueOf(Item.getItem(openedItem).get("description"));
-        final String usedInHall = String.valueOf(Item.getItem(allItems[index]).get("usedInHall"));
+        String description = String.valueOf(items.getItem(openedItem).get("description"));
+        final String usedInHall = String.valueOf(items.getItem(allItems[index]).get("usedInHall"));
 
         popupOwnedItem = utilDialog.createPopupItemAndPowerUp(openedItem, description, "popup_powerup");
         createBackButton(popupOwnedItem);

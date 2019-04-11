@@ -24,6 +24,7 @@ public class UtilPowerUp {
     private SpriteBatch batch;
     private Files files;
     private Skills skills;
+    private Item items;
     private Stage stage;
     private Skin skin;
     private Skin finalSkin;
@@ -48,6 +49,7 @@ public class UtilPowerUp {
         this.game = game;
         files = game.getFiles();
         skills = game.getSkills();
+        items = game.getItems();
         batch = game.getBatch();
         stage = game.getStage();
         dialog = game.getDialog();
@@ -117,11 +119,11 @@ public class UtilPowerUp {
                     break;
                 } else {
                     // Select random item
-                    name = Item.selectRandomItem();
-                    HashMap<String, Object> map = Item.getItem(name);
+                    name = items.selectRandomItem();
+                    HashMap<String, Object> map = items.getItem(name);
                     // If random item is not used in correct room, select new one
-                    boolean hallItem = (Boolean) map.get(Item.usedInHall);
-                    description = (String) map.get(Item.description);
+                    boolean hallItem = (Boolean) map.get(items.usedInHall);
+                    description = (String) map.get(items.description);
                     if (random[i] == HALL_ITEM) {
                         if (hallItem) break;
                     } else if (random[i] == BATTLE_ITEM) {
@@ -146,10 +148,10 @@ public class UtilPowerUp {
                 description = String.valueOf(moneyAmount) + " shiny coins!";
                 break;
             } else {
-                name = Item.selectRandomItem();
-                HashMap<String, Object> map = Item.getItem(name);
-                boolean hallItem = (Boolean) map.get(Item.usedInHall);
-                description = (String) map.get(Item.description);
+                name = items.selectRandomItem();
+                HashMap<String, Object> map = items.getItem(name);
+                boolean hallItem = (Boolean) map.get(items.usedInHall);
+                description = (String) map.get(items.description);
                 if (random == HALL_ITEM) {
                     if (hallItem) break;
                 } else if (random == BATTLE_ITEM) {

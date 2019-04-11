@@ -31,6 +31,7 @@ public class MainGame extends Game {
 	private I18NBundle localize;
 	private Files files;
 	private Skills skills;
+	private Item items;
 
 	public final float pixelWidth = 1920f;
 	public final float pixelHeight = 1080f;
@@ -120,14 +121,12 @@ public class MainGame extends Game {
 		// Create skills and bosses when the game launches
 		skills = new Skills(this);
 		Bosses.createBosses(this);
+		items = new Item(this);
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, pixelWidth, pixelHeight);
 		loadSettings();
 		loadStats();
-
-		// Create items
-		Item.createItems();
 
 		createSkinAndStage();
 		createProgressBarFiles();
@@ -727,5 +726,9 @@ public class MainGame extends Game {
 
 	public Skills getSkills() {
 		return skills;
+	}
+
+	public Item getItems() {
+		return items;
 	}
 }
