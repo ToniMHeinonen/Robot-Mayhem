@@ -1,6 +1,7 @@
 package fi.tamk.fi;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -263,6 +264,7 @@ public class RoomFight extends RoomParent {
             if (!spawnPowerUp) {
                 spawnPowerUp = true;
                 powerUp = new UtilPowerUp(game);
+                files.sndPowerUpPopup.play();
             }
             powerUp.update();
 
@@ -512,6 +514,7 @@ public class RoomFight extends RoomParent {
                 if (!opponent.isHitAnimationRunning()) {
                     opponent.takeHit(dmgAmount);
                     turnState = END_ACTION;
+                    files.sndMetallicHit.play();
                     if (dealCriticalHit) {
                         dealCriticalHit = false;
                         opponent.startCriticalHitAnimation();
@@ -580,14 +583,16 @@ public class RoomFight extends RoomParent {
         // Opponent starts this when hitting you
         protected void startMissAnimation() {
             missCritAnimationRunning = true;
-            files.sndMissedHit.play();
+            if (ID == PLAYER) files.sndPlayerMiss.play();
+            else files.sndEnemyMiss.play();
             critMissAnim.startAnimation(missAnim, 8);
         }
 
         // Opponent starts this when hitting you
         protected void startCriticalHitAnimation() {
             missCritAnimationRunning = true;
-            files.sndCriticalHit.play();
+            if (ID == PLAYER) files.sndPlayerCriticalHit.play();
+            else files.sndEnemyCriticalHit.play();
             critMissAnim.startAnimation(criticalHitAnim, 8);
         }
 
@@ -931,10 +936,15 @@ public class RoomFight extends RoomParent {
                 skillState = SKILL_DAMAGE;
                 actionSelected = true;
                 curAnimation = skillAnim;
-                curHitAnimation = (Animation<TextureRegion>) mapAttack.get(Skills.hitAnimation);
-                dmgAmount = defaultDmg;
-                dealCriticalHit = randomChance((Integer) mapAttack.get(Skills.critChance));
-                if (dealCriticalHit) dmgAmount *= 1.5;
+                // If skill misses, skip everything
+                boolean miss = randomChance((Integer) mapAttack.get(Skills.missChance));
+                if (miss) skillState = SKILL_MISS;
+                else {
+                    curHitAnimation = (Animation<TextureRegion>) mapAttack.get(Skills.hitAnimation);
+                    dmgAmount = defaultDmg;
+                    dealCriticalHit = randomChance((Integer) mapAttack.get(Skills.critChance));
+                    if (dealCriticalHit) dmgAmount *= 1.5;
+                }
 
                 actionState = TEMP_ANIM;
             }
@@ -943,6 +953,7 @@ public class RoomFight extends RoomParent {
                 if (cooldowns.get("Defend") == 0) {
                     actionSelected = true;
                     curAnimation = defendAnim;
+                    files.sndDefend.play();
                     addCooldown("Defend", (Integer) mapDefend.get(Skills.cooldown));
                     skillState = SKILL_DEFEND;
                     actionState = LONG_ANIM;
@@ -951,6 +962,7 @@ public class RoomFight extends RoomParent {
             else if (action == "Item")
             {
                 actionSelected = true;
+                files.sndUseItem.play();
                 curAnimation = itemAnim;
                 actionState = TEMP_ANIM;
             }
@@ -966,6 +978,10 @@ public class RoomFight extends RoomParent {
                         addCooldown(skills[i],
                                 (Integer) skillMap.get(Skills.cooldown));
                         curAnimation = skillAnim;
+
+                        // Play sound if not null
+                        Sound snd = (Sound) skillMap.get(Skills.sound);
+                        if (snd != null) snd.play();
 
                         // If skill misses, skip everything
                         boolean miss = randomChance((Integer) skillMap.get(Skills.missChance));
@@ -1108,6 +1124,7 @@ public class RoomFight extends RoomParent {
         private String[] skillNames;
         private int[] critChances, missChances, cooldownAmount, damageOverTimeTurns;
         private boolean[] dotPurePercents;
+        private Sound[] sounds;
 
         Enemy() {
             retrieveBoss();
@@ -1174,6 +1191,7 @@ public class RoomFight extends RoomParent {
             damageOverTimes = new double[3];
             damageOverTimeTurns = new int[3];
             dotPurePercents = new boolean[3];
+            sounds = new Sound[3];
 
             for (int i = 0; i < 3; i++) {
                 // Retrieve skill's name from boss and add it to the array
@@ -1215,6 +1233,10 @@ public class RoomFight extends RoomParent {
                 // Retrieve if to deal pure percent or comparable to defaultDamage
                 boolean pure = (Boolean) mapSkill.get(Skills.dotPurePercent);
                 dotPurePercents[i] = pure;
+
+                // Retrieve sound effect
+                Sound snd = (Sound) mapSkill.get(Skills.sound);
+                sounds[i] = snd;
             }
 
             // Retrieve enemy animations and speed
@@ -1252,6 +1274,9 @@ public class RoomFight extends RoomParent {
                     }
                 }
                 dialog.showSkillName(skillNames[random]);
+
+                // Play sound if not null
+                if (sounds[random] != null) sounds[random].play();
 
                 boolean miss = randomChance(missChances[random]);
                 if (miss) skillState = SKILL_MISS;
