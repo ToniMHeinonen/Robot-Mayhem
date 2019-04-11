@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -231,9 +232,14 @@ public class RoomFight extends RoomParent {
             batch.draw(escapeBg, game.pixelWidth/2 - escapeBg.getWidth()/2f,
                     game.pixelHeight/2 - escapeBg.getHeight()/2f,
                     escapeBg.getWidth(), escapeBg.getHeight());
-            // Temporary font and position, just for testing
-            fontSteps.draw(batch, "Do you want to escape?",
-                    game.pixelWidth/2 - 400, game.pixelHeight/2 + 150);
+
+            Label escapeLabel = new Label("Do you want to escape?", finalSkin);
+            escapeLabel.debug();
+            escapeLabel.setWrap(true);
+            escapeLabel.setWidth(530);
+            escapeLabel.setAlignment(1);
+            escapeLabel.setPosition(game.pixelWidth/2 - 260, game.pixelHeight/2 + 120);
+            escapeLabel.draw(batch, 1);
         }
     }
 
@@ -326,10 +332,8 @@ public class RoomFight extends RoomParent {
 
     // Creates yes and no buttons for escaping
     private void createYesNo() {
-        final TextButton btn = new TextButton("Yes", skin);
-        btn.setWidth(300);
-        btn.setHeight(100);
-        btn.setPosition(game.pixelWidth/2 - btn.getWidth()/2, game.pixelHeight/2 - 50);
+        final TextButton btn = new TextButton("Yes", finalSkin);
+        btn.setPosition(game.pixelWidth/2 - btn.getWidth(), game.pixelHeight/2 - 175);
         stage.addActor(btn);
 
         btn.addListener(new ClickListener() {
@@ -342,10 +346,8 @@ public class RoomFight extends RoomParent {
             }
         });
 
-        final TextButton btn2 = new TextButton("No", skin);
-        btn2.setWidth(300);
-        btn2.setHeight(100);
-        btn2.setPosition(game.pixelWidth/2 - btn2.getWidth()/2, game.pixelHeight/2 - 175);
+        final TextButton btn2 = new TextButton("No", finalSkin);
+        btn2.setPosition(game.pixelWidth/2, game.pixelHeight/2 - 175);
         stage.addActor(btn2);
 
         btn2.addListener(new ClickListener() {
