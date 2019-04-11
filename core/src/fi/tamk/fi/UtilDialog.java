@@ -15,6 +15,7 @@ public class UtilDialog {
     private Stage stage;
     private boolean dialogOn, skillNameOn;
     private Skin skin;
+    private Skin finalSkin;
 
     private Label.LabelStyle labelStyle;
     private Window.WindowStyle windowStyle;
@@ -27,6 +28,7 @@ public class UtilDialog {
         windowStyle = game.getWindowStyle();
         fontColor = game.getFontColor();
         skin = game.getSkin();
+        finalSkin = game.getFinalSkin();
     }
 
     public void createDialog(String text) {
@@ -55,26 +57,25 @@ public class UtilDialog {
     }
 
     // Start of all-in-one method.
-    public Dialog createPopupItemAndPowerUp(String header, String description) {
+    public Dialog createPopupItemAndPowerUp(String header, String description, String style) {
 
-        Dialog dialog = new Dialog("", skin);
+        Dialog dialog = new Dialog("", finalSkin, style);
         dialog.setMovable(false);
-        dialog.setSize(game.pixelWidth/2,
-                game.pixelHeight/2 + game.pixelHeight/4);
-        dialog.setPosition(game.pixelWidth/4,
-                game.pixelHeight/3 - game.pixelHeight/4);
+        dialog.setSize(game.pixelWidth, game.pixelHeight);
+        dialog.setPosition(0, 0);
 
-        Label labelHeader = new Label(header, skin);
-        labelHeader.setColor(fontColor);
-        labelHeader.setPosition(dialog.getWidth()/2 - labelHeader.getWidth()/2, dialog.getHeight() - 100);
+        Label labelHeader = new Label(header, finalSkin, "big");
+        labelHeader.setPosition(game.pixelWidth / 4, game.pixelHeight / 2 + 195);
+        labelHeader.setSize(960, 100);
+        labelHeader.setAlignment(1);
 
-        Label labelDescription = new Label(description, skin);
+        Label labelDescription = new Label(description, finalSkin);
         labelDescription.setWrap(true);
-        labelDescription.setWidth(dialog.getWidth() - 100);
-        labelDescription.setHeight(labelDescription.getPrefHeight());
-        labelDescription.setColor(fontColor);
-        labelDescription.setPosition(dialog.getWidth() - dialog.getWidth() + 50,
-                labelHeader.getY() - 100);
+        labelDescription.setWidth(960);
+        labelDescription.setHeight(360);
+        labelDescription.setPosition(labelHeader.getX(),
+                labelHeader.getY() - 370);
+        labelDescription.setAlignment(1);
 
         dialog.addActor(labelHeader);
         dialog.addActor(labelDescription);

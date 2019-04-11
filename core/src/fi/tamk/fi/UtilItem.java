@@ -251,11 +251,20 @@ public class UtilItem {
         final String stringCost = String.valueOf(Item.getItem(allItems[index]).get("price"));
         final int price = Integer.valueOf(stringCost);
 
-        popupBuyableItem = utilDialog.createPopupItemAndPowerUp(openedItem, description);
+        popupBuyableItem = utilDialog.createPopupItemAndPowerUp(openedItem, description, "popup_item");
+
+        Label labelPrice = new Label("Price: " + stringCost, finalSkin);
+        labelPrice.setPosition(game.pixelWidth/4, 400);
+        labelPrice.setSize(960, 70);
+        labelPrice.setAlignment(1);
+        popupBuyableItem.addActor(labelPrice);
+
         createBackButton(popupBuyableItem);
 
-        final TextButton buttonBuy = new TextButton("Buy", skin);
-        buttonBuy.setPosition(popupBuyableItem.getWidth()/2 - 300, popupBuyableItem.getHeight()/4);
+        final ImageButton buttonBuy = new ImageButton(finalSkin, "buy_en");
+        buttonBuy.setPosition(popupBuyableItem.getWidth()/2 - 400, popupBuyableItem.getHeight()/4 - 60);
+        System.out.println(buttonBuy.getX());
+        System.out.println(buttonBuy.getY());
         buttonBuy.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
@@ -281,7 +290,7 @@ public class UtilItem {
         String description = String.valueOf(Item.getItem(openedItem).get("description"));
         final String usedInHall = String.valueOf(Item.getItem(allItems[index]).get("usedInHall"));
 
-        popupOwnedItem = utilDialog.createPopupItemAndPowerUp(openedItem, description);
+        popupOwnedItem = utilDialog.createPopupItemAndPowerUp(openedItem, description, "popup_powerup");
         createBackButton(popupOwnedItem);
 
         /*
@@ -289,8 +298,8 @@ public class UtilItem {
         TextButton buttonUse = new TextButton("Use", skin, "StyleUseOn")
         and moved inside the if-statement.
         */
-        TextButton buttonUse = new TextButton("Use", skin);
-        buttonUse.setPosition(popupOwnedItem.getWidth()/2 - 300, popupOwnedItem.getHeight()/4);
+        ImageButton buttonUse = new ImageButton(finalSkin, "use_en");
+        buttonUse.setPosition(560, 210);
         if ((room.equals("hall") && usedInHall.equals("true")) ||
             (room.equals("fight") && usedInHall.equals("false"))) {
             buttonUse.addListener(new ClickListener(){
@@ -315,8 +324,8 @@ public class UtilItem {
     }
 
     private void createBackButton(final Dialog dialog) {
-        TextButton buttonBack = new TextButton("Back", skin);
-        buttonBack.setPosition(dialog.getWidth()/2, dialog.getHeight()/4);
+        ImageButton buttonBack = new ImageButton(finalSkin, "cancel_en");
+        buttonBack.setPosition(dialog.getWidth()/2 + 35, 210);
         dialog.addActor(buttonBack);
         buttonBack.addListener(new ClickListener(){
             @Override
