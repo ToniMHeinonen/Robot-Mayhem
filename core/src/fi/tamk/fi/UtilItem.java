@@ -112,8 +112,12 @@ public class UtilItem {
         for (int i = 0; i < allItems.length; i++) {
             buttonCounterBuyable = i;
             Label shopItems = new Label(allItems[i], finalSkin);
-            tableBuyableItems.add(shopItems).size(550, 75).row();
+            tableBuyableItems.add(shopItems).size(525, 75);
             buyableItems++;
+
+            final String stringCost = String.valueOf(Item.getItem(allItems[i]).get("price"));
+            Label labelPrice = new Label(stringCost, finalSkin);
+            tableBuyableItems.add(labelPrice).size(50, 75).row();
 
             shopItems.addListener(new ClickListener(){
                 int i = buttonCounterBuyable;
@@ -122,18 +126,12 @@ public class UtilItem {
                     popupForBuyableItem(i);
                 }
             });
-
-            /*
-            String stringCost = String.valueOf(Item.getItem(allItems[i]).get("price"));
-            TextButton buttonPrice = new TextButton(stringCost, skin);
-            tableBuyableItems.add(buttonPrice).size(100, 100).row();
-            */
         }
 
         if (buyableItems > 11) {
             createScrollTableBuyable(tableBuyableItems);
         } else {
-            tableBuyableItems.setPosition(400, 845 - (buyableItems-1)*75/2);
+            tableBuyableItems.setPosition(410, 845 - (buyableItems-1)*75/2);
             dialogItems.addActor(tableBuyableItems);
         }
     }
@@ -253,9 +251,9 @@ public class UtilItem {
 
         popupBuyableItem = utilDialog.createPopupItemAndPowerUp(openedItem, description, "popup_item");
 
-        Label labelPrice = new Label("Price: " + stringCost, finalSkin);
-        labelPrice.setPosition(game.pixelWidth/4, 400);
-        labelPrice.setSize(960, 70);
+        Label labelPrice = new Label(stringCost, finalSkin, "big");
+        labelPrice.setPosition(1350, game.pixelHeight / 2 + 195);
+        labelPrice.setSize(80, 100);
         labelPrice.setAlignment(1);
         popupBuyableItem.addActor(labelPrice);
 
