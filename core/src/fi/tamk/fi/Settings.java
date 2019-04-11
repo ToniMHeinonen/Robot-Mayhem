@@ -193,7 +193,7 @@ public class Settings {
 
         buttonInventory = new ImageButton(finalSkin.getDrawable("menu_items1"));
         buttonInventory.setPosition(buttonSettings.getX(),
-                buttonSettings.getY() - 150);
+                buttonSettings.getY() - 180);
         buttonInventory.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
@@ -204,7 +204,7 @@ public class Settings {
 
         buttonStats = new ImageButton(finalSkin.getDrawable("menu_stats1"));
         buttonStats.setPosition(buttonSettings.getX(),
-                buttonInventory.getY() - 150);
+                buttonInventory.getY() - 180);
 
         settingsDialog.addActor(buttonSettings);
         settingsDialog.addActor(buttonInventory);

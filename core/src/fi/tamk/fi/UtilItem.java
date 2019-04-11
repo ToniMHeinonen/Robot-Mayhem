@@ -235,11 +235,11 @@ public class UtilItem {
 
         buttonInventory = new ImageButton(finalSkin, "inventory");
         buttonInventory.setPosition(buttonSettings.getX(),
-                buttonSettings.getY() - 150);
+                buttonSettings.getY() - 180);
 
         buttonStats = new ImageButton(finalSkin.getDrawable("menu_stats1"));
         buttonStats.setPosition(buttonSettings.getX(),
-                buttonInventory.getY() - 150);
+                buttonInventory.getY() - 180);
 
         dialogItems.addActor(buttonSettings);
         dialogItems.addActor(buttonInventory);
