@@ -263,8 +263,6 @@ public class UtilItem {
 
         final ImageButton buttonBuy = new ImageButton(finalSkin, "buy_en");
         buttonBuy.setPosition(popupBuyableItem.getWidth()/2 - 400, popupBuyableItem.getHeight()/4 - 60);
-        System.out.println(buttonBuy.getX());
-        System.out.println(buttonBuy.getY());
         buttonBuy.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
