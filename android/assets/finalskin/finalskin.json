@@ -165,5 +165,13 @@ com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
 		background: window_large
 		titleFont: font-average
 	}
+	skillname: {
+		background: skillname
+		titleFont: font-average
+	}
+	skilldescription: {
+		background: window_small
+		titleFont: font-average
+	}
 }
 }

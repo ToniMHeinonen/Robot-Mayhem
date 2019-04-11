@@ -14,39 +14,31 @@ public class UtilDialog {
     private MainGame game;
     private Stage stage;
     private boolean dialogOn, skillNameOn;
-    private Skin skin;
     private Skin finalSkin;
-
-    private Label.LabelStyle labelStyle;
-    private Window.WindowStyle windowStyle;
-    private com.badlogic.gdx.graphics.Color fontColor;
 
     UtilDialog(MainGame game) {
         this.game = game;
         stage = game.getStage();
-        labelStyle = game.getLabelStyle();
-        windowStyle = game.getWindowStyle();
-        fontColor = game.getFontColor();
-        skin = game.getSkin();
         finalSkin = game.getFinalSkin();
     }
 
     public void createDialog(String text) {
         dialogOn = true;
-        float areaWidth = 1000f;
-        float areaHeight = 600f;
+        float areaWidth = 780f;
+        float areaHeight = 540f;
         float x = game.pixelWidth/2 - areaWidth/2;
         float y = 300f;
-        Label label = new Label(text, labelStyle);
+
+        Label label = new Label(text, finalSkin);
         label.setWrap(true);
         label.setAlignment(1);
-        final Dialog dialog = new Dialog("", windowStyle);
+
+        final Dialog dialog = new Dialog("", finalSkin, "skilldescription");
         dialog.getContentTable().add(label).prefWidth(areaWidth);
         dialog.setPosition(x, y);
-        // dialog.getBackground().getMinHeight()
-        // dialog.getBackground().getMinWidth()
         dialog.setSize(areaWidth,areaHeight);
         stage.addActor(dialog);
+
         dialog.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
@@ -88,18 +80,17 @@ public class UtilDialog {
         float areaSize = 800f;
         float x = game.pixelWidth/2 - areaSize/2;
         float y = game.pixelHeight - 350f;
-        Label label = new Label(text, labelStyle);
+
+        Label label = new Label(text, finalSkin);
         label.setWrap(true);
         label.setAlignment(1);
 
-        final Dialog dialog = new Dialog("", windowStyle);
+        final Dialog dialog = new Dialog("", finalSkin, "skillname");
         dialog.getContentTable().add(label).prefWidth(areaSize);
-
-        // dialog.getBackground().getMinHeight()
-        // dialog.getBackground().getMinWidth()
         dialog.setSize(areaSize,label.getHeight()*2);
         dialog.setPosition(x,y);
         stage.addActor(dialog);
+
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {

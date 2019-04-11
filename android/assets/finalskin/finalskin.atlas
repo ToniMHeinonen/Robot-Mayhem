@@ -117,6 +117,27 @@ size: 2025,2023
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
+button_normal0
+  rotate: false
+  xy: 388, 1058
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_normal1
+  rotate: false
+  xy: 774, 1025
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_normal2
+  rotate: false
+  xy: 388, 816
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
 buy0_en
   rotate: false
   xy: 774, 903
@@ -397,197 +418,176 @@ topbarbutton1
   orig: 360, 120
   offset: 0, 0
   index: -1
-button_normal0
-  rotate: false
-  xy: 388, 816
-  size: 384, 240
-  orig: 384, 240
-  offset: 0, 0
-  index: -1
-button_normal1
-  rotate: false
-  xy: 388, 1058
-  size: 384, 240
-  orig: 384, 240
-  offset: 0, 0
-  index: -1
-button_normal2
-  rotate: false
-  xy: 774, 1025
-  size: 384, 240
-  orig: 384, 240
-  offset: 0, 0
-  index: -1
 
 finalskin8.png
-size: 1148,1146
+size: 1150,1148
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 diff1_0
   rotate: false
-  xy: 1, 295
+  xy: 363, 53
   size: 300, 120
   orig: 300, 120
   offset: 0, 0
   index: -1
 diff1_1
   rotate: false
-  xy: 725, 419
+  xy: 665, 53
   size: 300, 120
   orig: 300, 120
   offset: 0, 0
   index: -1
 diff1_2
   rotate: false
-  xy: 1, 173
+  xy: 725, 1027
   size: 300, 120
   orig: 300, 120
   offset: 0, 0
   index: -1
 diff2_0
   rotate: false
-  xy: 1, 51
+  xy: 725, 905
   size: 300, 120
   orig: 300, 120
   offset: 0, 0
   index: -1
 diff2_1
   rotate: false
-  xy: 363, 297
+  xy: 725, 783
   size: 300, 120
   orig: 300, 120
   offset: 0, 0
   index: -1
 diff2_2
   rotate: false
-  xy: 665, 297
+  xy: 725, 661
   size: 300, 120
   orig: 300, 120
   offset: 0, 0
   index: -1
 diff3_0
   rotate: false
-  xy: 303, 175
+  xy: 725, 539
   size: 300, 120
   orig: 300, 120
   offset: 0, 0
   index: -1
 diff3_1
   rotate: false
-  xy: 303, 53
+  xy: 725, 417
   size: 300, 120
   orig: 300, 120
   offset: 0, 0
   index: -1
 diff3_2
   rotate: false
-  xy: 605, 175
+  xy: 725, 295
   size: 300, 120
   orig: 300, 120
   offset: 0, 0
   index: -1
 quit2_fi
   rotate: false
-  xy: 363, 661
+  xy: 1, 907
   size: 360, 240
   orig: 360, 240
   offset: 0, 0
   index: -1
 reset1_en
   rotate: false
-  xy: 725, 783
+  xy: 1, 665
   size: 360, 240
   orig: 360, 240
   offset: 0, 0
   index: -1
 reset1_fi
   rotate: false
-  xy: 1, 417
+  xy: 1, 423
   size: 360, 240
   orig: 360, 240
   offset: 0, 0
   index: -1
 reset2_en
   rotate: false
-  xy: 363, 419
+  xy: 1, 181
   size: 360, 240
   orig: 360, 240
   offset: 0, 0
   index: -1
 reset2_fi
   rotate: false
-  xy: 725, 541
+  xy: 363, 907
   size: 360, 240
   orig: 360, 240
   offset: 0, 0
   index: -1
 scrollbar
   rotate: false
-  xy: 1087, 290
+  xy: 1089, 292
   size: 60, 855
   orig: 60, 855
   offset: 0, 0
   index: -1
 scrollslider
   rotate: false
-  xy: 727, 83
+  xy: 967, 81
   size: 60, 90
   orig: 60, 90
   offset: 0, 0
   index: -1
 topbarbutton2
   rotate: false
-  xy: 1, 1025
+  xy: 363, 785
   size: 360, 120
   orig: 360, 120
   offset: 0, 0
   index: -1
 use0_en
   rotate: false
-  xy: 1, 903
+  xy: 363, 663
   size: 360, 120
   orig: 360, 120
   offset: 0, 0
   index: -1
 use0_fi
   rotate: false
-  xy: 363, 1025
+  xy: 363, 541
   size: 360, 120
   orig: 360, 120
   offset: 0, 0
   index: -1
 use1_en
   rotate: false
-  xy: 1, 781
+  xy: 363, 419
   size: 360, 120
   orig: 360, 120
   offset: 0, 0
   index: -1
 use1_fi
   rotate: false
-  xy: 363, 903
+  xy: 363, 297
   size: 360, 120
   orig: 360, 120
   offset: 0, 0
   index: -1
 use2_en
   rotate: false
-  xy: 725, 1025
+  xy: 363, 175
   size: 360, 120
   orig: 360, 120
   offset: 0, 0
   index: -1
 use2_fi
   rotate: false
-  xy: 1, 659
+  xy: 1, 59
   size: 360, 120
   orig: 360, 120
   offset: 0, 0
   index: -1
 volumeslider
   rotate: false
-  xy: 605, 53
+  xy: 967, 173
   size: 120, 120
   orig: 120, 120
   offset: 0, 0
