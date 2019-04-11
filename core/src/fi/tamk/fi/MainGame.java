@@ -122,7 +122,7 @@ public class MainGame extends Game {
 		createBundle();
 		files = new Files();
 		// Create skills and bosses when the game launches
-		Skills.createSkills();
+		Skills.createSkills(this);
 		Bosses.createBosses(this);
 
 		// Create items
@@ -134,7 +134,7 @@ public class MainGame extends Game {
 
 		createHackFiles();
 
-		askForName();
+		//askForName(); add later
 
 		// Switch to first room
 		switchToRoomGame();
@@ -151,8 +151,6 @@ public class MainGame extends Game {
 		batch.dispose();
 		stage.dispose();
 		skin.dispose();
-		Bosses.dispose();
-		Skills.dispose();
 		files.manager.dispose();
 		saveStats();
 	}

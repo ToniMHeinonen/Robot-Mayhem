@@ -381,7 +381,7 @@ public class RoomFight extends RoomParent {
         protected int turnState, BEFORE = 0, TAKING_DOT = 1, START = 2, WAIT_FOR_ACTION = 3,
                                 DOING_ACTION = 4, END_ACTION = 5;
         protected int actionState, TEMP_ANIM = 0, HIT_ANIM = 1, LONG_ANIM = 2, MISS_ANIM = 3,
-                        HEAL_ANIM = 4, DOT_ANIM = 5;
+                        HEAL_ANIM = 4, DOT_ANIM = 5, DELAY_ANIM = 6;
         protected int skillState, SKILL_RESET = 0, SKILL_DAMAGE = 1, SKILL_HEAL = 2, SKILL_MISS = 3,
                         SKILL_DEFEND = 4;
         protected boolean flashWhite, hitAnimationRunning, missCritAnimationRunning, dealDoT,
@@ -402,12 +402,10 @@ public class RoomFight extends RoomParent {
         protected boolean hpIncorrect = false;
         protected boolean reflectingShield = false;
 
-        protected int idleSpd, skillSpd, hackSpd, takeHitSpd, itemSpd, deathSpd, escapeSpd,
-                defendSpd, curHitAnimationSpd;
+        protected int animSpeed = 8;
         protected Animation<TextureRegion> curAnimation, curHitAnimation, idleAnim, hackAnim,
                 skillAnim, takeHitAnim, healthPlus, healthMinus, criticalHitAnim, missAnim,
                 healAnim, dotMinus, dotPlus;
-        protected Integer[] hitSpeeds;
         protected HashMap<String,Integer> cooldowns;
 
         Fighters() {
@@ -490,7 +488,7 @@ public class RoomFight extends RoomParent {
                 // If temp animation is finished, check skillState for type
                 if (curAnimation.isAnimationFinished(anim.getStateTime())) {
                     if (skillState == SKILL_DAMAGE) {
-                        opponent.startHitAnimation(curHitAnimation, curHitAnimationSpd);
+                        opponent.startHitAnimation(curHitAnimation, animSpeed);
                         actionState = HIT_ANIM;
                     } else if (skillState == SKILL_HEAL){
                         takeHeal(dmgAmount);
@@ -529,16 +527,24 @@ public class RoomFight extends RoomParent {
                 }
             } else if (actionState == DOT_ANIM) {
                 if (!isHitAnimationRunning() && !opponent.isHitAnimationRunning()) {
-                    turnState = END_ACTION;
+                    actionState = DELAY_ANIM;
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            turnState = END_ACTION;
+                        }
+                    }, 0.5f);
                 }
             }
 
+            // If doing action has ended, but DoT was inflicted during turn, then do DoT animation
             if (turnState == END_ACTION) {
                 if (dealDoT) {
                     dealDoT = false;
-                    turnState = DOT_ANIM;
-                    if (dotAmount > 0) opponent.startHitAnimation(dotMinus, 8);
-                    else startHitAnimation(dotPlus, 8);
+                    turnState = DOING_ACTION;
+                    actionState = DOT_ANIM;
+                    if (dotAmount > 0) opponent.startHitAnimation(dotMinus, animSpeed);
+                    else startHitAnimation(dotPlus, animSpeed);
                 }
             }
         }
@@ -591,11 +597,11 @@ public class RoomFight extends RoomParent {
         }
 
         protected void startIdle() {
-            anim.startAnimation(idleAnim, idleSpd);
+            anim.startAnimation(idleAnim, animSpeed);
         }
 
         protected void startHack() {
-            anim.startAnimation(hackAnim, hackSpd);
+            anim.startAnimation(hackAnim, animSpeed);
         }
 
         // If taken hit, then pause so that new actions won't take place
@@ -632,7 +638,7 @@ public class RoomFight extends RoomParent {
         }
 
         protected void changeToTakeHitAnimation() {
-            anim.startAnimation(takeHitAnim, takeHitSpd);
+            anim.startAnimation(takeHitAnim, animSpeed);
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
@@ -855,16 +861,6 @@ public class RoomFight extends RoomParent {
             ifDead = State.DEAD;
             ID = PLAYER;
 
-            // These are now useless, since all the animations are 8 fps
-            idleSpd = 8;
-            skillSpd = 8;
-            defendSpd = 8;
-            itemSpd = 8;
-            takeHitSpd = 8;
-            hackSpd = 8;
-            deathSpd = 8;
-            escapeSpd = 8;
-
             addSkillsToMap();
 
             // Create maps for attack and defend, create cooldowns
@@ -885,7 +881,7 @@ public class RoomFight extends RoomParent {
             hackAnim = files.animHack;
             deathAnim = files.animDeath;
 
-            anim.startAnimation(idleAnim, idleSpd);
+            anim.startAnimation(idleAnim, animSpeed);
         }
 
         public void update() {
@@ -901,7 +897,7 @@ public class RoomFight extends RoomParent {
                 } else if (state == State.HACK) {
                     if (anim.getAnimation() != hackAnim) startHack();
                 } else if (state == State.DEAD) {
-                    if (anim.getAnimation() != deathAnim) anim.startAnimation(deathAnim, deathSpd);
+                    if (anim.getAnimation() != deathAnim) anim.startAnimation(deathAnim, animSpeed);
                 } else if (state == State.ESCAPE) {
                     runAway();
                 }
@@ -926,9 +922,7 @@ public class RoomFight extends RoomParent {
                 skillState = SKILL_DAMAGE;
                 actionSelected = true;
                 curAnimation = skillAnim;
-                curAnimSpd =  skillSpd;
                 curHitAnimation = (Animation<TextureRegion>) mapAttack.get(Skills.hitAnimation);
-                curHitAnimationSpd = (Integer) mapAttack.get(Skills.hitAnimationSpd);
                 dmgAmount = defaultDmg;
                 dealCriticalHit = randomChance((Integer) mapAttack.get(Skills.critChance));
                 if (dealCriticalHit) dmgAmount *= 1.5;
@@ -940,7 +934,6 @@ public class RoomFight extends RoomParent {
                 if (cooldowns.get("Defend") == 0) {
                     actionSelected = true;
                     curAnimation = defendAnim;
-                    curAnimSpd = defendSpd;
                     addCooldown("Defend", (Integer) mapDefend.get(Skills.cooldown));
                     skillState = SKILL_DEFEND;
                     actionState = LONG_ANIM;
@@ -950,7 +943,6 @@ public class RoomFight extends RoomParent {
             {
                 actionSelected = true;
                 curAnimation = itemAnim;
-                curAnimSpd = itemSpd;
                 actionState = TEMP_ANIM;
             }
             else { // It's skill
@@ -965,7 +957,6 @@ public class RoomFight extends RoomParent {
                         addCooldown(skills[i],
                                 (Integer) skillMap.get(Skills.cooldown));
                         curAnimation = skillAnim;
-                        curAnimSpd = skillSpd;
 
                         // If skill misses, skip everything
                         boolean miss = randomChance((Integer) skillMap.get(Skills.missChance));
@@ -981,7 +972,6 @@ public class RoomFight extends RoomParent {
                                 // If skill does not have animation, then it does not do damage
                                 if (curHitAnimation != null) {
                                     skillState = SKILL_DAMAGE;
-                                    curHitAnimationSpd = (Integer) skillMap.get(Skills.hitAnimationSpd);
 
                                     // If critical hit, deal 1.5x damage
                                     dmgAmount = defaultDmg * (Double) skillMap.get(Skills.damage);
@@ -1014,7 +1004,7 @@ public class RoomFight extends RoomParent {
 
             // If player touched something that was on cooldown, actionSelected remains false
             if (actionSelected) {
-                anim.startAnimation(curAnimation, curAnimSpd);
+                anim.startAnimation(curAnimation, animSpeed);
                 turnState = DOING_ACTION;
                 removeButtons();
                 dialog.showSkillName(action);
@@ -1032,7 +1022,7 @@ public class RoomFight extends RoomParent {
 
         // Run away if escape is chosen
         private void runAway() {
-            if (anim.getAnimation() != escapeAnim) anim.startAnimation(escapeAnim, escapeSpd);
+            if (anim.getAnimation() != escapeAnim) anim.startAnimation(escapeAnim, animSpeed);
 
             if (X > - 400) {
                 X -= Gdx.graphics.getDeltaTime() * 300f;
@@ -1133,7 +1123,7 @@ public class RoomFight extends RoomParent {
             //hitAnimList = new ArrayList<Animation<TextureRegion>>();
             //Collections.addAll(hitAnimList, skill1_hit, skill2_hit, skill3_hit);
 
-            anim.startAnimation(idleAnim, idleSpd);
+            anim.startAnimation(idleAnim, animSpeed);
         }
 
         public void update() {
@@ -1145,7 +1135,7 @@ public class RoomFight extends RoomParent {
                     if (turnState == WAIT_FOR_ACTION) attack();
                     controlTurnStates();
                 } else if (state == State.HACK) {
-                    if (anim.getAnimation() != hackAnim) anim.startAnimation(hackAnim, hackSpd);
+                    if (anim.getAnimation() != hackAnim) anim.startAnimation(hackAnim, animSpeed);
                 } else if (state == State.HACK_FAILED) {
                     // If hacking failed, calculate 3+ percent of maxHp back
                     calcTargetHpSpd(-maxHp/3);
@@ -1168,7 +1158,6 @@ public class RoomFight extends RoomParent {
             // Use these arrays when selecting skills in attack()
             skillNames = new String[3];
             hitAnimList = new ArrayList<Animation<TextureRegion>>();
-            hitSpeeds = new Integer[3];
             damages = new double[3];
             critChances = new int[3];
             missChances = new int[3];
@@ -1185,12 +1174,10 @@ public class RoomFight extends RoomParent {
                 // Retrieve the skills map from Skills class which contains skill values
                 HashMap<String, Object> mapSkill = Skills.getSkill(skillName);
 
-                // Retrieve hit animation and it's speed from Skills class
+                // Retrieve hit animation from Skills class
                 Animation<TextureRegion> skillHit =
                         (Animation<TextureRegion>) mapSkill.get(Skills.hitAnimation);
                 hitAnimList.add(skillHit);
-                int skillHitSpd = (Integer) mapSkill.get(Skills.hitAnimationSpd);
-                hitSpeeds[i] = skillHitSpd;
 
                 // Retrieve skills's damage
                 double dmg = (Double) mapSkill.get(Skills.damage);
@@ -1226,10 +1213,6 @@ public class RoomFight extends RoomParent {
             skillAnim = (Animation<TextureRegion>) mapBoss.get(Bosses.skill);
             hackAnim = (Animation<TextureRegion>) mapBoss.get(Bosses.hack);
             takeHitAnim = (Animation<TextureRegion>) mapBoss.get(Bosses.takeHit);
-            idleSpd = (Integer) mapBoss.get(Bosses.speed + Bosses.idle);
-            skillSpd = (Integer) mapBoss.get(Bosses.speed + Bosses.skill);
-            hackSpd = (Integer) mapBoss.get(Bosses.speed + Bosses.hack);
-            takeHitSpd = (Integer) mapBoss.get(Bosses.speed + Bosses.takeHit);
 
             // Retrieve dialog start and end from Boss
             dialogStart = (String) mapBoss.get(Bosses.dialogStart);
@@ -1274,7 +1257,6 @@ public class RoomFight extends RoomParent {
                         // If hitAnimation is null, then it does no damage
                         if (curHitAnimation != null) {
                             skillState = SKILL_DAMAGE;
-                            curHitAnimationSpd = hitSpeeds[random];
 
                             // If critical hit, deal 1.5x damage
                             dmgAmount = defaultDmg * damages[random];
@@ -1297,7 +1279,7 @@ public class RoomFight extends RoomParent {
                 }
 
                 curAnimation = skillAnim;
-                anim.startAnimation(curAnimation, skillSpd);
+                anim.startAnimation(curAnimation, animSpeed);
             }
         }
 
@@ -1314,7 +1296,7 @@ public class RoomFight extends RoomParent {
 
         // Room calls this after hack is successful
         public void endDialogTimer() {
-            anim.startAnimation(takeHitAnim, takeHitSpd);
+            anim.startAnimation(takeHitAnim, animSpeed);
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {

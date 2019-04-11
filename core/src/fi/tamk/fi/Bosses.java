@@ -26,10 +26,7 @@ public class Bosses {
 
     private static HashMap<String, HashMap<String,Object>> mapBosses;
 
-    private static int s_idle, s_hack, s_skill, s_takeHit; // Animation speed
-    private static Texture t_idle, t_hack, t_skill, t_takeHit;
-    private static Animation<TextureRegion> a_idle, a_hack, a_skill, a_takeHit;
-    private static Animating anim = new Animating();
+    private static Animation<TextureRegion> animIdle, animStun, animAttack, animDamage;
 
     private static String curName, curSkillName0, curSkillName1, curSkillName2,
                             curDialogStart, curDialogEnd;
@@ -96,18 +93,10 @@ public class Bosses {
         curDialogStart = "I WILL ROB YOU NOW!!!";
         curDialogEnd = "Wish I hadn't deleted Subtle.exe...";
 
-        t_idle = new Texture("texture/robber/robber_idle.png");
-        a_idle = anim.createAnimation(t_idle, 4, 4);
-        s_idle = 8;
-        t_hack = new Texture("texture/robber/robber_stun.png");
-        a_hack = anim.createAnimation(t_hack, 4, 2);
-        s_hack = 8;
-        t_skill = new Texture("texture/robber/robber_attack.png");
-        a_skill = anim.createAnimation(t_skill, 4, 1);
-        s_skill = 8;
-        t_takeHit = new Texture("texture/robber/robber_damage.png");
-        a_takeHit = anim.createAnimation(t_takeHit, 4, 1);
-        s_takeHit = 8;
+        animIdle = files.a_robberIdle;
+        animAttack = files.a_robberAttack;
+        animDamage = files.a_robberDamage;
+        animStun = files.a_robberStun;
 
         addToMap();
     }
@@ -120,18 +109,10 @@ public class Bosses {
         curDialogStart = "Vroom Vroom! ";
         curDialogEnd = "Vroom poks!";
 
-        t_idle = new Texture("texture/roombot/roombot_idle.png");
-        a_idle = files.a_roombotIdle;
-        s_idle = 8;
-        t_hack = new Texture("texture/roombot/roombot_stun.png");
-        a_hack = files.a_roombotHack;
-        s_hack = 8;
-        t_skill = new Texture("texture/roombot/roombot_attack.png");
-        a_skill = files.a_roombotSkill;
-        s_skill = 8;
-        t_takeHit = new Texture("texture/roombot/roombot_damage.png");
-        a_takeHit = files.a_roombotDamage;
-        s_takeHit = 8;
+        animIdle = files.a_roombotIdle;
+        animAttack = files.a_roombotAttack;
+        animDamage = files.a_roombotDamage;
+        animStun = files.a_roombotStun;
 
         addToMap();
     }
@@ -144,18 +125,10 @@ public class Bosses {
         curDialogStart = "Here, have a 500 ticket!";
         curDialogEnd = "I'll pay your ticket!";
 
-        t_idle = new Texture("texture/copper/copper_idle.png");
-        a_idle = anim.createAnimation(t_idle, 4, 4);
-        s_idle = 8;
-        t_hack = new Texture("texture/copper/copper_stun.png");
-        a_hack = anim.createAnimation(t_hack, 4, 2);
-        s_hack = 8;
-        t_skill = new Texture("texture/copper/copper_attack.png");
-        a_skill = anim.createAnimation(t_skill, 4, 1);
-        s_skill = 8;
-        t_takeHit = new Texture("texture/copper/copper_damage.png");
-        a_takeHit = anim.createAnimation(t_takeHit, 4, 1);
-        s_takeHit = 8;
+        animIdle = files.a_copperIdle;
+        animAttack = files.a_copperAttack;
+        animDamage = files.a_copperDamage;
+        animStun = files.a_copperStun;
 
         addToMap();
     }
@@ -163,27 +136,16 @@ public class Bosses {
     private static void addToMap() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, curName);
-        map.put(idle, a_idle);
-        map.put(hack, a_hack);
-        map.put(skill, a_skill);
-        map.put(takeHit, a_takeHit);
+        map.put(idle, animIdle);
+        map.put(skill, animAttack);
+        map.put(takeHit, animDamage);
+        map.put(hack, animStun);
         map.put(skillName + "0", curSkillName0);
         map.put(skillName + "1", curSkillName1);
         map.put(skillName + "2", curSkillName2);
-        map.put(speed + idle, s_idle);
-        map.put(speed + hack, s_hack);
-        map.put(speed + skill, s_skill);
-        map.put(speed + takeHit, s_takeHit);
         map.put(dialogStart, curDialogStart);
         map.put(dialogEnd, curDialogEnd);
 
         mapBosses.put((String) map.get(name), map);
-    }
-
-    public static void dispose() {
-        t_idle.dispose();
-        t_hack.dispose();
-        t_skill.dispose();
-        t_takeHit.dispose();
     }
 }

@@ -9,6 +9,8 @@ import java.util.HashMap;
 
 public class Skills {
 
+    private static Files files;
+
     public static final String name = "name";
     public static final String description = "description";
     public static final String damage = "damage";
@@ -19,7 +21,6 @@ public class Skills {
     public static final String dotPurePercent = "dotPurePercent";
     public static final String cooldown = "cooldown";
     public static final String hitAnimation = "hitAnimation";
-    public static final String hitAnimationSpd = "hitAnimationSpd";
 
     public static final String ATTACK = "Attack";
     public static final String DEFEND = "Defend";
@@ -35,11 +36,9 @@ public class Skills {
     private static String[] allSkills = new String[] {ATTACK, DEFEND, REPAIR, SHOCK, FIRE,
     SUCTION, DUST};
 
-    private static HashMap<String,HashMap<String,Object>> mapSkills;
+    private static Animation<TextureRegion> physicalHit;
 
-    private static Texture t_Physical; // Remember to dispose these
-    private static Animating anim = new Animating();
-    private static Animation<TextureRegion> a_Physical;
+    private static HashMap<String,HashMap<String,Object>> mapSkills;
 
     /* NOTE!
     Every time you add new skill, remember to:
@@ -68,9 +67,10 @@ public class Skills {
     /*
     Create skills when the game starts.
      */
-    public static void createSkills() {
+    public static void createSkills(MainGame game) {
+        files = game.getFiles();
         mapSkills = new HashMap<String, HashMap<String,Object>>();
-        createAttackAndDefend();
+        loadSkillAnimations();
         skillAttack();
         skillDefend();
         skillItem();
@@ -101,6 +101,10 @@ public class Skills {
         return desc;
     }
 
+    private static void loadSkillAnimations() {
+        physicalHit = files.animPhysicalHit;
+    }
+
     private static void skillAttack() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, ATTACK);
@@ -112,8 +116,7 @@ public class Skills {
         map.put(damageOverTimeTurns, 0);
         map.put(dotPurePercent, false);
         map.put(cooldown, 0);
-        map.put(hitAnimation, a_Physical);
-        map.put(hitAnimationSpd, 8);
+        map.put(hitAnimation, physicalHit);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -131,7 +134,6 @@ public class Skills {
         map.put(dotPurePercent, false);
         map.put(cooldown, 3);
         map.put(hitAnimation, null);
-        map.put(hitAnimationSpd, 0);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -149,7 +151,6 @@ public class Skills {
         map.put(dotPurePercent, false);
         map.put(cooldown, 0);
         map.put(hitAnimation, null);
-        map.put(hitAnimationSpd, 0);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -166,7 +167,6 @@ public class Skills {
         map.put(dotPurePercent, true);
         map.put(cooldown, 2);
         map.put(hitAnimation, null);
-        map.put(hitAnimationSpd, 0);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -182,8 +182,7 @@ public class Skills {
         map.put(damageOverTimeTurns, 0);
         map.put(dotPurePercent, false);
         map.put(cooldown, 3);
-        map.put(hitAnimation, a_Physical);
-        map.put(hitAnimationSpd, 8);
+        map.put(hitAnimation, physicalHit);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -200,7 +199,6 @@ public class Skills {
         map.put(dotPurePercent, true);
         map.put(cooldown, 2);
         map.put(hitAnimation, null);
-        map.put(hitAnimationSpd, 0);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -217,8 +215,7 @@ public class Skills {
         map.put(damageOverTimeTurns, 0);
         map.put(dotPurePercent, false);
         map.put(cooldown, 2);
-        map.put(hitAnimation, a_Physical);
-        map.put(hitAnimationSpd, 8);
+        map.put(hitAnimation, physicalHit);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -236,17 +233,7 @@ public class Skills {
         map.put(dotPurePercent, false);
         map.put(cooldown, 3);
         map.put(hitAnimation, null);
-        map.put(hitAnimationSpd, 8);
 
         mapSkills.put((String) map.get(name), map);
-    }
-
-    private static void createAttackAndDefend() {
-        t_Physical = new Texture("texture/skills/physicalHit.png");
-        a_Physical = anim.createAnimation(t_Physical, 4, 1);
-    }
-
-    public static void dispose() {
-        t_Physical.dispose();
     }
 }
