@@ -21,6 +21,7 @@ public class Skills {
     public static final String dotPurePercent = "dotPurePercent";
     public static final String cooldown = "cooldown";
     public static final String hitAnimation = "hitAnimation";
+    public static final String sound = "sound";
 
     public static final String ATTACK = "Attack";
     public static final String DEFEND = "Defend";
@@ -117,6 +118,7 @@ public class Skills {
         map.put(dotPurePercent, false);
         map.put(cooldown, 0);
         map.put(hitAnimation, physicalHit);
+        map.put(sound, null);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -134,6 +136,7 @@ public class Skills {
         map.put(dotPurePercent, false);
         map.put(cooldown, 3);
         map.put(hitAnimation, null);
+        map.put(sound, null);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -151,6 +154,7 @@ public class Skills {
         map.put(dotPurePercent, false);
         map.put(cooldown, 0);
         map.put(hitAnimation, null);
+        map.put(sound, null);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -167,6 +171,7 @@ public class Skills {
         map.put(dotPurePercent, true);
         map.put(cooldown, 2);
         map.put(hitAnimation, null);
+        map.put(sound, null);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -183,6 +188,7 @@ public class Skills {
         map.put(dotPurePercent, false);
         map.put(cooldown, 3);
         map.put(hitAnimation, physicalHit);
+        map.put(sound, null);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -199,6 +205,7 @@ public class Skills {
         map.put(dotPurePercent, true);
         map.put(cooldown, 2);
         map.put(hitAnimation, null);
+        map.put(sound, null);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -216,6 +223,7 @@ public class Skills {
         map.put(dotPurePercent, false);
         map.put(cooldown, 2);
         map.put(hitAnimation, physicalHit);
+        map.put(sound, files.sndSuction);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -233,6 +241,7 @@ public class Skills {
         map.put(dotPurePercent, false);
         map.put(cooldown, 3);
         map.put(hitAnimation, null);
+        map.put(sound, files.sndDustThrow);
 
         mapSkills.put((String) map.get(name), map);
     }

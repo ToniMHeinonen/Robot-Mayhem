@@ -593,6 +593,7 @@ public class Hacking {
     private void collisionBulletEnemy(Body body) {
         bodiesToBeDestroyed.add(body);
         bulletHitEnemy = true;
+        files.sndHackSuccessful.play();
         for (Body b : shieldBodies) {
             if (b.getUserData() != null) {
                 bodiesToBeDestroyed.add(b);

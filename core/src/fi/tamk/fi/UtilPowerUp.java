@@ -288,6 +288,7 @@ public class UtilPowerUp {
     // Add selection to inventory
     private void addToInventory() {
         powerUpChosen = true;
+        files.sndChoosePowerUp.play();
         if (chosenType == MONEY) {
             game.addMoney(moneyAmount);
         } else if (chosenType == SKILL) {
