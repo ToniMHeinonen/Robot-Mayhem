@@ -1059,9 +1059,10 @@ public class RoomFight extends RoomParent {
         }
 
         public void createActionButtons() {
-            float space = game.pixelWidth / 5; // Temporary solution
+            float space = game.pixelWidth / 5;
             for (int i = 0; i < btnTexts.length; i++) {
                 btnCounter = i;
+                // Retrieve description and cooldown for button, using the complete name of skill
                 String name = btnTexts[i];
                 if (name != "") {
                     descriptions.add(skills.retrieveSkillDescription(name));
@@ -1075,23 +1076,28 @@ public class RoomFight extends RoomParent {
                     // This catch need to exist, otherwise it will crash
                 }
 
-                name = name.toLowerCase();
-                if (name == "") name = "empty";
+                // Retrieve correct button using the keyname of the action
+                name = skills.buttonKeys.get(btnTexts[i]);
+                if (name == null) name = "empty";
 
                 Drawable normal, clicked;
                 if (name == "empty") {
+                    // If button is empty, get empty button
                     normal = testSkin.getDrawable("button_" + name);
                     clicked = testSkin.getDrawable("button_" + name);
                 } else if (cooldown == 0) {
+                    // If cooldown is 0, get correct button for action
                     normal = testSkin.getDrawable("button_" + name);
                     clicked = testSkin.getDrawable("button_clicked");
                 } else {
+                    // else it has cooldown, so retrieve correct cooldown button
                     normal = testSkin.getDrawable("button_cooldown" + cooldown);
                     clicked = testSkin.getDrawable("button_cooldown" + cooldown);
                 }
                 final ImageButton imgButton = new ImageButton(normal, clicked);
                 imgButton.setPosition(i*space, 0f);
                 stage.addActor(imgButton);
+                // If skill does not have cooldown and is not empty, add button listener
                 if (cooldown == 0 && name != "empty") {
                     imgButton.addListener(new ActorGestureListener(20,
                             0.4f, 0.5f, 0.15f) {

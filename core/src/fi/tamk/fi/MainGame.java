@@ -270,8 +270,8 @@ public class MainGame extends Game {
     }
 
 	private void createBundle() {
-		Locale locale = Locale.getDefault();
-		//Locale locale = new Locale("fi", "FI"); //USE THIS TO TEST FINNISH VERSION
+		//Locale locale = Locale.getDefault();
+		Locale locale = new Locale("fi", "FI"); //USE THIS TO TEST FINNISH VERSION
 		localize = I18NBundle.createBundle(Gdx.files.internal("MyBundle"),
 				locale,"ISO-8859-1");
 	}

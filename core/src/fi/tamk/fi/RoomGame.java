@@ -70,7 +70,7 @@ public class RoomGame extends RoomParent {
 
     public void createButtonFight() {
         milestoneReached = true;
-        Drawable normal = testSkin.getDrawable("button_attack");
+        Drawable normal = testSkin.getDrawable("button_ATTACK");
         Drawable clicked = testSkin.getDrawable("button_clicked");
         final ImageButton btn = new ImageButton(normal, clicked);
         btn.setPosition(game.pixelWidth/2 - btn.getWidth()/2,

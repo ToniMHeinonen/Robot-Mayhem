@@ -3,7 +3,7 @@ actionButtons.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-button_attack
+button_ATTACK
   rotate: false
   xy: 1, 727
   size: 384, 240
@@ -38,14 +38,14 @@ button_cooldown3
   orig: 384, 240
   offset: 0, 0
   index: -1
-button_defend
+button_DEFEND
   rotate: false
   xy: 1, 1
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
-button_dust throw
+button_DUST
   rotate: false
   xy: 387, 243
   size: 384, 240
@@ -71,28 +71,28 @@ actionButtons2.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-button_item
+button_ITEM
   rotate: false
   xy: 1, 729
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
-button_self-repair
+button_REPAIR
   rotate: false
   xy: 1, 487
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
-button_shock
+button_SHOCK
   rotate: false
   xy: 387, 729
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
-button_suction
+button_SUCTION
   rotate: false
   xy: 1, 245
   size: 384, 240

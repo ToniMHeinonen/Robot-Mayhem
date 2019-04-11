@@ -25,31 +25,49 @@ public class Skills {
     public final String hitAnimation = "hitAnimation";
     public final String sound = "sound";
 
+    // These values are used by localization and actionbuttons
+    private final String keyAttack = "ATTACK";
+    private final String keyDefend = "DEFEND";
+    private final String keyItem = "ITEM";
+    private final String keyRepair = "REPAIR";
+    private final String keyShock = "SHOCK";
+    private final String keyFire = "FIRE";
+    private final String keySuction = "SUCTION";
+    private final String keyDust = "DUST";
+
     public final String ATTACK, DEFEND, ITEM, REPAIR, SHOCK, FIRE, SUCTION, DUST;
 
     private final int defCrit = 10; // Default crit chance percent
 
-    private String[] allSkills;
-
     private Animation<TextureRegion> physicalHit;
 
     private HashMap<String,HashMap<String,Object>> mapSkills;
+    public final HashMap<String,String> buttonKeys;
 
     Skills(MainGame game) {
         localize = game.getLocalize();
         files = game.getFiles();
 
-        ATTACK = localize.get("attack");
-        DEFEND = localize.get("defend");
-        ITEM = localize.get("item");
-        REPAIR = localize.get("repair");
-        SHOCK = localize.get("shock");
-        FIRE = localize.get("fire");
-        SUCTION = localize.get("suction");
-        DUST = localize.get("dust");
+        // Get correct texts for skills, depending on the language
+        ATTACK = localize.get(keyAttack);
+        DEFEND = localize.get(keyDefend);
+        ITEM = localize.get(keyItem);
+        REPAIR = localize.get(keyRepair);
+        SHOCK = localize.get(keyShock);
+        FIRE = localize.get(keyFire);
+        SUCTION = localize.get(keySuction);
+        DUST = localize.get(keyDust);
 
-        allSkills = new String[] {ATTACK, DEFEND, REPAIR, SHOCK, FIRE,
-                SUCTION, DUST};
+        // Create hashmap, which actionButtons can use to retrieve correct button
+        buttonKeys = new HashMap<String, String>();
+        buttonKeys.put(ATTACK, keyAttack);
+        buttonKeys.put(DEFEND, keyDefend);
+        buttonKeys.put(ITEM, keyItem);
+        buttonKeys.put(REPAIR, keyRepair);
+        buttonKeys.put(SHOCK, keyShock);
+        buttonKeys.put(FIRE, keyFire);
+        buttonKeys.put(SUCTION, keySuction);
+        buttonKeys.put(DUST, keyDust);
 
         mapSkills = new HashMap<String, HashMap<String,Object>>();
         loadSkillAnimations();
@@ -66,8 +84,9 @@ public class Skills {
     /* NOTE!
     Every time you add new skill, remember to:
     1. Make a String for it
-    2. Add it to the allSkills array
-    3. Make a new method for it
+    2. Make a new method for it
+    3. Add it to finnish and english bundle
+    4. Make a buttonKey for it and add it to the buttonKeys hashmap
      */
 
     /* Explanations for values:
