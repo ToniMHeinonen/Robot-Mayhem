@@ -273,8 +273,8 @@ public class MainGame extends Game {
 
 	private void createBundle() {
 		Locale locale;
-		if (language == "fi") locale = new Locale("fi", "FI");
-		else if (language == "en") locale = Locale.US;
+		if (language.equals("fi")) locale = new Locale("fi", "FI");
+		else if (language.equals("en")) locale = Locale.US;
 		else locale = Locale.getDefault();
 
 		localize = I18NBundle.createBundle(Gdx.files.internal("MyBundle"),
