@@ -25,6 +25,7 @@ public class UtilPowerUp {
     private Skills skills;
     private Stage stage;
     private Skin skin;
+    private Skin finalSkin;
     private Texture background, popup;
     private float backgroundX, backgroundY, popupX, popupY;
     private BitmapFont bigFont;
@@ -51,6 +52,7 @@ public class UtilPowerUp {
         dialog = game.getDialog();
         background = files.powerUpBg;
         popup = files.powerUpPopup;
+        finalSkin = files.finalSkin;
 
         // Create constants for text
         descriptionLabelStyle = game.getDescriptionLabelStyle();
@@ -92,10 +94,10 @@ public class UtilPowerUp {
 
     // Draws Choose PowerUp centered
     private void drawChoosePowerUp() {
-        final GlyphLayout layout = new GlyphLayout(bigFont, "Choose PowerUp");
+        final GlyphLayout layout = new GlyphLayout(finalSkin.getFont("font-large"), "Choose PowerUp");
         final float fontX = game.pixelWidth/2 - layout.width / 2;
         final float fontY = game.pixelHeight -200 - layout.height / 2;
-        bigFont.draw(batch, layout, fontX, fontY);
+        finalSkin.getFont("font-large").draw(batch, layout, fontX, fontY);
     }
 
     // If powerup is clicked, draw popup background

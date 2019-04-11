@@ -95,7 +95,7 @@ public class Files {
         escapeBg = manager.get("texture/escapeBackground.png");
         hpBarLeft = manager.get("texture/hpbar_left.png");
         hpBarRight = manager.get("texture/hpbar_right.png");
-        powerUpBg = manager.get("texture/powerUpBg.jpg");
+        powerUpBg = manager.get("texture/powerUpBg.png");
         powerUpPopup = manager.get("texture/powerUpPopup.jpg");
         itemBg = manager.get("texture/itemBg.jpg");
 
@@ -227,7 +227,7 @@ public class Files {
         manager.load("texture/escapeBackground.png", Texture.class);
         manager.load("texture/hpbar_left.png", Texture.class);
         manager.load("texture/hpbar_right.png", Texture.class);
-        manager.load("texture/powerUpBg.jpg", Texture.class);
+        manager.load("texture/powerUpBg.png", Texture.class);
         manager.load("texture/powerUpPopup.jpg", Texture.class);
         manager.load("texture/itemBg.jpg", Texture.class);
         // Bosses

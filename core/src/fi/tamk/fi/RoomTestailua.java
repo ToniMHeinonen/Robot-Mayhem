@@ -23,6 +23,8 @@ import java.util.ArrayList;
 public class RoomTestailua extends RoomParent {
     private Skin testSkin;
 
+    UtilPowerUp utilPowerUp;
+
     private Drawable[] tooltips;
     private Drawable tooltipAttack, tooltipDefend, tooltipItem;
 
@@ -52,10 +54,27 @@ public class RoomTestailua extends RoomParent {
         createButtonHacking();
         createButtonHacking2();
         createButtonDialog();
+        createButtonPowerup();
         // playMusic();
 
         // Added for testing.
         createButtonItemTesting();
+    }
+
+    public void createButtonPowerup() {
+        final TextButton buttonSettings = new TextButton("PowerUp", skin);
+        buttonSettings.setWidth(300f);
+        buttonSettings.setHeight(100f);
+        buttonSettings.setPosition(game.pixelWidth /2 - buttonSettings.getWidth() /2 + 300,
+                (game.pixelHeight/3) *2 - buttonSettings.getHeight() /2);
+        stage.addActor(buttonSettings);
+
+        buttonSettings.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                utilPowerUp = new UtilPowerUp(game);
+            }
+        });
     }
 
     public void playMusic() {

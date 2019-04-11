@@ -73,34 +73,42 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
 	buy_en: {
 		up: buy1_en
 		down: buy2_en
+		disabled: buy0_en
 	}
 	buy_fi: {
 		up: buy1_fi
 		down: buy2_fi
+		disabled: buy0_fi
 	}
 	cancel_en: {
 		up: cancel1_en
 		down: cancel2_en
+		disabled: cancel0_en
 	}
 	cancel_fi: {
 		up: cancel1_fi
 		down: cancel2_fi
+		disabled: cancel0_fi
 	}
 	confirm_en: {
 		up: confirm1_en
 		down: confirm2_en
+		disabled: confirm0_en
 	}
 	confirm_fi: {
 		up: confirm1_fi
 		down: confirm2_fi
+		disabled: confirm0_fi
 	}
 	use_en: {
 		up: use1_en
 		down: use2_en
+		disabled: use0_en
 	}
 	use_fi: {
 		up: use1_fi
 		down: use2_fi
+		disabled: use0_fi
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
@@ -126,8 +134,9 @@ com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
 com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 	default: {
 		font: font-average
-		up: topbarbutton1
-		down: topbarbutton2
+		up: button_normal1
+		down: button_normal2
+		disabled: button_normal0
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {

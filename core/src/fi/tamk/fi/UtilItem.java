@@ -22,6 +22,7 @@ public class UtilItem {
     private Skin finalSkin;
     private int money;
     private String room;
+    private Files files;
 
     private Table tableBuyableItems;
     private Table tableOwnedItems;
@@ -68,6 +69,7 @@ public class UtilItem {
         inventory = game.getInventory();
         allItems = Item.getAllItems();
         utilDialog = game.getDialog();
+        files = game.getFiles();
         amounts = new int[allItems.length];
 
         setValues();
@@ -259,20 +261,23 @@ public class UtilItem {
 
         createBackButton(popupBuyableItem);
 
-        final ImageButton buttonBuy = new ImageButton(finalSkin, "buy_en");
+        ImageButton buttonBuy = new ImageButton(finalSkin, "buy_en");
         buttonBuy.setPosition(popupBuyableItem.getWidth()/2 - 400, popupBuyableItem.getHeight()/4 - 60);
-        buttonBuy.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                if (money >= price) {
+        buttonBuy.setDisabled(true);
+        if (money >= price) {
+            buttonBuy.setDisabled(false);
+            buttonBuy.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    files.sndPurchaseItem.play();
                     game.decreaseMoney(price);
                     game.addToInventory(allItems[index], false);
                     popupBuyableItem.remove();
                     dialogItems.remove();
                     UtilItem utilItem = new UtilItem(game, room);
                 }
-            }
-        });
+            });
+        }
 
         popupBuyableItem.addActor(buttonBuy);
         stage.addActor(popupBuyableItem);
@@ -289,15 +294,12 @@ public class UtilItem {
         popupOwnedItem = utilDialog.createPopupItemAndPowerUp(openedItem, description, "popup_powerup");
         createBackButton(popupOwnedItem);
 
-        /*
-        When we have finished our skin, this will be:
-        TextButton buttonUse = new TextButton("Use", skin, "StyleUseOn")
-        and moved inside the if-statement.
-        */
         ImageButton buttonUse = new ImageButton(finalSkin, "use_en");
         buttonUse.setPosition(560, 210);
+        buttonUse.setDisabled(true);
         if ((room.equals("hall") && usedInHall.equals("true")) ||
             (room.equals("fight") && usedInHall.equals("false"))) {
+            buttonUse.setDisabled(false);
             buttonUse.addListener(new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -307,13 +309,6 @@ public class UtilItem {
                 }
             });
         }
-        /*
-        When we have finished our skin, this will be:
-        else {
-        TextButton buttonUse = new TextButton("Use", skin, "StyleUseOff")
-        }
-        And not include listener.
-        */
 
         popupOwnedItem.addActor(buttonUse);
         stage.addActor(popupOwnedItem);
