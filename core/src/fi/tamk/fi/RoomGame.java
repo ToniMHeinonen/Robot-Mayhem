@@ -29,12 +29,14 @@ public class RoomGame extends RoomParent {
     private float bankSpd;
     private float bankRetrieved = game.getStepCount();
     private boolean milestoneReached;
+    private Skin finalSkin;
 
     RoomGame(final MainGame game) {
         super(game);
         createProgressBar();
         curSteps = game.getStepCount();
         goalSteps = progressBar.getMaxValue();
+        finalSkin = files.finalSkin;
 
         calculateBankSpeed();
 
@@ -88,8 +90,8 @@ public class RoomGame extends RoomParent {
     public void drawSteps() {
         String strCurSteps = String.valueOf((int) progressBar.getValue());
         String strGoalSteps = String.valueOf((int) progressBar.getMaxValue());
-        fontSteps.draw(batch,strCurSteps + "/" + strGoalSteps,
-                50, game.pixelHeight - fontSteps.getXHeight() - 10);
+        finalSkin.getFont("font-average").draw(batch,strCurSteps + "/" + strGoalSteps,
+                50, game.pixelHeight - finalSkin.getFont("font-average").getXHeight() - 10);
     }
 
     // Calculates how many steps will be added every frame

@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -80,7 +81,6 @@ public class UtilPowerUp {
         drawBackground();
         drawChoosePowerUp();
         powerups.draw(batch,1f);
-        drawPopup();
         descriptionBox.draw(batch,1f);
         confirmation.draw(batch, 1f);
         batch.end();
@@ -98,13 +98,6 @@ public class UtilPowerUp {
         final float fontX = game.pixelWidth/2 - layout.width / 2;
         final float fontY = game.pixelHeight -200 - layout.height / 2;
         finalSkin.getFont("font-large").draw(batch, layout, fontX, fontY);
-    }
-
-    // If powerup is clicked, draw popup background
-    private void drawPopup() {
-        if (showDesc) {
-            batch.draw(popup, popupX, popupY, popup.getWidth(), popup.getHeight());
-        }
     }
 
     // Spawn first and second powerup randomly
@@ -209,14 +202,15 @@ public class UtilPowerUp {
 
     // Create buttons for powerups
     private void createPowerUp(int pos, final int type, final String name, final String desc) {
-        float[] xPos = new float[] {300f, 750f, 1200f};
+        float[] xPos = new float[] {450f, 750f, 1050f};
+        float[] yPos = new float[] {416, 216, 416};
         spawnedPowerups[pos] = name;
         TextButton btn = new TextButton(name, finalSkin);
         btn.setWidth(420f);
         btn.getLabelCell().width(384);
         btn.getLabel().setWrap(true);
         btn.invalidate();
-        btn.setPosition(xPos[pos],  game.pixelHeight/5);
+        btn.setPosition(xPos[pos],  yPos[pos]);
 
         powerups.addActor(btn);
 
@@ -240,12 +234,12 @@ public class UtilPowerUp {
 
     // If powerup is selected, spawn buttons to select it or go back
     private void createConfirmationButtons() {
-        float margin = 50f;
-        float btnX = popupX + margin;
-        float btnY = popupY + margin;
-        final TextButton btn = new TextButton("Choose", skin);
-        btn.setWidth(300);
-        btn.setHeight(100);
+        float margin = 120f;
+        float btnX = popupX + margin + 10;
+        float btnY = popupY;
+        final ImageButton btn = new ImageButton(finalSkin, "confirm_en");
+        //btn.setWidth(300);
+        //btn.setHeight(100);
         btn.setPosition(btnX, btnY);
         confirmation.addActor(btn);
 
@@ -256,11 +250,11 @@ public class UtilPowerUp {
             }
         });
 
-        final TextButton btn2 = new TextButton("Back", skin);
-        btn2.setWidth(300);
-        btn2.setHeight(100);
-        float btn2X = popupX + popup.getWidth() - margin - btn2.getWidth();
-        float btn2Y = popupY + margin;
+        final ImageButton btn2 = new ImageButton(finalSkin, "cancel_en");
+        //btn2.setWidth(300);
+        //btn2.setHeight(100);
+        float btn2X = btn.getX() + margin*4-40;
+        float btn2Y = popupY;
         btn2.setPosition(btn2X, btn2Y);
         confirmation.addActor(btn2);
 
