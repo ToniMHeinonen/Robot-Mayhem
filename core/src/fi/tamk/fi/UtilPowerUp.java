@@ -16,11 +16,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.I18NBundle;
 
 import java.util.HashMap;
 
 public class UtilPowerUp {
     private MainGame game;
+    private final I18NBundle localize;
     private SpriteBatch batch;
     private Files files;
     private Skills skills;
@@ -48,6 +50,7 @@ public class UtilPowerUp {
 
     UtilPowerUp(MainGame game) {
         this.game = game;
+        localize = game.getLocalize();
         files = game.getFiles();
         skills = game.getSkills();
         items = game.getItems();
@@ -98,7 +101,8 @@ public class UtilPowerUp {
 
     // Draws Choose PowerUp centered
     private void drawChoosePowerUp() {
-        final GlyphLayout layout = new GlyphLayout(finalSkin.getFont("font-large"), "Choose PowerUp");
+        final GlyphLayout layout = new GlyphLayout(finalSkin.getFont("font-large"),
+                localize.get("choosePowerup"));
         final float fontX = game.pixelWidth/2 - layout.width / 2;
         final float fontY = game.pixelHeight -200 - layout.height / 2;
         finalSkin.getFont("font-large").draw(batch, layout, fontX, fontY);
@@ -115,9 +119,9 @@ public class UtilPowerUp {
                 if (random[0] == random[1]) continue;
 
                 if (random[i] == MONEY) {
-                    name = "Money";
+                    name = localize.get("money");
                     moneyAmount = MathUtils.random(5, 10);
-                    description = String.valueOf(moneyAmount) + " shiny coins!";
+                    description = String.valueOf(moneyAmount) + " " + localize.get("shinyCoins");
                     break;
                 } else {
                     // Select random item
@@ -145,9 +149,9 @@ public class UtilPowerUp {
             random = MathUtils.random(0, 2);
 
             if (random == MONEY) {
-                name = "Money";
+                name = localize.get("money");
                 moneyAmount = MathUtils.random(5, 10);
-                description = String.valueOf(moneyAmount) + " shiny coins!";
+                description = String.valueOf(moneyAmount) + " " + localize.get("shinyCoins");
                 break;
             } else {
                 name = items.selectRandomItem();
