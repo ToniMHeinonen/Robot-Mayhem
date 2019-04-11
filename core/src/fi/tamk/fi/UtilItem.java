@@ -22,6 +22,7 @@ public class UtilItem {
     private Skin finalSkin;
     private int money;
     private String room;
+    private Files files;
 
     private Table tableBuyableItems;
     private Table tableOwnedItems;
@@ -68,6 +69,7 @@ public class UtilItem {
         inventory = game.getInventory();
         allItems = Item.getAllItems();
         utilDialog = game.getDialog();
+        files = game.getFiles();
         amounts = new int[allItems.length];
 
         setValues();
@@ -267,6 +269,7 @@ public class UtilItem {
             buttonBuy.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
+                    files.sndPurchaseItem.play();
                     game.decreaseMoney(price);
                     game.addToInventory(allItems[index], false);
                     popupBuyableItem.remove();
