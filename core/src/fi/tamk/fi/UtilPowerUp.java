@@ -211,9 +211,11 @@ public class UtilPowerUp {
     private void createPowerUp(int pos, final int type, final String name, final String desc) {
         float[] xPos = new float[] {300f, 750f, 1200f};
         spawnedPowerups[pos] = name;
-        TextButton btn = new TextButton(name, skin);
-        btn.setWidth(400f);
-        btn.setHeight(400f);
+        TextButton btn = new TextButton(name, finalSkin);
+        btn.setWidth(420f);
+        btn.getLabelCell().width(384);
+        btn.getLabel().setWrap(true);
+        btn.invalidate();
         btn.setPosition(xPos[pos],  game.pixelHeight/5);
 
         powerups.addActor(btn);
@@ -224,9 +226,6 @@ public class UtilPowerUp {
                 showDesc = true;
                 chosenName = name;
                 chosenType = type;
-                /*
-                createDescription(desc);
-                 */
                 createDescription(name, desc);
                 createConfirmationButtons();
             }
@@ -237,20 +236,6 @@ public class UtilPowerUp {
     private void createDescription(String name, String text) {
         final Dialog dialog1 = dialog.createPopupItemAndPowerUp(name, text, "popup_powerup");
         descriptionBox.addActor(dialog1);
-
-    /*
-    private void createDescription(String text) {
-        Label label = new Label(text, descriptionLabelStyle);
-        label.setWrap(true);
-        label.setAlignment(1);
-        final Dialog dialog = new Dialog("", emptyWindowsStyle);
-        dialog.getContentTable().add(label).prefWidth(popup.getWidth()-50);
-        dialog.setPosition(popupX, popupY + popup.getHeight()/3);
-        dialog.setSize(popup.getWidth(),popup.getHeight()/3 * 2);
-
-        descriptionBox.addActor(dialog);
-    ]
-    */
     }
 
     // If powerup is selected, spawn buttons to select it or go back
