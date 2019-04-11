@@ -21,6 +21,7 @@ public class Settings {
     private Stage stage;
     private Skin finalSkin;
     private String room;
+    private String lan;
 
     private float posX;
     private float onScreenY;
@@ -66,6 +67,7 @@ public class Settings {
         skin = game.getSkin();
         stage = game.getStage();
         finalSkin = game.getFinalSkin();
+        lan = game.getLanguage();
 
         setValues();
         createSettingsDialog();
@@ -162,11 +164,11 @@ public class Settings {
     }
 
     private void createQuitAndResetButtons() {
-        buttonQuit = new ImageButton(finalSkin, "quit_en");
+        buttonQuit = new ImageButton(finalSkin, "quit_" + lan);
         buttonQuit.setPosition(difficultyLabel.getX() - 20,
                 120);
 
-        buttonReset = new ImageButton(finalSkin, "reset_en");
+        buttonReset = new ImageButton(finalSkin, "reset_" + lan);
         buttonReset.setPosition(buttonQuit.getX() + buttonReset.getWidth(),
                 buttonQuit.getY());
 

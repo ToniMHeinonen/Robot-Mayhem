@@ -24,6 +24,7 @@ public class UtilPowerUp {
     private MainGame game;
     private final I18NBundle localize;
     private SpriteBatch batch;
+    private String lan;
     private Files files;
     private Skills skills;
     private Item items;
@@ -51,6 +52,7 @@ public class UtilPowerUp {
     UtilPowerUp(MainGame game) {
         this.game = game;
         localize = game.getLocalize();
+        lan = game.getLanguage();
         files = game.getFiles();
         skills = game.getSkills();
         items = game.getItems();
@@ -245,7 +247,7 @@ public class UtilPowerUp {
         float margin = 120f;
         float btnX = popupX + margin + 10;
         float btnY = popupY;
-        final ImageButton btn = new ImageButton(finalSkin, "confirm_en");
+        final ImageButton btn = new ImageButton(finalSkin, "confirm_" + lan);
         //btn.setWidth(300);
         //btn.setHeight(100);
         btn.setPosition(btnX, btnY);
@@ -258,7 +260,7 @@ public class UtilPowerUp {
             }
         });
 
-        final ImageButton btn2 = new ImageButton(finalSkin, "cancel_en");
+        final ImageButton btn2 = new ImageButton(finalSkin, "cancel_" + lan);
         //btn2.setWidth(300);
         //btn2.setHeight(100);
         float btn2X = btn.getX() + margin*4-40;

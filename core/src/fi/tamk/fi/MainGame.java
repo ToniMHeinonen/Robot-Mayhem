@@ -4,16 +4,12 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
@@ -47,8 +43,12 @@ public class MainGame extends Game {
 	private int[] poolMilestones = new int[] {0, 9000, 18000, 27000, 36000};
 
 	// Settings
+	// Keys
+	private String keyMusicVol = "musicVol";
+	private String keyLanguage = "language";
 	private Preferences settings;
 	private float musicVol;
+	private String language;
     private boolean clickedOpenSettings = false;
 
 	// Stats
@@ -118,6 +118,7 @@ public class MainGame extends Game {
 	@Override
 	public void create () {
 		files = new Files();
+		loadSettings();
 		createBundle();
 		// Create skills and bosses when the game launches
 		skills = new Skills(this);
@@ -126,7 +127,6 @@ public class MainGame extends Game {
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, pixelWidth, pixelHeight);
-		loadSettings();
 		loadStats();
 
 		createSkinAndStage();
@@ -272,19 +272,27 @@ public class MainGame extends Game {
     }
 
 	private void createBundle() {
-		//Locale locale = Locale.getDefault();
-		Locale locale = new Locale("fi", "FI"); //USE THIS TO TEST FINNISH VERSION
+		Locale locale;
+		if (language == "fi") locale = new Locale("fi", "FI");
+		else if (language == "en") locale = Locale.US;
+		else locale = Locale.getDefault();
+
 		localize = I18NBundle.createBundle(Gdx.files.internal("MyBundle"),
 				locale,"ISO-8859-1");
+
+		if (locale == Locale.US) language = "en";
+		else language = "fi";
 	}
 
     public void loadSettings() {
 		settings = Gdx.app.getPreferences("Robot_Mayhem_Settings");
-		musicVol = settings.getFloat("musicVolume", 0.8f);
+		musicVol = settings.getFloat(keyMusicVol, 0.8f);
+		language = settings.getString(keyLanguage, "fi");
     }
 
     public void saveSettings() {
-	    settings.putFloat("musicVolume", musicVol);
+	    settings.putFloat(keyMusicVol, musicVol);
+	    settings.putString(keyLanguage, language);
 	    settings.flush();
     }
 
@@ -735,5 +743,9 @@ public class MainGame extends Game {
 
 	public Bosses getBosses() {
 		return bosses;
+	}
+
+	public String getLanguage() {
+		return language;
 	}
 }

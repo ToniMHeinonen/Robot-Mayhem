@@ -231,7 +231,7 @@ public class RoomFight extends RoomParent {
                     game.pixelHeight/2 - escapeBg.getHeight()/2f,
                     escapeBg.getWidth(), escapeBg.getHeight());
 
-            Label escapeLabel = new Label("Do you want to escape?", finalSkin);
+            Label escapeLabel = new Label(localize.get("escape"), finalSkin);
             escapeLabel.setWrap(true);
             escapeLabel.setWidth(530);
             escapeLabel.setAlignment(1);
@@ -329,7 +329,7 @@ public class RoomFight extends RoomParent {
 
     // Creates yes and no buttons for escaping
     private void createYesNo() {
-        final TextButton btn = new TextButton("Yes", finalSkin);
+        final TextButton btn = new TextButton(localize.get("yes"), finalSkin);
         btn.setPosition(game.pixelWidth/2 - btn.getWidth(), game.pixelHeight/2 - 175);
         stage.addActor(btn);
 
@@ -343,7 +343,7 @@ public class RoomFight extends RoomParent {
             }
         });
 
-        final TextButton btn2 = new TextButton("No", finalSkin);
+        final TextButton btn2 = new TextButton(localize.get("no"), finalSkin);
         btn2.setPosition(game.pixelWidth/2, game.pixelHeight/2 - 175);
         stage.addActor(btn2);
 

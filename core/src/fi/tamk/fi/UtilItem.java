@@ -22,6 +22,7 @@ public class UtilItem {
     private Skin finalSkin;
     private int money;
     private String room;
+    private String lan;
     private Files files;
     private Item items;
 
@@ -71,6 +72,7 @@ public class UtilItem {
         items = game.getItems();
         allItems = items.getAllItems();
         utilDialog = game.getDialog();
+        lan = game.getLanguage();
         files = game.getFiles();
         amounts = new int[allItems.length];
 
@@ -263,7 +265,7 @@ public class UtilItem {
 
         createBackButton(popupBuyableItem);
 
-        ImageButton buttonBuy = new ImageButton(finalSkin, "buy_en");
+        ImageButton buttonBuy = new ImageButton(finalSkin, "buy_" + lan);
         buttonBuy.setPosition(popupBuyableItem.getWidth()/2 - 400, popupBuyableItem.getHeight()/4 - 60);
         buttonBuy.setDisabled(true);
         if (money >= price) {
@@ -296,7 +298,7 @@ public class UtilItem {
         popupOwnedItem = utilDialog.createPopupItemAndPowerUp(openedItem, description, "popup_powerup");
         createBackButton(popupOwnedItem);
 
-        ImageButton buttonUse = new ImageButton(finalSkin, "use_en");
+        ImageButton buttonUse = new ImageButton(finalSkin, "use_" + lan);
         buttonUse.setPosition(560, 210);
         buttonUse.setDisabled(true);
         if ((room.equals("hall") && usedInHall.equals("true")) ||
@@ -317,7 +319,7 @@ public class UtilItem {
     }
 
     private void createBackButton(final Dialog dialog) {
-        ImageButton buttonBack = new ImageButton(finalSkin, "cancel_en");
+        ImageButton buttonBack = new ImageButton(finalSkin, "cancel_" + lan);
         buttonBack.setPosition(dialog.getWidth()/2 + 35, 210);
         dialog.addActor(buttonBack);
         buttonBack.addListener(new ClickListener(){
