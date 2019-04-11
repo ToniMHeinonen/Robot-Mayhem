@@ -112,12 +112,12 @@ public class UtilItem {
         for (int i = 0; i < allItems.length; i++) {
             buttonCounterBuyable = i;
             Label shopItems = new Label(allItems[i], finalSkin);
-            tableBuyableItems.add(shopItems).size(525, 75);
+            tableBuyableItems.add(shopItems).size(520, 75);
             buyableItems++;
 
             final String stringCost = String.valueOf(Item.getItem(allItems[i]).get("price"));
             Label labelPrice = new Label(stringCost, finalSkin);
-            tableBuyableItems.add(labelPrice).size(50, 75).row();
+            tableBuyableItems.add(labelPrice).size(35, 75).row();
 
             shopItems.addListener(new ClickListener(){
                 int i = buttonCounterBuyable;
