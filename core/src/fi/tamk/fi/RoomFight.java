@@ -52,8 +52,6 @@ public class RoomFight extends RoomParent {
     private Animating animHealthEnemy = new Animating();
     private Player player;
     private Enemy enemy;
-    private String[] btnTexts = new String[] {skills.ATTACK, skills.DEFEND, skills.ITEM,
-                                game.getSkill1(), game.getSkill2()};
     private int btnCounter; // Used for button classes to get the correct value
     private State state = State.START_ROOM;
     private boolean escapePopup, spawnHacking, actionButtonsOn, spawnPowerUp;
@@ -866,6 +864,8 @@ public class RoomFight extends RoomParent {
         private ArrayList<HashMap<String,Object>> mapSkills;
         private String[] skillNames;
         private double[] defaultDamages = new double[] {34, 25, 20, 25, 20, 15, 20, 15, 10};
+        private String[] btnTexts = new String[] {skills.ATTACK, skills.DEFEND, skills.ITEM,
+                game.getSkill1(), game.getSkill2()};
 
         Player() {
             X = game.gridSize;
@@ -932,11 +932,9 @@ public class RoomFight extends RoomParent {
             skillState = SKILL_RESET;
             boolean actionSelected = false;
             int curAnimSpd = 0;
-            System.out.println(action);
 
             if (action == skills.ATTACK)
             {
-                System.out.println("here");
                 skillState = SKILL_DAMAGE;
                 actionSelected = true;
                 curAnimation = skillAnim;
@@ -1065,31 +1063,34 @@ public class RoomFight extends RoomParent {
             for (int i = 0; i < btnTexts.length; i++) {
                 btnCounter = i;
                 // Retrieve description and cooldown for button, using the complete name of skill
-                String name = btnTexts[i];
-                if (name != "") {
-                    descriptions.add(skills.retrieveSkillDescription(name));
+                String action, button;
+                action = btnTexts[i];
+                HashMap<String, Object> skillMap = skills.getSkill(action);
+
+                if (action != "") {
+                    descriptions.add(skills.retrieveSkillDescription(action));
                 } else {
                     descriptions.add("");
                 }
                 int cooldown = 0;
                 try {
-                    cooldown = cooldowns.get(name);
+                    cooldown = cooldowns.get(action);
                 } catch (Exception e) {
                     // This catch need to exist, otherwise it will crash
                 }
 
                 // Retrieve correct button using the keyname of the action
-                name = skills.buttonKeys.get(btnTexts[i]);
-                if (name == null) name = "empty";
+                if (action == "") button = "empty";
+                else button = (String) skillMap.get(skills.button);
 
                 Drawable normal, clicked;
-                if (name == "empty") {
+                if (button == "empty") {
                     // If button is empty, get empty button
-                    normal = testSkin.getDrawable("button_" + name);
-                    clicked = testSkin.getDrawable("button_" + name);
+                    normal = testSkin.getDrawable("button_" + button);
+                    clicked = testSkin.getDrawable("button_" + button);
                 } else if (cooldown == 0) {
                     // If cooldown is 0, get correct button for action
-                    normal = testSkin.getDrawable("button_" + name);
+                    normal = testSkin.getDrawable("button_" + button);
                     clicked = testSkin.getDrawable("button_clicked");
                 } else {
                     // else it has cooldown, so retrieve correct cooldown button
@@ -1100,7 +1101,7 @@ public class RoomFight extends RoomParent {
                 imgButton.setPosition(i*space, 0f);
                 stage.addActor(imgButton);
                 // If skill does not have cooldown and is not empty, add button listener
-                if (cooldown == 0 && name != "empty") {
+                if (cooldown == 0 && button != "empty") {
                     imgButton.addListener(new ActorGestureListener(20,
                             0.4f, 0.5f, 0.15f) {
                         int i = btnCounter;

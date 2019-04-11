@@ -24,16 +24,18 @@ public class Skills {
     public final String cooldown = "cooldown";
     public final String hitAnimation = "hitAnimation";
     public final String sound = "sound";
+    public final String button = "button";
 
-    // These values are used by localization and actionbuttons
-    private final String keyAttack = "ATTACK";
-    private final String keyDefend = "DEFEND";
-    private final String keyItem = "ITEM";
-    private final String keyRepair = "REPAIR";
-    private final String keyShock = "SHOCK";
-    private final String keyFire = "FIRE";
-    private final String keySuction = "SUCTION";
-    private final String keyDust = "DUST";
+    // These values are used by actionbuttons (every button will probably not have it's own button,
+    // so some of these values are going to be removed)
+    private final String buttonAttack = "ATTACK";
+    private final String buttonDefend = "DEFEND";
+    private final String buttonItem = "ITEM";
+    private final String buttonRepair = "REPAIR";
+    private final String buttonShock = "SHOCK";
+    private final String buttonFire = "FIRE";
+    private final String buttonSuction = "SUCTION";
+    private final String buttonDust = "DUST";
 
     public final String ATTACK, DEFEND, ITEM, REPAIR, SHOCK, FIRE, SUCTION, DUST;
 
@@ -42,32 +44,20 @@ public class Skills {
     private Animation<TextureRegion> physicalHit;
 
     private HashMap<String,HashMap<String,Object>> mapSkills;
-    public final HashMap<String,String> buttonKeys;
 
     Skills(MainGame game) {
         localize = game.getLocalize();
         files = game.getFiles();
 
         // Get correct texts for skills, depending on the language
-        ATTACK = localize.get(keyAttack);
-        DEFEND = localize.get(keyDefend);
-        ITEM = localize.get(keyItem);
-        REPAIR = localize.get(keyRepair);
-        SHOCK = localize.get(keyShock);
-        FIRE = localize.get(keyFire);
-        SUCTION = localize.get(keySuction);
-        DUST = localize.get(keyDust);
-
-        // Create hashmap, which actionButtons can use to retrieve correct button
-        buttonKeys = new HashMap<String, String>();
-        buttonKeys.put(ATTACK, keyAttack);
-        buttonKeys.put(DEFEND, keyDefend);
-        buttonKeys.put(ITEM, keyItem);
-        buttonKeys.put(REPAIR, keyRepair);
-        buttonKeys.put(SHOCK, keyShock);
-        buttonKeys.put(FIRE, keyFire);
-        buttonKeys.put(SUCTION, keySuction);
-        buttonKeys.put(DUST, keyDust);
+        ATTACK = localize.get("ATTACK");
+        DEFEND = localize.get("DEFEND");
+        ITEM = localize.get("ITEM");
+        REPAIR = localize.get("REPAIR");
+        SHOCK = localize.get("SHOCK");
+        FIRE = localize.get("FIRE");
+        SUCTION = localize.get("SUCTION");
+        DUST = localize.get("DUST");
 
         mapSkills = new HashMap<String, HashMap<String,Object>>();
         loadSkillAnimations();
@@ -84,9 +74,9 @@ public class Skills {
     /* NOTE!
     Every time you add new skill, remember to:
     1. Make a String for it
-    2. Make a new method for it
-    3. Add it to finnish and english bundle
-    4. Make a buttonKey for it and add it to the buttonKeys hashmap
+    2. Add it's name and description to MyBundle file
+    3. Retrieve it's localized name
+    4. Make a new method for it
      */
 
     /* Explanations for values:
@@ -105,6 +95,7 @@ public class Skills {
     - hitAnimationSpd = How fast does the animation move (on default use 8, this variable might be
       deleted in the future)
     - sound = The sound effect what plays on the start of move
+    - button = The name which is used for retrieving correct button from skin
      */
 
     /*
@@ -134,7 +125,7 @@ public class Skills {
     private void skillAttack() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, ATTACK);
-        map.put(description, "Light attack that’s usable every turn.");
+        map.put(description, localize.get("attackDesc"));
         map.put(damage, 1.0);
         map.put(critChance, defCrit);
         map.put(missChance, 0);
@@ -144,6 +135,7 @@ public class Skills {
         map.put(cooldown, 0);
         map.put(hitAnimation, physicalHit);
         map.put(sound, null);
+        map.put(button, buttonAttack);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -151,8 +143,7 @@ public class Skills {
     private void skillDefend() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, DEFEND);
-        map.put(description,
-                "Shield protects you completely from damage you’d receive in the next turn.");
+        map.put(description, localize.get("defendDesc"));
         map.put(damage, 0.0);
         map.put(critChance, 0);
         map.put(missChance, 0);
@@ -162,6 +153,7 @@ public class Skills {
         map.put(cooldown, 3);
         map.put(hitAnimation, null);
         map.put(sound, null);
+        map.put(button, buttonDefend);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -169,8 +161,7 @@ public class Skills {
     private void skillItem() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, ITEM);
-        map.put(description,
-                "Buy and use items.");
+        map.put(description, localize.get("itemDesc"));
         map.put(damage, 0.0);
         map.put(critChance, 0);
         map.put(missChance, 0);
@@ -180,6 +171,7 @@ public class Skills {
         map.put(cooldown, 0);
         map.put(hitAnimation, null);
         map.put(sound, null);
+        map.put(button, buttonItem);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -187,7 +179,7 @@ public class Skills {
     private void skillRepair() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, REPAIR);
-        map.put(description, "Self-repair heals you slightly over 2 turns.");
+        map.put(description, localize.get("repairDesc"));
         map.put(damage, 0.0);
         map.put(critChance, 0);
         map.put(missChance, 0);
@@ -197,6 +189,7 @@ public class Skills {
         map.put(cooldown, 2);
         map.put(hitAnimation, null);
         map.put(sound, null);
+        map.put(button, buttonRepair);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -204,7 +197,7 @@ public class Skills {
     private void skillShock() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, SHOCK);
-        map.put(description, "Shock the opponent with amazing damage!");
+        map.put(description, localize.get("shockDesc"));
         map.put(damage, 3.0);
         map.put(critChance, defCrit);
         map.put(missChance, 0);
@@ -214,6 +207,7 @@ public class Skills {
         map.put(cooldown, 3);
         map.put(hitAnimation, physicalHit);
         map.put(sound, null);
+        map.put(button, buttonShock);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -221,7 +215,7 @@ public class Skills {
     private void skillFire() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, FIRE);
-        map.put(description, "Burn your enemy for 3 turns.");
+        map.put(description, localize.get("fireDesc"));
         map.put(damage, 0.0);
         map.put(critChance, 0);
         map.put(missChance, 0);
@@ -231,6 +225,7 @@ public class Skills {
         map.put(cooldown, 2);
         map.put(hitAnimation, null);
         map.put(sound, null);
+        map.put(button, buttonFire);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -238,8 +233,7 @@ public class Skills {
     private void skillSuction() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, SUCTION);
-        map.put(description, "Suctions suckforce causes medium damage to the recipient. " +
-                "(has an 10% increased chance to be a critical hit)");
+        map.put(description, localize.get("suctionDesc"));
         map.put(damage, 1.5);
         map.put(critChance, defCrit + 10);
         map.put(missChance, 0);
@@ -249,6 +243,7 @@ public class Skills {
         map.put(cooldown, 2);
         map.put(hitAnimation, physicalHit);
         map.put(sound, files.sndSuction);
+        map.put(button, buttonSuction);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -256,8 +251,7 @@ public class Skills {
     private void skillDust() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, DUST);
-        map.put(description, "Dust throw releases a big amount of dust inside the robot’s fans" +
-                " and causes medium damage to the recipient over two turns.");
+        map.put(description, localize.get("dustDesc"));
         map.put(damage, 0.0);
         map.put(critChance, 0);
         map.put(missChance, 0);
@@ -267,6 +261,7 @@ public class Skills {
         map.put(cooldown, 3);
         map.put(hitAnimation, null);
         map.put(sound, files.sndDustThrow);
+        map.put(button, buttonDust);
 
         mapSkills.put((String) map.get(name), map);
     }
