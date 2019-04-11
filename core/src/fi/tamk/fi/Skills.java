@@ -3,43 +3,65 @@ package fi.tamk.fi;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.I18NBundle;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Skills {
 
-    private static Files files;
+    private Files files;
+    private I18NBundle localize;
 
-    public static final String name = "name";
-    public static final String description = "description";
-    public static final String damage = "damage";
-    public static final String critChance = "critChance";
-    public static final String missChance = "missChance";
-    public static final String damageOverTime = "damageOverTime";
-    public static final String damageOverTimeTurns = "damageOverTimeTurns";
-    public static final String dotPurePercent = "dotPurePercent";
-    public static final String cooldown = "cooldown";
-    public static final String hitAnimation = "hitAnimation";
-    public static final String sound = "sound";
+    public final String name = "name";
+    public final String description = "description";
+    public final String damage = "damage";
+    public final String critChance = "critChance";
+    public final String missChance = "missChance";
+    public final String damageOverTime = "damageOverTime";
+    public final String damageOverTimeTurns = "damageOverTimeTurns";
+    public final String dotPurePercent = "dotPurePercent";
+    public final String cooldown = "cooldown";
+    public final String hitAnimation = "hitAnimation";
+    public final String sound = "sound";
 
-    public static final String ATTACK = "Attack";
-    public static final String DEFEND = "Defend";
-    public static final String ITEM = "Item";
-    public static final String REPAIR = "Self-repair";
-    public static final String SHOCK = "Shock";
-    public static final String FIRE = "Fire";
-    public static final String SUCTION = "Suction";
-    public static final String DUST = "Dust throw";
+    public final String ATTACK, DEFEND, ITEM, REPAIR, SHOCK, FIRE, SUCTION, DUST;
 
-    private static final int defCrit = 10; // Default crit chance percent
+    private final int defCrit = 10; // Default crit chance percent
 
-    private static String[] allSkills = new String[] {ATTACK, DEFEND, REPAIR, SHOCK, FIRE,
-    SUCTION, DUST};
+    private String[] allSkills;
 
-    private static Animation<TextureRegion> physicalHit;
+    private Animation<TextureRegion> physicalHit;
 
-    private static HashMap<String,HashMap<String,Object>> mapSkills;
+    private HashMap<String,HashMap<String,Object>> mapSkills;
+
+    Skills(MainGame game) {
+        localize = game.getLocalize();
+        files = game.getFiles();
+
+        ATTACK = localize.get("attack");
+        DEFEND = localize.get("defend");
+        ITEM = localize.get("item");
+        REPAIR = localize.get("repair");
+        SHOCK = localize.get("shock");
+        FIRE = localize.get("fire");
+        SUCTION = localize.get("suction");
+        DUST = localize.get("dust");
+
+        allSkills = new String[] {ATTACK, DEFEND, REPAIR, SHOCK, FIRE,
+                SUCTION, DUST};
+
+        mapSkills = new HashMap<String, HashMap<String,Object>>();
+        loadSkillAnimations();
+        skillAttack();
+        skillDefend();
+        skillItem();
+        skillRepair();
+        skillShock();
+        skillFire();
+        skillSuction();
+        skillDust();
+    }
 
     /* NOTE!
     Every time you add new skill, remember to:
@@ -63,29 +85,13 @@ public class Skills {
     - hitAnimation = What animation is played when hitting enemy
     - hitAnimationSpd = How fast does the animation move (on default use 8, this variable might be
       deleted in the future)
+    - sound = The sound effect what plays on the start of move
      */
-
-    /*
-    Create skills when the game starts.
-     */
-    public static void createSkills(MainGame game) {
-        files = game.getFiles();
-        mapSkills = new HashMap<String, HashMap<String,Object>>();
-        loadSkillAnimations();
-        skillAttack();
-        skillDefend();
-        skillItem();
-        skillRepair();
-        skillShock();
-        skillFire();
-        skillSuction();
-        skillDust();
-    }
 
     /*
     Retrieve correct skill map by using string value.
      */
-    public static HashMap<String, Object> getSkill(String skill) {
+    public HashMap<String, Object> getSkill(String skill) {
         HashMap<String, Object> chosenSkill;
 
         chosenSkill = mapSkills.get(skill);
@@ -93,7 +99,7 @@ public class Skills {
         return chosenSkill;
     }
 
-    public static String retrieveSkillDescription(String skill) {
+    public String retrieveSkillDescription(String skill) {
         String desc = "";
         HashMap<String, Object> skillMap = getSkill(skill);
 
@@ -102,11 +108,11 @@ public class Skills {
         return desc;
     }
 
-    private static void loadSkillAnimations() {
+    private void loadSkillAnimations() {
         physicalHit = files.animPhysicalHit;
     }
 
-    private static void skillAttack() {
+    private void skillAttack() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, ATTACK);
         map.put(description, "Light attack that’s usable every turn.");
@@ -123,7 +129,7 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
-    private static void skillDefend() {
+    private void skillDefend() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, DEFEND);
         map.put(description,
@@ -141,7 +147,7 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
-    private static void skillItem() {
+    private void skillItem() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, ITEM);
         map.put(description,
@@ -159,7 +165,7 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
-    private static void skillRepair() {
+    private void skillRepair() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, REPAIR);
         map.put(description, "Self-repair heals you slightly over 2 turns.");
@@ -176,7 +182,7 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
-    private static void skillShock() {
+    private void skillShock() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, SHOCK);
         map.put(description, "Shock the opponent with amazing damage!");
@@ -193,7 +199,7 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
-    private static void skillFire() {
+    private void skillFire() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, FIRE);
         map.put(description, "Burn your enemy for 3 turns.");
@@ -210,7 +216,7 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
-    private static void skillSuction() {
+    private void skillSuction() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, SUCTION);
         map.put(description, "Suctions suckforce causes medium damage to the recipient. " +
@@ -228,7 +234,7 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
-    private static void skillDust() {
+    private void skillDust() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, DUST);
         map.put(description, "Dust throw releases a big amount of dust inside the robot’s fans" +

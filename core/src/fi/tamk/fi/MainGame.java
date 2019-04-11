@@ -28,8 +28,9 @@ import java.util.Locale;
 
 public class MainGame extends Game {
 	private SpriteBatch batch;
-	private I18NBundle myBundle;
+	private I18NBundle localize;
 	private Files files;
+	private Skills skills;
 
 	public final float pixelWidth = 1920f;
 	public final float pixelHeight = 1080f;
@@ -114,16 +115,16 @@ public class MainGame extends Game {
 
 	@Override
 	public void create () {
+		files = new Files();
+		createBundle();
+		// Create skills and bosses when the game launches
+		skills = new Skills(this);
+		Bosses.createBosses(this);
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, pixelWidth, pixelHeight);
 		loadSettings();
 		loadStats();
-		createBundle();
-		files = new Files();
-		// Create skills and bosses when the game launches
-		Skills.createSkills(this);
-		Bosses.createBosses(this);
 
 		// Create items
 		Item.createItems();
@@ -270,14 +271,9 @@ public class MainGame extends Game {
 
 	private void createBundle() {
 		Locale locale = Locale.getDefault();
-		//Locale locale = new Locale("fi", "FI"); USE THIS TO TEST FINNISH VERSION
-		myBundle = I18NBundle.createBundle(Gdx.files.internal("MyBundle"),
+		//Locale locale = new Locale("fi", "FI"); //USE THIS TO TEST FINNISH VERSION
+		localize = I18NBundle.createBundle(Gdx.files.internal("MyBundle"),
 				locale,"ISO-8859-1");
-
-		//EXAMPLE CODE
-		//System.out.println(myBundle.get("test"));
-		//String str = myBundle.get("test");
-		//System.out.println(str);
 	}
 
     public void loadSettings() {
@@ -303,7 +299,7 @@ public class MainGame extends Game {
 		stepCount = stats.getFloat(keyStepCount, 0);
 		stepAllCount = stats.getFloat(keyStepAllCount, 0);
 		stepBank = stats.getFloat(keyStepBank, 0);
-		skill1 = stats.getString(keySkill1, Skills.REPAIR);
+		skill1 = stats.getString(keySkill1, skills.REPAIR);
 		skill2 = stats.getString(keySkill2, "");
 		currentBoss = stats.getString(keyCurrentBoss, Bosses.ROOMBOT);
 		firstPlayTime = stats.getBoolean(keyFirstPlayTime, true);
@@ -523,8 +519,8 @@ public class MainGame extends Game {
 		return musicVol;
 	}
 
-	public I18NBundle getMyBundle() {
-		return myBundle;
+	public I18NBundle getLocalize() {
+		return localize;
 	}
 
 	public ProgressBar.ProgressBarStyle getProgBarStyle() {
@@ -725,5 +721,9 @@ public class MainGame extends Game {
 
 	public Files getFiles() {
 		return files;
+	}
+
+	public Skills getSkills() {
+		return skills;
 	}
 }

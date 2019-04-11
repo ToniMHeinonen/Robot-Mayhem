@@ -4,12 +4,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.I18NBundle;
 
 import java.util.HashMap;
 
 public class Bosses {
 
     private static Files files;
+    private static I18NBundle localize;
+    private static Skills skills;
     /*
     Use these, since if you need to change the name to something else, you then only need
     to change it in here.
@@ -48,6 +51,8 @@ public class Bosses {
      */
     public static void createBosses(MainGame game) {
         files = game.getFiles();
+        localize = game.getLocalize();
+        skills = game.getSkills();
         mapBosses = new HashMap<String, HashMap<String,Object>>();
         bossRoombot();
         bossCopper();
@@ -86,12 +91,12 @@ public class Bosses {
 
     private static void bossRobber() {
         curName = ROBBER;
-        curSkillName0 = Skills.ATTACK;
-        curSkillName1 = Skills.SUCTION;
-        curSkillName2 = Skills.DUST;
+        curSkillName0 = skills.ATTACK;
+        curSkillName1 = skills.SUCTION;
+        curSkillName2 = skills.DUST;
 
-        curDialogStart = "I WILL ROB YOU NOW!!!";
-        curDialogEnd = "Wish I hadn't deleted Subtle.exe...";
+        curDialogStart = localize.get("robberDialogStart");
+        curDialogEnd = localize.get("robberDialogEnd");
 
         animIdle = files.a_robberIdle;
         animAttack = files.a_robberAttack;
@@ -103,11 +108,11 @@ public class Bosses {
 
     private static void bossRoombot() {
         curName = ROOMBOT;
-        curSkillName0 = Skills.ATTACK;
-        curSkillName1 = Skills.SUCTION;
-        curSkillName2 = Skills.DUST;
-        curDialogStart = "Vroom Vroom! ";
-        curDialogEnd = "Vroom poks!";
+        curSkillName0 = skills.ATTACK;
+        curSkillName1 = skills.SUCTION;
+        curSkillName2 = skills.DUST;
+        curDialogStart = localize.get("roombotDialogStart");
+        curDialogEnd = localize.get("roombotDialogEnd");
 
         animIdle = files.a_roombotIdle;
         animAttack = files.a_roombotAttack;
@@ -119,11 +124,11 @@ public class Bosses {
 
     private static void bossCopper() {
         curName = COPPER;
-        curSkillName0 = Skills.ATTACK;
-        curSkillName1 = Skills.SHOCK;
-        curSkillName2 = Skills.DUST;
-        curDialogStart = "Here, have a 500 ticket!";
-        curDialogEnd = "I'll pay your ticket!";
+        curSkillName0 = skills.ATTACK;
+        curSkillName1 = skills.SHOCK;
+        curSkillName2 = skills.DUST;
+        curDialogStart = localize.get("copperDialogStart");
+        curDialogEnd = localize.get("copperDialogEnd");
 
         animIdle = files.a_copperIdle;
         animAttack = files.a_copperAttack;

@@ -21,9 +21,10 @@ import com.badlogic.gdx.utils.I18NBundle;
 public class RoomParent implements Screen {
     protected SpriteBatch batch;
     protected Texture imgBG, imgTopBar, imgBottomBar;
-    protected I18NBundle myBundle;
+    protected I18NBundle localize;
     protected MainGame game;
     protected Files files;
+    protected Skills skills;
     protected OrthographicCamera camera;
     protected Stage stage;
     protected Skin skin;
@@ -40,7 +41,8 @@ public class RoomParent implements Screen {
 
     RoomParent(MainGame game) {
         this.batch = game.getBatch();
-        this.myBundle = game.getMyBundle();
+        this.localize = game.getLocalize();
+        this.skills = game.getSkills();
         this.game = game;
         this.files = game.getFiles();
         this.camera = game.getCamera();

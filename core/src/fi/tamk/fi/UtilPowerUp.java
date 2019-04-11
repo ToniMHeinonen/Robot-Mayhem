@@ -22,6 +22,7 @@ public class UtilPowerUp {
     private MainGame game;
     private SpriteBatch batch;
     private Files files;
+    private Skills skills;
     private Stage stage;
     private Skin skin;
     private Texture background, popup;
@@ -44,6 +45,7 @@ public class UtilPowerUp {
     UtilPowerUp(MainGame game) {
         this.game = game;
         files = game.getFiles();
+        skills = game.getSkills();
         batch = game.getBatch();
         stage = game.getStage();
         dialog = game.getDialog();
@@ -198,7 +200,7 @@ public class UtilPowerUp {
 
         // If either skill is not owned, spawn boss's skill
         if (chosenSkill != "") {
-            String desc = Skills.retrieveSkillDescription(chosenSkill);
+            String desc = skills.retrieveSkillDescription(chosenSkill);
             createPowerUp(2, SKILL, chosenSkill, desc);
         }
     }

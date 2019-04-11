@@ -51,7 +51,7 @@ public class RoomFight extends RoomParent {
     private Animating animHealthEnemy = new Animating();
     private Player player;
     private Enemy enemy;
-    private String[] btnTexts = new String[] {"Attack", "Defend", "Item",
+    private String[] btnTexts = new String[] {skills.ATTACK, skills.DEFEND, skills.ITEM,
                                 game.getSkill1(), game.getSkill2()};
     private int btnCounter; // Used for button classes to get the correct value
     private State state = State.START_ROOM;
@@ -862,7 +862,7 @@ public class RoomFight extends RoomParent {
 
         private ArrayList<String> descriptions = new ArrayList<String>();
         private ArrayList<HashMap<String,Object>> mapSkills;
-        private String[] skills;
+        private String[] skillNames;
         private double[] defaultDamages = new double[] {34, 25, 20, 25, 20, 15, 20, 15, 10};
 
         Player() {
@@ -878,12 +878,12 @@ public class RoomFight extends RoomParent {
             addSkillsToMap();
 
             // Create maps for attack and defend, create cooldowns
-            mapAttack = Skills.getSkill(Skills.ATTACK);
-            mapDefend = Skills.getSkill(Skills.DEFEND);
+            mapAttack = skills.getSkill(skills.ATTACK);
+            mapDefend = skills.getSkill(skills.DEFEND);
             cooldowns = new HashMap<String, Integer>();
-            cooldowns.put("Defend", 0);
-            cooldowns.put(skills[0], 0);
-            cooldowns.put(skills[1], 0);
+            cooldowns.put(skills.DEFEND, 0);
+            cooldowns.put(skillNames[0], 0);
+            cooldowns.put(skillNames[1], 0);
 
             // Retrieve animations
             idleAnim = files.animIdle;
@@ -930,36 +930,38 @@ public class RoomFight extends RoomParent {
             skillState = SKILL_RESET;
             boolean actionSelected = false;
             int curAnimSpd = 0;
+            System.out.println(action);
 
-            if (action == "Attack")
+            if (action == skills.ATTACK)
             {
+                System.out.println("here");
                 skillState = SKILL_DAMAGE;
                 actionSelected = true;
                 curAnimation = skillAnim;
                 // If skill misses, skip everything
-                boolean miss = randomChance((Integer) mapAttack.get(Skills.missChance));
+                boolean miss = randomChance((Integer) mapAttack.get(skills.missChance));
                 if (miss) skillState = SKILL_MISS;
                 else {
-                    curHitAnimation = (Animation<TextureRegion>) mapAttack.get(Skills.hitAnimation);
+                    curHitAnimation = (Animation<TextureRegion>) mapAttack.get(skills.hitAnimation);
                     dmgAmount = defaultDmg;
-                    dealCriticalHit = randomChance((Integer) mapAttack.get(Skills.critChance));
+                    dealCriticalHit = randomChance((Integer) mapAttack.get(skills.critChance));
                     if (dealCriticalHit) dmgAmount *= 1.5;
                 }
 
                 actionState = TEMP_ANIM;
             }
-            else if (action == "Defend")
+            else if (action == skills.DEFEND)
             {
-                if (cooldowns.get("Defend") == 0) {
+                if (cooldowns.get(skills.DEFEND) == 0) {
                     actionSelected = true;
                     curAnimation = defendAnim;
                     files.sndDefend.play();
-                    addCooldown("Defend", (Integer) mapDefend.get(Skills.cooldown));
+                    addCooldown(skills.DEFEND, (Integer) mapDefend.get(skills.cooldown));
                     skillState = SKILL_DEFEND;
                     actionState = LONG_ANIM;
                 }
             }
-            else if (action == "Item")
+            else if (action == skills.ITEM)
             {
                 actionSelected = true;
                 files.sndUseItem.play();
@@ -971,50 +973,50 @@ public class RoomFight extends RoomParent {
                     /*
                     If selected action is this skill, if skill is not empty and if cooldown is 0
                      */
-                    if (action == skills[i] && skills[i] != "" &&
-                            cooldowns.get(skills[i]) == 0) {
+                    if (action == skillNames[i] && skillNames[i] != "" &&
+                            cooldowns.get(skillNames[i]) == 0) {
                         actionSelected = true;
                         HashMap<String, Object> skillMap = mapSkills.get(i);
-                        addCooldown(skills[i],
-                                (Integer) skillMap.get(Skills.cooldown));
+                        addCooldown(skillNames[i],
+                                (Integer) skillMap.get(skills.cooldown));
                         curAnimation = skillAnim;
 
                         // Play sound if not null
-                        Sound snd = (Sound) skillMap.get(Skills.sound);
+                        Sound snd = (Sound) skillMap.get(skills.sound);
                         if (snd != null) snd.play();
 
                         // If skill misses, skip everything
-                        boolean miss = randomChance((Integer) skillMap.get(Skills.missChance));
+                        boolean miss = randomChance((Integer) skillMap.get(skills.missChance));
                         if (miss) skillState = SKILL_MISS;
                         else {
                             // Check if skill heals, else do damage
-                            if ((Double) skillMap.get(Skills.damage) < 0) {
+                            if ((Double) skillMap.get(skills.damage) < 0) {
                                 skillState = SKILL_HEAL;
-                                dmgAmount = (Double) skillMap.get(Skills.damage);
+                                dmgAmount = (Double) skillMap.get(skills.damage);
                             } else {
                                 curHitAnimation =
-                                        (Animation<TextureRegion>) skillMap.get(Skills.hitAnimation);
+                                        (Animation<TextureRegion>) skillMap.get(skills.hitAnimation);
                                 // If skill does not have animation, then it does not do damage
                                 if (curHitAnimation != null) {
                                     skillState = SKILL_DAMAGE;
 
                                     // If critical hit, deal 1.5x damage
-                                    dmgAmount = defaultDmg * (Double) skillMap.get(Skills.damage);
+                                    dmgAmount = defaultDmg * (Double) skillMap.get(skills.damage);
                                     dealCriticalHit = randomChance((Integer)
-                                            skillMap.get(Skills.critChance));
+                                            skillMap.get(skills.critChance));
                                     if (dealCriticalHit) dmgAmount *= 1.5;
                                 }
                             }
 
                             // Damage over time can happen with healing and damage
-                            double value = (Double) skillMap.get(Skills.damageOverTime);
+                            double value = (Double) skillMap.get(skills.damageOverTime);
                             double dot;
                             // If purePercent is true, then dot value 2.0 deals 2 percent of MaxHp
                             // otherwise it deals 2.0*defaultDmg
-                            if ((Boolean) skillMap.get(Skills.dotPurePercent)) dot = value;
+                            if ((Boolean) skillMap.get(skills.dotPurePercent)) dot = value;
                             else dot = value * defaultDmg;
                             dotAmount = dot;
-                            int dotTurns = (Integer) skillMap.get(Skills.damageOverTimeTurns);
+                            int dotTurns = (Integer) skillMap.get(skills.damageOverTimeTurns);
                             if (dot != 0) {
                                 dealDoT = true;
                                 if (dot > 0) enemy.addDoT(dotTurns, dot); // Damage
@@ -1038,10 +1040,10 @@ public class RoomFight extends RoomParent {
 
         // Add current skills to map
         private void addSkillsToMap() {
-            skills = new String[] {game.getSkill1(), game.getSkill2()};
+            skillNames = new String[] {game.getSkill1(), game.getSkill2()};
             mapSkills = new ArrayList<HashMap<String, Object>>();
             for (int i = 0; i < 2; i++) {
-                if (skills[i] != "") mapSkills.add(i, Skills.getSkill(skills[i]));
+                if (skillNames[i] != "") mapSkills.add(i, skills.getSkill(skillNames[i]));
             }
         }
 
@@ -1062,7 +1064,7 @@ public class RoomFight extends RoomParent {
                 btnCounter = i;
                 String name = btnTexts[i];
                 if (name != "") {
-                    descriptions.add(Skills.retrieveSkillDescription(name));
+                    descriptions.add(skills.retrieveSkillDescription(name));
                 } else {
                     descriptions.add("");
                 }
@@ -1199,43 +1201,43 @@ public class RoomFight extends RoomParent {
                 skillNames[i] = skillName;
 
                 // Retrieve the skills map from Skills class which contains skill values
-                HashMap<String, Object> mapSkill = Skills.getSkill(skillName);
+                HashMap<String, Object> mapSkill = skills.getSkill(skillName);
 
                 // Retrieve hit animation from Skills class
                 Animation<TextureRegion> skillHit =
-                        (Animation<TextureRegion>) mapSkill.get(Skills.hitAnimation);
+                        (Animation<TextureRegion>) mapSkill.get(skills.hitAnimation);
                 hitAnimList.add(skillHit);
 
                 // Retrieve skills's damage
-                double dmg = (Double) mapSkill.get(Skills.damage);
+                double dmg = (Double) mapSkill.get(skills.damage);
                 damages[i] = dmg;
 
                 // Retrieve skill's crit chance percent
-                int crit = (Integer) mapSkill.get(Skills.critChance);
+                int crit = (Integer) mapSkill.get(skills.critChance);
                 critChances[i] = crit;
 
                 // Retrieve skill's miss chance percent
-                int miss = (Integer) mapSkill.get(Skills.missChance);
+                int miss = (Integer) mapSkill.get(skills.missChance);
                 missChances[i] = miss;
 
                 // Retrieve skill's cooldown
-                int cd = (Integer) mapSkill.get(Skills.cooldown);
+                int cd = (Integer) mapSkill.get(skills.cooldown);
                 cooldownAmount[i] = cd;
 
                 // Retrieve skills' damage over time
-                double dot = (Double) mapSkill.get(Skills.damageOverTime);
+                double dot = (Double) mapSkill.get(skills.damageOverTime);
                 damageOverTimes[i] = dot;
 
                 // Retrieve skill's damage over time turns
-                int dotTurn = (Integer) mapSkill.get(Skills.damageOverTimeTurns);
+                int dotTurn = (Integer) mapSkill.get(skills.damageOverTimeTurns);
                 damageOverTimeTurns[i] = dotTurn;
 
                 // Retrieve if to deal pure percent or comparable to defaultDamage
-                boolean pure = (Boolean) mapSkill.get(Skills.dotPurePercent);
+                boolean pure = (Boolean) mapSkill.get(skills.dotPurePercent);
                 dotPurePercents[i] = pure;
 
                 // Retrieve sound effect
-                Sound snd = (Sound) mapSkill.get(Skills.sound);
+                Sound snd = (Sound) mapSkill.get(skills.sound);
                 sounds[i] = snd;
             }
 
