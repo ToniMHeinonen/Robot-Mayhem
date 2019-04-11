@@ -134,8 +134,9 @@ com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
 com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 	default: {
 		font: font-average
-		up: topbarbutton1
-		down: topbarbutton2
+		up: button_normal1
+		down: button_normal2
+		disabled: button_normal0
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
