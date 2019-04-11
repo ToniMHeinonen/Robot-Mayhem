@@ -38,8 +38,6 @@ public class RoomParent implements Screen {
 
     protected Settings settings;
 
-    protected ImageButton button; //Temporary solution
-
     RoomParent(MainGame game) {
         this.batch = game.getBatch();
         this.myBundle = game.getMyBundle();
@@ -83,12 +81,6 @@ public class RoomParent implements Screen {
 
             stage.act(Gdx.graphics.getDeltaTime());
         }
-
-        /*
-        if (clickedOpenSettings) {
-            settings.update();
-        }
-        */
     }
 
     public void transitionColor() {
@@ -113,17 +105,8 @@ public class RoomParent implements Screen {
         }
     }
 
-
-
-    public void drawTopAndBottomBar() {
-        batch.draw(imgTopBar, 0,game.pixelHeight - imgTopBar.getHeight(),
-                imgTopBar.getWidth(), imgTopBar.getHeight());
-        batch.draw(imgBottomBar, 0,0,
-                imgTopBar.getWidth(), imgTopBar.getHeight());
-    }
-
-    public void createMenuButton() {
-        button = new ImageButton(testSkin.getDrawable("button_settings"),
+    public void createMenuButton(final String room) {
+        ImageButton button = new ImageButton(testSkin.getDrawable("button_settings"),
                 testSkin.getDrawable("button_settings_clicked"));
         button.setPosition(game.pixelWidth - button.getWidth()/2 - 190, game.pixelHeight - 120);
         button.addListener(new InputListener() {
@@ -132,12 +115,18 @@ public class RoomParent implements Screen {
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                settings = new Settings(game);
-                clickedOpenSettings = true;
+                settings = new Settings(game, room);
             }
         });
 
         stage.addActor(button);
+    }
+
+    public void drawTopAndBottomBar() {
+        batch.draw(imgTopBar, 0,game.pixelHeight - imgTopBar.getHeight(),
+                imgTopBar.getWidth(), imgTopBar.getHeight());
+        batch.draw(imgBottomBar, 0,0,
+                imgTopBar.getWidth(), imgTopBar.getHeight());
     }
 
     @Override

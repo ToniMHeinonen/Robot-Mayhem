@@ -97,6 +97,7 @@ public class RoomTestailua extends RoomParent {
         });
     }
 
+
     public void createButtonDialog() {
         final TextButton buttonSettings = new TextButton("Dialog", skin);
         buttonSettings.setWidth(300f);
@@ -109,8 +110,8 @@ public class RoomTestailua extends RoomParent {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 Dialog popup = utilDialog.createPopupItemAndPowerUp("Item/PowerUp", "Description " +
-                        "Description Description Description Description Description Description " +
-                        "Descriptionnnn nnn Description Description Description");
+                        "Description Description Description Description " +
+                        "Descriptionnnn nnn Description Description", "popup_powerup");
                 stage.addActor(popup);
             }
         });

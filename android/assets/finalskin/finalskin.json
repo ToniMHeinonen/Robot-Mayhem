@@ -1,10 +1,10 @@
 {
 com.badlogic.gdx.graphics.g2d.BitmapFont: {
-	font-big: {
-		file: font-big.fnt
+	font-average: {
+		file: font-average.fnt
 	}
-	font-normal: {
-		file: font-normal.fnt
+	font-large: {
+		file: font-large.fnt
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
@@ -70,13 +70,45 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
 		up: menu_settings2
 		down: menu_settings1
 	}
+	buy_en: {
+		up: buy1_en
+		down: buy2_en
+	}
+	buy_fi: {
+		up: buy1_fi
+		down: buy2_fi
+	}
+	cancel_en: {
+		up: cancel1_en
+		down: cancel2_en
+	}
+	cancel_fi: {
+		up: cancel1_fi
+		down: cancel2_fi
+	}
+	confirm_en: {
+		up: confirm1_en
+		down: confirm2_en
+	}
+	confirm_fi: {
+		up: confirm1_fi
+		down: confirm2_fi
+	}
+	use_en: {
+		up: use1_en
+		down: use2_en
+	}
+	use_fi: {
+		up: use1_fi
+		down: use2_fi
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	default: {
-		font: font-normal
+		font: font-average
 	}
 	big: {
-		font: font-big
+		font: font-large
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
@@ -93,7 +125,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 	default: {
-		font: font-normal
+		font: font-average
 		up: topbarbutton1
 		down: topbarbutton2
 	}
@@ -106,15 +138,23 @@ com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
 com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
 	default: {
 		background: bg_powerup
-		titleFont: font-normal
+		titleFont: font-average
 	}
 	settings: {
 		background: bg_settings_flat
-		titleFont: font-normal
+		titleFont: font-average
 	}
 	inventory: {
 		background: bg_items_flat
-		titleFont: font-normal
+		titleFont: font-average
+	}
+	popup_item: {
+		background: window_large_item
+		titleFont: font-average
+	}
+	popup_powerup: {
+		background: window_large
+		titleFont: font-average
 	}
 }
 }

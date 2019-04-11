@@ -231,7 +231,7 @@ public class UtilPowerUp {
 
     // Draw description for powerup's info
     private void createDescription(String name, String text) {
-        final Dialog dialog1 = dialog.createPopupItemAndPowerUp(name, text);
+        final Dialog dialog1 = dialog.createPopupItemAndPowerUp(name, text, "popup_powerup");
         descriptionBox.addActor(dialog1);
 
     /*

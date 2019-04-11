@@ -44,7 +44,7 @@ public class RoomGame extends RoomParent {
         imgBG = files.imgBgHall;
         imgBG.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 
-        createMenuButton();
+        createMenuButton("hall");
         //createButtonFight(); // For playtesting
     }
 
