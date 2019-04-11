@@ -4,7 +4,9 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class Files {
     public final AssetManager manager = new AssetManager();
@@ -39,6 +41,9 @@ public class Files {
     // Other textures
     public final Texture imgBgHall, imgBgBoss, imgTopBar, imgBottomBar, escapeBg, hpBarLeft,
             hpBarRight, powerUpBg, powerUpPopup, itemBg;
+
+    // Skins
+    public final Skin skin, finalSkin;
 
     // Music
     public final Music[] allMusic;
@@ -135,6 +140,12 @@ public class Files {
         a_copperStun = createAnims.createAnimation(t_copperStun, 4, 2);
 
         /*
+        Skins
+         */
+        skin = manager.get("glassy-ui.json");
+        finalSkin = manager.get("finalskin/finalskin.json");
+
+        /*
         Music
          */
         musMainTheme = manager.get("music/mainTheme.mp3");
@@ -194,6 +205,12 @@ public class Files {
         manager.load("texture/copper/copper_attack.png", Texture.class);
         manager.load("texture/copper/copper_damage.png", Texture.class);
         manager.load("texture/copper/copper_stun.png", Texture.class);
+
+        /*
+        Skins
+         */
+        manager.load("glassy-ui.json", Skin.class);
+        manager.load("finalskin/finalskin.json", Skin.class);
 
         /*
         Music

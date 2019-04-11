@@ -150,7 +150,12 @@ public class MainGame extends Game {
 	public void dispose () {
 		batch.dispose();
 		stage.dispose();
-		skin.dispose();
+		fontSteps.dispose();
+		descriptionFont.dispose();
+		testButtonAtlas.dispose();
+		testSkin.dispose();
+		progBarAtlas.dispose();
+		progBarSkin.dispose();
 		files.manager.dispose();
 		saveStats();
 	}
@@ -448,13 +453,18 @@ public class MainGame extends Game {
 
     private void createSkinAndStage() {
         stage = new Stage(new FitViewport(pixelWidth, pixelHeight), batch);
+        /*
+        Delete these comments before publishing
+         */
         // Skin: https://github.com/czyzby/gdx-skins/tree/master/glassy
         // Check "License" bottom of the page
         // Files in \android\assets:
         // font-big-export.fnt, font-export.fnt, glassy-ui.atlas,
         // glassy-ui.json, glassy-ui.png
-        skin = new Skin( Gdx.files.internal("glassy-ui.json") );
-        finalSkin = new Skin(Gdx.files.internal("finalskin/finalskin.json"));
+        //skin = new Skin( Gdx.files.internal("glassy-ui.json") );
+        //finalSkin = new Skin(Gdx.files.internal("finalskin/finalskin.json"));
+		skin = files.skin;
+		finalSkin = files.finalSkin;
     }
 
 	// Receive steps on Desktop, if milestone is not reached, else add them to stepBank
