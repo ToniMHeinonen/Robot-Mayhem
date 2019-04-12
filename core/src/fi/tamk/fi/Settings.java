@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.I18NBundle;
 
 public class Settings {
@@ -108,8 +109,10 @@ public class Settings {
 
     private void createHeader() {
         header = new Label(localize.get("settings"), finalSkin, "big");
-        header.setPosition(settingsDialog.getWidth() / 3 - 70,
+        header.setPosition(60,
                 settingsDialog.getHeight() - 200);
+        header.setSize(1435, header.getPrefHeight());
+        header.setAlignment(1);
 
         settingsDialog.addActor(header);
     }
@@ -117,7 +120,7 @@ public class Settings {
     private void createMusicVolume() {
         musicVolSlider = new Slider(0.1f, 0.9f, 0.1f, false, finalSkin);
         musicVolSlider.setValue(game.getMusicVol());
-        musicVolSlider.setPosition(header.getX() - 110,
+        musicVolSlider.setPosition(500,
                 header.getY() - 160);
         musicVolSlider.setSize(900, 120);
         musicVolSlider.addListener(new ChangeListener() {
@@ -129,8 +132,10 @@ public class Settings {
         });
 
         musicVolLabel = new Label(localize.get("music"), finalSkin);
-        musicVolLabel.setPosition(musicVolSlider.getX() - 205,
-                musicVolSlider.getY() + 25);
+        musicVolLabel.setPosition(musicVolSlider.getX() - 365,
+                musicVolSlider.getY() + 35);
+        musicVolLabel.setSize(368, 62);
+        musicVolLabel.setAlignment(Align.right);
 
         settingsDialog.addActor(musicVolSlider);
         settingsDialog.addActor(musicVolLabel);
@@ -151,8 +156,10 @@ public class Settings {
         });
 
         soundVolLabel = new Label(localize.get("sound"), finalSkin);
-        soundVolLabel.setPosition(soundVolSlider.getX() - 205,
-                soundVolSlider.getY() + 25);
+        soundVolLabel.setPosition(musicVolSlider.getX() - 365,
+                soundVolSlider.getY() + 35);
+        soundVolLabel.setSize(368, 62);
+        soundVolLabel.setAlignment(Align.right);
 
         settingsDialog.addActor(soundVolSlider);
         settingsDialog.addActor(soundVolLabel);
@@ -166,8 +173,10 @@ public class Settings {
             settingsDialog.addActor(difficulty);
         }
         difficultyLabel = new Label(localize.get("difficulty"), finalSkin);
-        difficultyLabel.setPosition(soundVolLabel.getX() - 105,
+        difficultyLabel.setPosition(musicVolSlider.getX() - 365,
                 soundVolLabel.getY() - 120);
+        difficultyLabel.setSize(difficultyLabel.getPrefWidth(), difficultyLabel.getPrefHeight());
+        difficultyLabel.setAlignment(Align.right);
 
         settingsDialog.addActor(difficultyLabel);
     }
