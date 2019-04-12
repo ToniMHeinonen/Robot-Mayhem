@@ -100,7 +100,7 @@ public class Settings {
     }
 
     private void createSettingsDialog() {
-        settingsDialog = new Dialog(localize.get("settings"), finalSkin, "settings");
+        settingsDialog = new Dialog("", finalSkin, "settings");
         settingsDialog.setMovable(false);
         settingsDialog.setKeepWithinStage(false);
         settingsDialog.setPosition(posX, onScreenY);
