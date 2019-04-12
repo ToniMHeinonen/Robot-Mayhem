@@ -270,7 +270,7 @@ public class Settings {
 
     private void createMenuButtons() {
         buttonSettings = new ImageButton(finalSkin, "settings");
-        buttonSettings.setPosition(1441, 720);
+        buttonSettings.setPosition(1440, 720);
 
         buttonInventory = new ImageButton(finalSkin.getDrawable("menu_items1"));
         buttonInventory.setPosition(buttonSettings.getX(),

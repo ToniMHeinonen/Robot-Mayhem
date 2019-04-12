@@ -231,7 +231,7 @@ public class UtilItem {
 
     private void createMenuButtons() {
         buttonSettings = new ImageButton(finalSkin.getDrawable("menu_settings1"));
-        buttonSettings.setPosition(1441, 720);
+        buttonSettings.setPosition(1440, 720);
         buttonSettings.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
