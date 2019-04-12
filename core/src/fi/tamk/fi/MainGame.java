@@ -276,14 +276,14 @@ public class MainGame extends Game {
 		Locale locale;
 		// If language is not either, then the game gets software's default language
 		if (language.equals("fi")) locale = new Locale("fi", "FI");
-		else if (language.equals("en")) locale = Locale.US;
+		else if (language.equals("en")) locale = new Locale("en", "US");
 		else locale = Locale.getDefault();
 
 		localize = I18NBundle.createBundle(Gdx.files.internal("MyBundle"),
 				locale,"ISO-8859-1");
 
 		// After initializing localize, make language variable the chosen one
-		if (locale == Locale.US) language = "en";
+		if (locale.getLanguage() == "en") language = "en";
 		else language = "fi";
 	}
 
