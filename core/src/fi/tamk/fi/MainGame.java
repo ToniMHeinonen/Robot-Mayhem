@@ -53,21 +53,21 @@ public class MainGame extends Game {
 
 	// Stats
 	// Keys (use these to decrease error chance)
-	private String keyMoney = "money";
-	private String keyStepCount = "stepCount";
-	private String keyStepAllCount = "stepAllCount";
-	private String keyStepBank = "stepBank";
-	private String keySkill1 = "skill1";
-	private String keySkill2 = "skill2";
-	private String keyCurrentBoss = "currentBoss";
-	private String keyFirstPlayTime = "firstPlayTime";
-	private String keyPool = "pool";
-	private String keyPoolMult = "poolMult";
-	private String keyInventorySize = "inventorySize";
-	private String keyInventory = "inventory";
-	private String keyDefeatedBossesSize = "defeatedBossesSize";
-	private String keyDefeatedBosses = "defeatedBosses";
-	protected static String keyName = "name";
+	private String keyMoney = encrypt("money");
+	private String keyStepCount = encrypt("stepCount");
+	private String keyStepAllCount = encrypt("stepAllCount");
+	private String keyStepBank = encrypt("stepBank");
+	private String keySkill1 = encrypt("skill1");
+	private String keySkill2 = encrypt("skill2");
+	private String keyCurrentBoss = encrypt("currentBoss");
+	private String keyFirstPlayTime = encrypt("firstPlayTime");
+	private String keyPool = encrypt("pool");
+	private String keyPoolMult = encrypt("poolMult");
+	private String keyInventorySize = encrypt("inventorySize");
+	private String keyInventory = encrypt("inventory");
+	private String keyDefeatedBossesSize = encrypt("defeatedBossesSize");
+	private String keyDefeatedBosses = encrypt("defeatedBosses");
+	private String keyName = encrypt("name");
 	// Values
 	private int saveTimerAmount = 3600;
 	private int saveTimer = saveTimerAmount;
@@ -283,7 +283,7 @@ public class MainGame extends Game {
 				locale,"ISO-8859-1");
 
 		// After initializing localize, make language variable the chosen one
-		if (locale.getLanguage() == "en") language = "en";
+		if (locale.getLanguage().equals("en")) language = "en";
 		else language = "fi";
 	}
 
@@ -306,27 +306,62 @@ public class MainGame extends Game {
 		else saveTimer = saveTimerAmount; saveStats();
 	}
 
-	/*private String encodeFunction(String value){
-		byte[] bytes = new byte[0];
-		try {
-			bytes = value.getBytes("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+	public String encrypt(String text) {
+		//String text = (String) value;
+		String out = "";
+		char[] chars = text.toCharArray();
+		for (int i = 0; i < chars.length; i++) {
+			char aux = chars[i];
+			aux += (i + 3) * 1;
+			out += aux;
 		}
-		String encoded = Base64Coder.encodeString(value);
-		return encoded;
-	}*/
+		return out;
+	}
+
+	public String decrypt(String text) {
+		String out = "";
+		char[] chars = text.toCharArray();
+		for (int i = 0; i < chars.length; i++) {
+			char aux = chars[i];
+			aux -= (i + 3) * 1;
+			out += aux;
+		}
+		return out;
+	}
+
 
 	public void loadStats() {
 		stats = Gdx.app.getPreferences("Robot_Mayhem_Stats");
 		stats.clear(); // For testing purposes
 		stats.flush(); // Without flushing, clear does not work in Android
-		//Encode testing
-		/*money = Integer.valueOf(stats.getString(keyMoney, "0"));
-		stepCount = Float.valueOf(stats.getString(keyStepCount, "0"));
-		stepAllCount = Float.valueOf(stats.getString(keyStepAllCount, "0"));
-		stepBank = Float.valueOf(stats.getString(keyStepBank, "0"));*/
-		money = stats.getInteger(keyMoney, 0);
+		money = Integer.valueOf(decrypt(stats.getString(keyMoney, encrypt("30"))));
+		stepCount = Float.valueOf(decrypt(stats.getString(keyStepCount, encrypt("0"))));
+		stepAllCount = Float.valueOf(decrypt(stats.getString(keyStepAllCount, encrypt("0"))));
+		stepBank = Float.valueOf(decrypt(stats.getString(keyStepBank, encrypt("0"))));
+		skill1 = decrypt(stats.getString(keySkill1, encrypt(skills.REPAIR)));
+		skill2 = decrypt(stats.getString(keySkill2, encrypt("")));
+		currentBoss = decrypt(stats.getString(keyCurrentBoss, encrypt(bosses.ROOMBOT)));
+		firstPlayTime = Boolean.valueOf(decrypt(stats.getString
+				(keyFirstPlayTime, encrypt("true"))));
+		pool = Integer.valueOf(decrypt(stats.getString(keyPool, encrypt("1"))));
+		poolMult = Integer.valueOf(decrypt(stats.getString(keyPoolMult, encrypt("0"))));
+		playerName = decrypt(stats.getString(keyName, encrypt("")));
+
+		// Load the size of inventory before loading inventory items
+		inventorySize = Integer.valueOf(decrypt(stats.getString
+				(keyInventorySize, encrypt("0"))));
+		for (int i = 0; i < inventorySize; i++) {
+			inventory.add(i, decrypt(stats.getString
+					(keyInventory + String.valueOf(i), encrypt(""))));
+		}
+		// Defeated bosses
+		defeatedBossesSize = Integer.valueOf(decrypt(stats.getString
+				(keyDefeatedBossesSize, encrypt("0"))));
+		for (int i = 0; i < defeatedBossesSize; i++) {
+			defeatedBosses.add(i, decrypt(stats.getString
+					(keyDefeatedBosses + String.valueOf(i), encrypt(""))));
+		}
+		/*money = stats.getInteger(keyMoney, 0);
 		stepCount = stats.getFloat(keyStepCount, 0);
 		stepAllCount = stats.getFloat(keyStepAllCount, 0);
 		stepBank = stats.getFloat(keyStepBank, 0);
@@ -346,27 +381,38 @@ public class MainGame extends Game {
 		defeatedBossesSize = stats.getInteger(keyDefeatedBossesSize, 0);
 		for (int i = 0; i < defeatedBossesSize; i++) {
 			defeatedBosses.add(i, stats.getString(keyDefeatedBosses + String.valueOf(i), ""));
-		}
-
-		/*
-		Where do you need an array, when you are going to store only 1 name?
-		 */
-
-		// Comment: Was not sure how else to do it.
-		playerName = stats.getString(keyName, "");
+		}*/
 	}
 
 	public void saveStats() {
 		// Encode testing
-		/*stats.putString(keyMoney, encodeFunction(Integer.toString(money)));
-		stats.putString(keyStepCount, encodeFunction(Float.toString(stepCount)));
-		stats.putString(keyStepAllCount, encodeFunction(Float.toString(stepAllCount)));
-		stats.putString(keyStepBank, encodeFunction(Float.toString(stepBank)));*/
-		stats.putInteger(keyMoney, money);
+		stats.putString(keyMoney, encrypt(Integer.toString(money)));
+		stats.putString(keyStepCount, encrypt(Float.toString(stepCount)));
+		stats.putString(keyStepAllCount, encrypt(Float.toString(stepAllCount)));
+		stats.putString(keyStepBank, encrypt(Float.toString(stepBank)));
+		stats.putString(keySkill1, encrypt(skill1));
+		stats.putString(keySkill2, encrypt(skill2));
+		stats.putString(keyCurrentBoss, encrypt(currentBoss));
+		stats.putString(keyFirstPlayTime, encrypt(Boolean.toString(firstPlayTime)));
+		stats.putString(keyPool, encrypt(Integer.toString(pool)));
+		stats.putString(keyPoolMult, encrypt(Integer.toString(poolMult)));
+		stats.putString(keyName, encrypt(playerName));
+		// Save inventory's current size on inventorySize key
+		stats.putString(keyInventorySize, encrypt(Integer.toString(inventory.size())));
+		for (int i = 0; i < inventory.size(); i++) {
+			stats.putString(keyInventory + String.valueOf(i), encrypt(inventory.get(i)));
+		}
+		// Defeated bosses
+		stats.putString(keyDefeatedBossesSize, encrypt(Integer.toString(defeatedBosses.size())));
+		for (int i = 0; i < defeatedBosses.size(); i++) {
+			stats.putString(keyDefeatedBosses + String.valueOf(i),
+					encrypt(defeatedBosses.get(i)));
+		}
+		/*stats.putInteger(keyMoney, money);
 		stats.putFloat(keyStepCount, stepCount);
 		stats.putFloat(keyStepAllCount, stepAllCount);
-		stats.putFloat(keyStepBank, stepBank);
-		stats.putString(keySkill1, skill1);
+		stats.putFloat(keyStepBank, stepBank);*/
+		/*stats.putString(keySkill1, skill1);
 		stats.putString(keySkill2, skill2);
 		stats.putString(keyCurrentBoss, currentBoss);
 		stats.putBoolean(keyFirstPlayTime, firstPlayTime);
@@ -382,10 +428,7 @@ public class MainGame extends Game {
 		stats.putInteger(keyDefeatedBossesSize, defeatedBosses.size());
 		for (int i = 0; i < defeatedBosses.size(); i++) {
 			stats.putString(keyDefeatedBosses + String.valueOf(i), defeatedBosses.get(i));
-		}
-
-		stats.putString(keyName, playerName);
-		//System.out.println(playerName);
+		}*/
 
 		stats.flush();
 	}
