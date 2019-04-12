@@ -369,6 +369,11 @@ public class MainGame extends Game {
 		stats.flush();
 	}
 
+	public void clearStats() {
+	    stats.clear();
+	    stats.flush();
+    }
+
 	// Methods for name start.
 	public class MyTextInputListener implements Input.TextInputListener {
 		@Override

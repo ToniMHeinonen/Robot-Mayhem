@@ -15,13 +15,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class Settings {
-    MainGame game;
+    private MainGame game;
     private Files files;
     private Skin skin;
     private Stage stage;
     private Skin finalSkin;
     private String room;
     private String lan;
+    private UtilDialog dialog;
 
     private float posX;
     private float onScreenY;
@@ -47,6 +48,10 @@ public class Settings {
     // Quit and Reset
     private ImageButton buttonQuit;
     private ImageButton buttonReset;
+    private Dialog confirmation1;
+    private Dialog confirmation2;
+    private TextButton btnYes;
+    private TextButton btnNo;
 
     // Language
     private ImageButton buttonFi;
@@ -68,6 +73,7 @@ public class Settings {
         stage = game.getStage();
         finalSkin = game.getFinalSkin();
         lan = game.getLanguage();
+        dialog = game.getDialog();
 
         setValues();
         createSettingsDialog();
@@ -171,9 +177,74 @@ public class Settings {
         buttonReset = new ImageButton(finalSkin, "reset_" + lan);
         buttonReset.setPosition(buttonQuit.getX() + buttonReset.getWidth(),
                 buttonQuit.getY());
+        buttonReset.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                askConfrimation1();
+            }
+        });
 
         settingsDialog.addActor(buttonQuit);
         settingsDialog.addActor(buttonReset);
+    }
+
+    private void askConfrimation1() {
+        confirmation1 = dialog.createPopupItemAndPowerUp("Reset",
+                "This will reset all your progress. Are you sure you want to proceed?",
+                "popup_powerup");
+        createYesAndNo();
+        confirmation1.addActor(btnYes);
+        confirmation1.addActor(btnNo);
+        settingsDialog.addActor(confirmation1);
+        btnYes.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                askConfirmation2();
+            }
+        });
+
+        btnNo.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                confirmation1.remove();
+            }
+        });
+    }
+
+    private void askConfirmation2() {
+        confirmation2 = dialog.createPopupItemAndPowerUp("Reset",
+                "Are you absolutely sure?",
+                "popup_powerup");
+        createYesAndNo();
+        confirmation2.addActor(btnYes);
+        confirmation2.addActor(btnNo);
+        settingsDialog.addActor(confirmation2);
+        btnYes.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                game.clearStats();
+                game.loadStats();
+                settingsDialog.remove();
+                game.switchToRoomGame();
+            }
+        });
+        btnNo.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                confirmation2.remove();
+                confirmation1.remove();
+            }
+        });
+    }
+
+    private void createYesAndNo() {
+        btnYes = new TextButton("Yes", finalSkin);
+        btnYes.setPosition(confirmation1.getWidth()/2 - 400, confirmation1.getHeight()/4 - 120);
+        btnYes.setScale(0.6f);
+
+        btnNo = new TextButton("No", finalSkin);
+        btnNo.setPosition(btnYes.getX() + 400, btnYes.getY());
+        btnNo.setScale(0.6f);
     }
 
     private void createLanguageButtons() {
