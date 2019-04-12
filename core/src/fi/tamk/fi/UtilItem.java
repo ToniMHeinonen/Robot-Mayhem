@@ -27,6 +27,7 @@ public class UtilItem {
     private String lan;
     private Files files;
     private Item items;
+    private Skills skills;
     private String fontSize;
 
     private Table tableBuyableItems;
@@ -46,6 +47,7 @@ public class UtilItem {
     private String[] allItems;
     private ArrayList<String> inventory;
     private int[] amounts;
+    private String[] allSkills;
 
     private int buttonCounterBuyable;
     private int buttonCounterOwned;
@@ -74,7 +76,9 @@ public class UtilItem {
         money = game.getMoney();
         inventory = game.getInventory();
         items = game.getItems();
+        skills = game.getSkills();
         allItems = items.getAllItems();
+        allSkills = skills.getAllSkills();
         utilDialog = game.getDialog();
         lan = game.getLanguage();
         files = game.getFiles();
@@ -168,6 +172,17 @@ public class UtilItem {
             for (int j = 0; j < inventory.size(); j++) {
                 if (inventory.get(j).contains(allItems[i])) {
                     amounts[i]++;
+                }
+            }
+        }
+
+        // Get owned skills, which player isn't using currently.
+        for (int i = 0; i < allSkills.length; i++) {
+            for (int j = 0; j < inventory.size(); j++) {
+                if (inventory.get(j).contains(allSkills[i])) {
+                    Label ownedSkill = new Label(inventory.get(j), finalSkin, getFontSize(inventory.get(j)));
+                    tableOwnedItems.add(ownedSkill).size(550, 75).row();
+                    ownedItems++;
                 }
             }
         }
