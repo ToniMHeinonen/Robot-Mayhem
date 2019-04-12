@@ -175,7 +175,7 @@ public class Settings {
         difficultyLabel = new Label(localize.get("difficulty"), finalSkin);
         difficultyLabel.setPosition(musicVolSlider.getX() - 365,
                 soundVolLabel.getY() - 120);
-        difficultyLabel.setSize(difficultyLabel.getPrefWidth(), difficultyLabel.getPrefHeight());
+        difficultyLabel.setSize(368, difficultyLabel.getPrefHeight());
         difficultyLabel.setAlignment(Align.right);
 
         settingsDialog.addActor(difficultyLabel);
