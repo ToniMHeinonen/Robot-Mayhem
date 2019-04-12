@@ -27,6 +27,7 @@ public class UtilItem {
     private String lan;
     private Files files;
     private Item items;
+    private String fontSize;
 
     private Table tableBuyableItems;
     private Table tableOwnedItems;
@@ -120,7 +121,7 @@ public class UtilItem {
 
         for (int i = 0; i < allItems.length; i++) {
             buttonCounterBuyable = i;
-            Label shopItems = new Label(allItems[i], finalSkin);
+            Label shopItems = new Label(allItems[i], finalSkin, getFontSize(allItems[i]));
             tableBuyableItems.add(shopItems).size(520, 75);
             buyableItems++;
 
@@ -176,7 +177,7 @@ public class UtilItem {
         for (int i = 0; i < allItems.length; i++) {
             buttonCounterOwned = i;
             if (game.inventoryOrSkillsContains(allItems[i])) {
-                Label ownedItem = new Label(allItems[i], finalSkin);
+                Label ownedItem = new Label(allItems[i], finalSkin, getFontSize(allItems[i]));
                 tableOwnedItems.add(ownedItem).size(550, 75).row();
                 ownedItems++;
 
@@ -323,6 +324,14 @@ public class UtilItem {
 
         popupOwnedItem.addActor(buttonUse);
         stage.addActor(popupOwnedItem);
+    }
+
+    private String getFontSize(String item) {
+        fontSize = "default";
+        if (item.length() >= 17) {
+            fontSize = "small";
+        }
+        return fontSize;
     }
 
     private void createBackButton(final Dialog dialog) {

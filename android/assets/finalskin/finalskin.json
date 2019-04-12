@@ -6,6 +6,9 @@ com.badlogic.gdx.graphics.g2d.BitmapFont: {
 	font-large: {
 		file: font-large.fnt
 	}
+	font-small: {
+		file: font-small.fnt
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 	default: {
@@ -117,6 +120,9 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	}
 	big: {
 		font: font-large
+	}
+	small: {
+		font: font-small
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {

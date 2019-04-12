@@ -50,13 +50,17 @@ public class UtilDialog {
 
     // Start of all-in-one method.
     public Dialog createPopupItemAndPowerUp(String header, String description, String style) {
+        String fontSize = "big";
+        if (header.length() >= 17) {
+            fontSize = "default";
+        }
 
         Dialog dialog = new Dialog("", finalSkin, style);
         dialog.setMovable(false);
         dialog.setSize(game.pixelWidth, game.pixelHeight);
         dialog.setPosition(0, 0);
 
-        Label labelHeader = new Label(header, finalSkin, "big");
+        Label labelHeader = new Label(header, finalSkin, fontSize);
         labelHeader.setPosition(game.pixelWidth / 4, game.pixelHeight / 2 + 195);
         labelHeader.setSize(960, 100);
         labelHeader.setAlignment(1);
