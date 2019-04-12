@@ -210,11 +210,15 @@ public class UtilItem {
 
     private void createHeaders() {
         labelShop = new Label(localize.get("shop"), finalSkin, "big");
-        labelShop.setPosition(300, 900);
+        labelShop.setSize(600, labelShop.getPrefHeight());
+        labelShop.setPosition(125, 900);
+        labelShop.setAlignment(1);
         dialogItems.addActor(labelShop);
 
         labelInventory = new Label(localize.get("inventory"), finalSkin, "big");
-        labelInventory.setPosition(labelShop.getX() + 650, labelShop.getY());
+        labelInventory.setSize(600, labelInventory.getPrefHeight());
+        labelInventory.setPosition(labelShop.getX() + 720, labelShop.getY());
+        labelInventory.setAlignment(1);
         dialogItems.addActor(labelInventory);
     }
 
