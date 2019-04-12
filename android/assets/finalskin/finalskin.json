@@ -144,6 +144,12 @@ com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 		down: button_normal2
 		disabled: button_normal0
 	}
+	small: {
+		font: font-small
+		up: topbarbutton1
+		down: topbarbutton2
+		disabled: topbarbutton0
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
 	default: {

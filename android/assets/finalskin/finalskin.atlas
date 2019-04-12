@@ -487,6 +487,13 @@ diff3_2
   orig: 300, 120
   offset: 0, 0
   index: -1
+font-small
+  rotate: false
+  xy: 725, 337
+  size: 320, 512
+  orig: 320, 512
+  offset: 0, 0
+  index: -1
 quit2_fi
   rotate: false
   xy: 1, 975
@@ -590,12 +597,5 @@ volumeslider
   xy: 967, 215
   size: 120, 120
   orig: 120, 120
-  offset: 0, 0
-  index: -1
-font-small
-  rotate: false
-  xy: 725, 337
-  size: 320, 512
-  orig: 320, 512
   offset: 0, 0
   index: -1
