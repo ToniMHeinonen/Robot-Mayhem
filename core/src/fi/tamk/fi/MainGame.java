@@ -306,10 +306,26 @@ public class MainGame extends Game {
 		else saveTimer = saveTimerAmount; saveStats();
 	}
 
+	/*private String encodeFunction(String value){
+		byte[] bytes = new byte[0];
+		try {
+			bytes = value.getBytes("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		String encoded = Base64Coder.encodeString(value);
+		return encoded;
+	}*/
+
 	public void loadStats() {
 		stats = Gdx.app.getPreferences("Robot_Mayhem_Stats");
 		stats.clear(); // For testing purposes
 		stats.flush(); // Without flushing, clear does not work in Android
+		//Encode testing
+		/*money = Integer.valueOf(stats.getString(keyMoney, "0"));
+		stepCount = Float.valueOf(stats.getString(keyStepCount, "0"));
+		stepAllCount = Float.valueOf(stats.getString(keyStepAllCount, "0"));
+		stepBank = Float.valueOf(stats.getString(keyStepBank, "0"));*/
 		money = stats.getInteger(keyMoney, 0);
 		stepCount = stats.getFloat(keyStepCount, 0);
 		stepAllCount = stats.getFloat(keyStepAllCount, 0);
@@ -341,6 +357,11 @@ public class MainGame extends Game {
 	}
 
 	public void saveStats() {
+		// Encode testing
+		/*stats.putString(keyMoney, encodeFunction(Integer.toString(money)));
+		stats.putString(keyStepCount, encodeFunction(Float.toString(stepCount)));
+		stats.putString(keyStepAllCount, encodeFunction(Float.toString(stepAllCount)));
+		stats.putString(keyStepBank, encodeFunction(Float.toString(stepBank)));*/
 		stats.putInteger(keyMoney, money);
 		stats.putFloat(keyStepCount, stepCount);
 		stats.putFloat(keyStepAllCount, stepAllCount);
