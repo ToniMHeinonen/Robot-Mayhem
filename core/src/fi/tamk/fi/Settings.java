@@ -13,9 +13,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.I18NBundle;
 
 public class Settings {
     private MainGame game;
+    private I18NBundle localize;
     private Files files;
     private Skin skin;
     private Stage stage;
@@ -68,6 +70,7 @@ public class Settings {
     Settings(MainGame game, String room) {
         this.game = game;
         this.room = room;
+        localize = game.getLocalize();
         files = game.getFiles();
         skin = game.getSkin();
         stage = game.getStage();
@@ -96,7 +99,7 @@ public class Settings {
     }
 
     private void createSettingsDialog() {
-        settingsDialog = new Dialog("Settings", finalSkin, "settings");
+        settingsDialog = new Dialog(localize.get("settings"), finalSkin, "settings");
         settingsDialog.setMovable(false);
         settingsDialog.setKeepWithinStage(false);
         settingsDialog.setPosition(posX, onScreenY);
@@ -104,7 +107,7 @@ public class Settings {
     }
 
     private void createHeader() {
-        header = new Label("Settings", finalSkin, "big");
+        header = new Label(localize.get("settings"), finalSkin, "big");
         header.setPosition(settingsDialog.getWidth() / 3 - 70,
                 settingsDialog.getHeight() - 200);
 
@@ -125,7 +128,7 @@ public class Settings {
             }
         });
 
-        musicVolLabel = new Label("Music:", finalSkin);
+        musicVolLabel = new Label(localize.get("music"), finalSkin);
         musicVolLabel.setPosition(musicVolSlider.getX() - 205,
                 musicVolSlider.getY() + 25);
 
@@ -147,7 +150,7 @@ public class Settings {
             }
         });
 
-        soundVolLabel = new Label("Sound:", finalSkin);
+        soundVolLabel = new Label(localize.get("sound"), finalSkin);
         soundVolLabel.setPosition(soundVolSlider.getX() - 205,
                 soundVolSlider.getY() + 25);
 
@@ -162,7 +165,7 @@ public class Settings {
                     soundVolSlider.getY() - 125);
             settingsDialog.addActor(difficulty);
         }
-        difficultyLabel = new Label("Difficulty:", finalSkin);
+        difficultyLabel = new Label(localize.get("difficulty"), finalSkin);
         difficultyLabel.setPosition(soundVolLabel.getX() - 105,
                 soundVolLabel.getY() - 120);
 
@@ -189,9 +192,8 @@ public class Settings {
     }
 
     private void askConfrimation1() {
-        confirmation1 = dialog.createPopupItemAndPowerUp("Reset",
-                "This will reset all your progress. Are you sure you want to proceed?",
-                "popup_powerup");
+        confirmation1 = dialog.createPopupItemAndPowerUp(localize.get("reset"),
+                localize.get("resetConf1"), "popup_powerup");
         createYesAndNo();
         confirmation1.addActor(btnYes);
         confirmation1.addActor(btnNo);
@@ -212,9 +214,8 @@ public class Settings {
     }
 
     private void askConfirmation2() {
-        confirmation2 = dialog.createPopupItemAndPowerUp("Reset",
-                "Are you absolutely sure?",
-                "popup_powerup");
+        confirmation2 = dialog.createPopupItemAndPowerUp(localize.get("reset"),
+                localize.get("resetConf2"), "popup_powerup");
         createYesAndNo();
         confirmation2.addActor(btnYes);
         confirmation2.addActor(btnNo);
@@ -238,11 +239,11 @@ public class Settings {
     }
 
     private void createYesAndNo() {
-        btnYes = new TextButton("Yes", finalSkin);
+        btnYes = new TextButton(localize.get("yes"), finalSkin);
         btnYes.setPosition(confirmation1.getWidth()/2 - 400, confirmation1.getHeight()/4 - 120);
         btnYes.setScale(0.6f);
 
-        btnNo = new TextButton("No", finalSkin);
+        btnNo = new TextButton(localize.get("no"), finalSkin);
         btnNo.setPosition(btnYes.getX() + 400, btnYes.getY());
         btnNo.setScale(0.6f);
     }

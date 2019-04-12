@@ -12,11 +12,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.I18NBundle;
 
 import java.util.ArrayList;
 
 public class UtilItem {
     private MainGame game;
+    private I18NBundle localize;
     private Stage stage;
     private Skin skin;
     private Skin finalSkin;
@@ -64,6 +66,7 @@ public class UtilItem {
     UtilItem(MainGame game, String room) {
         this.game = game;
         this.room = room;
+        localize = game.getLocalize();
         stage = game.getStage();
         skin = game.getSkin();
         finalSkin = game.getFinalSkin();
@@ -206,17 +209,17 @@ public class UtilItem {
     }
 
     private void createHeaders() {
-        labelShop = new Label("Shop", finalSkin, "big");
+        labelShop = new Label(localize.get("shop"), finalSkin, "big");
         labelShop.setPosition(300, 900);
         dialogItems.addActor(labelShop);
 
-        labelInventory = new Label("Inventory", finalSkin, "big");
+        labelInventory = new Label(localize.get("inventory"), finalSkin, "big");
         labelInventory.setPosition(labelShop.getX() + 650, labelShop.getY());
         dialogItems.addActor(labelInventory);
     }
 
     private void showMoney() {
-        labelMoney = new Label("Money:\n" + String.valueOf(money), finalSkin);
+        labelMoney = new Label(localize.get("shopMoney") + String.valueOf(money), finalSkin);
         labelMoney.setPosition(1650, 100);
         labelMoney.setAlignment(1);
         dialogItems.addActor(labelMoney);
