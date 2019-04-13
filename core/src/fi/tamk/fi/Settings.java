@@ -61,6 +61,7 @@ public class Settings {
     private Dialog confirmation2;
     private TextButton btnYes;
     private TextButton btnNo;
+    private Dialog popupQuit;
 
     // Language
     private ImageButton buttonFi;
@@ -210,6 +211,12 @@ public class Settings {
         buttonQuit = new ImageButton(finalSkin, "quit_" + lan);
         buttonQuit.setPosition(difficultyLabel.getX() - 20,
                 120);
+        buttonQuit.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                askQuit();
+            }
+        });
 
         buttonReset = new ImageButton(finalSkin, "reset_" + lan);
         buttonReset.setPosition(buttonQuit.getX() + buttonReset.getWidth(),
@@ -228,7 +235,7 @@ public class Settings {
     private void askConfrimation1() {
         confirmation1 = dialog.createPopupItemAndPowerUp(localize.get("reset"),
                 localize.get("resetConf1"), "popup_powerup");
-        createYesAndNo();
+        createYesAndNo(confirmation1);
         confirmation1.addActor(btnYes);
         confirmation1.addActor(btnNo);
         settingsDialog.addActor(confirmation1);
@@ -250,7 +257,7 @@ public class Settings {
     private void askConfirmation2() {
         confirmation2 = dialog.createPopupItemAndPowerUp(localize.get("reset"),
                 localize.get("resetConf2"), "popup_powerup");
-        createYesAndNo();
+        createYesAndNo(confirmation2);
         confirmation2.addActor(btnYes);
         confirmation2.addActor(btnNo);
         settingsDialog.addActor(confirmation2);
@@ -276,9 +283,34 @@ public class Settings {
         });
     }
 
-    private void createYesAndNo() {
+    private void askQuit() {
+        popupQuit = dialog.createPopupItemAndPowerUp(localize.get("quit"),
+                localize.get("askQuit"), "popup_powerup");
+        createYesAndNo(popupQuit);
+        popupQuit.addActor(btnYes);
+        popupQuit.addActor(btnNo);
+        settingsDialog.addActor(popupQuit);
+
+        btnYes.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                game.saveStats();
+                game.saveSettings();
+                Gdx.app.exit();
+            }
+        });
+
+        btnNo.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                popupQuit.remove();
+            }
+        });
+    }
+
+    private void createYesAndNo(Dialog dialog) {
         btnYes = new TextButton(localize.get("yes"), finalSkin);
-        btnYes.setPosition(confirmation1.getWidth()/2 - 400, confirmation1.getHeight()/4 - 120);
+        btnYes.setPosition(dialog.getWidth()/2 - 400, dialog.getHeight()/4 - 120);
         btnYes.setScale(0.6f);
 
         btnNo = new TextButton(localize.get("no"), finalSkin);

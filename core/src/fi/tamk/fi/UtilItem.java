@@ -369,7 +369,8 @@ public class UtilItem {
         String description = skills.retrieveSkillDescription(openedSkill);
 
         popupOwnedSkill = utilDialog.createPopupItemAndPowerUp(openedSkill,
-                description + " Which skill would you like to replace?", "popup_powerup");
+                description + " " + localize.get("replaceSkill"),
+                "popup_powerup");
 
         TextButton buttonSkill1 = new TextButton(game.getSkill1(), finalSkin, "small");
         buttonSkill1.setPosition(470, 210);
@@ -407,7 +408,7 @@ public class UtilItem {
             });
         }
 
-        TextButton buttonCancel = new TextButton("Cancel", finalSkin, "small");
+        TextButton buttonCancel = new TextButton(localize.get("cancel"), finalSkin, "small");
         buttonCancel.setPosition(1175, 210);
         buttonCancel.setSize(250, 120);
         buttonCancel.addListener(new ClickListener() {
