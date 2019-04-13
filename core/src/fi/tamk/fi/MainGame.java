@@ -294,12 +294,38 @@ public class MainGame extends Game {
 		}
 	}
 
+	public void languageToFIN() {
+		Locale locale = new Locale("fi", "FI");
+		localize = I18NBundle.createBundle(Gdx.files.internal("MyBundle"),
+				locale, "ISO-8859-1");
+		language = "fi";
+		saveSettings();
+		saveStats();
+		// Init these again to change the languages
+		skills = new Skills(this);
+		items = new Item(this);
+		bosses = new Bosses(this);
+		loadStats();
+	}
+
+	public void languageToENG() {
+		localize = I18NBundle.createBundle(Gdx.files.internal("MyBundle"),
+				"ISO-8859-1");
+		language = "en";
+		saveSettings();
+		saveStats();
+		skills = new Skills(this);
+		items = new Item(this);
+		bosses = new Bosses(this);
+		loadStats();
+	}
+
     public void loadSettings() {
 		settings = Gdx.app.getPreferences("Robot_Mayhem_Settings");
 		settings.clear(); // For testing purposes
 		settings.flush(); // Without flushing, clear does not work in Android
 		musicVol = settings.getFloat(keyMusicVol, 0.8f);
-		language = settings.getString(keyLanguage, "");
+		language = settings.getString(keyLanguage, "fi");
 		difficulty = settings.getString(keyDifficulty, "medium");
     }
 
