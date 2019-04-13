@@ -16,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.I18NBundle;
 
+import java.util.ArrayList;
+
 public class Settings {
     private MainGame game;
     private I18NBundle localize;
@@ -25,7 +27,9 @@ public class Settings {
     private Skin finalSkin;
     private String room;
     private String lan;
+    private ArrayList<String> inventory;
     private UtilDialog dialog;
+    private Skills skills;
 
     private float posX;
     private float onScreenY;
@@ -78,6 +82,8 @@ public class Settings {
         finalSkin = game.getFinalSkin();
         lan = game.getLanguage();
         dialog = game.getDialog();
+        inventory = game.getInventory();
+        skills = game.getSkills();
 
         setValues();
         createSettingsDialog();
@@ -234,6 +240,9 @@ public class Settings {
             public void clicked(InputEvent event, float x, float y){
                 game.clearStats();
                 game.loadStats();
+                inventory.clear();
+                game.setSkill1(skills.REPAIR);
+                game.setSkill2("");
                 settingsDialog.remove();
                 game.switchToRoomGame();
             }
