@@ -16,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.I18NBundle;
 
+import java.util.ArrayList;
+
 public class Settings {
     private MainGame game;
     private I18NBundle localize;
@@ -25,7 +27,10 @@ public class Settings {
     private Skin finalSkin;
     private String room;
     private String lan;
+    private ArrayList<String> inventory;
     private UtilDialog dialog;
+    private Skills skills;
+    private String difficulty;
 
     private float posX;
     private float onScreenY;
@@ -45,7 +50,8 @@ public class Settings {
 
     // Difficulty
     private Label difficultyLabel;
-    private String[] difficulties = new String[] {"0", "1", "2"};
+    private String[] difficulties = new String[] {"easy", "medium", "hard"};
+    private ImageButton[] difficultyButtons = new ImageButton[3];
     private int space = 310;
 
     // Quit and Reset
@@ -78,6 +84,9 @@ public class Settings {
         finalSkin = game.getFinalSkin();
         lan = game.getLanguage();
         dialog = game.getDialog();
+        inventory = game.getInventory();
+        skills = game.getSkills();
+        difficulty = game.getDifficulty();
 
         setValues();
         createSettingsDialog();
@@ -166,12 +175,28 @@ public class Settings {
     }
 
     private void createDifficultyButtons() {
-        for (int i = 0; i < difficulties.length; i++) {
-            ImageButton difficulty = new ImageButton(finalSkin, "diff" + difficulties[i]);
-            difficulty.setPosition(musicVolSlider.getX() + 15 + i* space,
+        for (int i = 0; i < difficultyButtons.length; i++) {
+            final int difficultyCounter = i;
+            difficultyButtons[i] = new ImageButton(finalSkin, difficulties[i]);
+            difficultyButtons[i].setPosition(musicVolSlider.getX() + 15 + i* space,
                     soundVolSlider.getY() - 125);
-            settingsDialog.addActor(difficulty);
+            if (difficulty.equals(difficulties[i])) {
+                difficultyButtons[i].setChecked(true);
+            }
+            difficultyButtons[i].addListener(new ClickListener(){
+                int i = difficultyCounter;
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    for (ImageButton button : difficultyButtons) {
+                        button.setChecked(false);
+                    }
+                    difficultyButtons[i].setChecked(true);
+                    game.setDifficulty(difficulties[i]);
+                }
+            });
+            settingsDialog.addActor(difficultyButtons[i]);
         }
+
         difficultyLabel = new Label(localize.get("difficulty"), finalSkin);
         difficultyLabel.setPosition(musicVolSlider.getX() - 365,
                 soundVolLabel.getY() - 120);
@@ -234,6 +259,10 @@ public class Settings {
             public void clicked(InputEvent event, float x, float y){
                 game.clearStats();
                 game.loadStats();
+                inventory.clear();
+                game.setSkill1(skills.REPAIR);
+                game.setSkill2("");
+                game.clearSettings();
                 settingsDialog.remove();
                 game.switchToRoomGame();
             }
@@ -260,9 +289,39 @@ public class Settings {
     private void createLanguageButtons() {
         buttonFi = new ImageButton(finalSkin, "finnish");
         buttonFi.setPosition(945, 240);
+        if (lan.equals("fi")) {
+            buttonFi.setChecked(true);
+        }
+        buttonFi.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                game.setLanguage("fi");
+                game.createBundle();
+                game.saveSettings();
+                buttonEn.setChecked(false);
+                buttonFi.setChecked(true);
+                settingsDialog.remove();
+                Settings settings = new Settings(game, room);
+            }
+        });
 
         buttonEn = new ImageButton(finalSkin, "english");
         buttonEn.setPosition(buttonFi.getX(), buttonFi.getY() - 120);
+        if (lan.equals("en")) {
+            buttonEn.setChecked(true);
+        }
+        buttonEn.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                game.setLanguage("en");
+                game.createBundle();
+                game.saveSettings();
+                buttonFi.setChecked(false);
+                buttonEn.setChecked(true);
+                settingsDialog.remove();
+                Settings settings = new Settings(game, room);
+            }
+        });
 
         settingsDialog.addActor(buttonFi);
         settingsDialog.addActor(buttonEn);

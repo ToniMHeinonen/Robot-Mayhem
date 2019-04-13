@@ -25,6 +25,8 @@ public class RoomTestailua extends RoomParent {
 
     UtilPowerUp utilPowerUp;
 
+    MainGame game;
+
     private Drawable[] tooltips;
     private Drawable tooltipAttack, tooltipDefend, tooltipItem;
 
@@ -46,6 +48,7 @@ public class RoomTestailua extends RoomParent {
 
     RoomTestailua(MainGame game) {
         super(game);
+        this.game = game;
         testSkin = game.getTestSkin();
         utilDialog = game.getDialog();
         createButtonSettings();
@@ -55,6 +58,7 @@ public class RoomTestailua extends RoomParent {
         createButtonHacking2();
         createButtonDialog();
         createButtonPowerup();
+        addSkills();
         // playMusic();
 
         // Added for testing.
@@ -80,6 +84,23 @@ public class RoomTestailua extends RoomParent {
     public void playMusic() {
         // backgroundMusic.setVolume(game.getMusicVol());
         // backgroundMusic.play();
+    }
+
+    private void addSkills() {
+        TextButton buttonAddSkills = new TextButton("Add2Skills", skin);
+        buttonAddSkills.setWidth(300f);
+        buttonAddSkills.setHeight(100f);
+        buttonAddSkills.setPosition(game.pixelWidth /2 + 200,
+                (game.pixelHeight/3) *2 + buttonAddSkills.getHeight()*2);
+        stage.addActor(buttonAddSkills);
+
+        buttonAddSkills.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                game.addToInventory(localize.get("DUST"), true);
+                game.addToInventory(localize.get("SHOCK"), true);
+            }
+        });
     }
 
     public void createButtonHacking() {

@@ -38,6 +38,7 @@ public class Skills {
     private final String buttonDust = "DUST";
 
     public final String ATTACK, DEFEND, ITEM, REPAIR, SHOCK, FIRE, SUCTION, DUST;
+    private final String[] allSkills;
 
     private final int defCrit = 10; // Default crit chance percent
 
@@ -58,6 +59,8 @@ public class Skills {
         FIRE = localize.get("FIRE");
         SUCTION = localize.get("SUCTION");
         DUST = localize.get("DUST");
+
+        allSkills = new String[] {ATTACK, DEFEND, ITEM, REPAIR, SHOCK, FIRE, SUCTION, DUST};
 
         mapSkills = new HashMap<String, HashMap<String,Object>>();
         loadSkillAnimations();
@@ -264,5 +267,9 @@ public class Skills {
         map.put(button, buttonDust);
 
         mapSkills.put((String) map.get(name), map);
+    }
+
+    public String[] getAllSkills() {
+        return allSkills;
     }
 }

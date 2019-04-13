@@ -1,6 +1,5 @@
 package fi.tamk.fi;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -11,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.I18NBundle;
 
 import java.util.ArrayList;
@@ -27,12 +25,15 @@ public class UtilItem {
     private String lan;
     private Files files;
     private Item items;
+    private Skills skills;
+    private String fontSize;
 
     private Table tableBuyableItems;
     private Table tableOwnedItems;
     private Dialog dialogItems;
     private Dialog popupBuyableItem;
     private Dialog popupOwnedItem;
+    private Dialog popupOwnedSkill;
 
     private ScrollPane scrollBuyable;
     private ScrollPane scrollOwned;
@@ -45,6 +46,7 @@ public class UtilItem {
     private String[] allItems;
     private ArrayList<String> inventory;
     private int[] amounts;
+    private String[] allSkills;
 
     private int buttonCounterBuyable;
     private int buttonCounterOwned;
@@ -73,7 +75,9 @@ public class UtilItem {
         money = game.getMoney();
         inventory = game.getInventory();
         items = game.getItems();
+        skills = game.getSkills();
         allItems = items.getAllItems();
+        allSkills = skills.getAllSkills();
         utilDialog = game.getDialog();
         lan = game.getLanguage();
         files = game.getFiles();
@@ -112,7 +116,7 @@ public class UtilItem {
     }
 
     /*
-    Table, which contains buyable items.
+    Table, which contains shop items.
      */
     private void createBuyableItemsTable() {
         int buyableItems = 0;
@@ -120,7 +124,7 @@ public class UtilItem {
 
         for (int i = 0; i < allItems.length; i++) {
             buttonCounterBuyable = i;
-            Label shopItems = new Label(allItems[i], finalSkin);
+            Label shopItems = new Label(allItems[i], finalSkin, getFontSize(allItems[i]));
             tableBuyableItems.add(shopItems).size(520, 75);
             buyableItems++;
 
@@ -145,6 +149,9 @@ public class UtilItem {
         }
     }
 
+    /*
+    If there are more than 11 items in shop, it creates scrollbar.
+     */
     private void createScrollTableBuyable(Table table) {
         scrollBuyable = new ScrollPane(table, finalSkin);
         scrollBuyable.setFadeScrollBars(false);
@@ -156,7 +163,7 @@ public class UtilItem {
     }
 
     /*
-    Table, which contains owned items.
+    Table, which contains owned items and skills.
      */
     private void createOwnedItemsTable() {
         tableOwnedItems = new Table();
@@ -171,12 +178,31 @@ public class UtilItem {
             }
         }
 
+        // Get owned skills, which player isn't using currently.
+        for (int i = 0; i < allSkills.length; i++) {
+            for (int j = 0; j < inventory.size(); j++) {
+                if (inventory.get(j).contains(allSkills[i])) {
+                    final int counterSkills = i;
+                    Label ownedSkill = new Label(inventory.get(j), finalSkin, getFontSize(inventory.get(j)));
+                    tableOwnedItems.add(ownedSkill).size(550, 75).row();
+                    ownedItems++;
+                    ownedSkill.addListener(new ClickListener(){
+                        int i = counterSkills;
+                        @Override
+                        public void clicked(InputEvent event, float x, float y){
+                            popupForOwnedSkill(i);
+                        }
+                    });
+                }
+            }
+        }
+
         // (String.valueOf(amounts[i]), skin);
 
         for (int i = 0; i < allItems.length; i++) {
             buttonCounterOwned = i;
             if (game.inventoryOrSkillsContains(allItems[i])) {
-                Label ownedItem = new Label(allItems[i], finalSkin);
+                Label ownedItem = new Label(allItems[i], finalSkin, getFontSize(allItems[i]));
                 tableOwnedItems.add(ownedItem).size(550, 75).row();
                 ownedItems++;
 
@@ -198,6 +224,9 @@ public class UtilItem {
         }
     }
 
+    /*
+    If there are more than 11 items in inventory, it creates scrollbar.
+    */
     private void createScrollTableOwned(Table table) {
         scrollOwned = new ScrollPane(table, finalSkin);
         scrollOwned.setFadeScrollBars(false);
@@ -208,6 +237,9 @@ public class UtilItem {
         dialogItems.addActor(scrollOwned);
     }
 
+    /*
+    Creates "Shop" and "Inventory" headers.
+     */
     private void createHeaders() {
         labelShop = new Label(localize.get("shop"), finalSkin, "big");
         labelShop.setSize(600, labelShop.getPrefHeight());
@@ -229,6 +261,9 @@ public class UtilItem {
         dialogItems.addActor(labelMoney);
     }
 
+    /*
+    Creates settings, inventory and stats buttons in the right side of the screen.
+     */
     private void createMenuButtons() {
         buttonSettings = new ImageButton(finalSkin.getDrawable("menu_settings1"));
         buttonSettings.setPosition(1440, 720);
@@ -254,7 +289,7 @@ public class UtilItem {
     }
 
     /*
-    This will open, when player has clicked one of the buyable items.
+    This will open, when player has clicked one of the items in shop.
      */
     private void popupForBuyableItem(final int index) {
         String openedItem = allItems[index];
@@ -325,6 +360,80 @@ public class UtilItem {
         stage.addActor(popupOwnedItem);
     }
 
+    /*
+    This will open, when player has clicked one of owned skills.
+    Player can change skills only in RoomGame.
+     */
+    private void popupForOwnedSkill(final int index) {
+        String openedSkill = allSkills[index];
+        String description = skills.retrieveSkillDescription(openedSkill);
+
+        popupOwnedSkill = utilDialog.createPopupItemAndPowerUp(openedSkill,
+                description + " Which skill would you like to replace?", "popup_powerup");
+
+        TextButton buttonSkill1 = new TextButton(game.getSkill1(), finalSkin, "small");
+        buttonSkill1.setPosition(470, 210);
+        buttonSkill1.setDisabled(true);
+        if (room.equals("hall")) {
+            buttonSkill1.setDisabled(false);
+            buttonSkill1.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    game.addToInventory(game.getSkill1(), true);
+                    game.setSkill1(allSkills[index]);
+                    game.removeFromInventory(allSkills[index]);
+                    popupOwnedSkill.remove();
+                    dialogItems.remove();
+                    UtilItem utilItem = new UtilItem(game, room);
+                }
+            });
+        }
+
+        TextButton buttonSkill2 = new TextButton(game.getSkill2(), finalSkin, "small");
+        buttonSkill2.setPosition(820, 210);
+        buttonSkill2.setDisabled(true);
+        if (room.equals("hall")) {
+            buttonSkill2.setDisabled(false);
+            buttonSkill2.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    game.addToInventory(game.getSkill2(), true);
+                    game.setSkill2(allSkills[index]);
+                    game.removeFromInventory(allSkills[index]);
+                    popupOwnedSkill.remove();
+                    dialogItems.remove();
+                    UtilItem utilItem = new UtilItem(game, room);
+                }
+            });
+        }
+
+        TextButton buttonCancel = new TextButton("Cancel", finalSkin, "small");
+        buttonCancel.setPosition(1175, 210);
+        buttonCancel.setSize(250, 120);
+        buttonCancel.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                popupOwnedSkill.remove();
+            }
+        });
+
+        popupOwnedSkill.addActor(buttonSkill1);
+        popupOwnedSkill.addActor(buttonSkill2);
+        popupOwnedSkill.addActor(buttonCancel);
+        stage.addActor(popupOwnedSkill);
+    }
+
+    /*
+    If items or skills are more than 17 characters long, it will put smaller font to them.
+     */
+    private String getFontSize(String item) {
+        fontSize = "default";
+        if (item.length() >= 17) {
+            fontSize = "small";
+        }
+        return fontSize;
+    }
+
     private void createBackButton(final Dialog dialog) {
         ImageButton buttonBack = new ImageButton(finalSkin, "cancel_" + lan);
         buttonBack.setPosition(dialog.getWidth()/2 + 35, 210);
@@ -337,6 +446,9 @@ public class UtilItem {
         });
     }
 
+    /*
+    The X-button in the top-right corner of the screen.
+     */
     private void createExitButton() {
         buttonExit = new ImageButton(finalSkin, "x");
         buttonExit.setPosition(1550, 960);
@@ -349,4 +461,9 @@ public class UtilItem {
 
         dialogItems.addActor(buttonExit);
     }
+
+    /*
+    If you add this to item-button, it should open inventory:
+    UtilItem utilItem = new UtilItem(game, "fight");
+     */
 }

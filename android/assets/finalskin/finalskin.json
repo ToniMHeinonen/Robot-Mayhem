@@ -6,6 +6,9 @@ com.badlogic.gdx.graphics.g2d.BitmapFont: {
 	font-large: {
 		file: font-large.fnt
 	}
+	font-small: {
+		file: font-small.fnt
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 	default: {
@@ -37,22 +40,27 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
 	english: {
 		up: lang_en1
 		down: lang_en2
+		checked: lang_en2
 	}
 	finnish: {
 		up: lang_fi1
 		down: lang_fi2
+		checked: lang_fi2
 	}
-	diff0: {
+	easy: {
 		up: diff1_1
 		down: diff1_2
+		checked: diff1_2
 	}
-	diff1: {
+	medium: {
 		up: diff2_1
 		down: diff2_2
+		checked: diff2_2
 	}
-	diff2: {
+	hard: {
 		up: diff3_1
 		down: diff3_2
+		checked: diff3_2
 	}
 	x: {
 		up: exit1
@@ -118,6 +126,9 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	big: {
 		font: font-large
 	}
+	small: {
+		font: font-small
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
 	default: {
@@ -137,6 +148,12 @@ com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 		up: button_normal1
 		down: button_normal2
 		disabled: button_normal0
+	}
+	small: {
+		font: font-small
+		up: topbarbutton1
+		down: topbarbutton2
+		disabled: topbarbutton0
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
