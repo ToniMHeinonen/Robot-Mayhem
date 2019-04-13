@@ -461,4 +461,9 @@ public class UtilItem {
 
         dialogItems.addActor(buttonExit);
     }
+
+    /*
+    If you add this to item-button, it should open inventory:
+    UtilItem utilItem = new UtilItem(game, "fight");
+     */
 }
