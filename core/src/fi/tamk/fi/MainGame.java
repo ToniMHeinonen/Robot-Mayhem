@@ -272,7 +272,7 @@ public class MainGame extends Game {
         else progressBarMilestone = poolMilestones[pool] / 3;
     }
 
-	private void createBundle() {
+	public void createBundle() {
 		Locale locale;
 		// If language is not either, then the game gets software's default language
 		if (language.equals("fi")) locale = new Locale("fi", "FI");

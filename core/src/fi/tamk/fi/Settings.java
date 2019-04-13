@@ -276,6 +276,8 @@ public class Settings {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 game.setLanguage("fi");
+                game.createBundle();
+                game.saveSettings();
                 buttonEn.setChecked(false);
                 buttonFi.setChecked(true);
                 settingsDialog.remove();
@@ -292,6 +294,8 @@ public class Settings {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 game.setLanguage("en");
+                game.createBundle();
+                game.saveSettings();
                 buttonFi.setChecked(false);
                 buttonEn.setChecked(true);
                 settingsDialog.remove();
