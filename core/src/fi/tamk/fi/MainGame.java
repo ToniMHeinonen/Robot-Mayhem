@@ -25,6 +25,7 @@ import java.util.Locale;
 public class MainGame extends Game {
 	private SpriteBatch batch;
 	private I18NBundle localize;
+	private Encryptor E = new Encryptor();
 	private Files files;
 	private Skills skills;
 	private Item items;
@@ -55,21 +56,21 @@ public class MainGame extends Game {
 
 	// Stats
 	// Keys (use these to decrease error chance)
-	private String keyMoney = encrypt("money");
-	private String keyStepCount = encrypt("stepCount");
-	private String keyStepAllCount = encrypt("stepAllCount");
-	private String keyStepBank = encrypt("stepBank");
-	private String keySkill1 = encrypt("skill1");
-	private String keySkill2 = encrypt("skill2");
-	private String keyCurrentBoss = encrypt("currentBoss");
-	private String keyFirstPlayTime = encrypt("firstPlayTime");
-	private String keyPool = encrypt("pool");
-	private String keyPoolMult = encrypt("poolMult");
-	private String keyInventorySize = encrypt("inventorySize");
-	private String keyInventory = encrypt("inventory");
-	private String keyDefeatedBossesSize = encrypt("defeatedBossesSize");
-	private String keyDefeatedBosses = encrypt("defeatedBosses");
-	private String keyName = encrypt("name");
+	private String keyMoney = E.encrypt("money");
+	private String keyStepCount = E.encrypt("stepCount");
+	private String keyStepAllCount = E.encrypt("stepAllCount");
+	private String keyStepBank = E.encrypt("stepBank");
+	private String keySkill1 = E.encrypt("skill1");
+	private String keySkill2 = E.encrypt("skill2");
+	private String keyCurrentBoss = E.encrypt("currentBoss");
+	private String keyFirstPlayTime = E.encrypt("firstPlayTime");
+	private String keyPool = E.encrypt("pool");
+	private String keyPoolMult = E.encrypt("poolMult");
+	private String keyInventorySize = E.encrypt("inventorySize");
+	private String keyInventory = E.encrypt("inventory");
+	private String keyDefeatedBossesSize = E.encrypt("defeatedBossesSize");
+	private String keyDefeatedBosses = E.encrypt("defeatedBosses");
+	private String keyName = E.encrypt("name");
 	// Values
 	private int saveTimerAmount = 3600;
 	private int saveTimer = saveTimerAmount;
@@ -325,7 +326,7 @@ public class MainGame extends Game {
 		settings.clear(); // For testing purposes
 		settings.flush(); // Without flushing, clear does not work in Android
 		musicVol = settings.getFloat(keyMusicVol, 0.8f);
-		language = settings.getString(keyLanguage, "fi");
+		language = settings.getString(keyLanguage, "");
 		difficulty = settings.getString(keyDifficulty, "medium");
     }
 
@@ -346,36 +347,37 @@ public class MainGame extends Game {
 		else saveTimer = saveTimerAmount; saveStats();
 	}
 
-	public String encrypt(String text) {
-		//String text = (String) value;
-		String out = "";
-		char[] chars = text.toCharArray();
-		for (int i = 0; i < chars.length; i++) {
-			char aux = chars[i];
-			aux += (i + 3) * 1;
-			out += aux;
-		}
-		return out;
-	}
-
-	public String decrypt(String text) {
-		String out = "";
-		char[] chars = text.toCharArray();
-		for (int i = 0; i < chars.length; i++) {
-			char aux = chars[i];
-			aux -= (i + 3) * 1;
-			out += aux;
-		}
-		return out;
-	}
-
-
 	public void loadStats() {
 		stats = Gdx.app.getPreferences("Robot_Mayhem_Stats");
 		stats.clear(); // For testing purposes
 		stats.flush(); // Without flushing, clear does not work in Android
-		money = Integer.valueOf(decrypt(stats.getString(keyMoney, encrypt("0"))));
-		stepCount = Float.valueOf(decrypt(stats.getString(keyStepCount, encrypt("0"))));
+
+		SaveAndLoad file = new SaveAndLoad(E, stats);
+		money = file.loadValue(keyMoney, 0);
+		stepCount = Float.valueOf(file.loadValue(keyStepCount, 0));
+		stepAllCount = Float.valueOf(file.loadValue(keyStepAllCount, 0));
+		stepBank = Float.valueOf(file.loadValue(keyStepBank, 0));
+		skill1 = file.loadValue(keySkill1, skills.REPAIR);
+		skill2 = file.loadValue(keySkill2, "");
+		currentBoss = file.loadValue(keyCurrentBoss, bosses.ROOMBOT);
+		firstPlayTime = file.loadValue(keyFirstPlayTime, true);
+		pool = file.loadValue(keyPool, 1);
+		poolMult = file.loadValue(keyPoolMult, 0);
+
+		// Load the size of inventory before loading inventory items
+		inventorySize = file.loadValue(keyInventorySize, 0);
+		for (int i = 0; i < inventorySize; i++) {
+			inventory.add(i, file.loadValue(keyInventory + String.valueOf(i), ""));
+		}
+		// Defeated bosses
+		defeatedBossesSize = file.loadValue(keyDefeatedBossesSize, 0);
+		for (int i = 0; i < defeatedBossesSize; i++) {
+			defeatedBosses.add(i, file.loadValue(keyDefeatedBosses + String.valueOf(i), ""));
+		}
+
+		//money = decrypt(stats.getInteger(keyMoney, encrypt(20)));
+		//money = Integer.valueOf(decrypt(stats.getString(keyMoney, encrypt("0"))));
+		/*stepCount = Float.valueOf(decrypt(stats.getString(keyStepCount, encrypt("0"))));
 		stepAllCount = Float.valueOf(decrypt(stats.getString(keyStepAllCount, encrypt("0"))));
 		stepBank = Float.valueOf(decrypt(stats.getString(keyStepBank, encrypt("0"))));
 		skill1 = decrypt(stats.getString(keySkill1, encrypt(skills.REPAIR)));
@@ -400,9 +402,9 @@ public class MainGame extends Game {
 		for (int i = 0; i < defeatedBossesSize; i++) {
 			defeatedBosses.add(i, decrypt(stats.getString
 					(keyDefeatedBosses + String.valueOf(i), encrypt(""))));
-		}
-		/*money = stats.getInteger(keyMoney, 0);
-		stepCount = stats.getFloat(keyStepCount, 0);
+		}*/
+		//money = stats.getInteger(keyMoney, 0);
+		/*stepCount = stats.getFloat(keyStepCount, 0);
 		stepAllCount = stats.getFloat(keyStepAllCount, 0);
 		stepBank = stats.getFloat(keyStepBank, 0);
 		skill1 = stats.getString(keySkill1, skills.REPAIR);
@@ -425,9 +427,34 @@ public class MainGame extends Game {
 	}
 
 	public void saveStats() {
-		// Encode testing
-		stats.putString(keyMoney, encrypt(Integer.toString(money)));
-		stats.putString(keyStepCount, encrypt(Float.toString(stepCount)));
+		SaveAndLoad file = new SaveAndLoad(E, stats);
+		file.saveValue(keyMoney, money);
+		file.saveValue(keyStepCount, Math.round(stepCount));
+		file.saveValue(keyStepAllCount, Math.round(stepAllCount));
+		file.saveValue(keyStepBank, Math.round(stepBank));
+		file.saveValue(keySkill1, skill1);
+		file.saveValue(keySkill2, skill2);
+		file.saveValue(keyCurrentBoss, currentBoss);
+		file.saveValue(keyFirstPlayTime, firstPlayTime);
+		file.saveValue(keyPool, pool);
+		file.saveValue(keyPoolMult, poolMult);
+
+		// Save inventory's current size on inventorySize key
+		file.saveValue(keyInventorySize, inventory.size());
+		for (int i = 0; i < inventory.size(); i++) {
+			file.saveValue(keyInventory + String.valueOf(i), inventory.get(i));
+		}
+		// Defeated bosses
+		file.saveValue(keyDefeatedBossesSize, defeatedBosses.size());
+		for (int i = 0; i < defeatedBosses.size(); i++) {
+			file.saveValue(keyDefeatedBosses + String.valueOf(i), defeatedBosses.get(i));
+		}
+
+		stats.flush();
+
+		//stats.putInteger(keyMoney, encrypt(money));
+		//stats.putString(keyMoney, encrypt(Integer.toString(money)));
+		/*stats.putString(keyStepCount, encrypt(Float.toString(stepCount)));
 		stats.putString(keyStepAllCount, encrypt(Float.toString(stepAllCount)));
 		stats.putString(keyStepBank, encrypt(Float.toString(stepBank)));
 		stats.putString(keySkill1, encrypt(skill1));
@@ -447,12 +474,12 @@ public class MainGame extends Game {
 		for (int i = 0; i < defeatedBosses.size(); i++) {
 			stats.putString(keyDefeatedBosses + String.valueOf(i),
 					encrypt(defeatedBosses.get(i)));
-		}
-		/*stats.putInteger(keyMoney, money);
-		stats.putFloat(keyStepCount, stepCount);
+		}*/
+		//stats.putInteger(keyMoney, money);
+		/*stats.putFloat(keyStepCount, stepCount);
 		stats.putFloat(keyStepAllCount, stepAllCount);
-		stats.putFloat(keyStepBank, stepBank);*/
-		/*stats.putString(keySkill1, skill1);
+		stats.putFloat(keyStepBank, stepBank);
+		stats.putString(keySkill1, skill1);
 		stats.putString(keySkill2, skill2);
 		stats.putString(keyCurrentBoss, currentBoss);
 		stats.putBoolean(keyFirstPlayTime, firstPlayTime);
@@ -469,8 +496,6 @@ public class MainGame extends Game {
 		for (int i = 0; i < defeatedBosses.size(); i++) {
 			stats.putString(keyDefeatedBosses + String.valueOf(i), defeatedBosses.get(i));
 		}*/
-
-		stats.flush();
 	}
 
 	public void clearStats() {
