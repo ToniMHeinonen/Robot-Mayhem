@@ -46,10 +46,12 @@ public class MainGame extends Game {
 	// Keys
 	private String keyMusicVol = "musicVol";
 	private String keyLanguage = "language";
+	private String keyDifficulty = "difficulty";
 	private Preferences settings;
 	private float musicVol;
 	private String language;
     private boolean clickedOpenSettings = false;
+    private String difficulty;
 
 	// Stats
 	// Keys (use these to decrease error chance)
@@ -293,11 +295,18 @@ public class MainGame extends Game {
 		settings.flush(); // Without flushing, clear does not work in Android
 		musicVol = settings.getFloat(keyMusicVol, 0.8f);
 		language = settings.getString(keyLanguage, "");
+		difficulty = settings.getString(keyDifficulty, "medium");
     }
 
     public void saveSettings() {
 	    settings.putFloat(keyMusicVol, musicVol);
 	    settings.putString(keyLanguage, language);
+	    settings.putString(keyDifficulty, difficulty);
+	    settings.flush();
+    }
+
+    public void clearSettings() {
+	    settings.clear();
 	    settings.flush();
     }
 
@@ -782,5 +791,13 @@ public class MainGame extends Game {
 
 	public void setLanguage(String language) {
 	    this.language = language;
+    }
+
+    public void setDifficulty(String difficulty) {
+	    this.difficulty = difficulty;
+    }
+
+    public String getDifficulty() {
+        return difficulty;
     }
 }

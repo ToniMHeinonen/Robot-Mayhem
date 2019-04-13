@@ -30,6 +30,7 @@ public class Settings {
     private ArrayList<String> inventory;
     private UtilDialog dialog;
     private Skills skills;
+    private String difficulty;
 
     private float posX;
     private float onScreenY;
@@ -49,7 +50,8 @@ public class Settings {
 
     // Difficulty
     private Label difficultyLabel;
-    private String[] difficulties = new String[] {"0", "1", "2"};
+    private String[] difficulties = new String[] {"easy", "medium", "hard"};
+    private ImageButton[] difficultyButtons = new ImageButton[3];
     private int space = 310;
 
     // Quit and Reset
@@ -84,6 +86,7 @@ public class Settings {
         dialog = game.getDialog();
         inventory = game.getInventory();
         skills = game.getSkills();
+        difficulty = game.getDifficulty();
 
         setValues();
         createSettingsDialog();
@@ -172,12 +175,28 @@ public class Settings {
     }
 
     private void createDifficultyButtons() {
-        for (int i = 0; i < difficulties.length; i++) {
-            ImageButton difficulty = new ImageButton(finalSkin, "diff" + difficulties[i]);
-            difficulty.setPosition(musicVolSlider.getX() + 15 + i* space,
+        for (int i = 0; i < difficultyButtons.length; i++) {
+            final int difficultyCounter = i;
+            difficultyButtons[i] = new ImageButton(finalSkin, difficulties[i]);
+            difficultyButtons[i].setPosition(musicVolSlider.getX() + 15 + i* space,
                     soundVolSlider.getY() - 125);
-            settingsDialog.addActor(difficulty);
+            if (difficulty.equals(difficulties[i])) {
+                difficultyButtons[i].setChecked(true);
+            }
+            difficultyButtons[i].addListener(new ClickListener(){
+                int i = difficultyCounter;
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    for (ImageButton button : difficultyButtons) {
+                        button.setChecked(false);
+                    }
+                    difficultyButtons[i].setChecked(true);
+                    game.setDifficulty(difficulties[i]);
+                }
+            });
+            settingsDialog.addActor(difficultyButtons[i]);
         }
+
         difficultyLabel = new Label(localize.get("difficulty"), finalSkin);
         difficultyLabel.setPosition(musicVolSlider.getX() - 365,
                 soundVolLabel.getY() - 120);
@@ -243,6 +262,7 @@ public class Settings {
                 inventory.clear();
                 game.setSkill1(skills.REPAIR);
                 game.setSkill2("");
+                game.clearSettings();
                 settingsDialog.remove();
                 game.switchToRoomGame();
             }
