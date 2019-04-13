@@ -2,6 +2,11 @@ package fi.tamk.fi;
 
 public class Encryptor {
 
+    /**
+     * Encrypts text.
+     * @param text given text
+     * @return encrypted String
+     */
     public String encrypt(String text) {
         String out = "";
         char[] chars = text.toCharArray();
@@ -13,27 +18,41 @@ public class Encryptor {
         return out;
     }
 
-    public Integer encrypt(Integer value) {
+    /**
+     * Changes Integer to String and encrypts it.
+     * @param value given value
+     * @return encrypted String
+     */
+    public String encrypt(Integer value) {
         String str = String.valueOf(value);
-        String encrypted = encrypt(str);
-
-        return Integer.valueOf(encrypted);
+        return encrypt(str);
     }
 
-    public Float encrypt(Float value) {
+    /**
+     * Changes Float to String and encrypts it.
+     * @param value given value
+     * @return encrypted String
+     */
+    public String encrypt(Float value) {
         String str = String.valueOf(value);
-        String encrypted = encrypt(str);
-
-        return Float.valueOf(encrypted);
+        return encrypt(str);
     }
 
-    public Boolean encrypt(Boolean value) {
+    /**
+     * Changes Boolean to String and encrypts it.
+     * @param value given value
+     * @return encrypted String
+     */
+    public String encrypt(Boolean value) {
         String str = String.valueOf(value);
-        String encrypted = encrypt(str);
-
-        return Boolean.valueOf(encrypted);
+        return encrypt(str);
     }
 
+    /**
+     * Decrypts String.
+     * @param text encrypted text
+     * @return decrypted String
+     */
     public String decrypt(String text) {
         String out = "";
         char[] chars = text.toCharArray();
@@ -43,29 +62,5 @@ public class Encryptor {
             out += aux;
         }
         return out;
-    }
-
-    public Integer decrypt(Integer value) {
-        String str = String.valueOf(value);
-        String decrypted = decrypt(str);
-
-        return Integer.valueOf(decrypted);
-    }
-
-    public Float decrypt(Float value) {
-        System.out.println(value);
-        String str = String.valueOf(value);
-        System.out.println(str);
-        String decrypted = decrypt(str);
-        System.out.println(decrypted);
-
-        return Float.valueOf(decrypted);
-    }
-
-    public Boolean decrypt(Boolean value) {
-        String str = String.valueOf(value);
-        String decrypted = decrypt(str);
-
-        return Boolean.valueOf(decrypted);
     }
 }

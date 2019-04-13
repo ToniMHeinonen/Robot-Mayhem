@@ -74,7 +74,8 @@ public class MainGame extends Game {
 	// Values
 	private int saveTimerAmount = 3600;
 	private int saveTimer = saveTimerAmount;
-	private Preferences stats;
+	private Preferences prefsStats;
+	private SaveAndLoad stats;
 	private float stepCount, stepBank, stepAllCount;
 	private int pool, poolMult, money;
 	private String skill1, skill2, currentBoss, playerName;
@@ -130,6 +131,7 @@ public class MainGame extends Game {
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, pixelWidth, pixelHeight);
+		initStats();
 		loadStats();
 
 		createSkinAndStage();
@@ -347,160 +349,79 @@ public class MainGame extends Game {
 		else saveTimer = saveTimerAmount; saveStats();
 	}
 
-	public void loadStats() {
-		stats = Gdx.app.getPreferences("Robot_Mayhem_Stats");
-		stats.clear(); // For testing purposes
-		stats.flush(); // Without flushing, clear does not work in Android
-
-		SaveAndLoad file = new SaveAndLoad(E, stats);
-		money = file.loadValue(keyMoney, 0);
-		stepCount = Float.valueOf(file.loadValue(keyStepCount, 0));
-		stepAllCount = Float.valueOf(file.loadValue(keyStepAllCount, 0));
-		stepBank = Float.valueOf(file.loadValue(keyStepBank, 0));
-		skill1 = file.loadValue(keySkill1, skills.REPAIR);
-		skill2 = file.loadValue(keySkill2, "");
-		currentBoss = file.loadValue(keyCurrentBoss, bosses.ROOMBOT);
-		firstPlayTime = file.loadValue(keyFirstPlayTime, true);
-		pool = file.loadValue(keyPool, 1);
-		poolMult = file.loadValue(keyPoolMult, 0);
-
-		// Load the size of inventory before loading inventory items
-		inventorySize = file.loadValue(keyInventorySize, 0);
-		for (int i = 0; i < inventorySize; i++) {
-			inventory.add(i, file.loadValue(keyInventory + String.valueOf(i), ""));
-		}
-		// Defeated bosses
-		defeatedBossesSize = file.loadValue(keyDefeatedBossesSize, 0);
-		for (int i = 0; i < defeatedBossesSize; i++) {
-			defeatedBosses.add(i, file.loadValue(keyDefeatedBosses + String.valueOf(i), ""));
-		}
-
-		//money = decrypt(stats.getInteger(keyMoney, encrypt(20)));
-		//money = Integer.valueOf(decrypt(stats.getString(keyMoney, encrypt("0"))));
-		/*stepCount = Float.valueOf(decrypt(stats.getString(keyStepCount, encrypt("0"))));
-		stepAllCount = Float.valueOf(decrypt(stats.getString(keyStepAllCount, encrypt("0"))));
-		stepBank = Float.valueOf(decrypt(stats.getString(keyStepBank, encrypt("0"))));
-		skill1 = decrypt(stats.getString(keySkill1, encrypt(skills.REPAIR)));
-		skill2 = decrypt(stats.getString(keySkill2, encrypt("")));
-		currentBoss = decrypt(stats.getString(keyCurrentBoss, encrypt(bosses.ROOMBOT)));
-		firstPlayTime = Boolean.valueOf(decrypt(stats.getString
-				(keyFirstPlayTime, encrypt("true"))));
-		pool = Integer.valueOf(decrypt(stats.getString(keyPool, encrypt("1"))));
-		poolMult = Integer.valueOf(decrypt(stats.getString(keyPoolMult, encrypt("0"))));
-		playerName = decrypt(stats.getString(keyName, encrypt("")));
-
-		// Load the size of inventory before loading inventory items
-		inventorySize = Integer.valueOf(decrypt(stats.getString
-				(keyInventorySize, encrypt("0"))));
-		for (int i = 0; i < inventorySize; i++) {
-			inventory.add(i, decrypt(stats.getString
-					(keyInventory + String.valueOf(i), encrypt(""))));
-		}
-		// Defeated bosses
-		defeatedBossesSize = Integer.valueOf(decrypt(stats.getString
-				(keyDefeatedBossesSize, encrypt("0"))));
-		for (int i = 0; i < defeatedBossesSize; i++) {
-			defeatedBosses.add(i, decrypt(stats.getString
-					(keyDefeatedBosses + String.valueOf(i), encrypt(""))));
-		}*/
-		//money = stats.getInteger(keyMoney, 0);
-		/*stepCount = stats.getFloat(keyStepCount, 0);
-		stepAllCount = stats.getFloat(keyStepAllCount, 0);
-		stepBank = stats.getFloat(keyStepBank, 0);
-		skill1 = stats.getString(keySkill1, skills.REPAIR);
-		skill2 = stats.getString(keySkill2, "");
-		currentBoss = stats.getString(keyCurrentBoss, bosses.ROOMBOT);
-		firstPlayTime = stats.getBoolean(keyFirstPlayTime, true);
-		pool = stats.getInteger(keyPool, 1);
-		poolMult = stats.getInteger(keyPoolMult, 0);
-
-		// Load the size of inventory before loading inventory items
-		inventorySize = stats.getInteger(keyInventorySize, 0);
-		for (int i = 0; i < inventorySize; i++) {
-			inventory.add(i, stats.getString(keyInventory + String.valueOf(i), ""));
-		}
-		// Defeated bosses
-		defeatedBossesSize = stats.getInteger(keyDefeatedBossesSize, 0);
-		for (int i = 0; i < defeatedBossesSize; i++) {
-			defeatedBosses.add(i, stats.getString(keyDefeatedBosses + String.valueOf(i), ""));
-		}*/
+	/**
+	 * Load correct preferences for statistics and initialize SaveAndLoad class for handling
+	 * loading and saving plus encryption and decryption of file.
+	 */
+	private void initStats() {
+		prefsStats = Gdx.app.getPreferences("Robot_Mayhem_Stats");
+		prefsStats.clear(); // For testing purposes
+		prefsStats.flush(); // Without flushing, clear does not work in Android
+		stats = new SaveAndLoad(E, prefsStats);
 	}
 
+	/**
+	 * Load statistics.
+	 */
+	public void loadStats() {
+		// NOTE: Remember to write 0f instead of 0 to float defValues, otherwise loading crashes
+		money = stats.loadValue(keyMoney, 20);
+		stepCount = stats.loadValue(keyStepCount, 0f);
+		stepAllCount = stats.loadValue(keyStepAllCount, 0f);
+		stepBank = stats.loadValue(keyStepBank, 0f);
+		skill1 = stats.loadValue(keySkill1, skills.REPAIR);
+		skill2 = stats.loadValue(keySkill2, "");
+		currentBoss = stats.loadValue(keyCurrentBoss, bosses.ROOMBOT);
+		firstPlayTime = stats.loadValue(keyFirstPlayTime, true);
+		pool = stats.loadValue(keyPool, 1);
+		poolMult = stats.loadValue(keyPoolMult, 0);
+		playerName = stats.loadValue(keyName, "");
+
+		// Load the size of inventory before loading inventory items
+		inventorySize = stats.loadValue(keyInventorySize, 0);
+		for (int i = 0; i < inventorySize; i++) {
+			inventory.add(i, stats.loadValue(keyInventory + String.valueOf(i), ""));
+		}
+		// Defeated bosses
+		defeatedBossesSize = stats.loadValue(keyDefeatedBossesSize, 0);
+		for (int i = 0; i < defeatedBossesSize; i++) {
+			defeatedBosses.add(i, stats.loadValue(keyDefeatedBosses + String.valueOf(i), ""));
+		}
+	}
+
+	/**
+	 * Save statistics.
+	 */
 	public void saveStats() {
-		SaveAndLoad file = new SaveAndLoad(E, stats);
-		file.saveValue(keyMoney, money);
-		file.saveValue(keyStepCount, Math.round(stepCount));
-		file.saveValue(keyStepAllCount, Math.round(stepAllCount));
-		file.saveValue(keyStepBank, Math.round(stepBank));
-		file.saveValue(keySkill1, skill1);
-		file.saveValue(keySkill2, skill2);
-		file.saveValue(keyCurrentBoss, currentBoss);
-		file.saveValue(keyFirstPlayTime, firstPlayTime);
-		file.saveValue(keyPool, pool);
-		file.saveValue(keyPoolMult, poolMult);
+		stats.saveValue(keyMoney, money);
+		stats.saveValue(keyStepCount, stepCount);
+		stats.saveValue(keyStepAllCount, stepAllCount);
+		stats.saveValue(keyStepBank, stepBank);
+		stats.saveValue(keySkill1, skill1);
+		stats.saveValue(keySkill2, skill2);
+		stats.saveValue(keyCurrentBoss, currentBoss);
+		stats.saveValue(keyFirstPlayTime, firstPlayTime);
+		stats.saveValue(keyPool, pool);
+		stats.saveValue(keyPoolMult, poolMult);
+		stats.saveValue(keyName, playerName);
 
 		// Save inventory's current size on inventorySize key
-		file.saveValue(keyInventorySize, inventory.size());
+		stats.saveValue(keyInventorySize, inventory.size());
 		for (int i = 0; i < inventory.size(); i++) {
-			file.saveValue(keyInventory + String.valueOf(i), inventory.get(i));
+			stats.saveValue(keyInventory + String.valueOf(i), inventory.get(i));
 		}
 		// Defeated bosses
-		file.saveValue(keyDefeatedBossesSize, defeatedBosses.size());
+		stats.saveValue(keyDefeatedBossesSize, defeatedBosses.size());
 		for (int i = 0; i < defeatedBosses.size(); i++) {
-			file.saveValue(keyDefeatedBosses + String.valueOf(i), defeatedBosses.get(i));
+			stats.saveValue(keyDefeatedBosses + String.valueOf(i), defeatedBosses.get(i));
 		}
 
-		stats.flush();
-
-		//stats.putInteger(keyMoney, encrypt(money));
-		//stats.putString(keyMoney, encrypt(Integer.toString(money)));
-		/*stats.putString(keyStepCount, encrypt(Float.toString(stepCount)));
-		stats.putString(keyStepAllCount, encrypt(Float.toString(stepAllCount)));
-		stats.putString(keyStepBank, encrypt(Float.toString(stepBank)));
-		stats.putString(keySkill1, encrypt(skill1));
-		stats.putString(keySkill2, encrypt(skill2));
-		stats.putString(keyCurrentBoss, encrypt(currentBoss));
-		stats.putString(keyFirstPlayTime, encrypt(Boolean.toString(firstPlayTime)));
-		stats.putString(keyPool, encrypt(Integer.toString(pool)));
-		stats.putString(keyPoolMult, encrypt(Integer.toString(poolMult)));
-		stats.putString(keyName, encrypt(playerName));
-		// Save inventory's current size on inventorySize key
-		stats.putString(keyInventorySize, encrypt(Integer.toString(inventory.size())));
-		for (int i = 0; i < inventory.size(); i++) {
-			stats.putString(keyInventory + String.valueOf(i), encrypt(inventory.get(i)));
-		}
-		// Defeated bosses
-		stats.putString(keyDefeatedBossesSize, encrypt(Integer.toString(defeatedBosses.size())));
-		for (int i = 0; i < defeatedBosses.size(); i++) {
-			stats.putString(keyDefeatedBosses + String.valueOf(i),
-					encrypt(defeatedBosses.get(i)));
-		}*/
-		//stats.putInteger(keyMoney, money);
-		/*stats.putFloat(keyStepCount, stepCount);
-		stats.putFloat(keyStepAllCount, stepAllCount);
-		stats.putFloat(keyStepBank, stepBank);
-		stats.putString(keySkill1, skill1);
-		stats.putString(keySkill2, skill2);
-		stats.putString(keyCurrentBoss, currentBoss);
-		stats.putBoolean(keyFirstPlayTime, firstPlayTime);
-		stats.putInteger(keyPool, pool);
-		stats.putInteger(keyPoolMult, poolMult);
-
-		// Save inventory's current size on inventorySize key
-		stats.putInteger(keyInventorySize, inventory.size());
-		for (int i = 0; i < inventory.size(); i++) {
-			stats.putString(keyInventory + String.valueOf(i), inventory.get(i));
-		}
-		// Defeated bosses
-		stats.putInteger(keyDefeatedBossesSize, defeatedBosses.size());
-		for (int i = 0; i < defeatedBosses.size(); i++) {
-			stats.putString(keyDefeatedBosses + String.valueOf(i), defeatedBosses.get(i));
-		}*/
+		prefsStats.flush();
 	}
 
 	public void clearStats() {
-	    stats.clear();
-	    stats.flush();
+	    prefsStats.clear();
+	    prefsStats.flush();
     }
 
 	// Methods for name start.
