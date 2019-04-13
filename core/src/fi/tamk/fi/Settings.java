@@ -269,9 +269,35 @@ public class Settings {
     private void createLanguageButtons() {
         buttonFi = new ImageButton(finalSkin, "finnish");
         buttonFi.setPosition(945, 240);
+        if (lan.equals("fi")) {
+            buttonFi.setChecked(true);
+        }
+        buttonFi.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                game.setLanguage("fi");
+                buttonEn.setChecked(false);
+                buttonFi.setChecked(true);
+                settingsDialog.remove();
+                Settings settings = new Settings(game, room);
+            }
+        });
 
         buttonEn = new ImageButton(finalSkin, "english");
         buttonEn.setPosition(buttonFi.getX(), buttonFi.getY() - 120);
+        if (lan.equals("en")) {
+            buttonEn.setChecked(true);
+        }
+        buttonEn.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                game.setLanguage("en");
+                buttonFi.setChecked(false);
+                buttonEn.setChecked(true);
+                settingsDialog.remove();
+                Settings settings = new Settings(game, room);
+            }
+        });
 
         settingsDialog.addActor(buttonFi);
         settingsDialog.addActor(buttonEn);

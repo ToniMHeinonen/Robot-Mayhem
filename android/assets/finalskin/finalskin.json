@@ -40,10 +40,12 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
 	english: {
 		up: lang_en1
 		down: lang_en2
+		checked: lang_en2
 	}
 	finnish: {
 		up: lang_fi1
 		down: lang_fi2
+		checked: lang_fi2
 	}
 	diff0: {
 		up: diff1_1
