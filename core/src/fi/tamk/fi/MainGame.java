@@ -278,15 +278,20 @@ public class MainGame extends Game {
 		Locale locale;
 		// If language is not either, then the game gets software's default language
 		if (language.equals("fi")) locale = new Locale("fi", "FI");
-		else if (language.equals("en")) locale = new Locale("en", "US");
+		else if (language.equals("en")) locale = null;
 		else locale = Locale.getDefault();
 
-		localize = I18NBundle.createBundle(Gdx.files.internal("MyBundle"),
-				locale,"ISO-8859-1");
-
-		// After initializing localize, make language variable the chosen one
-		if (locale.getLanguage().equals("en")) language = "en";
-		else language = "fi";
+		if (locale != null) {
+			localize = I18NBundle.createBundle(Gdx.files.internal("MyBundle"),
+					locale, "ISO-8859-1");
+			// After initializing localize, make language variable the chosen one
+			if (locale.getLanguage().equals("fi")) language = "fi";
+			else language = "en";
+		} else {
+			localize = I18NBundle.createBundle(Gdx.files.internal("MyBundle"),
+					"ISO-8859-1");
+			language = "en";
+		}
 	}
 
     public void loadSettings() {
@@ -343,7 +348,7 @@ public class MainGame extends Game {
 		stats = Gdx.app.getPreferences("Robot_Mayhem_Stats");
 		stats.clear(); // For testing purposes
 		stats.flush(); // Without flushing, clear does not work in Android
-		money = Integer.valueOf(decrypt(stats.getString(keyMoney, encrypt("30"))));
+		money = Integer.valueOf(decrypt(stats.getString(keyMoney, encrypt("0"))));
 		stepCount = Float.valueOf(decrypt(stats.getString(keyStepCount, encrypt("0"))));
 		stepAllCount = Float.valueOf(decrypt(stats.getString(keyStepAllCount, encrypt("0"))));
 		stepBank = Float.valueOf(decrypt(stats.getString(keyStepBank, encrypt("0"))));
