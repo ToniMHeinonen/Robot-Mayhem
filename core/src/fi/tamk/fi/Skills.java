@@ -41,6 +41,7 @@ public class Skills {
             SHOCK, FIRE, SUCTION, DUST};
 
     private final int defCrit = 10; // Default crit chance percent
+    private final int defMiss = 5; // Default miss chance percent
 
     private Animation<TextureRegion> physicalHit;
 
@@ -119,7 +120,7 @@ public class Skills {
         map.put(description, "attackDesc");
         map.put(damage, 1.0);
         map.put(critChance, defCrit);
-        map.put(missChance, 0);
+        map.put(missChance, defMiss);
         map.put(damageOverTime, 0.0);
         map.put(damageOverTimeTurns, 0);
         map.put(dotPurePercent, false);
@@ -187,7 +188,7 @@ public class Skills {
         map.put(description, "shockDesc");
         map.put(damage, 3.0);
         map.put(critChance, defCrit);
-        map.put(missChance, 0);
+        map.put(missChance, defMiss);
         map.put(damageOverTime, 0.0);
         map.put(damageOverTimeTurns, 0);
         map.put(dotPurePercent, false);
@@ -221,7 +222,7 @@ public class Skills {
         map.put(description, "suctionDesc");
         map.put(damage, 1.5);
         map.put(critChance, defCrit + 10);
-        map.put(missChance, 0);
+        map.put(missChance, defMiss);
         map.put(damageOverTime, 0.0);
         map.put(damageOverTimeTurns, 0);
         map.put(dotPurePercent, false);

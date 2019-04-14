@@ -46,8 +46,8 @@ public class Files {
     public final Skin skin, finalSkin;
 
     // Music
-    public final Music[] allMusic;
-    public final Music musMainTheme, musBossRobo, musBossFuturistic;
+    public final Music[] allBossMusic;
+    public final Music musMainTheme, musBossRobo, musBossFuturistic, musBossSankari;
 
     // Sound effects fight general
     public final Sound sndHealOverTime, sndFastHeal, sndLoseToBoss, sndPlayerMiss,
@@ -163,8 +163,10 @@ public class Files {
         musMainTheme = manager.get("music/mainTheme.mp3");
         musBossRobo = manager.get("music/bossRobo.mp3");
         musBossFuturistic = manager.get("music/bossFuturistic.mp3");
+        musBossSankari = manager.get("music/bossSankari.mp3");
+
         // Remember to add all new music here
-        allMusic = new Music[] {musMainTheme, musBossRobo, musBossFuturistic};
+        allBossMusic = new Music[] {musBossRobo, musBossFuturistic, musBossSankari};
 
         /*
         Sound effects
@@ -254,6 +256,7 @@ public class Files {
         manager.load("music/mainTheme.mp3", Music.class);
         manager.load("music/bossRobo.mp3", Music.class);
         manager.load("music/bossFuturistic.mp3", Music.class);
+        manager.load("music/bossSankari.mp3", Music.class);
 
         /*
         Sound effects
