@@ -44,6 +44,7 @@ public class Hacking {
     private int pool3InnerHackShieldAmount;
     private FloatArray innerPosX;
     private FloatArray innerPosY;
+    private float innerShieldRadius = 0.4f;
     private Array<DistanceJointDef> innerDistanceJointDefs = new Array<DistanceJointDef>();
     private float ipos1x, ipos1y, ipos2x, ipos2y, ipos3x, ipos3y, ipos4x, ipos4y, ipos5x, ipos5y,
     ipos6x, ipos6y, ipos7x, ipos7y;
@@ -51,6 +52,7 @@ public class Hacking {
 
     private Texture shieldTexture;
     private Texture bulletTexture;
+    private Texture innerShieldTexture;
 
     private final float WORLD_WIDTH = 19.20f;
     private final float WORLD_HEIGHT = 10.80f;
@@ -145,7 +147,7 @@ public class Hacking {
     public void update() {
         batch.setProjectionMatrix(hackingCamera.combined);
         doPhysicsStep(Gdx.graphics.getDeltaTime());
-        debugRenderer.render(world, hackingCamera.combined);
+        //debugRenderer.render(world, hackingCamera.combined);
         deleteBodies();
         batch.begin();
         drawBodies();
@@ -156,12 +158,23 @@ public class Hacking {
     }
 
     private void createConstants() {
-        shieldTexture = new Texture("texture/hacking/shield_small.png");
+        //this.pool = game.getPool();
+        //this.poolMult = game.getPoolMult();
+
+        // Change these to test the effects of different pools/poolmultipliers.
+        pool = 1;
+        poolMult = 0;
+        if (pool == 1) {
+            shieldTexture = new Texture("texture/hacking/shield_medium.png");
+        } else {
+            shieldTexture = new Texture("texture/hacking/shield_small.png");
+        }
+        innerShieldTexture = new Texture("texture/hacking/shield_medium.png");
         bulletTexture = new Texture("texture/hacking/bullet.png");
         hackingCamera.setToOrtho(false, WORLD_WIDTH, WORLD_HEIGHT);
         world = new World(new Vector2(0, 0), true);
         enemyBody = world.createBody(getDefinitionOfEnemyBody());
-        enemyBody.createFixture(getShieldFixtureDefinition());
+        enemyBody.createFixture(getShieldFixtureDefinition(0.5f));
         enemyBody.setUserData(BodyData.ENEMY);
         debugRenderer = new Box2DDebugRenderer();
         center = enemyBody.getPosition();
@@ -173,12 +186,6 @@ public class Hacking {
         this.pool2HackShieldAmount = game.getPool2HackShieldAmount();
         this.pool3HackShieldAmount = game.getPool3HackShieldAmount();
         this.pool3InnerHackShieldAmount = game.getPool3InnerHackShieldAmount();
-        //this.pool = game.getPool();
-        //this.poolMult = game.getPoolMult();
-
-        // Change these to test the effects of different pools/poolmultipliers.
-        pool = 2;
-        poolMult = 0;
     }
 
     /*
@@ -204,7 +211,7 @@ public class Hacking {
         if (pool == 1) {
             shieldLength = 1.9f;
         } else {
-            shieldLength = 3f;
+            shieldLength = 2.8f;
         }
 
         // These may have to be adjusted a bit, if we are going to change shieldLength.
@@ -327,7 +334,7 @@ public class Hacking {
         for (int i = 0; i < hackShieldAmount; i++) {
             myBodyDef.position.set(hackPosX.get(i), hackPosY.get(i));
             shieldBody = world.createBody(myBodyDef);
-            shieldBody.createFixture(getShieldFixtureDefinition());
+            shieldBody.createFixture(getShieldFixtureDefinition(shieldRadius));
             shieldBody.setUserData(BodyData.SHIELD);
             shieldBodies.add(shieldBody);
         }
@@ -340,7 +347,7 @@ public class Hacking {
             for (int i = 0; i < innerHackShieldAmount; i++) {
                 innerBodyDef.position.set(innerPosX.get(i), innerPosY.get(i));
                 innerBody = world.createBody(innerBodyDef);
-                innerBody.createFixture(getShieldFixtureDefinition());
+                innerBody.createFixture(getShieldFixtureDefinition(innerShieldRadius));
                 innerBody.setUserData(INNERSHIELD);
                 innerBodyShields.add(innerBody);
             }
@@ -366,7 +373,7 @@ public class Hacking {
         if (pool == 3) {
             DistanceJointDef innerDistanceJointDef = new DistanceJointDef();
             innerDistanceJointDef.bodyB = enemyBody;
-            innerDistanceJointDef.length = 2f;
+            innerDistanceJointDef.length = 1.9f;
             innerDistanceJointDef.frequencyHz = 3;
             innerDistanceJointDef.dampingRatio = 0.1f;
             for (int i = 0; i < innerHackShieldAmount; i++) {
@@ -609,13 +616,13 @@ public class Hacking {
         }
     }
 
-    private FixtureDef getShieldFixtureDefinition() {
+    private FixtureDef getShieldFixtureDefinition(float r) {
         FixtureDef shieldFixtureDef = new FixtureDef();
         shieldFixtureDef.density = 0f;
         shieldFixtureDef.restitution = 0f;
         shieldFixtureDef.friction = 0f;
         CircleShape circleshape = new CircleShape();
-        circleshape.setRadius(shieldRadius);
+        circleshape.setRadius(r);
         shieldFixtureDef.shape = circleshape;
         return shieldFixtureDef;
     }
@@ -710,20 +717,20 @@ public class Hacking {
         }
         for (Body body : innerBodyShields) {
             if (body.getUserData() != null) {
-                batch.draw(shieldTexture,
-                        body.getPosition().x - shieldRadius,
-                        body.getPosition().y - shieldRadius,
-                        shieldRadius, // originX
-                        shieldRadius, // originY
-                        shieldRadius * 2, // width
-                        shieldRadius * 2, // height
+                batch.draw(innerShieldTexture,
+                        body.getPosition().x - innerShieldRadius,
+                        body.getPosition().y - innerShieldRadius,
+                        innerShieldRadius, // originX
+                        innerShieldRadius, // originY
+                        innerShieldRadius * 2, // width
+                        innerShieldRadius * 2, // height
                         1.0f, // scaleX
                         1.0f, // scaleY
                         body.getTransform().getRotation() * MathUtils.radiansToDegrees,
                         0, // Start drawing from x = 0
                         0, // Start drawing from y = 0
-                        shieldTexture.getWidth(), // End drawing x
-                        shieldTexture.getHeight(), // End drawing y
+                        innerShieldTexture.getWidth(), // End drawing x
+                        innerShieldTexture.getHeight(), // End drawing y
                         false, // flipX
                         false); // flipY
             }
