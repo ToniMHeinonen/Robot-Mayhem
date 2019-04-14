@@ -86,9 +86,9 @@ public class MainGame extends Game {
 	private String skill1, skill2, currentBoss, playerName;
 	private boolean firstPlayTime;
 	// Stat arrays
-	private ArrayList<String> inventory = new ArrayList<String>();
+	private ArrayList<String> inventory;
 	private int inventorySize; // Needed for loading correct amount of array items
-	private ArrayList<String> defeatedBosses = new ArrayList<String>();
+	private ArrayList<String> defeatedBosses;
 	private int defeatedBossesSize;
 
 	// Stepmeter in RoomGame
@@ -123,6 +123,8 @@ public class MainGame extends Game {
     private final int pool2HackShieldAmount = 15;
     private final int pool3HackShieldAmount = 15;
     private final int pool3InnerHackShieldAmount = 7;
+
+    private boolean resetting;
 
 	@Override
 	public void create () {
@@ -170,8 +172,25 @@ public class MainGame extends Game {
 		progBarAtlas.dispose();
 		progBarSkin.dispose();
 		files.manager.dispose();
-		saveStats();
-		saveSettings();
+		if (resetting) resetting = false;
+		else {
+			saveStats();
+			saveSettings();
+		}
+	}
+
+	public void restartGame() {
+		dispose();
+		create();
+	}
+
+	public void resetGame() {
+		resetting = true;
+		settings.clear();
+		settings.flush();
+		prefsStats.clear();
+		prefsStats.flush();
+		restartGame();
 	}
 
 	boolean haveWeChangedTheRoom = false;
@@ -347,11 +366,7 @@ public class MainGame extends Game {
 		language = "fi";
 		saveSettings();
 		saveStats();
-		// Init these again to change the languages
-		skills = new Skills(this);
-		items = new Item(this);
-		bosses = new Bosses(this);
-		loadStats();
+		restartGame();
 	}
 
 	public void languageToENG() {
@@ -360,16 +375,13 @@ public class MainGame extends Game {
 		language = "en";
 		saveSettings();
 		saveStats();
-		skills = new Skills(this);
-		items = new Item(this);
-		bosses = new Bosses(this);
-		loadStats();
+		restartGame();
 	}
 
     public void loadSettings() {
 		settings = Gdx.app.getPreferences("Robot_Mayhem_Settings");
-		settings.clear(); // For testing purposes
-		settings.flush(); // Without flushing, clear does not work in Android
+		//settings.clear(); // For testing purposes
+		//settings.flush(); // Without flushing, clear does not work in Android
 		musicVol = settings.getFloat(keyMusicVol, 0.8f);
 		soundVol = settings.getFloat(keySoundVol, 0.8f);
 		language = settings.getString(keyLanguage, "");
@@ -384,11 +396,6 @@ public class MainGame extends Game {
 	    settings.flush();
     }
 
-    public void clearSettings() {
-	    settings.clear();
-	    settings.flush();
-    }
-
     public void controlSaveTimer() {
 		if (saveTimer > 0) saveTimer--;
 		else saveTimer = saveTimerAmount; saveStats();
@@ -399,9 +406,11 @@ public class MainGame extends Game {
 	 * loading and saving plus encryption and decryption of file.
 	 */
 	private void initStats() {
+		inventory = new ArrayList<String>();
+		defeatedBosses = new ArrayList<String>();
 		prefsStats = Gdx.app.getPreferences("Robot_Mayhem_Stats");
-		prefsStats.clear(); // For testing purposes
-		prefsStats.flush(); // Without flushing, clear does not work in Android
+		//prefsStats.clear(); // For testing purposes
+		//prefsStats.flush(); // Without flushing, clear does not work in Android
 		stats = new SaveAndLoad(E, prefsStats);
 	}
 
@@ -463,11 +472,6 @@ public class MainGame extends Game {
 
 		prefsStats.flush();
 	}
-
-	public void clearStats() {
-	    prefsStats.clear();
-	    prefsStats.flush();
-    }
 
 	// Methods for name start.
 	public class MyTextInputListener implements Input.TextInputListener {

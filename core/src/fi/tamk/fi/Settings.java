@@ -263,25 +263,7 @@ public class Settings {
         btnYes.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                game.clearStats();
-                game.loadStats();
-                /*
-                I was wrong, it is not enough that you clear stats and move to room RoomGame. You
-                also need to reset MainGame. So the best way is that if you find a way how to
-                restart the whole game after clearing stats. Currently for example milestone is not
-                reseted and there could be a lot more values which are not reseted using this way.
-
-                So all you need to do in here is:
-                game.clearStats();
-                game.clearSettings();
-                game.restart??? (I have no idea how to restart the game...)
-                 */
-                inventory.clear();
-                game.setSkill1(skills.REPAIR);
-                game.setSkill2("");
-                game.clearSettings();
-                settingsDialog.remove();
-                game.switchToRoomGame();
+                game.resetGame();
             }
         });
         btnNo.addListener(new ClickListener(){
@@ -337,11 +319,10 @@ public class Settings {
         buttonFi.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                game.languageToFIN();
-                buttonEn.setChecked(false);
+                /*buttonEn.setChecked(false);
                 buttonFi.setChecked(true);
-                settingsDialog.remove();
-                Settings settings = new Settings(game, room);
+                settingsDialog.remove();*/
+                game.languageToFIN();
             }
         });
 
@@ -353,11 +334,11 @@ public class Settings {
         buttonEn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                game.languageToENG();
-                buttonFi.setChecked(false);
+                /*buttonFi.setChecked(false);
                 buttonEn.setChecked(true);
                 settingsDialog.remove();
-                Settings settings = new Settings(game, room);
+                Settings settings = new Settings(game, room);*/
+                game.languageToENG();
             }
         });
 

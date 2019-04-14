@@ -1065,6 +1065,7 @@ public class RoomFight extends RoomParent {
                 String action, button;
                 action = btnTexts[i];
                 HashMap<String, Object> skillMap = skills.getSkill(action);
+                System.out.println(action);
 
                 if (action != "") {
                     descriptions.add(skills.retrieveSkillDescription(action));
