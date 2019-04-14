@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -30,6 +31,7 @@ public class MainGame extends Game {
 	private Skills skills;
 	private Item items;
 	private Bosses bosses;
+	private Music curMusic;
 
 	public final float pixelWidth = 1920f;
 	public final float pixelHeight = 1080f;
@@ -46,10 +48,13 @@ public class MainGame extends Game {
 	// Settings
 	// Keys
 	private String keyMusicVol = "musicVol";
+	private String keySoundVol = "soundVol";
 	private String keyLanguage = "language";
 	private String keyDifficulty = "difficulty";
+	//Values
 	private Preferences settings;
 	private float musicVol;
+	private float soundVol;
 	private String language;
     private boolean clickedOpenSettings = false;
     private String difficulty;
@@ -215,13 +220,51 @@ public class MainGame extends Game {
 		//setScreen(room);
 	}
 
+	/**
+	 * If selected music file is not playing, stop the current music and play the selected file.
+	 * @param file selected music file
+	 */
 	private void startMusic(Music file) {
-		if (!file.isPlaying()) {
-			for (Music m : files.allMusic) {
-				if (m.isPlaying()) m.stop();
-			}
-			file.play();
+		if (file != curMusic) {
+			if (curMusic != null) curMusic.stop();
+			playMusic(file);
 		}
+	}
+
+	/**
+	 * Set correct volume for file, loop it and play it.
+	 * @param file selected music file
+	 */
+	public void playMusic(Music file) {
+		file.setVolume(musicVol);
+		file.setLooping(true);
+		file.play();
+		curMusic = file;
+	}
+
+	/**
+	 * Change music volume. Mainly used in settings.
+	 * @param musicVol wanted volume
+	 */
+	public void setMusicVol(float musicVol) {
+		this.musicVol = musicVol;
+		curMusic.setVolume(musicVol);
+	}
+
+	/**
+	 * Play selected sound using correct sound volume.
+	 * @param file selected sound file
+	 */
+	public void playSound(Sound file) {
+		file.play(soundVol);
+	}
+
+	/**
+	 * Sets sound volume variable. Mainly used in Settings.
+	 * @param soundVol wanted sound volume
+	 */
+	public void setSoundVol(float soundVol) {
+		this.soundVol = soundVol;
 	}
 
     private void createHackFiles() {
@@ -328,12 +371,14 @@ public class MainGame extends Game {
 		settings.clear(); // For testing purposes
 		settings.flush(); // Without flushing, clear does not work in Android
 		musicVol = settings.getFloat(keyMusicVol, 0.8f);
+		soundVol = settings.getFloat(keySoundVol, 0.8f);
 		language = settings.getString(keyLanguage, "");
 		difficulty = settings.getString(keyDifficulty, "medium");
     }
 
     public void saveSettings() {
 	    settings.putFloat(keyMusicVol, musicVol);
+		settings.putFloat(keySoundVol, soundVol);
 	    settings.putString(keyLanguage, language);
 	    settings.putString(keyDifficulty, difficulty);
 	    settings.flush();
@@ -549,12 +594,6 @@ public class MainGame extends Game {
 	public void retrieveFromBank(float amount) {
 		stepBank -= amount;
 		if (stepBank < 0) stepBank = 0;
-	}
-
-	public void setMusicVol(float musicVol) {
-		if (musicVol > 0.0f && musicVol < 1.0f) {
-			this.musicVol = musicVol;
-		}
 	}
 
 	public void addMoney(int amount) {

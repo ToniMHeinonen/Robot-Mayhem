@@ -139,7 +139,7 @@ public class RoomGame extends RoomParent {
         if (curSteps >= goalSteps) {
             if (!milestoneReached) {
                 createButtonFight();
-                files.sndMilestoneAchieved.play();
+                game.playSound(files.sndMilestoneAchieved);
             }
         }
     }

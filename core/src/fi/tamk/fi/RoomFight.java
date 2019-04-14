@@ -142,7 +142,7 @@ public class RoomFight extends RoomParent {
                 if (!startDeathTimer) {
                     startDeathTimer = true;
                     game.setStepCount(game.getProgressBarMilestone()*0.5f);
-                    files.sndLoseToBoss.play();
+                    game.playSound(files.sndLoseToBoss);
                 }
 
                 if (deathTimer > 0) deathTimer--;
@@ -267,7 +267,7 @@ public class RoomFight extends RoomParent {
             if (!spawnPowerUp) {
                 spawnPowerUp = true;
                 powerUp = new UtilPowerUp(game);
-                files.sndPowerUpPopup.play();
+                game.playSound(files.sndPowerUpPopup);
             }
             powerUp.update();
 
@@ -513,7 +513,7 @@ public class RoomFight extends RoomParent {
                 if (!opponent.isHitAnimationRunning()) {
                     opponent.takeHit(dmgAmount);
                     turnState = END_ACTION;
-                    files.sndMetallicHit.play();
+                    game.playSound(files.sndMetallicHit);
                     if (dealCriticalHit) {
                         dealCriticalHit = false;
                         opponent.startCriticalHitAnimation();
@@ -582,16 +582,16 @@ public class RoomFight extends RoomParent {
         // Opponent starts this when hitting you
         protected void startMissAnimation() {
             missCritAnimationRunning = true;
-            if (ID == PLAYER) files.sndPlayerMiss.play();
-            else files.sndEnemyMiss.play();
+            if (ID == PLAYER) game.playSound(files.sndPlayerMiss);
+            else game.playSound(files.sndEnemyMiss);
             critMissAnim.startAnimation(missAnim, 8);
         }
 
         // Opponent starts this when hitting you
         protected void startCriticalHitAnimation() {
             missCritAnimationRunning = true;
-            if (ID == PLAYER) files.sndPlayerCriticalHit.play();
-            else files.sndEnemyCriticalHit.play();
+            if (ID == PLAYER) game.playSound(files.sndPlayerCriticalHit);
+            else game.playSound(files.sndEnemyCriticalHit);
             critMissAnim.startAnimation(criticalHitAnim, 8);
         }
 
@@ -637,12 +637,12 @@ public class RoomFight extends RoomParent {
             if (takeDoT > 0) {
                 calcTargetHpSpd(takeDoT);
                 startHitAnimation(healthMinus, 15);
-                files.sndDamageOverTime.play();
+                game.playSound(files.sndDamageOverTime);
                 turnState = TAKING_DOT;
             } else if (takeDoT < 0) {
                 calcTargetHpSpd(takeDoT);
                 startHitAnimation(healthPlus, 15);
-                files.sndHealOverTime.play();
+                game.playSound(files.sndHealOverTime);
                 turnState = TAKING_DOT;
             } else {
                 turnState = START;
@@ -819,7 +819,7 @@ public class RoomFight extends RoomParent {
         }
 
         protected void takeHeal(double damage) {
-            files.sndFastHeal.play();
+            game.playSound(files.sndFastHeal);
             calcTargetHpSpd(damage);
         }
 
@@ -954,7 +954,7 @@ public class RoomFight extends RoomParent {
                 if (cooldowns.get(skills.DEFEND) == 0) {
                     actionSelected = true;
                     curAnimation = defendAnim;
-                    files.sndDefend.play();
+                    game.playSound(files.sndDefend);
                     addCooldown(skills.DEFEND, (Integer) mapDefend.get(skills.cooldown));
                     skillState = SKILL_DEFEND;
                     actionState = LONG_ANIM;
@@ -963,7 +963,7 @@ public class RoomFight extends RoomParent {
             else if (action.equals(skills.ITEM))
             {
                 actionSelected = true;
-                files.sndUseItem.play();
+                game.playSound(files.sndUseItem);
                 curAnimation = itemAnim;
                 actionState = TEMP_ANIM;
             }

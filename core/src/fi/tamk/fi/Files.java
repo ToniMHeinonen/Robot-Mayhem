@@ -59,7 +59,7 @@ public class Files {
     public final Sound sndDustThrow, sndDefend, sndSuction;
 
     // Sound effect other
-    public final Sound  sndMilestoneAchieved, sndPurchaseItem, sndUseItem;
+    public final Sound  sndMilestoneAchieved, sndPurchaseItem, sndUseItem, sndNotification;
 
     Files () {
         loadAssets();
@@ -161,11 +161,8 @@ public class Files {
         Music
          */
         musMainTheme = manager.get("music/mainTheme.mp3");
-        musMainTheme.setLooping(true);
         musBossRobo = manager.get("music/bossRobo.mp3");
-        musBossRobo.setLooping(true);
         musBossFuturistic = manager.get("music/bossFuturistic.mp3");
-        musBossFuturistic.setLooping(true);
         // Remember to add all new music here
         allMusic = new Music[] {musMainTheme, musBossRobo, musBossFuturistic};
 
@@ -194,6 +191,7 @@ public class Files {
         sndMilestoneAchieved = manager.get("sound/MileStoneAchieved.mp3");
         sndPurchaseItem = manager.get("sound/PurchaseItemFromShop.mp3");
         sndUseItem = manager.get("sound/GeneralItemUse.mp3");
+        sndNotification = manager.get("sound/GeneralNotification.mp3");
     }
 
     private void loadAssets() {
@@ -282,5 +280,6 @@ public class Files {
         manager.load("sound/MileStoneAchieved.mp3", Sound.class);
         manager.load("sound/PurchaseItemFromShop.mp3", Sound.class);
         manager.load("sound/GeneralItemUse.mp3", Sound.class);
+        manager.load("sound/GeneralNotification.mp3", Sound.class);
     }
 }

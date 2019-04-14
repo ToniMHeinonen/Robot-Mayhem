@@ -128,7 +128,7 @@ public class Settings {
     }
 
     private void createMusicVolume() {
-        musicVolSlider = new Slider(0.1f, 0.9f, 0.1f, false, finalSkin);
+        musicVolSlider = new Slider(0.0f, 1.0f, 0.1f, false, finalSkin);
         musicVolSlider.setValue(game.getMusicVol());
         musicVolSlider.setPosition(500,
                 header.getY() - 160);
@@ -136,7 +136,6 @@ public class Settings {
         musicVolSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                files.musMainTheme.setVolume(musicVolSlider.getValue());
                 game.setMusicVol(musicVolSlider.getValue());
             }
         });
@@ -152,7 +151,7 @@ public class Settings {
     }
 
     private void createSoundVolume() {
-        soundVolSlider = new Slider(0.1f, 0.9f, 0.1f, false, finalSkin);
+        soundVolSlider = new Slider(0.0f, 1.0f, 0.1f, false, finalSkin);
         soundVolSlider.setValue(game.getMusicVol());
         soundVolSlider.setPosition(musicVolSlider.getX(),
                 musicVolSlider.getY() - 120);
@@ -160,8 +159,8 @@ public class Settings {
         soundVolSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                files.musMainTheme.setVolume(musicVolSlider.getValue());
-                game.setMusicVol(musicVolSlider.getValue());
+                game.setSoundVol(soundVolSlider.getValue());
+                game.playSound(files.sndNotification);
             }
         });
 
@@ -266,6 +265,17 @@ public class Settings {
             public void clicked(InputEvent event, float x, float y){
                 game.clearStats();
                 game.loadStats();
+                /*
+                I was wrong, it is not enough that you clear stats and move to room RoomGame. You
+                also need to reset MainGame. So the best way is that if you find a way how to
+                restart the whole game after clearing stats. Currently for example milestone is not
+                reseted and there could be a lot more values which are not reseted using this way.
+
+                So all you need to do in here is:
+                game.clearStats();
+                game.clearSettings();
+                game.restart??? (I have no idea how to restart the game...)
+                 */
                 inventory.clear();
                 game.setSkill1(skills.REPAIR);
                 game.setSkill2("");

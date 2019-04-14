@@ -543,7 +543,7 @@ public class Hacking {
         int i = 0;
         int j = 0;
         if (bulletHitShield) {
-            files.sndBreakShield.play();
+            game.playSound(files.sndBreakShield);
             for (Body body : shieldBodies) {
                 if (body.getUserData() != null) {
                     hackPosX.set(i, body.getPosition().x);
@@ -593,7 +593,7 @@ public class Hacking {
     private void collisionBulletEnemy(Body body) {
         bodiesToBeDestroyed.add(body);
         bulletHitEnemy = true;
-        files.sndHackSuccessful.play();
+        game.playSound(files.sndHackSuccessful);
         for (Body b : shieldBodies) {
             if (b.getUserData() != null) {
                 bodiesToBeDestroyed.add(b);
