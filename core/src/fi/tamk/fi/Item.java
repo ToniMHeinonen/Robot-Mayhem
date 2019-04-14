@@ -9,16 +9,27 @@ public class Item {
 
     public final String name = "name";
     public final String description = "description";
-    public final String damage = "damage";
+    public final String value = "value";
     public final String usedInHall = "usedInHall";
     public final String isSkill = "isSkill";
     public final String price = "price";
 
+    // Fight item specific values
+    public final String critBoost = "critBoost";
+    public final String missBoost = "missBoost";
+
     public final String BOMB = "BOMB";
     public final String POTION = "POTION";
     public final String DOUBLE_STEPS = "DOUBLE_STEPS";
+    public final String OVERCLOCK1 = "OVERCLOCK1";
+    public final String OVERCLOCK2 = "OVERCLOCK2";
+    public final String OVERCLOCK3 = "OVERCLOCK3";
+    public final String LONG_SCOPE1 = "LONG_SCOPE1";
+    public final String LONG_SCOPE2 = "LONG_SCOPE2";
+    public final String LONG_SCOPE3 = "LONG_SCOPE3";
 
-    private final String[] allItems = new String[] {BOMB, POTION, DOUBLE_STEPS};
+    private final String[] allItems = new String[] {BOMB, POTION, DOUBLE_STEPS, OVERCLOCK1,
+            OVERCLOCK2, OVERCLOCK3, LONG_SCOPE1, LONG_SCOPE2, LONG_SCOPE3};
     private HashMap<String,HashMap<String,Object>> mapItems;
 
     /* NOTE!
@@ -38,6 +49,12 @@ public class Item {
         itemBomb();
         itemPotion();
         itemDoubleSteps();
+        itemOverclock1();
+        itemOverclock2();
+        itemOverclock3();
+        itemLongScope1();
+        itemLongScope2();
+        itemLongScope3();
     }
 
     public HashMap<String, Object> getItem(String item) {
@@ -60,7 +77,7 @@ public class Item {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, BOMB);
         map.put(description, "bombDesc");
-        map.put(damage, 50);
+        map.put(value, 50);
         map.put(usedInHall, false);
         map.put(isSkill, false);
         map.put(price, 5);
@@ -72,7 +89,7 @@ public class Item {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, POTION);
         map.put(description, "potionDesc");
-        map.put(damage, -50);
+        map.put(value, -50);
         map.put(usedInHall, false);
         map.put(isSkill, false);
         map.put(price, 10);
@@ -84,10 +101,94 @@ public class Item {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, DOUBLE_STEPS);
         map.put(description, "doubleStepsDesc");
-        map.put(damage, 0);
+        map.put(value, 0);
         map.put(usedInHall, true);
         map.put(isSkill, false);
         map.put(price, 15);
+
+        mapItems.put((String) map.get(name), map);
+    }
+
+    private void itemOverclock1() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, OVERCLOCK1);
+        map.put(description, "overclock1Desc");
+        map.put(value, 5);
+        map.put(usedInHall, false);
+        map.put(isSkill, false);
+        map.put(critBoost, true);
+        map.put(missBoost, false);
+        map.put(price, 10);
+
+        mapItems.put((String) map.get(name), map);
+    }
+
+    private void itemOverclock2() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, OVERCLOCK2);
+        map.put(description, "overclock2Desc");
+        map.put(value, 10);
+        map.put(usedInHall, false);
+        map.put(isSkill, false);
+        map.put(critBoost, true);
+        map.put(missBoost, false);
+        map.put(price, 20);
+
+        mapItems.put((String) map.get(name), map);
+    }
+
+    private void itemOverclock3() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, OVERCLOCK3);
+        map.put(description, "overclock3Desc");
+        map.put(value, 15);
+        map.put(usedInHall, false);
+        map.put(isSkill, false);
+        map.put(critBoost, true);
+        map.put(missBoost, false);
+        map.put(price, 30);
+
+        mapItems.put((String) map.get(name), map);
+    }
+
+    private void itemLongScope1() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, LONG_SCOPE1);
+        map.put(description, "longScope1Desc");
+        map.put(value, 5);
+        map.put(usedInHall, false);
+        map.put(isSkill, false);
+        map.put(critBoost, false);
+        map.put(missBoost, true);
+        map.put(price, 10);
+
+        mapItems.put((String) map.get(name), map);
+    }
+
+    private void itemLongScope2() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, LONG_SCOPE2);
+        map.put(description, "longScope2Desc");
+        map.put(value, 10);
+        map.put(usedInHall, false);
+        map.put(isSkill, false);
+        map.put(critBoost, false);
+        map.put(missBoost, true);
+        map.put(price, 20);
+
+        mapItems.put((String) map.get(name), map);
+    }
+
+    private void itemLongScope3() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, LONG_SCOPE3);
+        map.put(description, "longScope3Desc");
+        map.put(value, 15);
+        map.put(usedInHall, false);
+        map.put(isSkill, false);
+        map.put(critBoost, false);
+        map.put(missBoost, true);
+        map.put(price, 30);
 
         mapItems.put((String) map.get(name), map);
     }

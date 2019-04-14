@@ -373,7 +373,7 @@ public class RoomFight extends RoomParent {
     /*
     CREATE PARENT FIGHTER
      */
-    class Fighters {
+    public class Fighters {
 
         protected float X, Y;
         protected double maxHp, hp, targetHp, hpDecreaseSpd, defaultDmg, dmgAmount, dotAmount;
@@ -386,15 +386,16 @@ public class RoomFight extends RoomParent {
         protected int turnState, BEFORE = 0, TAKING_DOT = 1, START = 2, WAIT_FOR_ACTION = 3,
                                 DOING_ACTION = 4, END_ACTION = 5;
         protected int actionState, TEMP_ANIM = 0, HIT_ANIM = 1, LONG_ANIM = 2, MISS_ANIM = 3,
-                        HEAL_ANIM = 4, DOT_ANIM = 5, DELAY_ANIM = 6;
+                        HEAL_ANIM = 4, DOT_ANIM = 5, DELAY_ANIM = 6, ITEM_ANIM = 7;
         protected int skillState, SKILL_RESET = 0, SKILL_DAMAGE = 1, SKILL_HEAL = 2, SKILL_MISS = 3,
-                        SKILL_DEFEND = 4;
+                        SKILL_DEFEND = 4, SKILL_ITEM = 5;
         protected boolean flashWhite, hitAnimationRunning, missCritAnimationRunning, dealDoT,
                             dealCriticalHit;
         protected float flashTime = 0.25f;
         protected State ifDead;
         protected int ID, PLAYER = 0, ENEMY = 1;
         protected Fighters opponent;
+        protected int critBoost, missBoost;
 
         protected float positionOffset;
         protected boolean positionIncorrect;
@@ -412,6 +413,7 @@ public class RoomFight extends RoomParent {
                 skillAnim, takeHitAnim, healthPlus, healthMinus, criticalHitAnim, missAnim,
                 healAnim, dotMinus, dotPlus;
         protected HashMap<String,Integer> cooldowns;
+        protected String usedItem;
 
         Fighters() {
             healthPlus = files.animHealthPlusDoT;
@@ -497,11 +499,13 @@ public class RoomFight extends RoomParent {
                         actionState = HIT_ANIM;
                     } else if (skillState == SKILL_HEAL){
                         takeHeal(dmgAmount);
-                        startHitAnimation(healAnim, 8);
+                        startHitAnimation(healAnim, animSpeed);
                         actionState = HEAL_ANIM;
                     } else if (skillState == SKILL_MISS) {
                         opponent.startMissAnimation();
                         actionState = MISS_ANIM;
+                    } else if (skillState == SKILL_ITEM) {
+                        useItem();
                     } else {
                         // Else it's only DoT move
                         turnState = END_ACTION;
@@ -553,6 +557,25 @@ public class RoomFight extends RoomParent {
                     else startHitAnimation(dotPlus, animSpeed);
                 }
             }
+        }
+
+        protected void useItem() {
+            HashMap<String, Object> item = items.getItem(usedItem);
+            if ((Boolean) item.get(items.critBoost)) {
+                int amount = (Integer) item.get(items.value);
+                critBoost += amount;
+                turnState = END_ACTION;
+            } else if ((Boolean) item.get(items.missBoost)) {
+                int amount = (Integer) item.get(items.value);
+                missBoost += amount;
+                turnState = END_ACTION;
+            } else if (usedItem == items.POTION) {
+                // This is here just for tomorrow's show
+                takeHeal(-50);
+                startHitAnimation(healAnim, animSpeed);
+                actionState = HEAL_ANIM;
+            }
+
         }
 
         // Before starting turn, reset turnState
@@ -758,13 +781,33 @@ public class RoomFight extends RoomParent {
             }
         }
 
-        protected boolean randomChance(int value) {
+        /*protected boolean randomChance(int value) {
             boolean critical = false;
             int random = MathUtils.random(1, 100);
 
             if (random <= value) critical = true;
 
             return critical;
+        }*/
+
+        protected boolean randomCritChance(int value) {
+            value += critBoost;
+            boolean critical = false;
+            int random = MathUtils.random(1, 100);
+
+            if (random <= value) critical = true;
+
+            return critical;
+        }
+
+        protected boolean randomMissChance(int value) {
+            value -= missBoost;
+            boolean miss = false;
+            int random = MathUtils.random(1, 100);
+
+            if (random <= value) miss = true;
+
+            return miss;
         }
 
         protected void addCooldown(String skill, int amount) {
@@ -854,7 +897,7 @@ public class RoomFight extends RoomParent {
     /*
     CREATE PLAYER
      */
-    class Player extends Fighters {
+    public class Player extends Fighters {
 
         private Animation<TextureRegion> defendAnim, escapeAnim, itemAnim, deathAnim;
         private HashMap<String,Object> mapAttack, mapDefend;
@@ -938,12 +981,12 @@ public class RoomFight extends RoomParent {
                 actionSelected = true;
                 curAnimation = skillAnim;
                 // If skill misses, skip everything
-                boolean miss = randomChance((Integer) mapAttack.get(skills.missChance));
+                boolean miss = randomMissChance((Integer) mapAttack.get(skills.missChance));
                 if (miss) skillState = SKILL_MISS;
                 else {
                     curHitAnimation = (Animation<TextureRegion>) mapAttack.get(skills.hitAnimation);
                     dmgAmount = defaultDmg;
-                    dealCriticalHit = randomChance((Integer) mapAttack.get(skills.critChance));
+                    dealCriticalHit = randomCritChance((Integer) mapAttack.get(skills.critChance));
                     if (dealCriticalHit) dmgAmount *= 1.5;
                 }
 
@@ -962,10 +1005,11 @@ public class RoomFight extends RoomParent {
             }
             else if (action.equals(skills.ITEM))
             {
-                actionSelected = true;
+                UtilItem inventory = new UtilItem(game, "fight", this);
+                /*actionSelected = true;
                 game.playSound(files.sndUseItem);
                 curAnimation = itemAnim;
-                actionState = TEMP_ANIM;
+                actionState = TEMP_ANIM;*/
             }
             else { // It's skill
                 for (int i = 0; i < 2; i++) {
@@ -985,7 +1029,7 @@ public class RoomFight extends RoomParent {
                         if (snd != null) snd.play();
 
                         // If skill misses, skip everything
-                        boolean miss = randomChance((Integer) skillMap.get(skills.missChance));
+                        boolean miss = randomMissChance((Integer) skillMap.get(skills.missChance));
                         if (miss) skillState = SKILL_MISS;
                         else {
                             // Check if skill heals, else do damage
@@ -1001,7 +1045,7 @@ public class RoomFight extends RoomParent {
 
                                     // If critical hit, deal 1.5x damage
                                     dmgAmount = defaultDmg * (Double) skillMap.get(skills.damage);
-                                    dealCriticalHit = randomChance((Integer)
+                                    dealCriticalHit = randomCritChance((Integer)
                                             skillMap.get(skills.critChance));
                                     if (dealCriticalHit) dmgAmount *= 1.5;
                                 }
@@ -1058,6 +1102,19 @@ public class RoomFight extends RoomParent {
             }
         }
 
+        public void selectItem(String item) {
+            skillState = SKILL_ITEM;
+            state = State.PLAYER_TURN;
+            usedItem = item;
+            game.playSound(files.sndUseItem);
+            curAnimation = itemAnim;
+            actionState = TEMP_ANIM;
+            anim.startAnimation(curAnimation, animSpeed);
+            turnState = DOING_ACTION;
+            removeButtons();
+            dialog.showSkillName(localize.get(item));
+        }
+
         public void createActionButtons() {
             float space = game.pixelWidth / 5;
             for (int i = 0; i < btnTexts.length; i++) {
@@ -1065,7 +1122,6 @@ public class RoomFight extends RoomParent {
                 // Retrieve description and cooldown for button, using the complete name of skill
                 String action, button;
                 action = btnTexts[i];
-                System.out.println(action);
                 HashMap<String, Object> skillMap = skills.getSkill(action);
 
                 if (action != "") {
@@ -1126,7 +1182,7 @@ public class RoomFight extends RoomParent {
     /*
     CREATE ENEMY
      */
-    class Enemy extends Fighters {
+    public class Enemy extends Fighters {
 
         private String dialogStart, dialogEnd;
         private HashMap<String,Object> mapBoss;
@@ -1291,7 +1347,7 @@ public class RoomFight extends RoomParent {
                 // Play sound if not null
                 if (sounds[random] != null) sounds[random].play();
 
-                boolean miss = randomChance(missChances[random]);
+                boolean miss = randomMissChance(missChances[random]);
                 if (miss) skillState = SKILL_MISS;
                 else {
                     // Check if skill heals, else do damage
@@ -1307,7 +1363,7 @@ public class RoomFight extends RoomParent {
 
                             // If critical hit, deal 1.5x damage
                             dmgAmount = defaultDmg * damages[random];
-                            dealCriticalHit = randomChance(critChances[random]);
+                            dealCriticalHit = randomCritChance(critChances[random]);
                             if (dealCriticalHit) dmgAmount *= 1.5;
                         }
                     }

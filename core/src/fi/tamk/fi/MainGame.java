@@ -392,7 +392,7 @@ public class MainGame extends Game {
 		//settings.flush(); // Without flushing, clear does not work in Android
 		musicVol = settings.getFloat(keyMusicVol, 0.8f);
 		soundVol = settings.getFloat(keySoundVol, 0.8f);
-		language = settings.getString(keyLanguage, "fi");
+		language = settings.getString(keyLanguage, "");
 		difficulty = settings.getString(keyDifficulty, "medium");
     }
 
@@ -427,7 +427,7 @@ public class MainGame extends Game {
 	 */
 	public void loadStats() {
 		// NOTE: Remember to write 0f instead of 0 to float defValues, otherwise loading crashes
-		money = stats.loadValue(keyMoney, 20);
+		money = stats.loadValue(keyMoney, 100);
 		stepCount = stats.loadValue(keyStepCount, 0f);
 		stepAllCount = stats.loadValue(keyStepAllCount, 0f);
 		stepBank = stats.loadValue(keyStepBank, 0f);

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 public class UtilItem {
     private MainGame game;
+    private RoomFight.Player player;
     private I18NBundle localize;
     private Stage stage;
     private Skin skin;
@@ -68,6 +69,17 @@ public class UtilItem {
     UtilItem(MainGame game, String room) {
         this.game = game;
         this.room = room;
+        create();
+    }
+
+    UtilItem(MainGame game, String room, RoomFight.Player player) {
+        this.game = game;
+        this.room = room;
+        this.player = player;
+        create();
+    }
+
+    private void create() {
         localize = game.getLocalize();
         stage = game.getStage();
         skin = game.getSkin();
@@ -325,7 +337,9 @@ public class UtilItem {
                     game.addToInventory(allItems[index], false);
                     popupBuyableItem.remove();
                     dialogItems.remove();
-                    UtilItem utilItem = new UtilItem(game, room);
+                    UtilItem utilItem;
+                    if (room.equals("fight")) utilItem = new UtilItem(game, room, player);
+                    else  utilItem = new UtilItem(game, room);
                 }
             });
         }
@@ -361,12 +375,22 @@ public class UtilItem {
                     game.removeFromInventory(allItems[index]);
                     popupOwnedItem.remove();
                     dialogItems.remove();
+                    // This throws nullPointerException if I use player.selectItem method
+                    if (room.equals("fight")) player.selectItem(allItems[index]);
                 }
             });
         }
 
         popupOwnedItem.addActor(buttonUse);
         stage.addActor(popupOwnedItem);
+    }
+
+    /**
+     * Use item in RoomFight.
+     * @param item selected item
+     */
+    public void selectRoomFightItem(String item) {
+
     }
 
     /*
