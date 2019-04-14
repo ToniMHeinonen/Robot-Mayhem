@@ -125,6 +125,7 @@ public class Hacking {
     private Stage stage;
 
     private int destroyedNeighbors = 0;
+    private boolean limitBodyRemoval = false;
 
     Hacking(MainGame game, boolean firstTry) {
         this.game = game;
@@ -162,7 +163,7 @@ public class Hacking {
         //this.poolMult = game.getPoolMult();
 
         // Change these to test the effects of different pools/poolmultipliers.
-        pool = 1;
+        pool = 3;
         poolMult = 0;
         if (pool == 1) {
             shieldTexture = new Texture("texture/hacking/shield_medium.png");
@@ -292,20 +293,20 @@ public class Hacking {
                 innerPosX.clear();
                 innerPosY.clear();
                 innerHackShieldAmount = pool3InnerHackShieldAmount;
-                ipos1x = widthOfEnemy + 0.5f;
+                ipos1x = widthOfEnemy + 0.9f;
                 ipos1y = heightOfEnemy;
-                ipos2x = widthOfEnemy + 0.21f;
-                ipos2y = heightOfEnemy + 0.21f;
+                ipos2x = widthOfEnemy + 0.61f;
+                ipos2y = heightOfEnemy + 0.61f;
                 ipos3x = widthOfEnemy;
-                ipos3y = heightOfEnemy + 0.5f;
-                ipos4x = widthOfEnemy - 0.21f;
-                ipos4y = heightOfEnemy + 0.21f;
-                ipos5x = widthOfEnemy - 0.5f;
+                ipos3y = heightOfEnemy + 0.9f;
+                ipos4x = widthOfEnemy - 0.61f;
+                ipos4y = heightOfEnemy + 0.61f;
+                ipos5x = widthOfEnemy - 0.9f;
                 ipos5y = heightOfEnemy;
-                ipos6x = widthOfEnemy - 0.21f;
-                ipos6y = heightOfEnemy - 0.21f;
+                ipos6x = widthOfEnemy - 0.61f;
+                ipos6y = heightOfEnemy - 0.61f;
                 ipos7x = widthOfEnemy;
-                ipos7y = heightOfEnemy - 0.5f;
+                ipos7y = heightOfEnemy - 0.9f;
                 innerPosX.addAll(ipos1x, ipos2x, ipos3x, ipos4x, ipos5x, ipos6x, ipos7x);
                 innerPosY.addAll(ipos1y, ipos2y, ipos3y, ipos4y, ipos5y, ipos6y, ipos7y);
                 game.setInnerPosX(innerPosX);
@@ -373,7 +374,7 @@ public class Hacking {
         if (pool == 3) {
             DistanceJointDef innerDistanceJointDef = new DistanceJointDef();
             innerDistanceJointDef.bodyB = enemyBody;
-            innerDistanceJointDef.length = 1.9f;
+            innerDistanceJointDef.length = 1.8f;
             innerDistanceJointDef.frequencyHz = 3;
             innerDistanceJointDef.dampingRatio = 0.1f;
             for (int i = 0; i < innerHackShieldAmount; i++) {
@@ -428,28 +429,36 @@ public class Hacking {
                 Body body1 = contact.getFixtureA().getBody();
                 Body body2 = contact.getFixtureB().getBody();
 
-                if (body1.getUserData() == BodyData.SHIELD && body2.getUserData() == BodyData.BULLET) {
-                    collisionBulletShield(body1, body2);
-                }
+                if (!limitBodyRemoval) {
+                    if (body1.getUserData() == BodyData.SHIELD && body2.getUserData() == BodyData.BULLET) {
+                        limitBodyRemoval = true;
+                        collisionBulletShield(body1, body2);
+                    }
 
-                if (body2.getUserData() == BodyData.SHIELD && body1.getUserData() == BodyData.BULLET) {
-                    collisionBulletShield(body2, body1);
-                }
+                    if (body2.getUserData() == BodyData.SHIELD && body1.getUserData() == BodyData.BULLET) {
+                        limitBodyRemoval = true;
+                        collisionBulletShield(body2, body1);
+                    }
 
-                if (body1.getUserData() == BodyData.INNERSHIELD && body2.getUserData() == BodyData.BULLET) {
-                    collisionBulletInnerShield(body1, body2);
-                }
+                    if (body1.getUserData() == BodyData.INNERSHIELD && body2.getUserData() == BodyData.BULLET) {
+                        limitBodyRemoval = true;
+                        collisionBulletInnerShield(body1, body2);
+                    }
 
-                if (body2.getUserData() == BodyData.INNERSHIELD && body1.getUserData() == BodyData.BULLET) {
-                    collisionBulletInnerShield(body2, body1);
-                }
+                    if (body2.getUserData() == BodyData.INNERSHIELD && body1.getUserData() == BodyData.BULLET) {
+                        limitBodyRemoval = true;
+                        collisionBulletInnerShield(body2, body1);
+                    }
 
-                if (body1.getUserData() == BodyData.BULLET && body2.getUserData() == BodyData.ENEMY) {
-                    collisionBulletEnemy(body1);
-                }
+                    if (body1.getUserData() == BodyData.BULLET && body2.getUserData() == BodyData.ENEMY) {
+                        limitBodyRemoval = true;
+                        collisionBulletEnemy(body1);
+                    }
 
-                if (body2.getUserData() == BodyData.BULLET && body1.getUserData() == BodyData.ENEMY) {
-                    collisionBulletEnemy(body2);
+                    if (body2.getUserData() == BodyData.BULLET && body1.getUserData() == BodyData.ENEMY) {
+                        limitBodyRemoval = true;
+                        collisionBulletEnemy(body2);
+                    }
                 }
             }
             @Override
