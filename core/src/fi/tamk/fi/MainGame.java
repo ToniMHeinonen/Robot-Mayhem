@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
@@ -31,7 +32,7 @@ public class MainGame extends Game {
 	private Skills skills;
 	private Item items;
 	private Bosses bosses;
-	private Music curMusic;
+	private Music curMusic, curBossMusic;
 
 	public final float pixelWidth = 1920f;
 	public final float pixelHeight = 1080f;
@@ -153,6 +154,7 @@ public class MainGame extends Game {
 		switchToRoomGame();
 
 		currentBoss = bosses.selectRandomBoss(); // For testing purposes, remember to remove
+		selectRandomBossMusic();
 	}
 
 	@Override
@@ -193,6 +195,12 @@ public class MainGame extends Game {
 		restartGame();
 	}
 
+	private void selectRandomBossMusic() {
+		int all = files.allBossMusic.length;
+		int random = MathUtils.random(0, all - 1);
+		curBossMusic = files.allBossMusic[random];
+	}
+
 	boolean haveWeChangedTheRoom = false;
 
 	public void transition() { haveWeChangedTheRoom = true; }
@@ -220,7 +228,7 @@ public class MainGame extends Game {
 
     public void switchToRoomFight() {
 		transition();
-		startMusic(files.musBossRobo);
+		startMusic(curBossMusic);
 	    RoomFight room = new RoomFight(this);
 	    setScreen(room);
     }
