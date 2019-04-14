@@ -121,7 +121,7 @@ public class UtilPowerUp {
                 if (random[0] == random[1]) continue;
 
                 if (random[i] == MONEY) {
-                    name = localize.get("money");
+                    name = "money";
                     moneyAmount = MathUtils.random(5, 10);
                     description = String.valueOf(moneyAmount) + " " + localize.get("shinyCoins");
                     break;
@@ -131,7 +131,7 @@ public class UtilPowerUp {
                     HashMap<String, Object> map = items.getItem(name);
                     // If random item is not used in correct room, select new one
                     boolean hallItem = (Boolean) map.get(items.usedInHall);
-                    description = (String) map.get(items.description);
+                    description = localize.get((String) map.get(items.description));
                     if (random[i] == HALL_ITEM) {
                         if (hallItem) break;
                     } else if (random[i] == BATTLE_ITEM) {
@@ -151,7 +151,7 @@ public class UtilPowerUp {
             random = MathUtils.random(0, 2);
 
             if (random == MONEY) {
-                name = localize.get("money");
+                name = "money";
                 moneyAmount = MathUtils.random(5, 10);
                 description = String.valueOf(moneyAmount) + " " + localize.get("shinyCoins");
                 break;
@@ -159,7 +159,7 @@ public class UtilPowerUp {
                 name = items.selectRandomItem();
                 HashMap<String, Object> map = items.getItem(name);
                 boolean hallItem = (Boolean) map.get(items.usedInHall);
-                description = (String) map.get(items.description);
+                description = localize.get((String) map.get(items.description));
                 if (random == HALL_ITEM) {
                     if (hallItem) break;
                 } else if (random == BATTLE_ITEM) {
@@ -215,7 +215,8 @@ public class UtilPowerUp {
         float[] xPos = new float[] {450f, 750f, 1050f};
         float[] yPos = new float[] {416, 216, 416};
         spawnedPowerups[pos] = name;
-        TextButton btn = new TextButton(name, finalSkin);
+        final String localizedName = localize.get(name);
+        TextButton btn = new TextButton(localizedName, finalSkin);
         btn.setWidth(420f);
         btn.getLabelCell().width(384);
         btn.getLabel().setWrap(true);
@@ -230,7 +231,7 @@ public class UtilPowerUp {
                 showDesc = true;
                 chosenName = name;
                 chosenType = type;
-                createDescription(name, desc);
+                createDescription(localizedName, desc);
                 createConfirmationButtons();
             }
         });

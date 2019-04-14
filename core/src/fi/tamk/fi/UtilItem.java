@@ -124,11 +124,12 @@ public class UtilItem {
 
         for (int i = 0; i < allItems.length; i++) {
             buttonCounterBuyable = i;
-            Label shopItems = new Label(allItems[i], finalSkin, getFontSize(allItems[i]));
+            String itemName = localize.get(allItems[i]);
+            Label shopItems = new Label(itemName, finalSkin, getFontSize(itemName));
             tableBuyableItems.add(shopItems).size(520, 75);
             buyableItems++;
 
-            final String stringCost = String.valueOf(items.getItem(allItems[i]).get("price"));
+            final String stringCost = String.valueOf(items.getItem(allItems[i]).get(items.price));
             Label labelPrice = new Label(stringCost, finalSkin);
             tableBuyableItems.add(labelPrice).size(35, 75).row();
 
@@ -183,7 +184,8 @@ public class UtilItem {
             for (int j = 0; j < inventory.size(); j++) {
                 if (inventory.get(j).contains(allSkills[i])) {
                     final int counterSkills = i;
-                    Label ownedSkill = new Label(inventory.get(j), finalSkin, getFontSize(inventory.get(j)));
+                    String skillName = localize.get(inventory.get(j));
+                    Label ownedSkill = new Label(skillName, finalSkin, getFontSize(skillName));
                     tableOwnedItems.add(ownedSkill).size(550, 75).row();
                     ownedItems++;
                     ownedSkill.addListener(new ClickListener(){
@@ -202,7 +204,8 @@ public class UtilItem {
         for (int i = 0; i < allItems.length; i++) {
             buttonCounterOwned = i;
             if (game.inventoryOrSkillsContains(allItems[i])) {
-                Label ownedItem = new Label(allItems[i], finalSkin, getFontSize(allItems[i]));
+                String itemName = localize.get(allItems[i]);
+                Label ownedItem = new Label(itemName, finalSkin, getFontSize(itemName));
                 tableOwnedItems.add(ownedItem).size(550, 75).row();
                 ownedItems++;
 
@@ -293,11 +296,13 @@ public class UtilItem {
      */
     private void popupForBuyableItem(final int index) {
         String openedItem = allItems[index];
-        String description = String.valueOf(items.getItem(openedItem).get("description"));
-        final String stringCost = String.valueOf(items.getItem(allItems[index]).get("price"));
+        String itemName = localize.get(allItems[index]);
+        String description = String.valueOf(items.getItem(openedItem).get(items.description));
+        description = localize.get(description);
+        final String stringCost = String.valueOf(items.getItem(allItems[index]).get(items.price));
         final int price = Integer.valueOf(stringCost);
 
-        popupBuyableItem = utilDialog.createPopupItemAndPowerUp(openedItem, description, "popup_item");
+        popupBuyableItem = utilDialog.createPopupItemAndPowerUp(itemName, description, "popup_item");
 
         Label labelPrice = new Label(stringCost, finalSkin, "big");
         labelPrice.setPosition(1350, game.pixelHeight / 2 + 195);
@@ -334,10 +339,14 @@ public class UtilItem {
      */
     private void popupForOwnedItem(final int index) {
         String openedItem = allItems[index];
-        String description = String.valueOf(items.getItem(openedItem).get("description"));
-        final String usedInHall = String.valueOf(items.getItem(allItems[index]).get("usedInHall"));
+        String itemName = localize.get(allItems[index]);
+        String description = String.valueOf(items.getItem(openedItem).get(items.description));
+        description = localize.get(description);
+        final String usedInHall = String.valueOf(items.getItem
+                (allItems[index]).get(items.usedInHall));
 
-        popupOwnedItem = utilDialog.createPopupItemAndPowerUp(openedItem, description, "popup_powerup");
+        popupOwnedItem = utilDialog.createPopupItemAndPowerUp(itemName, description,
+                "popup_powerup");
         createBackButton(popupOwnedItem);
 
         ImageButton buttonUse = new ImageButton(finalSkin, "use_" + lan);
@@ -366,13 +375,15 @@ public class UtilItem {
      */
     private void popupForOwnedSkill(final int index) {
         String openedSkill = allSkills[index];
+        String skillName = localize.get(allSkills[index]);
         String description = skills.retrieveSkillDescription(openedSkill);
 
-        popupOwnedSkill = utilDialog.createPopupItemAndPowerUp(openedSkill,
+        popupOwnedSkill = utilDialog.createPopupItemAndPowerUp(skillName,
                 description + " " + localize.get("replaceSkill"),
                 "popup_powerup");
 
-        TextButton buttonSkill1 = new TextButton(game.getSkill1(), finalSkin, "small");
+        TextButton buttonSkill1 = new TextButton(localize.get(game.getSkill1()),
+                finalSkin, "small");
         buttonSkill1.setPosition(470, 210);
         buttonSkill1.setDisabled(true);
         if (room.equals("hall")) {
@@ -390,7 +401,8 @@ public class UtilItem {
             });
         }
 
-        TextButton buttonSkill2 = new TextButton(game.getSkill2(), finalSkin, "small");
+        TextButton buttonSkill2 = new TextButton(localize.get(game.getSkill2()),
+                finalSkin, "small");
         buttonSkill2.setPosition(820, 210);
         buttonSkill2.setDisabled(true);
         if (room.equals("hall")) {

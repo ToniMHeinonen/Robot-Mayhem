@@ -384,7 +384,7 @@ public class MainGame extends Game {
 		//settings.flush(); // Without flushing, clear does not work in Android
 		musicVol = settings.getFloat(keyMusicVol, 0.8f);
 		soundVol = settings.getFloat(keySoundVol, 0.8f);
-		language = settings.getString(keyLanguage, "");
+		language = settings.getString(keyLanguage, "fi");
 		difficulty = settings.getString(keyDifficulty, "medium");
     }
 

@@ -7,8 +7,6 @@ import java.util.HashMap;
 
 public class Item {
 
-    private final I18NBundle localize;
-
     public final String name = "name";
     public final String description = "description";
     public final String damage = "damage";
@@ -16,9 +14,11 @@ public class Item {
     public final String isSkill = "isSkill";
     public final String price = "price";
 
-    public final String BOMB, POTION, DOUBLE_STEPS;
+    public final String BOMB = "BOMB";
+    public final String POTION = "POTION";
+    public final String DOUBLE_STEPS = "DOUBLE_STEPS";
 
-    private final String[] allItems;
+    private final String[] allItems = new String[] {BOMB, POTION, DOUBLE_STEPS};
     private HashMap<String,HashMap<String,Object>> mapItems;
 
     /* NOTE!
@@ -34,14 +34,6 @@ public class Item {
     Create items when the game starts.
      */
     Item(MainGame game) {
-        localize = game.getLocalize();
-
-        BOMB = localize.get("BOMB");
-        POTION = localize.get("POTION");
-        DOUBLE_STEPS = localize.get("DOUBLE_STEPS");
-
-        allItems = new String[] {BOMB, POTION, DOUBLE_STEPS};
-
         mapItems = new HashMap<String, HashMap<String,Object>>();
         itemBomb();
         itemPotion();
@@ -67,7 +59,7 @@ public class Item {
     private void itemBomb() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, BOMB);
-        map.put(description, localize.get("bombDesc"));
+        map.put(description, "bombDesc");
         map.put(damage, 50);
         map.put(usedInHall, false);
         map.put(isSkill, false);
@@ -79,7 +71,7 @@ public class Item {
     private void itemPotion() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, POTION);
-        map.put(description, localize.get("potionDesc"));
+        map.put(description, "potionDesc");
         map.put(damage, -50);
         map.put(usedInHall, false);
         map.put(isSkill, false);
@@ -91,7 +83,7 @@ public class Item {
     private void itemDoubleSteps() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, DOUBLE_STEPS);
-        map.put(description, localize.get("doubleStepsDesc"));
+        map.put(description, "doubleStepsDesc");
         map.put(damage, 0);
         map.put(usedInHall, true);
         map.put(isSkill, false);

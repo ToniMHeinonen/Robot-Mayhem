@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class Bosses {
 
     private Files files;
-    private I18NBundle localize;
+    //private I18NBundle localize;
     private Skills skills;
     /*
     Use these, since if you need to change the name to something else, you then only need
@@ -50,7 +50,6 @@ public class Bosses {
      */
     Bosses(MainGame game) {
         files = game.getFiles();
-        localize = game.getLocalize();
         skills = game.getSkills();
         mapBosses = new HashMap<String, HashMap<String,Object>>();
         bossRoombot();
@@ -94,8 +93,8 @@ public class Bosses {
         curSkillName1 = skills.SUCTION;
         curSkillName2 = skills.DUST;
 
-        curDialogStart = localize.get("robberDialogStart");
-        curDialogEnd = localize.get("robberDialogEnd");
+        curDialogStart = "robberDialogStart";
+        curDialogEnd = "robberDialogEnd";
 
         animIdle = files.a_robberIdle;
         animAttack = files.a_robberAttack;
@@ -110,8 +109,8 @@ public class Bosses {
         curSkillName0 = skills.ATTACK;
         curSkillName1 = skills.SUCTION;
         curSkillName2 = skills.DUST;
-        curDialogStart = localize.get("roombotDialogStart");
-        curDialogEnd = localize.get("roombotDialogEnd");
+        curDialogStart = "roombotDialogStart";
+        curDialogEnd = "roombotDialogEnd";
 
         animIdle = files.a_roombotIdle;
         animAttack = files.a_roombotAttack;
@@ -126,8 +125,8 @@ public class Bosses {
         curSkillName0 = skills.ATTACK;
         curSkillName1 = skills.SHOCK;
         curSkillName2 = skills.DUST;
-        curDialogStart = localize.get("copperDialogStart");
-        curDialogEnd = localize.get("copperDialogEnd");
+        curDialogStart = "copperDialogStart";
+        curDialogEnd = "copperDialogEnd";
 
         animIdle = files.a_copperIdle;
         animAttack = files.a_copperAttack;

@@ -1033,6 +1033,7 @@ public class RoomFight extends RoomParent {
                 anim.startAnimation(curAnimation, animSpeed);
                 turnState = DOING_ACTION;
                 removeButtons();
+                action = localize.get(action);
                 dialog.showSkillName(action);
             }
         }
@@ -1064,8 +1065,8 @@ public class RoomFight extends RoomParent {
                 // Retrieve description and cooldown for button, using the complete name of skill
                 String action, button;
                 action = btnTexts[i];
-                HashMap<String, Object> skillMap = skills.getSkill(action);
                 System.out.println(action);
+                HashMap<String, Object> skillMap = skills.getSkill(action);
 
                 if (action != "") {
                     descriptions.add(skills.retrieveSkillDescription(action));
@@ -1081,7 +1082,7 @@ public class RoomFight extends RoomParent {
 
                 // Retrieve correct button using the keyname of the action
                 if (action.equals("")) button = "empty";
-                else button = (String) skillMap.get(skills.button);
+                else button = (String) skillMap.get(skills.name);
 
                 Drawable normal, clicked;
                 if (button.equals("empty")) {
@@ -1257,8 +1258,8 @@ public class RoomFight extends RoomParent {
             takeHitAnim = (Animation<TextureRegion>) mapBoss.get(bosses.takeHit);
 
             // Retrieve dialog start and end from Boss
-            dialogStart = (String) mapBoss.get(bosses.dialogStart);
-            dialogEnd = (String) mapBoss.get(bosses.dialogEnd);
+            dialogStart = localize.get((String) mapBoss.get(bosses.dialogStart));
+            dialogEnd = localize.get((String) mapBoss.get(bosses.dialogEnd));
         }
 
         // Select skill
@@ -1284,7 +1285,8 @@ public class RoomFight extends RoomParent {
                         break;
                     }
                 }
-                dialog.showSkillName(skillNames[random]);
+                String localizedName = localize.get(skillNames[random]);
+                dialog.showSkillName(localizedName);
 
                 // Play sound if not null
                 if (sounds[random] != null) sounds[random].play();

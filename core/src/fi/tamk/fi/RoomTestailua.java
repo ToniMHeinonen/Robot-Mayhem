@@ -97,8 +97,8 @@ public class RoomTestailua extends RoomParent {
         buttonAddSkills.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                game.addToInventory(localize.get("DUST"), true);
-                game.addToInventory(localize.get("SHOCK"), true);
+                game.addToInventory("DUST", true);
+                game.addToInventory("SHOCK", true);
             }
         });
     }
