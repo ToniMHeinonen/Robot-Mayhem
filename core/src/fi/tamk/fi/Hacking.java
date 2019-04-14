@@ -68,8 +68,8 @@ public class Hacking {
     // Size of bullet's hitbox
     private float bulletHitboxRadius = 0.3f;
     // Size of bullet's texture
-    private float bulletRadius = 0.3f;
-    private float bulletSpeed = 5f;
+    private float bulletRadius = 1f;
+    private float bulletSpeed = 4.2f;
 
     private double accumulator = 0;
     private float TIME_STEP = 1 / 60f;
@@ -145,7 +145,7 @@ public class Hacking {
     public void update() {
         batch.setProjectionMatrix(hackingCamera.combined);
         doPhysicsStep(Gdx.graphics.getDeltaTime());
-        //debugRenderer.render(world, camera.combined);
+        debugRenderer.render(world, hackingCamera.combined);
         deleteBodies();
         batch.begin();
         drawBodies();
@@ -156,7 +156,7 @@ public class Hacking {
     }
 
     private void createConstants() {
-        shieldTexture = new Texture("texture/hacking/shield.png");
+        shieldTexture = new Texture("texture/hacking/shield_small.png");
         bulletTexture = new Texture("texture/hacking/bullet.png");
         hackingCamera.setToOrtho(false, WORLD_WIDTH, WORLD_HEIGHT);
         world = new World(new Vector2(0, 0), true);
@@ -191,7 +191,7 @@ public class Hacking {
      */
     private void setShieldAttributes() {
         FloatArray poolSpeeds = new FloatArray();
-        poolSpeeds.add(6, 4, 4);
+        poolSpeeds.add(4, 4, 4);
 
         FloatArray poolSizes = new FloatArray();
         poolSizes.add(0.5f, 0.3f, 0.3f);
@@ -200,7 +200,12 @@ public class Hacking {
 
         shieldSpeed = poolSpeeds.get(pool - 1) + increasedSpeed;
         shieldRadius = poolSizes.get(pool - 1);
-        shieldLength = 3f;
+        //shieldLength = 3f;
+        if (pool == 1) {
+            shieldLength = 1.9f;
+        } else {
+            shieldLength = 3f;
+        }
 
         // These may have to be adjusted a bit, if we are going to change shieldLength.
         poolHitAreaX = new FloatArray();
@@ -324,7 +329,6 @@ public class Hacking {
             shieldBody = world.createBody(myBodyDef);
             shieldBody.createFixture(getShieldFixtureDefinition());
             shieldBody.setUserData(BodyData.SHIELD);
-            shieldBody.setAngularVelocity(-2f);
             shieldBodies.add(shieldBody);
         }
     }
@@ -338,7 +342,6 @@ public class Hacking {
                 innerBody = world.createBody(innerBodyDef);
                 innerBody.createFixture(getShieldFixtureDefinition());
                 innerBody.setUserData(INNERSHIELD);
-                innerBody.setAngularVelocity(-2f);
                 innerBodyShields.add(innerBody);
             }
         }
@@ -623,7 +626,7 @@ public class Hacking {
         bulletFixtureDef.restitution = 0f;
         bulletFixtureDef.friction = 0f;
         CircleShape circleshape = new CircleShape();
-        circleshape.setRadius(bulletHitboxRadius);
+        circleshape.setRadius(0.3f);
         bulletFixtureDef.shape = circleshape;
         return bulletFixtureDef;
     }
@@ -728,12 +731,12 @@ public class Hacking {
         for (Body body : bulletBodies) {
             if (body.getUserData() != null) {
                 batch.draw(bulletTexture,
-                        body.getPosition().x - bulletRadius,
-                        body.getPosition().y - bulletRadius,
+                        body.getPosition().x - 0.6f,
+                        body.getPosition().y - bulletRadius/2,
                         bulletRadius, // originX
                         bulletRadius, // originY
-                        bulletRadius * 2, // width
-                        bulletRadius * 2, // height
+                        bulletRadius, // width
+                        bulletRadius, // height
                         1.0f, // scaleX
                         1.0f, // scaleY
                         body.getTransform().getRotation() * MathUtils.radiansToDegrees,
