@@ -374,6 +374,15 @@ public class UtilItem {
                 "popup_powerup");
         createBackButton(popupOwnedItem);
 
+        if (amounts[index] > 1) {
+            String StringOwnedAmount = String.valueOf(amounts[index]);
+            Label labelOwnedAmount = new Label(StringOwnedAmount, finalSkin, "big");
+            labelOwnedAmount.setPosition(1350, game.pixelHeight / 2 + 195);
+            labelOwnedAmount.setSize(80, 100);
+            labelOwnedAmount.setAlignment(1);
+            popupOwnedItem.addActor(labelOwnedAmount);
+        }
+
         ImageButton buttonUse = new ImageButton(finalSkin, "use_" + lan);
         buttonUse.setPosition(560, 210);
         buttonUse.setDisabled(true);
