@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.I18NBundle;
 
 import java.util.ArrayList;
@@ -143,6 +144,7 @@ public class UtilItem {
 
             final String stringCost = String.valueOf(items.getItem(allItems[i]).get(items.price));
             Label labelPrice = new Label(stringCost, finalSkin);
+            labelPrice.setAlignment(Align.right);
             tableBuyableItems.add(labelPrice).size(50, 75).row();
 
             shopItems.addListener(new ClickListener(){
@@ -218,8 +220,17 @@ public class UtilItem {
             if (game.inventoryOrSkillsContains(allItems[i])) {
                 String itemName = localize.get(allItems[i]);
                 Label ownedItem = new Label(itemName, finalSkin, getFontSize(itemName));
-                tableOwnedItems.add(ownedItem).size(550, 75).row();
+                tableOwnedItems.add(ownedItem).size(505, 75);
                 ownedItems++;
+
+                String StringOwnedAmount = String.valueOf(amounts[i]);
+                Label ownedAmount = new Label(StringOwnedAmount, finalSkin);
+                ownedAmount.setAlignment(Align.right);
+                if (amounts[i] > 1) {
+                    tableOwnedItems.add(ownedAmount).size(50, 75).row();
+                } else {
+                    tableOwnedItems.add().size(50, 75).row();
+                }
 
                 ownedItem.addListener(new ClickListener(){
                     int i = buttonCounterOwned;

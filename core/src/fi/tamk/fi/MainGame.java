@@ -443,7 +443,7 @@ public class MainGame extends Game {
 	 */
 	public void loadStats() {
 		// NOTE: Remember to write 0f instead of 0 to float defValues, otherwise loading crashes
-		money = stats.loadValue(keyMoney, 100);
+		money = stats.loadValue(keyMoney, 500);
 		stepCount = stats.loadValue(keyStepCount, 0f);
 		stepAllCount = stats.loadValue(keyStepAllCount, 0f);
 		stepBank = stats.loadValue(keyStepBank, 0f);
