@@ -163,7 +163,7 @@ public class Hacking {
         //this.poolMult = game.getPoolMult();
 
         // Change these to test the effects of different pools/poolmultipliers.
-        pool = 3;
+        pool = 1;
         poolMult = 0;
         if (pool == 1) {
             shieldTexture = new Texture("texture/hacking/shield_medium.png");
