@@ -148,7 +148,7 @@ public class MainGame extends Game {
 		// Create skills and bosses when the game launches
 		skills = new Skills(this);
 		bosses = new Bosses(this);
-		items = new Item(this);
+		items = new Item();
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, pixelWidth, pixelHeight);

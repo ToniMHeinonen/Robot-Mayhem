@@ -27,6 +27,9 @@ public class Item {
     public final String POWER_POTION = "POWER_POTION";
     public final String IRON_CASE = "IRON_CASE";
     public final String REPAIR_BOT = "REPAIR_BOT";
+    public final String SUPER_VISION = "SUPER_VISION";
+    public final String HARDWARE = "HARDWARE";
+    public final String DIAMOND_COAT = "DIAMOND_COAT";
 
     private final int basePrice = 10;
     private ArrayList<String> allItems = new ArrayList<String>();
@@ -44,7 +47,7 @@ public class Item {
     /*
     Create items when the game starts.
      */
-    Item(MainGame game) {
+    Item() {
         mapItems = new HashMap<String, HashMap<String,Object>>();
         itemBomb();
         itemPotion();
@@ -54,6 +57,9 @@ public class Item {
         itemPowerPotion();
         itemIronCase();
         itemRepairBot();
+        itemSuperVision();
+        itemHardware();
+        itemDiamondCoat();
     }
 
     public HashMap<String, Object> getItem(String item) {
@@ -202,6 +208,48 @@ public class Item {
             allItems.add((String) map.get(name));
             mapItems.put((String) map.get(name), map);
         }
+    }
+
+    private void itemSuperVision() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, SUPER_VISION);
+        map.put(description, "superVisionDesc");
+        map.put(value, 0.1);
+        map.put(usedInHall, true);
+        map.put(isSkill, false);
+        map.put(boostType, MISS_BOOST);
+        map.put(price, 80);
+
+        allItems.add((String) map.get(name));
+        mapItems.put((String) map.get(name), map);
+    }
+
+    private void itemHardware() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, HARDWARE);
+        map.put(description, "hardwareDesc");
+        map.put(value, 0.05);
+        map.put(usedInHall, true);
+        map.put(isSkill, false);
+        map.put(boostType, DMG_BOOST);
+        map.put(price, 80);
+
+        allItems.add((String) map.get(name));
+        mapItems.put((String) map.get(name), map);
+    }
+
+    private void itemDiamondCoat() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, DIAMOND_COAT);
+        map.put(description, "diamondCoatDesc");
+        map.put(value, 0.34);
+        map.put(usedInHall, true);
+        map.put(isSkill, false);
+        map.put(boostType, ARMOR_BOOST);
+        map.put(price, 80);
+
+        allItems.add((String) map.get(name));
+        mapItems.put((String) map.get(name), map);
     }
 
     public String[] getAllItems() {
