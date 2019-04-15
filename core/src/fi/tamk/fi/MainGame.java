@@ -83,11 +83,17 @@ public class MainGame extends Game {
 	private String keyName = E.encrypt("name");
 	private String keyFightsWon = E.encrypt("fightsWon");
 	private String keyPrevDayGift = E.encrypt("prevDayGift");
+
 	private String keyCritBoost = E.encrypt("critBoost");
 	private String keyMissBoost = E.encrypt("missBoost");
 	private String keyArmorBoost = E.encrypt("armorBoost");
 	private String keyDmgBoost = E.encrypt("dmgBoost");
 	private String keyHealBoost = E.encrypt("healBoost");
+	private String keyPermanentCritBoost = E.encrypt("permanentCritBoost");
+	private String keyPermanentMissBoost = E.encrypt("permanentMissBoost");
+	private String keyPermanentArmorBoost = E.encrypt("permanentArmorBoost");
+	private String keyPermanentDmgBoost = E.encrypt("permanentDmgBoost");
+	private String keyPermanentHealBoost = E.encrypt("permanentHealBoost");
 	// Values
 	private int saveTimerAmount = 3600;
 	private int saveTimer = saveTimerAmount;
@@ -97,8 +103,8 @@ public class MainGame extends Game {
 	private int pool, poolMult, money, fightsWon, prevDayGift;
 	private String skill1, skill2, currentBoss, playerName;
 	private boolean firstPlayTime;
-	private int critBoost, missBoost;
-	private float armorBoost, dmgBoost, healBoost;
+	private int critBoost, missBoost, permaCritBoost, permaMissBoost;
+	private float armorBoost, dmgBoost, healBoost, permaArmorBoost, permaDmgBoost, permaHealBoost;
 	// Stat arrays
 	private ArrayList<String> inventory;
 	private int inventorySize; // Needed for loading correct amount of array items
@@ -486,11 +492,17 @@ public class MainGame extends Game {
 		playerName = stats.loadValue(keyName, "");
 		fightsWon = stats.loadValue(keyFightsWon, 0);
 		prevDayGift = stats.loadValue(keyPrevDayGift, -1);
+
 		critBoost = stats.loadValue(keyCritBoost, 0);
 		missBoost = stats.loadValue(keyMissBoost, 0);
 		dmgBoost = stats.loadValue(keyDmgBoost, 0f);
 		armorBoost = stats.loadValue(keyArmorBoost, 0f);
 		healBoost = stats.loadValue(keyHealBoost, 0f);
+		permaCritBoost = stats.loadValue(keyPermanentCritBoost, 0);
+		permaMissBoost = stats.loadValue(keyPermanentMissBoost, 0);
+		permaDmgBoost = stats.loadValue(keyPermanentDmgBoost, 0f);
+		permaArmorBoost = stats.loadValue(keyPermanentArmorBoost, 0f);
+		permaHealBoost = stats.loadValue(keyPermanentHealBoost, 0f);
 
 		// Load the size of inventory before loading inventory items
 		inventorySize = stats.loadValue(keyInventorySize, 0);
@@ -521,11 +533,17 @@ public class MainGame extends Game {
 		stats.saveValue(keyName, playerName);
 		stats.saveValue(keyFightsWon, fightsWon);
 		stats.saveValue(keyPrevDayGift, prevDayGift);
+
 		stats.saveValue(keyCritBoost, critBoost);
 		stats.saveValue(keyMissBoost, missBoost);
 		stats.saveValue(keyDmgBoost, dmgBoost);
 		stats.saveValue(keyArmorBoost, armorBoost);
 		stats.saveValue(keyHealBoost, healBoost);
+		stats.saveValue(keyPermanentCritBoost, permaCritBoost);
+		stats.saveValue(keyPermanentMissBoost, permaMissBoost);
+		stats.saveValue(keyPermanentDmgBoost, permaDmgBoost);
+		stats.saveValue(keyPermanentArmorBoost, permaArmorBoost);
+		stats.saveValue(keyPermanentHealBoost, permaHealBoost);
 
 		// Save inventory's current size on inventorySize key
 		stats.saveValue(keyInventorySize, inventory.size());
@@ -689,28 +707,53 @@ public class MainGame extends Game {
 		healBoost += amount;
 	}
 
+	public void addPermaCritBoost(int amount) {
+		permaCritBoost += amount;
+	}
+
+	public void addPermaMissBoost(int amount) {
+		permaMissBoost += amount;
+	}
+
+	public void addPermaDmgBoost(double amount) {
+		permaDmgBoost += amount;
+	}
+
+	public void addPermaArmorBoost(double amount) {
+		permaArmorBoost += amount;
+	}
+
+	public void addPermaHealBoost(double amount) {
+		permaHealBoost += amount;
+	}
+
 	/*
 	GETTERS
 	 */
 
 	public int getCritBoost() {
-		return critBoost;
+		int wholeBoost = critBoost + permaCritBoost;
+		return wholeBoost;
 	}
 
 	public int getMissBoost() {
-		return missBoost;
-	}
-
-	public float getArmorBoost() {
-		return armorBoost;
+		int wholeBoost = missBoost + permaMissBoost;
+		return wholeBoost;
 	}
 
 	public float getDmgBoost() {
-		return dmgBoost;
+		float wholeBoost = dmgBoost + permaDmgBoost;
+		return wholeBoost;
+	}
+
+	public float getArmorBoost() {
+		float wholeBoost = armorBoost + permaArmorBoost;
+		return wholeBoost;
 	}
 
 	public float getHealBoost() {
-		return healBoost;
+		float wholeBoost = healBoost + permaHealBoost;
+		return wholeBoost;
 	}
 
 	public SpriteBatch getBatch() {

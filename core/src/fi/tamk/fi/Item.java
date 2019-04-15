@@ -214,7 +214,7 @@ public class Item {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, SUPER_VISION);
         map.put(description, "superVisionDesc");
-        map.put(value, 0.1);
+        map.put(value, 10);
         map.put(usedInHall, true);
         map.put(isSkill, false);
         map.put(boostType, MISS_BOOST);

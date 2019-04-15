@@ -933,6 +933,7 @@ public class RoomFight extends RoomParent {
             armorBoost = game.getArmorBoost();
             healBoost = game.getHealBoost();
 
+
             addSkillsToMap();
 
             // Create maps for attack and defend, create cooldowns

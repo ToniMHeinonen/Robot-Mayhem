@@ -17,6 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
+import java.util.HashMap;
+
 public class RoomGame extends RoomParent {
 
     private Player player;
@@ -198,12 +200,38 @@ public class RoomGame extends RoomParent {
         batch.draw(imgBG, 0,0, bgPos, 0, imgBG.getWidth(), imgBG.getHeight());
     }
 
+    @Override
+    public void selectItem(String selected) {
+        player.setUseItem(true);
+        game.playSound(files.sndUseItem);
+        HashMap<String, Object> item = items.getItem(selected);
+        int boost = (Integer) item.get(items.boostType);
+        if (boost == items.CRIT_BOOST) {
+            int amount = (Integer) item.get(items.value);
+            game.addPermaCritBoost(amount);
+        } else if (boost == items.MISS_BOOST) {
+            int amount = (Integer) item.get(items.value);
+            game.addPermaMissBoost(amount);
+        } else if (boost == items.DMG_BOOST) {
+            double amount = (Double) item.get(items.value);
+            game.addPermaDmgBoost(amount);
+        } else if (boost == items.ARMOR_BOOST) {
+            double amount = (Double) item.get(items.value);
+            game.addPermaArmorBoost(amount);
+        } else if (boost == items.HEAL_BOOST) {
+            double amount = (Double) item.get(items.value);
+            game.addPermaHealBoost(amount);
+        }
+
+    }
+
     /*
     Create class for player
      */
     private class Player {
-        private Animation<TextureRegion> idle, moving;
+        private Animation<TextureRegion> idle, moving, item;
         private Animating anim;
+        private boolean useItem;
         private float X;
         private float Y;
 
@@ -215,21 +243,30 @@ public class RoomGame extends RoomParent {
             // Retrieve necessary animations and start the correct one
             idle = files.animIdle;
             moving = files.animGameMoving;
+            item = files.animItem;
             anim.startAnimation(idle, 8);
         }
 
         public void update() {
-            // If moving, animate sprite
-            // Else, return to state 0
-            if (bgSpd > 0f) {
-                if (anim.getAnimation() != moving) anim.startAnimation(moving, 8);
-                anim.setFrameSpeed((int)maxSpd - (int)bgSpd);
+            if (useItem) {
+                if (anim.getAnimation() != item) anim.startAnimation(item, 8);
+                if (item.isAnimationFinished(anim.getStateTime())) useItem = false;
             } else {
-                if (anim.getAnimation() != idle) anim.startAnimation(idle, 8);
+                // If moving, animate sprite. Else, return to state 0
+                if (bgSpd > 0f) {
+                    if (anim.getAnimation() != moving) anim.startAnimation(moving, 8);
+                    anim.setFrameSpeed((int) maxSpd - (int) bgSpd);
+                } else {
+                    if (anim.getAnimation() != idle) anim.startAnimation(idle, 8);
+                }
             }
 
             anim.animate();
             anim.draw(batch, X, Y);
+        }
+
+        public void setUseItem(boolean useItem) {
+            this.useItem = useItem;
         }
     }
 }

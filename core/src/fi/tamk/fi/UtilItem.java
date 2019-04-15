@@ -392,7 +392,6 @@ public class UtilItem {
                     game.removeFromInventory(allItems[index]);
                     popupOwnedItem.remove();
                     dialogItems.remove();
-                    System.out.println(curRoom);
                     curRoom.selectItem(allItems[index]);
                 }
             });
