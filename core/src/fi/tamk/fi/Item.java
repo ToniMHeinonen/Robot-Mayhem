@@ -80,6 +80,8 @@ public class Item {
         map.put(value, 50);
         map.put(usedInHall, false);
         map.put(isSkill, false);
+        map.put(critBoost, false);
+        map.put(missBoost, false);
         map.put(price, 5);
 
         mapItems.put((String) map.get(name), map);
@@ -92,6 +94,8 @@ public class Item {
         map.put(value, -50);
         map.put(usedInHall, false);
         map.put(isSkill, false);
+        map.put(critBoost, false);
+        map.put(missBoost, false);
         map.put(price, 10);
 
         mapItems.put((String) map.get(name), map);
@@ -104,6 +108,8 @@ public class Item {
         map.put(value, 0);
         map.put(usedInHall, true);
         map.put(isSkill, false);
+        map.put(critBoost, false);
+        map.put(missBoost, false);
         map.put(price, 15);
 
         mapItems.put((String) map.get(name), map);

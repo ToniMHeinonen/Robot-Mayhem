@@ -18,6 +18,7 @@ public class Bosses {
     to change it in here.
      */
     public final String name = "name";
+    public final String normalSize = "normalSize";
     public final String idle = "idle";
     public final String hack = "hack";
     public final String skill = "skill";
@@ -32,6 +33,7 @@ public class Bosses {
 
     private String curName, curSkillName0, curSkillName1, curSkillName2,
                             curDialogStart, curDialogEnd;
+    private Boolean curNormalSize;
 
     public final String ROOMBOT = "Roombot";
     public final String COPPER = "Copper";
@@ -89,6 +91,7 @@ public class Bosses {
 
     private void bossRobber() {
         curName = ROBBER;
+        curNormalSize = true;
         curSkillName0 = skills.ATTACK;
         curSkillName1 = skills.SUCTION;
         curSkillName2 = skills.DUST;
@@ -106,6 +109,7 @@ public class Bosses {
 
     private void bossRoombot() {
         curName = ROOMBOT;
+        curNormalSize = false;
         curSkillName0 = skills.ATTACK;
         curSkillName1 = skills.SUCTION;
         curSkillName2 = skills.DUST;
@@ -122,6 +126,7 @@ public class Bosses {
 
     private void bossCopper() {
         curName = COPPER;
+        curNormalSize = true;
         curSkillName0 = skills.ATTACK;
         curSkillName1 = skills.SHOCK;
         curSkillName2 = skills.DUST;
@@ -139,6 +144,7 @@ public class Bosses {
     private void addToMap() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, curName);
+        map.put(normalSize, curNormalSize);
         map.put(idle, animIdle);
         map.put(skill, animAttack);
         map.put(takeHit, animDamage);

@@ -407,6 +407,7 @@ public class RoomFight extends RoomParent {
         protected boolean pauseStates = false;
         protected boolean hpIncorrect = false;
         protected boolean reflectingShield = false;
+        protected boolean normalSize = true;
 
         protected int animSpeed = 8;
         protected Animation<TextureRegion> curAnimation, curHitAnimation, idleAnim, hackAnim,
@@ -727,6 +728,7 @@ public class RoomFight extends RoomParent {
         protected void calcTargetHpSpd(double damage) {
             targetHp = hp - damage;
             if (targetHp < 0) targetHp = 0;
+            else if (targetHp > 100) targetHp = 100;
             hpDecreaseSpd = (targetHp - hp) / 100;
         }
 
@@ -1079,6 +1081,14 @@ public class RoomFight extends RoomParent {
                 removeButtons();
                 action = localize.get(action);
                 dialog.showSkillName(action);
+
+                if (!opponent.normalSize) {
+                    if (curHitAnimation == files.animPhysicalHit) {
+                        curHitAnimation = files.animPhysicalHitLow;
+                    } else if (curHitAnimation == files.animSkillHit) {
+                        curHitAnimation = files.animPhysicalHitLow;
+                    }
+                }
             }
         }
 
@@ -1306,6 +1316,9 @@ public class RoomFight extends RoomParent {
                 Sound snd = (Sound) mapSkill.get(skills.sound);
                 sounds[i] = snd;
             }
+
+            // Retrieve boss's size
+            normalSize = (Boolean) mapBoss.get(bosses.normalSize);
 
             // Retrieve enemy animations and speed
             idleAnim = (Animation<TextureRegion>) mapBoss.get(bosses.idle);

@@ -20,9 +20,10 @@ public class Files {
 
     // Skills textures and animations
     private final Texture healthPlus, healthMinus, criticalHit, miss, healing,
-            dotMinus, dotPlus, physicalHit;
+            dotMinus, dotPlus, physicalHit, physicalHitLow, skillHit, skillHitLow;
     public final Animation<TextureRegion> animHealthPlusDoT, animHealthMinusDoT,
-            animMiss, animCriticalHit, animHealing, animDoTPlus, animDoTMinus, animPhysicalHit;
+            animMiss, animCriticalHit, animHealing, animDoTPlus, animDoTMinus, animPhysicalHit,
+            animPhysicalHitLow, animSkillHit, animSkillHitLow;
 
     // Roombot textures and animations
     private final Texture t_roombotIdle, t_roombotAttack, t_roombotDamage, t_roombotStun;
@@ -84,9 +85,12 @@ public class Files {
         criticalHit = manager.get("texture/skills/criticalHit.png");
         miss = manager.get("texture/skills/miss.png");
         healing = manager.get("texture/skills/healing.png");
-        dotMinus = manager.get("texture/skills/dotMinus.png");
-        dotPlus = manager.get("texture/skills/dotPlus.png");
+        dotMinus = manager.get("texture/skills/dotNegative.png");
+        dotPlus = manager.get("texture/skills/dotPositive.png");
         physicalHit = manager.get("texture/skills/physicalHit.png");
+        physicalHitLow = manager.get("texture/skills/physicalHitLow.png");
+        skillHit = manager.get("texture/skills/skillHit.png");
+        skillHitLow = manager.get("texture/skills/skillHitLow.png");
         // Other
         imgBgHall = manager.get("texture/bg_hall1.png");
         imgBgBoss = manager.get("texture/bg_hall1_boss.png");
@@ -111,14 +115,17 @@ public class Files {
         animDeath = createAnims.createAnimation(playerDeath, 4, 2);
         animTakeHitAnim = createAnims.createAnimation(playerTakeHit, 4, 1);
         animGameMoving = createAnims.createAnimation(playerGameMoving, 4, 1);
-        animHealthPlusDoT = createAnims.createAnimation(healthPlus, 3, 1);
-        animHealthMinusDoT = createAnims.createAnimation(healthMinus, 3, 1);
+        animHealthPlusDoT = createAnims.createAnimation(healthPlus, 4, 1);
+        animHealthMinusDoT = createAnims.createAnimation(healthMinus, 4, 1);
         animCriticalHit = createAnims.createAnimation(criticalHit, 4, 1);
         animMiss = createAnims.createAnimation(miss, 4, 1);
         animHealing = createAnims.createAnimation(healing, 4, 1);
         animDoTPlus = createAnims.createAnimation(dotPlus, 4, 1);
         animDoTMinus = createAnims.createAnimation(dotMinus, 4, 1);
         animPhysicalHit = createAnims.createAnimation(physicalHit, 4, 1);
+        animPhysicalHitLow = createAnims.createAnimation(physicalHitLow, 4, 1);
+        animSkillHit = createAnims.createAnimation(skillHit, 4, 1);
+        animSkillHitLow = createAnims.createAnimation(skillHitLow, 4, 1);
 
         /*
         Bosses Textures and animations
@@ -216,9 +223,12 @@ public class Files {
         manager.load("texture/skills/criticalHit.png", Texture.class);
         manager.load("texture/skills/miss.png", Texture.class);
         manager.load("texture/skills/healing.png", Texture.class);
-        manager.load("texture/skills/dotMinus.png", Texture.class);
-        manager.load("texture/skills/dotPlus.png", Texture.class);
+        manager.load("texture/skills/dotNegative.png", Texture.class);
+        manager.load("texture/skills/dotPositive.png", Texture.class);
         manager.load("texture/skills/physicalHit.png", Texture.class);
+        manager.load("texture/skills/physicalHitLow.png", Texture.class);
+        manager.load("texture/skills/skillHit.png", Texture.class);
+        manager.load("texture/skills/skillHitLow.png", Texture.class);
         // Other
         manager.load("texture/bg_hall1.png", Texture.class);
         manager.load("texture/bg_hall1_boss.png", Texture.class);
