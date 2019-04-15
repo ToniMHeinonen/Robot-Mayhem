@@ -9,6 +9,21 @@ com.badlogic.gdx.graphics.g2d.BitmapFont: {
 	font-small: {
 		file: font-small.fnt
 	}
+	font30: {
+		file: font30.fnt
+	}
+	font34: {
+		file: font34.fnt
+	}
+	font38: {
+		file: font38.fnt
+	}
+	font42: {
+		file: font42.fnt
+	}
+	font46: {
+		file: font46.fnt
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 	default: {
@@ -138,6 +153,21 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	}
 	small: {
 		font: font-small
+	}
+	font30: {
+		font: font30
+	}
+	font34: {
+		font: font34
+	}
+	font38: {
+		font: font38
+	}
+	font42: {
+		font: font42
+	}
+	font46: {
+		font: font46
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {

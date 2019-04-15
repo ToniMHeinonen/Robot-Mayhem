@@ -138,7 +138,8 @@ public class UtilItem {
         for (int i = 0; i < allItems.length; i++) {
             buttonCounterBuyable = i;
             String itemName = localize.get(allItems[i]);
-            Label shopItems = new Label(itemName, finalSkin, getFontSize(itemName));
+            Label checkFontSize = new Label(itemName, finalSkin);
+            Label shopItems = new Label(itemName, finalSkin, getFontSize(checkFontSize));
             tableBuyableItems.add(shopItems).size(505, 75);
             buyableItems++;
 
@@ -199,7 +200,8 @@ public class UtilItem {
                 if (inventory.get(j).contains(allSkills[i])) {
                     final int counterSkills = i;
                     String skillName = localize.get(inventory.get(j));
-                    Label ownedSkill = new Label(skillName, finalSkin, getFontSize(skillName));
+                    Label checkFontSize = new Label(skillName, finalSkin);
+                    Label ownedSkill = new Label(skillName, finalSkin, getFontSize(checkFontSize));
                     tableOwnedItems.add(ownedSkill).size(550, 75).row();
                     ownedItems++;
                     ownedSkill.addListener(new ClickListener(){
@@ -219,7 +221,8 @@ public class UtilItem {
             buttonCounterOwned = i;
             if (game.inventoryOrSkillsContains(allItems[i])) {
                 String itemName = localize.get(allItems[i]);
-                Label ownedItem = new Label(itemName, finalSkin, getFontSize(itemName));
+                Label checkFontSize = new Label(itemName, finalSkin);
+                Label ownedItem = new Label(itemName, finalSkin, getFontSize(checkFontSize));
                 tableOwnedItems.add(ownedItem).size(505, 75);
                 ownedItems++;
 
@@ -483,12 +486,39 @@ public class UtilItem {
     /*
     If items or skills are more than 17 characters long, it will put smaller font to them.
      */
-    private String getFontSize(String item) {
+    private String getFontSize(Label checkFontSize) {
+        /*
         fontSize = "default";
         if (item.length() >= 17) {
             fontSize = "small";
         }
         return fontSize;
+        */
+        String returnStyle = "";
+        if (checkFontSize.getWidth() >= 0 && checkFontSize.getWidth() < 480) {
+            returnStyle = "default";
+        }
+
+        if (checkFontSize.getWidth() >= 480 && checkFontSize.getWidth() < 650) {
+            returnStyle = "font46";
+        }
+
+        if (checkFontSize.getWidth() >= 650 && checkFontSize.getWidth() < 730) {
+            returnStyle = "font42";
+        }
+
+        if (checkFontSize.getWidth() >= 730 && checkFontSize.getWidth() < 800) {
+            returnStyle = "font38";
+        }
+
+        if (checkFontSize.getWidth() >= 800 && checkFontSize.getWidth() < 890) {
+            returnStyle = "font34";
+        }
+
+        if (checkFontSize.getWidth() >= 890) {
+            returnStyle = "font30";
+        }
+        return returnStyle;
     }
 
     private void createBackButton(final Dialog dialog) {
