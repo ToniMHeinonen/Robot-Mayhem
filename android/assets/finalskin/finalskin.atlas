@@ -329,28 +329,28 @@ lang_en2
   index: -1
 lang_en_locked1
   rotate: false
-  xy: 1447, 1267
+  xy: 483, 1300
   size: 480, 120
   orig: 480, 120
   offset: 0, 0
   index: -1
 lang_en_locked2
   rotate: false
-  xy: 1, 1178
+  xy: 965, 1267
   size: 480, 120
   orig: 480, 120
   offset: 0, 0
   index: -1
 lang_fi1
   rotate: false
-  xy: 483, 1300
+  xy: 1447, 1267
   size: 480, 120
   orig: 480, 120
   offset: 0, 0
   index: -1
 lang_fi2
   rotate: false
-  xy: 965, 1267
+  xy: 1, 1178
   size: 480, 120
   orig: 480, 120
   offset: 0, 0
@@ -494,6 +494,41 @@ font-small
   orig: 320, 512
   offset: 0, 0
   index: -1
+font30
+  rotate: false
+  xy: 1324, 97
+  size: 188, 504
+  orig: 188, 504
+  offset: 0, 0
+  index: -1
+font34
+  rotate: false
+  xy: 1119, 89
+  size: 203, 512
+  orig: 203, 512
+  offset: 0, 0
+  index: -1
+font38
+  rotate: false
+  xy: 910, 66
+  size: 207, 511
+  orig: 207, 511
+  offset: 0, 0
+  index: -1
+font42
+  rotate: false
+  xy: 668, 67
+  size: 240, 510
+  orig: 240, 510
+  offset: 0, 0
+  index: -1
+font46
+  rotate: false
+  xy: 363, 215
+  size: 303, 512
+  orig: 303, 512
+  offset: 0, 0
+  index: -1
 quit1_fi
   rotate: false
   xy: 1, 1337
@@ -625,40 +660,5 @@ volumeslider
   xy: 1449, 1457
   size: 120, 120
   orig: 120, 120
-  offset: 0, 0
-  index: -1
-font30
-  rotate: false
-  xy: 1324, 97
-  size: 188, 504
-  orig: 188, 504
-  offset: 0, 0
-  index: -1
-font34
-  rotate: false
-  xy: 1119, 89
-  size: 203, 512
-  orig: 203, 512
-  offset: 0, 0
-  index: -1
-font38
-  rotate: false
-  xy: 910, 66
-  size: 207, 511
-  orig: 207, 511
-  offset: 0, 0
-  index: -1
-font42
-  rotate: false
-  xy: 668, 67
-  size: 240, 510
-  orig: 240, 510
-  offset: 0, 0
-  index: -1
-font46
-  rotate: false
-  xy: 363, 215
-  size: 303, 512
-  orig: 303, 512
   offset: 0, 0
   index: -1

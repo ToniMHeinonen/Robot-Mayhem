@@ -430,8 +430,8 @@ public class UtilItem {
                 "popup_powerup");
 
         TextButton buttonSkill1 = new TextButton(localize.get(game.getSkill1()),
-                finalSkin, "small");
-        buttonSkill1.setPosition(470, 210);
+                finalSkin, "smallest");
+        buttonSkill1.setPosition(480, 210);
         buttonSkill1.setDisabled(true);
         if (room.equals("hall")) {
             buttonSkill1.setDisabled(false);
@@ -449,8 +449,8 @@ public class UtilItem {
         }
 
         TextButton buttonSkill2 = new TextButton(localize.get(game.getSkill2()),
-                finalSkin, "small");
-        buttonSkill2.setPosition(820, 210);
+                finalSkin, "smallest");
+        buttonSkill2.setPosition(830, 210);
         buttonSkill2.setDisabled(true);
         if (room.equals("hall")) {
             buttonSkill2.setDisabled(false);
@@ -467,8 +467,8 @@ public class UtilItem {
             });
         }
 
-        TextButton buttonCancel = new TextButton(localize.get("cancel"), finalSkin, "small");
-        buttonCancel.setPosition(1175, 210);
+        TextButton buttonCancel = new TextButton(localize.get("cancel"), finalSkin, "smallest");
+        buttonCancel.setPosition(1185, 210);
         buttonCancel.setSize(250, 120);
         buttonCancel.addListener(new ClickListener() {
             @Override
