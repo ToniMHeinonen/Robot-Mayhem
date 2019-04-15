@@ -122,7 +122,7 @@ public class UtilPowerUp {
 
                 if (random[i] == MONEY) {
                     name = "money";
-                    moneyAmount = MathUtils.random(5, 10);
+                    moneyAmount = MathUtils.random(15, 20);
                     description = String.valueOf(moneyAmount) + " " + localize.get("shinyCoins");
                     break;
                 } else {
@@ -152,7 +152,7 @@ public class UtilPowerUp {
 
             if (random == MONEY) {
                 name = "money";
-                moneyAmount = MathUtils.random(5, 10);
+                moneyAmount = MathUtils.random(15, 20);
                 description = String.valueOf(moneyAmount) + " " + localize.get("shinyCoins");
                 break;
             } else {

@@ -141,7 +141,6 @@ public class RoomFight extends RoomParent {
             case DEAD: {
                 if (!startDeathTimer) {
                     startDeathTimer = true;
-                    game.setStepCount(game.getProgressBarMilestone()*0.5f);
                     game.playSound(files.sndLoseToBoss);
                 }
 
@@ -666,10 +665,8 @@ public class RoomFight extends RoomParent {
             double takeDoT = 0;
             for (int i = 0; i < dotTurns.size(); i++) {
                 double damage = dotDamage.get(i);
-                System.out.println(damage);
                 if (damage > 0) damage -= damage * armorBoost;
                 else damage += damage * healBoost;
-                System.out.println(damage);
                 takeDoT += damage;
                 dotTurns.set(i, dotTurns.get(i) - 1);
                 if (dotTurns.get(i) == 0) {
@@ -870,9 +867,7 @@ public class RoomFight extends RoomParent {
                     knockbackSoft();
                 }
             } else {
-                System.out.println(damage);
                 damage -= damage * armorBoost;
-                System.out.println(damage);
                 knockbackHard();
                 calcTargetHpSpd(damage);
                 changeToTakeHitAnimation();
