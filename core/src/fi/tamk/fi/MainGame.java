@@ -83,6 +83,11 @@ public class MainGame extends Game {
 	private String keyName = E.encrypt("name");
 	private String keyFightsWon = E.encrypt("fightsWon");
 	private String keyPrevDayGift = E.encrypt("prevDayGift");
+	private String keyCritBoost = E.encrypt("critBoost");
+	private String keyMissBoost = E.encrypt("missBoost");
+	private String keyArmorBoost = E.encrypt("armorBoost");
+	private String keyDmgBoost = E.encrypt("dmgBoost");
+	private String keyHealBoost = E.encrypt("healBoost");
 	// Values
 	private int saveTimerAmount = 3600;
 	private int saveTimer = saveTimerAmount;
@@ -92,6 +97,8 @@ public class MainGame extends Game {
 	private int pool, poolMult, money, fightsWon, prevDayGift;
 	private String skill1, skill2, currentBoss, playerName;
 	private boolean firstPlayTime;
+	private int critBoost, missBoost;
+	private float armorBoost, dmgBoost, healBoost;
 	// Stat arrays
 	private ArrayList<String> inventory;
 	private int inventorySize; // Needed for loading correct amount of array items
@@ -479,6 +486,11 @@ public class MainGame extends Game {
 		playerName = stats.loadValue(keyName, "");
 		fightsWon = stats.loadValue(keyFightsWon, 0);
 		prevDayGift = stats.loadValue(keyPrevDayGift, -1);
+		critBoost = stats.loadValue(keyCritBoost, 0);
+		missBoost = stats.loadValue(keyMissBoost, 0);
+		dmgBoost = stats.loadValue(keyDmgBoost, 0f);
+		armorBoost = stats.loadValue(keyArmorBoost, 0f);
+		healBoost = stats.loadValue(keyHealBoost, 0f);
 
 		// Load the size of inventory before loading inventory items
 		inventorySize = stats.loadValue(keyInventorySize, 0);
@@ -509,6 +521,11 @@ public class MainGame extends Game {
 		stats.saveValue(keyName, playerName);
 		stats.saveValue(keyFightsWon, fightsWon);
 		stats.saveValue(keyPrevDayGift, prevDayGift);
+		stats.saveValue(keyCritBoost, critBoost);
+		stats.saveValue(keyMissBoost, missBoost);
+		stats.saveValue(keyDmgBoost, dmgBoost);
+		stats.saveValue(keyArmorBoost, armorBoost);
+		stats.saveValue(keyHealBoost, healBoost);
 
 		// Save inventory's current size on inventorySize key
 		stats.saveValue(keyInventorySize, inventory.size());
@@ -568,7 +585,12 @@ public class MainGame extends Game {
 		fightsWon ++;
 		chooseNextMilestone();
 
-		// Add bank steps in roomGame
+		// Reset boost values
+		critBoost = 0;
+		missBoost = 0;
+		dmgBoost = 0;
+		armorBoost = 0;
+		healBoost = 0;
 
 		currentBoss = bosses.selectRandomBoss(); // Randomize new boss
 		selectRandomBossMusic(); // Randomize new song
@@ -647,9 +669,49 @@ public class MainGame extends Game {
 	    money -= amount;
     }
 
+    public void addCritBoost(int amount) {
+		critBoost += amount;
+	}
+
+	public void addMissBoost(int amount) {
+		missBoost += amount;
+	}
+
+	public void addDmgBoost(double amount) {
+		dmgBoost += amount;
+	}
+
+	public void addArmorBoost(double amount) {
+		armorBoost += amount;
+	}
+
+	public void addHealBoost(double amount) {
+		healBoost += amount;
+	}
+
 	/*
 	GETTERS
 	 */
+
+	public int getCritBoost() {
+		return critBoost;
+	}
+
+	public int getMissBoost() {
+		return missBoost;
+	}
+
+	public float getArmorBoost() {
+		return armorBoost;
+	}
+
+	public float getDmgBoost() {
+		return dmgBoost;
+	}
+
+	public float getHealBoost() {
+		return healBoost;
+	}
 
 	public SpriteBatch getBatch() {
 		return batch;

@@ -569,22 +569,27 @@ public class RoomFight extends RoomParent {
             if (boost == items.CRIT_BOOST) {
                 int amount = (Integer) item.get(items.value);
                 critBoost += amount;
+                game.addCritBoost(amount);
                 turnState = END_ACTION;
             } else if (boost == items.MISS_BOOST) {
                 int amount = (Integer) item.get(items.value);
                 missBoost += amount;
+                game.addMissBoost(amount);
                 turnState = END_ACTION;
             } else if (boost == items.DMG_BOOST) {
                 double amount = (Double) item.get(items.value);
                 dmgBoost += amount;
+                game.addDmgBoost(amount);
                 turnState = END_ACTION;
             } else if (boost == items.ARMOR_BOOST) {
                 double amount = (Double) item.get(items.value);
                 armorBoost += amount;
+                game.addArmorBoost(amount);
                 turnState = END_ACTION;
             } else if (boost == items.HEAL_BOOST) {
                 double amount = (Double) item.get(items.value);
                 healBoost += amount;
+                game.addHealBoost(amount);
                 turnState = END_ACTION;
             } else if (usedItem == items.POTION) {
                 // This is here just for tomorrow's show
@@ -932,6 +937,13 @@ public class RoomFight extends RoomParent {
             defaultDmg = defaultDamages[game.getPoolMult()];
             ifDead = State.DEAD;
             ID = PLAYER;
+
+            //Retrieve saved boosts
+            critBoost = game.getCritBoost();
+            missBoost = game.getMissBoost();
+            dmgBoost = game.getDmgBoost();
+            armorBoost = game.getArmorBoost();
+            healBoost = game.getHealBoost();
 
             addSkillsToMap();
 
