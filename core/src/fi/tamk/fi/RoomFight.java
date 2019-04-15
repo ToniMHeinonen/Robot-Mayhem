@@ -396,6 +396,7 @@ public class RoomFight extends RoomParent {
         protected int ID, PLAYER = 0, ENEMY = 1;
         protected Fighters opponent;
         protected int critBoost, missBoost;
+        protected double dmgBoost;
 
         protected float positionOffset;
         protected boolean positionIncorrect;
@@ -556,6 +557,9 @@ public class RoomFight extends RoomParent {
                     actionState = DOT_ANIM;
                     if (dotAmount > 0) opponent.startHitAnimation(dotMinus, animSpeed);
                     else startHitAnimation(dotPlus, animSpeed);
+                } else if (usedItem != null) {
+                    usedItem = null;
+                    turnState = WAIT_FOR_ACTION;
                 }
             }
         }
@@ -569,6 +573,10 @@ public class RoomFight extends RoomParent {
             } else if ((Boolean) item.get(items.missBoost)) {
                 int amount = (Integer) item.get(items.value);
                 missBoost += amount;
+                turnState = END_ACTION;
+            } else if ((Boolean) item.get(items.dmgBoost)) {
+                int amount = (Integer) item.get(items.value);
+                dmgBoost += amount;
                 turnState = END_ACTION;
             } else if (usedItem == items.POTION) {
                 // This is here just for tomorrow's show
@@ -978,7 +986,7 @@ public class RoomFight extends RoomParent {
                 if (miss) skillState = SKILL_MISS;
                 else {
                     curHitAnimation = (Animation<TextureRegion>) mapAttack.get(skills.hitAnimation);
-                    dmgAmount = defaultDmg;
+                    dmgAmount = defaultDmg + dmgBoost;
                     dealCriticalHit = randomCritChance((Integer) mapAttack.get(skills.critChance));
                     if (dealCriticalHit) dmgAmount *= 1.5;
                 }
@@ -1037,7 +1045,8 @@ public class RoomFight extends RoomParent {
                                     skillState = SKILL_DAMAGE;
 
                                     // If critical hit, deal 1.5x damage
-                                    dmgAmount = defaultDmg * (Double) skillMap.get(skills.damage);
+                                    dmgAmount = (defaultDmg + dmgBoost) *
+                                            (Double) skillMap.get(skills.damage);
                                     dealCriticalHit = randomCritChance((Integer)
                                             skillMap.get(skills.critChance));
                                     if (dealCriticalHit) dmgAmount *= 1.5;
@@ -1050,7 +1059,7 @@ public class RoomFight extends RoomParent {
                             // If purePercent is true, then dot value 2.0 deals 2 percent of MaxHp
                             // otherwise it deals 2.0*defaultDmg
                             if ((Boolean) skillMap.get(skills.dotPurePercent)) dot = value;
-                            else dot = value * defaultDmg;
+                            else dot = value * (defaultDmg + dmgBoost);
                             dotAmount = dot;
                             int dotTurns = (Integer) skillMap.get(skills.damageOverTimeTurns);
                             if (dot != 0) {
@@ -1366,7 +1375,7 @@ public class RoomFight extends RoomParent {
                             skillState = SKILL_DAMAGE;
 
                             // If critical hit, deal 1.5x damage
-                            dmgAmount = defaultDmg * damages[random];
+                            dmgAmount = (defaultDmg + dmgBoost) * damages[random];
                             dealCriticalHit = randomCritChance(critChances[random]);
                             if (dealCriticalHit) dmgAmount *= 1.5;
                         }
@@ -1375,7 +1384,7 @@ public class RoomFight extends RoomParent {
                     // Damage over time (can happen with healing and damage)
                     double dot;
                     if (dotPurePercents[random]) dot = damageOverTimes[random];
-                    else dot = damageOverTimes[random] * defaultDmg;
+                    else dot = damageOverTimes[random] * (defaultDmg + dmgBoost);
                     int dotTurns = damageOverTimeTurns[random];
                     dotAmount = dot;
                     if (dot != 0) {
