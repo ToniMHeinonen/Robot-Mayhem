@@ -376,7 +376,8 @@ public class RoomFight extends RoomParent {
     public class Fighters {
 
         protected float X, Y;
-        protected double maxHp, hp, targetHp, hpDecreaseSpd, defaultDmg, dmgAmount, dotAmount;
+        protected double maxHp, hp, targetHp, hpDecreaseSpd, defaultDmg, wholeDmg, dmgAmount,
+                dotAmount;
         protected ArrayList<Double> dotDamage = new ArrayList<Double>();
         protected ArrayList<Integer> dotTurns = new ArrayList<Integer>();
         protected Animating anim = new Animating();
@@ -396,7 +397,7 @@ public class RoomFight extends RoomParent {
         protected int ID, PLAYER = 0, ENEMY = 1;
         protected Fighters opponent;
         protected int critBoost, missBoost;
-        protected double dmgBoost;
+        protected double dmgBoost, armorBoost, healBoost;
 
         protected float positionOffset;
         protected boolean positionIncorrect;
@@ -413,7 +414,7 @@ public class RoomFight extends RoomParent {
         protected int animSpeed = 8;
         protected Animation<TextureRegion> curAnimation, curHitAnimation, idleAnim, hackAnim,
                 skillAnim, takeHitAnim, healthPlus, healthMinus, criticalHitAnim, missAnim,
-                healAnim, dotMinus, dotPlus;
+                dotMinus, dotPlus;
         protected HashMap<String,Integer> cooldowns;
         protected String usedItem;
 
@@ -424,7 +425,6 @@ public class RoomFight extends RoomParent {
             dotPlus = files.animDoTPlus;
             criticalHitAnim = files.animCriticalHit;
             missAnim = files.animMiss;
-            healAnim = files.animHealing;
         }
 
         // Do this at the start of update method
@@ -501,7 +501,7 @@ public class RoomFight extends RoomParent {
                         actionState = HIT_ANIM;
                     } else if (skillState == SKILL_HEAL){
                         takeHeal(dmgAmount);
-                        startHitAnimation(healAnim, animSpeed);
+                        startHitAnimation(healthPlus, animSpeed);
                         actionState = HEAL_ANIM;
                     } else if (skillState == SKILL_MISS) {
                         opponent.startMissAnimation();
@@ -566,22 +566,31 @@ public class RoomFight extends RoomParent {
 
         protected void useItem() {
             HashMap<String, Object> item = items.getItem(usedItem);
-            if ((Boolean) item.get(items.critBoost)) {
+            int boost = (Integer) item.get(items.boostType);
+            if (boost == items.CRIT_BOOST) {
                 int amount = (Integer) item.get(items.value);
                 critBoost += amount;
                 turnState = END_ACTION;
-            } else if ((Boolean) item.get(items.missBoost)) {
+            } else if (boost == items.MISS_BOOST) {
                 int amount = (Integer) item.get(items.value);
                 missBoost += amount;
                 turnState = END_ACTION;
-            } else if ((Boolean) item.get(items.dmgBoost)) {
-                int amount = (Integer) item.get(items.value);
+            } else if (boost == items.DMG_BOOST) {
+                double amount = (Double) item.get(items.value);
                 dmgBoost += amount;
+                turnState = END_ACTION;
+            } else if (boost == items.ARMOR_BOOST) {
+                double amount = (Double) item.get(items.value);
+                armorBoost += amount;
+                turnState = END_ACTION;
+            } else if (boost == items.HEAL_BOOST) {
+                double amount = (Double) item.get(items.value);
+                healBoost += amount;
                 turnState = END_ACTION;
             } else if (usedItem == items.POTION) {
                 // This is here just for tomorrow's show
                 takeHeal(-50);
-                startHitAnimation(healAnim, animSpeed);
+                startHitAnimation(healthPlus, animSpeed);
                 actionState = HEAL_ANIM;
             }
 
@@ -656,7 +665,12 @@ public class RoomFight extends RoomParent {
         protected void checkDoT() {
             double takeDoT = 0;
             for (int i = 0; i < dotTurns.size(); i++) {
-                takeDoT += dotDamage.get(i);
+                double damage = dotDamage.get(i);
+                System.out.println(damage);
+                if (damage > 0) damage -= damage * armorBoost;
+                else damage += damage * healBoost;
+                System.out.println(damage);
+                takeDoT += damage;
                 dotTurns.set(i, dotTurns.get(i) - 1);
                 if (dotTurns.get(i) == 0) {
                     dotTurns.remove(i);
@@ -856,6 +870,9 @@ public class RoomFight extends RoomParent {
                     knockbackSoft();
                 }
             } else {
+                System.out.println(damage);
+                damage -= damage * armorBoost;
+                System.out.println(damage);
                 knockbackHard();
                 calcTargetHpSpd(damage);
                 changeToTakeHitAnimation();
@@ -863,6 +880,7 @@ public class RoomFight extends RoomParent {
         }
 
         protected void takeHeal(double damage) {
+            damage += damage * healBoost;
             game.playSound(files.sndFastHeal);
             calcTargetHpSpd(damage);
         }
@@ -972,6 +990,7 @@ public class RoomFight extends RoomParent {
             // Reset necessary values
             curHitAnimation = null;
             dealDoT = false;
+            wholeDmg = defaultDmg + (defaultDmg * dmgBoost);
             skillState = SKILL_RESET;
             boolean actionSelected = false;
             int curAnimSpd = 0;
@@ -986,7 +1005,7 @@ public class RoomFight extends RoomParent {
                 if (miss) skillState = SKILL_MISS;
                 else {
                     curHitAnimation = (Animation<TextureRegion>) mapAttack.get(skills.hitAnimation);
-                    dmgAmount = defaultDmg + dmgBoost;
+                    dmgAmount = wholeDmg;
                     dealCriticalHit = randomCritChance((Integer) mapAttack.get(skills.critChance));
                     if (dealCriticalHit) dmgAmount *= 1.5;
                 }
@@ -1045,8 +1064,7 @@ public class RoomFight extends RoomParent {
                                     skillState = SKILL_DAMAGE;
 
                                     // If critical hit, deal 1.5x damage
-                                    dmgAmount = (defaultDmg + dmgBoost) *
-                                            (Double) skillMap.get(skills.damage);
+                                    dmgAmount = wholeDmg * (Double) skillMap.get(skills.damage);
                                     dealCriticalHit = randomCritChance((Integer)
                                             skillMap.get(skills.critChance));
                                     if (dealCriticalHit) dmgAmount *= 1.5;
@@ -1058,8 +1076,9 @@ public class RoomFight extends RoomParent {
                             double dot;
                             // If purePercent is true, then dot value 2.0 deals 2 percent of MaxHp
                             // otherwise it deals 2.0*defaultDmg
-                            if ((Boolean) skillMap.get(skills.dotPurePercent)) dot = value;
-                            else dot = value * (defaultDmg + dmgBoost);
+                            if ((Boolean) skillMap.get(skills.dotPurePercent)) dot = value +
+                                    (value * dmgBoost);
+                            else dot = value * wholeDmg;
                             dotAmount = dot;
                             int dotTurns = (Integer) skillMap.get(skills.damageOverTimeTurns);
                             if (dot != 0) {
@@ -1338,6 +1357,7 @@ public class RoomFight extends RoomParent {
                 actionTimer--;
             } else {
                 // Reset necessary values
+                wholeDmg = defaultDmg + (defaultDmg * dmgBoost);
                 curHitAnimation = null;
                 dealDoT = false;
                 skillState = SKILL_RESET;
@@ -1375,7 +1395,7 @@ public class RoomFight extends RoomParent {
                             skillState = SKILL_DAMAGE;
 
                             // If critical hit, deal 1.5x damage
-                            dmgAmount = (defaultDmg + dmgBoost) * damages[random];
+                            dmgAmount = wholeDmg * damages[random];
                             dealCriticalHit = randomCritChance(critChances[random]);
                             if (dealCriticalHit) dmgAmount *= 1.5;
                         }
@@ -1383,8 +1403,9 @@ public class RoomFight extends RoomParent {
 
                     // Damage over time (can happen with healing and damage)
                     double dot;
-                    if (dotPurePercents[random]) dot = damageOverTimes[random];
-                    else dot = damageOverTimes[random] * (defaultDmg + dmgBoost);
+                    double dmg = damageOverTimes[random];
+                    if (dotPurePercents[random]) dot = dmg + (dmg * dmgBoost);
+                    else dot = dmg * wholeDmg;
                     int dotTurns = damageOverTimeTurns[random];
                     dotAmount = dot;
                     if (dot != 0) {

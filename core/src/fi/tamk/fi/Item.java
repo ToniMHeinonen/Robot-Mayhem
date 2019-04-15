@@ -14,11 +14,10 @@ public class Item {
     public final String usedInHall = "usedInHall";
     public final String isSkill = "isSkill";
     public final String price = "price";
+    public final String boostType = "boostType";
 
-    // Fight item specific values
-    public final String critBoost = "critBoost";
-    public final String missBoost = "missBoost";
-    public final String dmgBoost = "dmgBoost";
+    public final int NO_BOOST = 0, CRIT_BOOST = 1, MISS_BOOST = 2, DMG_BOOST = 3, ARMOR_BOOST = 4,
+    HEAL_BOOST = 5;
 
     public final String BOMB = "BOMB";
     public final String POTION = "POTION";
@@ -26,8 +25,9 @@ public class Item {
     public final String OVERCLOCK = "OVERCLOCK";
     public final String LONG_SCOPE = "LONG_SCOPE";
     public final String POWER_POTION = "POWER_POTION";
+    public final String IRON_CASE = "IRON_CASE";
+    public final String REPAIR_BOT = "REPAIR_BOT";
 
-    private final int baseValue = 5;
     private final int basePrice = 10;
     private ArrayList<String> allItems = new ArrayList<String>();
     private HashMap<String,HashMap<String,Object>> mapItems;
@@ -52,6 +52,8 @@ public class Item {
         itemOverclock();
         itemLongScope();
         itemPowerPotion();
+        itemIronCase();
+        itemRepairBot();
     }
 
     public HashMap<String, Object> getItem(String item) {
@@ -77,9 +79,7 @@ public class Item {
         map.put(value, 50);
         map.put(usedInHall, false);
         map.put(isSkill, false);
-        map.put(critBoost, false);
-        map.put(missBoost, false);
-        map.put(dmgBoost, false);
+        map.put(boostType, NO_BOOST);
         map.put(price, 5);
 
         allItems.add((String) map.get(name));
@@ -93,9 +93,7 @@ public class Item {
         map.put(value, -50);
         map.put(usedInHall, false);
         map.put(isSkill, false);
-        map.put(critBoost, false);
-        map.put(missBoost, false);
-        map.put(dmgBoost, false);
+        map.put(boostType, NO_BOOST);
         map.put(price, 10);
 
         allItems.add((String) map.get(name));
@@ -109,9 +107,7 @@ public class Item {
         map.put(value, 0);
         map.put(usedInHall, true);
         map.put(isSkill, false);
-        map.put(critBoost, false);
-        map.put(missBoost, false);
-        map.put(dmgBoost, false);
+        map.put(boostType, NO_BOOST);
         map.put(price, 15);
 
         allItems.add((String) map.get(name));
@@ -119,6 +115,7 @@ public class Item {
     }
 
     private void itemOverclock() {
+        int baseValue = 5;
         for (int i = 1; i <=3; i++) {
             String index = String.valueOf(i);
             HashMap<String, Object> map = new HashMap<String, Object>();
@@ -127,9 +124,7 @@ public class Item {
             map.put(value, baseValue * i);
             map.put(usedInHall, false);
             map.put(isSkill, false);
-            map.put(critBoost, true);
-            map.put(missBoost, false);
-            map.put(dmgBoost, false);
+            map.put(boostType, CRIT_BOOST);
             map.put(price, basePrice * i);
 
             allItems.add((String) map.get(name));
@@ -138,6 +133,7 @@ public class Item {
     }
 
     private void itemLongScope() {
+        int baseValue = 5;
         for (int i = 1; i <=3; i++) {
             String index = String.valueOf(i);
             HashMap<String, Object> map = new HashMap<String, Object>();
@@ -146,9 +142,7 @@ public class Item {
             map.put(value, baseValue * i);
             map.put(usedInHall, false);
             map.put(isSkill, false);
-            map.put(critBoost, false);
-            map.put(missBoost, true);
-            map.put(dmgBoost, false);
+            map.put(boostType, MISS_BOOST);
             map.put(price, basePrice * i);
 
             allItems.add((String) map.get(name));
@@ -157,6 +151,7 @@ public class Item {
     }
 
     private void itemPowerPotion() {
+        double baseValue = 0.1;
         for (int i = 1; i <=3; i++) {
             String index = String.valueOf(i);
             HashMap<String, Object> map = new HashMap<String, Object>();
@@ -165,9 +160,43 @@ public class Item {
             map.put(value, baseValue * i);
             map.put(usedInHall, false);
             map.put(isSkill, false);
-            map.put(critBoost, false);
-            map.put(missBoost, false);
-            map.put(dmgBoost, true);
+            map.put(boostType, DMG_BOOST);
+            map.put(price, basePrice * i);
+
+            allItems.add((String) map.get(name));
+            mapItems.put((String) map.get(name), map);
+        }
+    }
+
+    private void itemIronCase() {
+        double[] values = new double[] {0.0, 0.15, 0.34, 0.5};
+        for (int i = 1; i <=3; i++) {
+            String index = String.valueOf(i);
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            map.put(name, IRON_CASE + index);
+            map.put(description, "ironCaseDesc" + index);
+            map.put(value, values[i]);
+            map.put(usedInHall, false);
+            map.put(isSkill, false);
+            map.put(boostType, ARMOR_BOOST);
+            map.put(price, basePrice * i);
+
+            allItems.add((String) map.get(name));
+            mapItems.put((String) map.get(name), map);
+        }
+    }
+
+    private void itemRepairBot() {
+        double baseValue = 0.2;
+        for (int i = 1; i <=3; i++) {
+            String index = String.valueOf(i);
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            map.put(name, REPAIR_BOT + index);
+            map.put(description, "repairBotDesc" + index);
+            map.put(value, baseValue * i);
+            map.put(usedInHall, false);
+            map.put(isSkill, false);
+            map.put(boostType, HEAL_BOOST);
             map.put(price, basePrice * i);
 
             allItems.add((String) map.get(name));
