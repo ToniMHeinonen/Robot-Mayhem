@@ -22,6 +22,9 @@ import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class MainGame extends Game {
@@ -33,6 +36,7 @@ public class MainGame extends Game {
 	private Item items;
 	private Bosses bosses;
 	private Music curMusic, curBossMusic;
+	private int curRoom, ROOM_GAME = 1, ROOM_FIGHT = 2;
 
 	public final float pixelWidth = 1920f;
 	public final float pixelHeight = 1080f;
@@ -77,13 +81,15 @@ public class MainGame extends Game {
 	private String keyDefeatedBossesSize = E.encrypt("defeatedBossesSize");
 	private String keyDefeatedBosses = E.encrypt("defeatedBosses");
 	private String keyName = E.encrypt("name");
+	private String keyFightsWon = E.encrypt("fightsWon");
+	private String keyPrevDayGift = E.encrypt("prevDayGift");
 	// Values
 	private int saveTimerAmount = 3600;
 	private int saveTimer = saveTimerAmount;
 	private Preferences prefsStats;
 	private SaveAndLoad stats;
 	private float stepCount, stepBank, stepAllCount;
-	private int pool, poolMult, money;
+	private int pool, poolMult, money, fightsWon, prevDayGift;
 	private String skill1, skill2, currentBoss, playerName;
 	private boolean firstPlayTime;
 	// Stat arrays
@@ -141,6 +147,7 @@ public class MainGame extends Game {
 		camera.setToOrtho(false, pixelWidth, pixelHeight);
 		initStats();
 		loadStats();
+		checkDate();
 
 		createSkinAndStage();
 		createProgressBarFiles();
@@ -201,6 +208,19 @@ public class MainGame extends Game {
 		curBossMusic = files.allBossMusic[random];
 	}
 
+	/**
+	 * Check current date. If date is different than saved date, then give random amount of money.
+	 */
+	private void checkDate() {
+		GregorianCalendar calendarG = new GregorianCalendar();
+		calendarG.setTime(new Date());
+		int currentDate = calendarG.get(Calendar.DAY_OF_YEAR);
+		if (currentDate != prevDayGift) {
+			prevDayGift = currentDate;
+			money += MathUtils.random(5, 10);
+		}
+	}
+
 	boolean haveWeChangedTheRoom = false;
 
 	public void transition() { haveWeChangedTheRoom = true; }
@@ -224,6 +244,7 @@ public class MainGame extends Game {
 		startMusic(files.musMainTheme);
 	    RoomGame room = new RoomGame(this);
         setScreen(room);
+        curRoom = ROOM_GAME;
     }
 
     public void switchToRoomFight() {
@@ -231,6 +252,8 @@ public class MainGame extends Game {
 		startMusic(curBossMusic);
 	    RoomFight room = new RoomFight(this);
 	    setScreen(room);
+	    curRoom = ROOM_FIGHT;
+	    stepCount /= 2;
     }
 
 	public void switchToPowerUps() {
@@ -454,6 +477,8 @@ public class MainGame extends Game {
 		pool = stats.loadValue(keyPool, 1);
 		poolMult = stats.loadValue(keyPoolMult, 0);
 		playerName = stats.loadValue(keyName, "");
+		fightsWon = stats.loadValue(keyFightsWon, 0);
+		prevDayGift = stats.loadValue(keyPrevDayGift, -1);
 
 		// Load the size of inventory before loading inventory items
 		inventorySize = stats.loadValue(keyInventorySize, 0);
@@ -482,6 +507,8 @@ public class MainGame extends Game {
 		stats.saveValue(keyPool, pool);
 		stats.saveValue(keyPoolMult, poolMult);
 		stats.saveValue(keyName, playerName);
+		stats.saveValue(keyFightsWon, fightsWon);
+		stats.saveValue(keyPrevDayGift, prevDayGift);
 
 		// Save inventory's current size on inventorySize key
 		stats.saveValue(keyInventorySize, inventory.size());
@@ -536,12 +563,15 @@ public class MainGame extends Game {
 		// defeatedBosses.add(currentBoss); Add when all the bosses exist
 
 		stepCount = 0; // Reset step count
+		money += MathUtils.random(5, 10);
 		poolMult++;
+		fightsWon ++;
 		chooseNextMilestone();
 
 		// Add bank steps in roomGame
 
 		currentBoss = bosses.selectRandomBoss(); // Randomize new boss
+		selectRandomBossMusic(); // Randomize new song
 
 		// Add when all the bosses exist
 		/*while (defeatedBosses.contains(currentBoss)) {
@@ -599,7 +629,7 @@ public class MainGame extends Game {
     // Receive steps on Android, if milestone is not reached, else add them to stepBank
 	public void receiveSteps(float stepCount) {
 		stepAllCount++;
-		if (this.stepCount < progressBarMilestone) this.stepCount++;
+		if (this.stepCount < progressBarMilestone && curRoom == ROOM_GAME) this.stepCount++;
 		else stepBank++;
 	}
 
