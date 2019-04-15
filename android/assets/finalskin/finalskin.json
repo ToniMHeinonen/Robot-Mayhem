@@ -118,6 +118,16 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
 		down: use2_fi
 		disabled: use0_fi
 	}
+	english_off: {
+		up: lang_en_locked1
+		down: lang_en_locked2
+		checked: lang_en_locked2
+	}
+	finnish_off: {
+		up: lang_fi_locked1
+		down: lang_fi_locked2
+		checked: lang_fi_locked2
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	default: {

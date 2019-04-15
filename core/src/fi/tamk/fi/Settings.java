@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -311,36 +312,51 @@ public class Settings {
     }
 
     private void createLanguageButtons() {
-        buttonFi = new ImageButton(finalSkin, "finnish");
+        String finnishStyle = "finnish";
+        String englishStyle = "english";
+        if (room == "fight") {
+            finnishStyle = "finnish_off";
+            englishStyle = "english_off";
+        }
+
+        buttonFi = new ImageButton(finalSkin, finnishStyle);
         buttonFi.setPosition(945, 240);
+        buttonFi.setTouchable(Touchable.disabled);
         if (lan.equals("fi")) {
             buttonFi.setChecked(true);
         }
-        buttonFi.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
+        if (room == "hall") {
+            buttonFi.setTouchable(Touchable.enabled);
+            buttonFi.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
                 /*buttonEn.setChecked(false);
                 buttonFi.setChecked(true);
                 settingsDialog.remove();*/
                 game.languageToFIN();
-            }
-        });
+                }
+            });
+        }
 
-        buttonEn = new ImageButton(finalSkin, "english");
+        buttonEn = new ImageButton(finalSkin, englishStyle);
         buttonEn.setPosition(buttonFi.getX(), buttonFi.getY() - 120);
+        buttonEn.setTouchable(Touchable.disabled);
         if (lan.equals("en")) {
             buttonEn.setChecked(true);
         }
-        buttonEn.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
+        if (room == "hall") {
+            buttonEn.setTouchable(Touchable.enabled);
+            buttonEn.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
                 /*buttonFi.setChecked(false);
                 buttonEn.setChecked(true);
                 settingsDialog.remove();
                 Settings settings = new Settings(game, room);*/
                 game.languageToENG();
-            }
-        });
+                }
+            });
+        }
 
         settingsDialog.addActor(buttonFi);
         settingsDialog.addActor(buttonEn);
