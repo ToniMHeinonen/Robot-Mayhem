@@ -591,6 +591,7 @@ public class MainGame extends Game {
 
 	// Receive steps on Desktop, if milestone is not reached, else add them to stepBank
     public void simulateStep() {
+		stepAllCount++;
 		if (stepCount < progressBarMilestone) this.stepCount++;
 		else if (stepBank < 3000) stepBank++;
 	}
