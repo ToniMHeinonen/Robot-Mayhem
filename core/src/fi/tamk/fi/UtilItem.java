@@ -138,12 +138,12 @@ public class UtilItem {
             buttonCounterBuyable = i;
             String itemName = localize.get(allItems[i]);
             Label shopItems = new Label(itemName, finalSkin, getFontSize(itemName));
-            tableBuyableItems.add(shopItems).size(520, 75);
+            tableBuyableItems.add(shopItems).size(505, 75);
             buyableItems++;
 
             final String stringCost = String.valueOf(items.getItem(allItems[i]).get(items.price));
             Label labelPrice = new Label(stringCost, finalSkin);
-            tableBuyableItems.add(labelPrice).size(35, 75).row();
+            tableBuyableItems.add(labelPrice).size(50, 75).row();
 
             shopItems.addListener(new ClickListener(){
                 int i = buttonCounterBuyable;
