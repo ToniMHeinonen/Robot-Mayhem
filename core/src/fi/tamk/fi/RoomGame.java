@@ -27,17 +27,16 @@ public class RoomGame extends RoomParent {
     private float bgAddSpd = 0.5f; // Amount to add every step
     private final float maxSpd = 15f;
     private float curSteps;
-    private float goalSteps;
     private float bankSpd;
     private float bankRetrieved = game.getStepCount();
     private boolean milestoneReached;
+    private ImageButton fightButton;
     private Skin finalSkin;
 
     RoomGame(final MainGame game) {
         super(game);
         createProgressBar();
         curSteps = game.getStepCount();
-        goalSteps = progressBar.getMaxValue();
         finalSkin = files.finalSkin;
 
         calculateBankSpeed();
@@ -57,7 +56,8 @@ public class RoomGame extends RoomParent {
         super.render(delta);
 
         if (!game.haveWeChangedTheRoom) {
-
+            // Set correct milestone in case of difficulty gets changed
+            progressBar.setRange(0f, game.getProgressBarMilestone());
             batch.begin();
             controlBackground();
             drawTopAndBottomBar();
@@ -76,12 +76,12 @@ public class RoomGame extends RoomParent {
         milestoneReached = true;
         Drawable normal = testSkin.getDrawable("button_ATTACK");
         Drawable clicked = testSkin.getDrawable("button_clicked");
-        final ImageButton btn = new ImageButton(normal, clicked);
-        btn.setPosition(game.pixelWidth/2 - btn.getWidth()/2,
-                game.pixelHeight/2 - btn.getHeight()/2);
-        stage.addActor(btn);
+        fightButton = new ImageButton(normal, clicked);
+        fightButton.setPosition(game.pixelWidth/2 - fightButton.getWidth()/2,
+                game.pixelHeight/2 - fightButton.getHeight()/2);
+        stage.addActor(fightButton);
 
-        btn.addListener(new ClickListener(){
+        fightButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
                 game.switchToRoomFight();
@@ -138,10 +138,19 @@ public class RoomGame extends RoomParent {
 
     // If milestone has been reached, draw text and
     public void checkToChangeRoom() {
-        if (curSteps >= goalSteps) {
+        if (curSteps >= progressBar.getMaxValue()) {
             if (!milestoneReached) {
                 createButtonFight();
                 game.playSound(files.sndMilestoneAchieved);
+            }
+        } else {
+            /*
+            If milestone has been reached, but difficulty has been changed higher after that,
+            remove fightButton and reset mileStoneReached.
+             */
+            if (fightButton != null) {
+                fightButton.remove();
+                milestoneReached = false;
             }
         }
     }

@@ -194,7 +194,8 @@ public class Settings {
                         button.setChecked(false);
                     }
                     difficultyButtons[i].setChecked(true);
-                    game.setDifficulty(difficulties[i]);
+                    game.changeDifficulty(difficulties[i]);
+                    //game.setDifficulty(difficulties[i]);
                 }
             });
             settingsDialog.addActor(difficultyButtons[i]);
@@ -332,9 +333,6 @@ public class Settings {
             buttonFi.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                /*buttonEn.setChecked(false);
-                buttonFi.setChecked(true);
-                settingsDialog.remove();*/
                 game.languageToFIN();
                 }
             });
@@ -351,10 +349,6 @@ public class Settings {
             buttonEn.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                /*buttonFi.setChecked(false);
-                buttonEn.setChecked(true);
-                settingsDialog.remove();
-                Settings settings = new Settings(game, room);*/
                 game.languageToENG();
                 }
             });

@@ -381,7 +381,15 @@ public class MainGame extends Game {
         // If it's the first boss, make milestone 20
         if (pool == 1 && poolMult == 0) progressBarMilestone = 20;
         else progressBarMilestone = poolMilestones[pool] / 3;
+        if (difficulty.equals("easy")) progressBarMilestone *= 0.5;
+        else if (difficulty.equals("medium")) progressBarMilestone *= 1;
+		else if (difficulty.equals("hard")) progressBarMilestone *= 1.5;
     }
+
+    public void changeDifficulty(String dif) {
+		difficulty = dif;
+		chooseNextMilestone();
+	}
 
 	/**
 	 * Create bundle for localization. If language is set in settings, retrieve that language.

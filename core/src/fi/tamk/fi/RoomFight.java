@@ -62,9 +62,6 @@ public class RoomFight extends RoomParent {
     private Hacking hacking;
     private UtilPowerUp powerUp;
 
-    //Dialog
-    private float dialogX = 500f, dialogY = 500f;
-
     RoomFight(MainGame game) {
         super(game);
         imgBg = files.imgBgBoss;
@@ -932,7 +929,6 @@ public class RoomFight extends RoomParent {
             dmgBoost = game.getDmgBoost();
             armorBoost = game.getArmorBoost();
             healBoost = game.getHealBoost();
-
 
             addSkillsToMap();
 
