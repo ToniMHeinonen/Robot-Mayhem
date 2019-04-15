@@ -23,6 +23,7 @@ public class RoomParent implements Screen {
     protected Texture imgBG, imgTopBar, imgBottomBar;
     protected I18NBundle localize;
     protected MainGame game;
+    protected RoomParent thisRoom = this;
     protected Files files;
     protected Skills skills;
     protected Item items;
@@ -95,6 +96,10 @@ public class RoomParent implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
+    public void selectItem(String item) {
+        // This is need for this method to work correctly in RoomGame and RoomFight
+    }
+
     public void defaultColor() {
 
         Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -121,7 +126,7 @@ public class RoomParent implements Screen {
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                settings = new Settings(game, room);
+                settings = new Settings(game, room, thisRoom);
             }
         });
 

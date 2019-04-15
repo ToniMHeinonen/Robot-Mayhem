@@ -100,21 +100,9 @@ public class RoomFight extends RoomParent {
         }
     }
 
-    // Creates the upper left escape button
-    private void createPowerUpButton() {
-        final TextButton btn = new TextButton("PowerUpTest", skin);
-        btn.setWidth(300);
-        btn.setHeight(100);
-        btn.setPosition(200f, game.pixelHeight - 100f);
-        stage.addActor(btn);
-
-        btn.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                stage.clear();
-                state = State.POWER_UP;
-            }
-        });
+    @Override
+    public void selectItem(String item) {
+        player.selectItem(item);
     }
 
     private void universalStateChecks() {
@@ -1032,7 +1020,7 @@ public class RoomFight extends RoomParent {
             }
             else if (action.equals(skills.ITEM))
             {
-                UtilItem inventory = new UtilItem(game, "fight", this);
+                UtilItem inventory = new UtilItem(game, "fight", thisRoom);
                 /*actionSelected = true;
                 game.playSound(files.sndUseItem);
                 curAnimation = itemAnim;

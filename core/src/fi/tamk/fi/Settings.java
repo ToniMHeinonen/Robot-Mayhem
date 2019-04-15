@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 public class Settings {
     private MainGame game;
+    private RoomParent curRoom;
     private I18NBundle localize;
     private Files files;
     private Skin skin;
@@ -76,9 +77,10 @@ public class Settings {
     // Exit
     private ImageButton buttonExit;
 
-    Settings(MainGame game, String room) {
+    Settings(MainGame game, String room, RoomParent curRoom) {
         this.game = game;
         this.room = room;
+        this.curRoom = curRoom;
         localize = game.getLocalize();
         files = game.getFiles();
         skin = game.getSkin();
@@ -372,7 +374,7 @@ public class Settings {
         buttonInventory.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                UtilItem utilItem = new UtilItem(game, room);
+                UtilItem utilItem = new UtilItem(game, room, curRoom);
                 settingsDialog.remove();
             }
         });

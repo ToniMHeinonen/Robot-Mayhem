@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class UtilItem {
     private MainGame game;
-    private RoomFight.Player player;
+    private RoomParent curRoom;
     private I18NBundle localize;
     private Stage stage;
     private Skin skin;
@@ -67,16 +67,10 @@ public class UtilItem {
     ImageButton buttonInventory;
     ImageButton buttonStats;
 
-    UtilItem(MainGame game, String room) {
+    UtilItem(MainGame game, String room, RoomParent curRoom) {
         this.game = game;
         this.room = room;
-        create();
-    }
-
-    UtilItem(MainGame game, String room, RoomFight.Player player) {
-        this.game = game;
-        this.room = room;
-        this.player = player;
+        this.curRoom = curRoom;
         create();
     }
 
@@ -300,7 +294,7 @@ public class UtilItem {
         buttonSettings.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                Settings settings = new Settings(game, room);
+                Settings settings = new Settings(game, room, curRoom);
                 dialogItems.remove();
             }
         });
@@ -353,8 +347,7 @@ public class UtilItem {
                     popupBuyableItem.remove();
                     dialogItems.remove();
                     UtilItem utilItem;
-                    if (room.equals("fight")) utilItem = new UtilItem(game, room, player);
-                    else  utilItem = new UtilItem(game, room);
+                    utilItem = new UtilItem(game, room, curRoom);
                 }
             });
         }
@@ -399,22 +392,14 @@ public class UtilItem {
                     game.removeFromInventory(allItems[index]);
                     popupOwnedItem.remove();
                     dialogItems.remove();
-                    // This throws nullPointerException if I use player.selectItem method
-                    if (room.equals("fight")) player.selectItem(allItems[index]);
+                    System.out.println(curRoom);
+                    curRoom.selectItem(allItems[index]);
                 }
             });
         }
 
         popupOwnedItem.addActor(buttonUse);
         stage.addActor(popupOwnedItem);
-    }
-
-    /**
-     * Use item in RoomFight.
-     * @param item selected item
-     */
-    public void selectRoomFightItem(String item) {
-
     }
 
     /*
@@ -444,7 +429,7 @@ public class UtilItem {
                     game.removeFromInventory(allSkills[index]);
                     popupOwnedSkill.remove();
                     dialogItems.remove();
-                    UtilItem utilItem = new UtilItem(game, room);
+                    UtilItem utilItem = new UtilItem(game, room, curRoom);
                 }
             });
         }
@@ -463,7 +448,7 @@ public class UtilItem {
                     game.removeFromInventory(allSkills[index]);
                     popupOwnedSkill.remove();
                     dialogItems.remove();
-                    UtilItem utilItem = new UtilItem(game, room);
+                    UtilItem utilItem = new UtilItem(game, room, curRoom);
                 }
             });
         }
