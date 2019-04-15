@@ -783,15 +783,6 @@ public class RoomFight extends RoomParent {
             }
         }
 
-        /*protected boolean randomChance(int value) {
-            boolean critical = false;
-            int random = MathUtils.random(1, 100);
-
-            if (random <= value) critical = true;
-
-            return critical;
-        }*/
-
         protected boolean randomCritChance(int value) {
             value += critBoost;
             boolean critical = false;

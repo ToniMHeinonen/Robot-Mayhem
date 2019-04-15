@@ -347,26 +347,26 @@ public class MainGame extends Game {
         else progressBarMilestone = poolMilestones[pool] / 3;
     }
 
-	public void createBundle() {
+	/**
+	 * Create bundle for localization. If language is set in settings, retrieve that language.
+	 */
+    public void createBundle() {
 		Locale locale;
-		// If language is not either, then the game gets software's default language
+		// If language is not set, then the game gets software's default language
 		if (language.equals("fi")) locale = new Locale("fi", "FI");
-		else if (language.equals("en")) locale = null;
+		else if (language.equals("en")) locale = new Locale("", "");
 		else locale = Locale.getDefault();
 
-		if (locale != null) {
-			localize = I18NBundle.createBundle(Gdx.files.internal("MyBundle"),
-					locale, "ISO-8859-1");
-			// After initializing localize, make language variable the chosen one
-			if (locale.getLanguage().equals("fi")) language = "fi";
-			else language = "en";
-		} else {
-			localize = I18NBundle.createBundle(Gdx.files.internal("MyBundle"),
-					"ISO-8859-1");
-			language = "en";
-		}
+		localize = I18NBundle.createBundle(Gdx.files.internal("MyBundle"),
+				locale, "ISO-8859-1");
+		// After initializing localize, make language variable the chosen one
+		if (locale.getLanguage().equals("fi")) language = "fi";
+		else language = "en";
 	}
 
+	/**
+	 * Change language to finnish and restart the game. Used in settings.
+	 */
 	public void languageToFIN() {
 		Locale locale = new Locale("fi", "FI");
 		localize = I18NBundle.createBundle(Gdx.files.internal("MyBundle"),
@@ -377,16 +377,23 @@ public class MainGame extends Game {
 		restartGame();
 	}
 
+	/**
+	 * Change language to english and restart the game. Used in settings.
+	 */
 	public void languageToENG() {
+		Locale locale = new Locale("", "");
 		localize = I18NBundle.createBundle(Gdx.files.internal("MyBundle"),
-				"ISO-8859-1");
+				locale, "ISO-8859-1");
 		language = "en";
 		saveSettings();
 		saveStats();
 		restartGame();
 	}
 
-    public void loadSettings() {
+	/**
+	 * Load settings values.
+	 */
+	public void loadSettings() {
 		settings = Gdx.app.getPreferences("Robot_Mayhem_Settings");
 		//settings.clear(); // For testing purposes
 		//settings.flush(); // Without flushing, clear does not work in Android
@@ -396,7 +403,10 @@ public class MainGame extends Game {
 		difficulty = settings.getString(keyDifficulty, "medium");
     }
 
-    public void saveSettings() {
+	/**
+	 * Save settings values.
+	 */
+	public void saveSettings() {
 	    settings.putFloat(keyMusicVol, musicVol);
 		settings.putFloat(keySoundVol, soundVol);
 	    settings.putString(keyLanguage, language);
@@ -404,9 +414,15 @@ public class MainGame extends Game {
 	    settings.flush();
     }
 
+	/**
+	 * Save stats every time timer is 0, then reset timer.
+	 */
     public void controlSaveTimer() {
 		if (saveTimer > 0) saveTimer--;
-		else saveTimer = saveTimerAmount; saveStats();
+		else {
+			saveTimer = saveTimerAmount;
+			saveStats();
+		}
 	}
 
 	/**
@@ -513,16 +529,8 @@ public class MainGame extends Game {
 			legal = false;
 		}
 
-		/*
-		You are flushing stats, even though you have not added anything new in it.
-		 */
-
-		// Comment: Thought this saved the name. :( Don't know what does.
-		//stats.flush();
 		return legal;
 	}
-
-	// Methods for name end.
 
 	public void bossDefeated() {
 		// defeatedBosses.add(currentBoss); Add when all the bosses exist
@@ -576,16 +584,7 @@ public class MainGame extends Game {
 
     private void createSkinAndStage() {
         stage = new Stage(new FitViewport(pixelWidth, pixelHeight), batch);
-        /*
-        Delete these comments before publishing
-         */
-        // Skin: https://github.com/czyzby/gdx-skins/tree/master/glassy
-        // Check "License" bottom of the page
-        // Files in \android\assets:
-        // font-big-export.fnt, font-export.fnt, glassy-ui.atlas,
-        // glassy-ui.json, glassy-ui.png
-        //skin = new Skin( Gdx.files.internal("glassy-ui.json") );
-        //finalSkin = new Skin(Gdx.files.internal("finalskin/finalskin.json"));
+
 		skin = files.skin;
 		finalSkin = files.finalSkin;
     }
@@ -598,6 +597,7 @@ public class MainGame extends Game {
 
     // Receive steps on Android, if milestone is not reached, else add them to stepBank
 	public void receiveSteps(float stepCount) {
+		stepAllCount++;
 		if (this.stepCount < progressBarMilestone) this.stepCount++;
 		else stepBank++;
 	}
