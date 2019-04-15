@@ -188,7 +188,7 @@ public class UtilItem {
         // Get the amount of owned items.
         for (int i = 0; i < allItems.length; i++) {
             for (int j = 0; j < inventory.size(); j++) {
-                if (inventory.get(j).contains(allItems[i])) {
+                if (inventory.get(j).equals(allItems[i])) {
                     amounts[i]++;
                 }
             }
@@ -197,12 +197,13 @@ public class UtilItem {
         // Get owned skills, which player isn't using currently.
         for (int i = 0; i < allSkills.length; i++) {
             for (int j = 0; j < inventory.size(); j++) {
-                if (inventory.get(j).contains(allSkills[i])) {
+                if (inventory.get(j).equals(allSkills[i])) {
                     final int counterSkills = i;
                     String skillName = localize.get(inventory.get(j));
                     Label checkFontSize = new Label(skillName, finalSkin);
                     Label ownedSkill = new Label(skillName, finalSkin, getFontSize(checkFontSize));
-                    tableOwnedItems.add(ownedSkill).size(550, 75).row();
+                    tableOwnedItems.add(ownedSkill).size(505, 75);
+                    tableOwnedItems.add().size(50, 75).row();
                     ownedItems++;
                     ownedSkill.addListener(new ClickListener(){
                         int i = counterSkills;
@@ -219,7 +220,7 @@ public class UtilItem {
 
         for (int i = 0; i < allItems.length; i++) {
             buttonCounterOwned = i;
-            if (game.inventoryOrSkillsContains(allItems[i])) {
+            if (inventory.contains(allItems[i])) {
                 String itemName = localize.get(allItems[i]);
                 Label checkFontSize = new Label(itemName, finalSkin);
                 Label ownedItem = new Label(itemName, finalSkin, getFontSize(checkFontSize));
