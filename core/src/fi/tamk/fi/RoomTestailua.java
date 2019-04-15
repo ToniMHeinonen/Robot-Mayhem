@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -59,10 +60,55 @@ public class RoomTestailua extends RoomParent {
         createButtonDialog();
         createButtonPowerup();
         addSkills();
+        fontSize();
         // playMusic();
 
         // Added for testing.
         createButtonItemTesting();
+    }
+
+    public void fontSize() {
+        String returnStyle = "";
+        String kk = "kext sgfdgffsdggfdgg hgghd";
+        Label item = new Label(kk, finalSkin, "default");
+
+        if (item.getWidth() >= 0 && item.getWidth() < 480) {
+            returnStyle = "default";
+        }
+
+        if (item.getWidth() >= 480 && item.getWidth() < 650) {
+            returnStyle = "font46";
+        }
+
+        if (item.getWidth() >= 650 && item.getWidth() < 730) {
+            returnStyle = "font42";
+        }
+
+        if (item.getWidth() >= 730 && item.getWidth() < 800) {
+            returnStyle = "font38";
+        }
+
+        if (item.getWidth() >= 800 && item.getWidth() < 890) {
+            returnStyle = "font34";
+        }
+
+        if (item.getWidth() >= 890) {
+            returnStyle = "font30";
+        }
+        System.out.println(returnStyle);
+        item.setSize(480, 75);
+        item.debug();
+        item.setPosition(100, 100);
+        stage.addActor(item);
+
+        Label newLabel = new Label(kk, finalSkin, returnStyle);
+        newLabel.debug();
+        newLabel.setSize(480, 75);
+        newLabel.setPosition(700, 100);
+        stage.addActor(newLabel);
+        System.out.println(item.getWidth());
+        System.out.println(item.getPrefWidth());
+        // Label-width 505
     }
 
     public void createButtonPowerup() {

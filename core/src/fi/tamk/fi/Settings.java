@@ -60,8 +60,8 @@ public class Settings {
     private ImageButton buttonReset;
     private Dialog confirmation1;
     private Dialog confirmation2;
-    private TextButton btnYes;
-    private TextButton btnNo;
+    private ImageButton btnYes;
+    private ImageButton btnNo;
     private Dialog popupQuit;
 
     // Language
@@ -302,12 +302,12 @@ public class Settings {
     }
 
     private void createYesAndNo(Dialog dialog) {
-        btnYes = new TextButton(localize.get("yes"), finalSkin);
-        btnYes.setPosition(dialog.getWidth()/2 - 400, dialog.getHeight()/4 - 120);
+        btnYes = new ImageButton(finalSkin, "confirm_" + lan);
+        btnYes.setPosition(dialog.getWidth()/2 - 400, dialog.getHeight()/4 - 55);
         btnYes.setScale(0.6f);
 
-        btnNo = new TextButton(localize.get("no"), finalSkin);
-        btnNo.setPosition(btnYes.getX() + 400, btnYes.getY());
+        btnNo = new ImageButton(finalSkin, "cancel_" + lan);
+        btnNo.setPosition(btnYes.getX() + 445, btnYes.getY());
         btnNo.setScale(0.6f);
     }
 

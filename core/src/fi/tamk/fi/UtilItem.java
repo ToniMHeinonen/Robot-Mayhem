@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.I18NBundle;
 
 import java.util.ArrayList;
@@ -137,13 +138,15 @@ public class UtilItem {
         for (int i = 0; i < allItems.length; i++) {
             buttonCounterBuyable = i;
             String itemName = localize.get(allItems[i]);
-            Label shopItems = new Label(itemName, finalSkin, getFontSize(itemName));
-            tableBuyableItems.add(shopItems).size(520, 75);
+            Label checkFontSize = new Label(itemName, finalSkin);
+            Label shopItems = new Label(itemName, finalSkin, getFontSize(checkFontSize));
+            tableBuyableItems.add(shopItems).size(505, 75);
             buyableItems++;
 
             final String stringCost = String.valueOf(items.getItem(allItems[i]).get(items.price));
             Label labelPrice = new Label(stringCost, finalSkin);
-            tableBuyableItems.add(labelPrice).size(35, 75).row();
+            labelPrice.setAlignment(Align.right);
+            tableBuyableItems.add(labelPrice).size(50, 75).row();
 
             shopItems.addListener(new ClickListener(){
                 int i = buttonCounterBuyable;
@@ -197,7 +200,8 @@ public class UtilItem {
                 if (inventory.get(j).contains(allSkills[i])) {
                     final int counterSkills = i;
                     String skillName = localize.get(inventory.get(j));
-                    Label ownedSkill = new Label(skillName, finalSkin, getFontSize(skillName));
+                    Label checkFontSize = new Label(skillName, finalSkin);
+                    Label ownedSkill = new Label(skillName, finalSkin, getFontSize(checkFontSize));
                     tableOwnedItems.add(ownedSkill).size(550, 75).row();
                     ownedItems++;
                     ownedSkill.addListener(new ClickListener(){
@@ -217,9 +221,19 @@ public class UtilItem {
             buttonCounterOwned = i;
             if (game.inventoryOrSkillsContains(allItems[i])) {
                 String itemName = localize.get(allItems[i]);
-                Label ownedItem = new Label(itemName, finalSkin, getFontSize(itemName));
-                tableOwnedItems.add(ownedItem).size(550, 75).row();
+                Label checkFontSize = new Label(itemName, finalSkin);
+                Label ownedItem = new Label(itemName, finalSkin, getFontSize(checkFontSize));
+                tableOwnedItems.add(ownedItem).size(505, 75);
                 ownedItems++;
+
+                String StringOwnedAmount = String.valueOf(amounts[i]);
+                Label ownedAmount = new Label(StringOwnedAmount, finalSkin);
+                ownedAmount.setAlignment(Align.right);
+                if (amounts[i] > 1) {
+                    tableOwnedItems.add(ownedAmount).size(50, 75).row();
+                } else {
+                    tableOwnedItems.add().size(50, 75).row();
+                }
 
                 ownedItem.addListener(new ClickListener(){
                     int i = buttonCounterOwned;
@@ -363,6 +377,15 @@ public class UtilItem {
                 "popup_powerup");
         createBackButton(popupOwnedItem);
 
+        if (amounts[index] > 1) {
+            String StringOwnedAmount = String.valueOf(amounts[index]);
+            Label labelOwnedAmount = new Label(StringOwnedAmount, finalSkin, "big");
+            labelOwnedAmount.setPosition(1350, game.pixelHeight / 2 + 195);
+            labelOwnedAmount.setSize(80, 100);
+            labelOwnedAmount.setAlignment(1);
+            popupOwnedItem.addActor(labelOwnedAmount);
+        }
+
         ImageButton buttonUse = new ImageButton(finalSkin, "use_" + lan);
         buttonUse.setPosition(560, 210);
         buttonUse.setDisabled(true);
@@ -407,8 +430,8 @@ public class UtilItem {
                 "popup_powerup");
 
         TextButton buttonSkill1 = new TextButton(localize.get(game.getSkill1()),
-                finalSkin, "small");
-        buttonSkill1.setPosition(470, 210);
+                finalSkin, "smallest");
+        buttonSkill1.setPosition(480, 210);
         buttonSkill1.setDisabled(true);
         if (room.equals("hall")) {
             buttonSkill1.setDisabled(false);
@@ -426,8 +449,8 @@ public class UtilItem {
         }
 
         TextButton buttonSkill2 = new TextButton(localize.get(game.getSkill2()),
-                finalSkin, "small");
-        buttonSkill2.setPosition(820, 210);
+                finalSkin, "smallest");
+        buttonSkill2.setPosition(830, 210);
         buttonSkill2.setDisabled(true);
         if (room.equals("hall")) {
             buttonSkill2.setDisabled(false);
@@ -444,8 +467,8 @@ public class UtilItem {
             });
         }
 
-        TextButton buttonCancel = new TextButton(localize.get("cancel"), finalSkin, "small");
-        buttonCancel.setPosition(1175, 210);
+        TextButton buttonCancel = new TextButton(localize.get("cancel"), finalSkin, "smallest");
+        buttonCancel.setPosition(1185, 210);
         buttonCancel.setSize(250, 120);
         buttonCancel.addListener(new ClickListener() {
             @Override
@@ -463,12 +486,39 @@ public class UtilItem {
     /*
     If items or skills are more than 17 characters long, it will put smaller font to them.
      */
-    private String getFontSize(String item) {
+    private String getFontSize(Label checkFontSize) {
+        /*
         fontSize = "default";
         if (item.length() >= 17) {
             fontSize = "small";
         }
         return fontSize;
+        */
+        String returnStyle = "";
+        if (checkFontSize.getWidth() >= 0 && checkFontSize.getWidth() < 480) {
+            returnStyle = "default";
+        }
+
+        if (checkFontSize.getWidth() >= 480 && checkFontSize.getWidth() < 650) {
+            returnStyle = "font46";
+        }
+
+        if (checkFontSize.getWidth() >= 650 && checkFontSize.getWidth() < 730) {
+            returnStyle = "font42";
+        }
+
+        if (checkFontSize.getWidth() >= 730 && checkFontSize.getWidth() < 800) {
+            returnStyle = "font38";
+        }
+
+        if (checkFontSize.getWidth() >= 800 && checkFontSize.getWidth() < 890) {
+            returnStyle = "font34";
+        }
+
+        if (checkFontSize.getWidth() >= 890) {
+            returnStyle = "font30";
+        }
+        return returnStyle;
     }
 
     private void createBackButton(final Dialog dialog) {
