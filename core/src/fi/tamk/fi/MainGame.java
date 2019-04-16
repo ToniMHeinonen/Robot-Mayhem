@@ -125,7 +125,6 @@ public class MainGame extends Game {
 	// Dialog
 	private static UtilDialog dialog;
 	private TextureAtlas testButtonAtlas;
-	private Skin testSkin;
 	private Label.LabelStyle labelStyle;
 	private Label.LabelStyle descriptionLabelStyle;
 	private Window.WindowStyle windowStyle;
@@ -198,7 +197,7 @@ public class MainGame extends Game {
 		fontSteps.dispose();
 		descriptionFont.dispose();
 		testButtonAtlas.dispose();
-		testSkin.dispose();
+		finalSkin.dispose();
 		progBarAtlas.dispose();
 		progBarSkin.dispose();
 		files.manager.dispose();
@@ -365,8 +364,7 @@ public class MainGame extends Game {
                 Gdx.files.internal("descriptionfont/descriptionfont.png"),
                 false);
 		testButtonAtlas = new TextureAtlas("testbuttons/actionButtons.pack");
-		testSkin = new Skin(testButtonAtlas);
-		windowStyle = new Window.WindowStyle(fontSteps, fontColor, testSkin.getDrawable("dialog_bg"));
+		//windowStyle = new Window.WindowStyle(fontSteps, fontColor, testSkin.getDrawable("dialog_bg"));
 		emptyWindowStyle = new Window.WindowStyle(fontSteps, fontColor, null);
 		labelStyle = new Label.LabelStyle(fontSteps, fontColor);
 		descriptionLabelStyle = new Label.LabelStyle(descriptionFont, fontColor);
@@ -852,10 +850,6 @@ public class MainGame extends Game {
 
 	public TextureAtlas getTestButtonAtlas() {
 		return testButtonAtlas;
-	}
-
-	public Skin getTestSkin() {
-		return testSkin;
 	}
 
 	public Label.LabelStyle getLabelStyle() {

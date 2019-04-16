@@ -121,7 +121,7 @@ public class Hacking {
     private OrthographicCamera hackingCamera;
     private MainGame game;
     private Files files;
-    private Skin testSkin;
+    private Skin finalSkin;
     private Stage stage;
 
     private int destroyedNeighbors = 0;
@@ -133,7 +133,7 @@ public class Hacking {
         files = game.getFiles();
         batch = game.getBatch();
         hackingCamera = new OrthographicCamera();
-        testSkin = game.getTestSkin();
+        finalSkin = game.getFinalSkin();
         stage = game.getStage();
         createConstants();
         setShieldAttributes();
@@ -387,8 +387,8 @@ public class Hacking {
     }
 
     private void createButtonShoot() {
-        Drawable normal = testSkin.getDrawable("button_SHOCK");
-        Drawable clicked = testSkin.getDrawable("button_clicked");
+        Drawable normal = finalSkin.getDrawable("button_SHOCK");
+        Drawable clicked = finalSkin.getDrawable("button_clicked");
         final ImageButton btn = new ImageButton(normal, clicked);
         btn.setPosition(game.pixelWidth /2 - btn.getWidth() /2,
                 0);

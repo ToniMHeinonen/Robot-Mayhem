@@ -294,8 +294,8 @@ public class RoomFight extends RoomParent {
 
     // Creates the upper left escape button
     private void createEscapeButton() {
-        final ImageButton btn = new ImageButton(testSkin.getDrawable("button_escape"),
-                testSkin.getDrawable("button_escape_clicked"));
+        final ImageButton btn = new ImageButton(finalSkin.getDrawable("button_escape"),
+                finalSkin.getDrawable("button_escape_clicked"));
         btn.setPosition(0, game.pixelHeight - 120);
         stage.addActor(btn);
 
@@ -1164,16 +1164,16 @@ public class RoomFight extends RoomParent {
                 Drawable normal, clicked;
                 if (button.equals("empty")) {
                     // If button is empty, get empty button
-                    normal = testSkin.getDrawable("button_" + button);
-                    clicked = testSkin.getDrawable("button_" + button);
+                    normal = finalSkin.getDrawable("button_" + button);
+                    clicked = finalSkin.getDrawable("button_" + button);
                 } else if (cooldown == 0) {
                     // If cooldown is 0, get correct button for action
-                    normal = testSkin.getDrawable("button_" + button);
-                    clicked = testSkin.getDrawable("button_" + button + "_clicked");
+                    normal = finalSkin.getDrawable("button_" + button);
+                    clicked = finalSkin.getDrawable("button_" + button + "_clicked");
                 } else {
                     // else it has cooldown, so retrieve correct cooldown button
-                    normal = testSkin.getDrawable("button_cooldown" + cooldown);
-                    clicked = testSkin.getDrawable("button_cooldown" + cooldown);
+                    normal = finalSkin.getDrawable("button_cooldown" + cooldown);
+                    clicked = finalSkin.getDrawable("button_cooldown" + cooldown);
                 }
                 final ImageButton imgButton = new ImageButton(normal, clicked);
                 imgButton.setPosition(i*space, 0f);

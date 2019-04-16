@@ -31,7 +31,6 @@ public class RoomParent implements Screen {
     protected OrthographicCamera camera;
     protected Stage stage;
     protected Skin skin;
-    protected Skin testSkin;
     protected Skin finalSkin;
     protected ProgressBar progressBar;
     protected ProgressBar.ProgressBarStyle progressBarStyle;
@@ -57,7 +56,6 @@ public class RoomParent implements Screen {
         fontSteps = game.getFontSteps();
         progressBarStyle = game.getProgBarStyle();
         clickedOpenSettings = game.getClickedOpenSettings();
-        testSkin = game.getTestSkin();
         finalSkin = game.getFinalSkin();
         stage.clear();
 
@@ -117,8 +115,8 @@ public class RoomParent implements Screen {
     }
 
     public void createMenuButton(final String room) {
-        ImageButton button = new ImageButton(testSkin.getDrawable("button_settings"),
-                testSkin.getDrawable("button_settings_clicked"));
+        ImageButton button = new ImageButton(finalSkin.getDrawable("button_settings"),
+                finalSkin.getDrawable("button_settings_clicked"));
         button.setPosition(game.pixelWidth - button.getWidth()/2 - 190, game.pixelHeight - 120);
         button.addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
