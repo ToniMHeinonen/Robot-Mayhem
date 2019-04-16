@@ -79,7 +79,7 @@ public class UtilDialog {
         return dialog;
     }
 
-    public void showSkillName(String text) {
+    public void showSkillName(String text, String skillStyle) {
         skillNameOn = true;
         float areaSize = 800f;
         float x = game.pixelWidth/2 - areaSize/2;
@@ -89,7 +89,7 @@ public class UtilDialog {
         label.setWrap(true);
         label.setAlignment(1);
 
-        final Dialog dialog = new Dialog("", finalSkin, "skillname");
+        final Dialog dialog = new Dialog("", finalSkin, skillStyle);
         dialog.getContentTable().add(label).prefWidth(areaSize);
         dialog.setSize(areaSize,label.getHeight()*2);
         dialog.setPosition(x,y);

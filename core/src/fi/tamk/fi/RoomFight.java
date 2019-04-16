@@ -1091,7 +1091,7 @@ public class RoomFight extends RoomParent {
                 turnState = DOING_ACTION;
                 removeButtons();
                 action = localize.get(action);
-                dialog.showSkillName(action);
+                dialog.showSkillName(action, "skillname");
 
                 if (!opponent.normalSize) {
                     if (curHitAnimation == files.animPhysicalHit) {
@@ -1133,7 +1133,7 @@ public class RoomFight extends RoomParent {
             anim.startAnimation(curAnimation, animSpeed);
             turnState = DOING_ACTION;
             removeButtons();
-            dialog.showSkillName(localize.get(item));
+            dialog.showSkillName(localize.get(item), "skillname");
         }
 
         public void createActionButtons() {
@@ -1367,7 +1367,7 @@ public class RoomFight extends RoomParent {
                     }
                 }
                 String localizedName = localize.get(skillNames[random]);
-                dialog.showSkillName(localizedName);
+                dialog.showSkillName(localizedName, "skillname_enemy");
 
                 // Play sound if not null
                 if (sounds[random] != null) sounds[random].play();

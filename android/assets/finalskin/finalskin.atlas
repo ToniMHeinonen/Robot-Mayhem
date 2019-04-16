@@ -78,7 +78,7 @@ filter: Linear,Linear
 repeat: none
 font-large
   rotate: false
-  xy: 903, 333
+  xy: 903, 151
   size: 726, 512
   orig: 726, 512
   offset: 0, 0
@@ -109,6 +109,13 @@ window_small
   xy: 1, 1
   size: 780, 540
   orig: 780, 540
+  offset: 0, 0
+  index: -1
+skillname_enemy
+  rotate: false
+  xy: 903, 665
+  size: 900, 180
+  orig: 900, 180
   offset: 0, 0
   index: -1
 

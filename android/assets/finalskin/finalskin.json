@@ -243,5 +243,9 @@ com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
 		background: dialog_left
 		titleFont: font-average
 	}
+	skillname_enemy: {
+		background: skillname_enemy
+		titleFont: font-average
+	}
 }
 }
