@@ -143,6 +143,10 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
 		down: lang_fi_locked2
 		checked: lang_fi_locked2
 	}
+	money: {
+		up: button_money
+		down: button_money_clicked
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	default: {
