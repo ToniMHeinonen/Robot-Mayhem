@@ -306,6 +306,13 @@ public class UtilItem {
         buttonStats = new ImageButton(finalSkin.getDrawable("menu_stats1"));
         buttonStats.setPosition(buttonSettings.getX(),
                 buttonInventory.getY() - 180);
+        buttonStats.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                Stats stats = new Stats(game, room, curRoom);
+                dialogItems.remove();
+            }
+        });
 
         dialogItems.addActor(buttonSettings);
         dialogItems.addActor(buttonInventory);

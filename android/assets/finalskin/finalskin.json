@@ -247,5 +247,9 @@ com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
 		background: skillname_enemy
 		titleFont: font-average
 	}
+	stats: {
+		background: bg_stats_flat
+		titleFont: font-average
+	}
 }
 }
