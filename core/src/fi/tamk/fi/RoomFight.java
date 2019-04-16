@@ -1159,7 +1159,7 @@ public class RoomFight extends RoomParent {
 
                 // Retrieve correct button using the keyname of the action
                 if (action.equals("")) button = "empty";
-                else button = (String) skillMap.get(skills.name);
+                else button = (String) skillMap.get(skills.button);
 
                 Drawable normal, clicked;
                 if (button.equals("empty")) {
@@ -1169,7 +1169,7 @@ public class RoomFight extends RoomParent {
                 } else if (cooldown == 0) {
                     // If cooldown is 0, get correct button for action
                     normal = testSkin.getDrawable("button_" + button);
-                    clicked = testSkin.getDrawable("button_clicked");
+                    clicked = testSkin.getDrawable("button_" + button + "_clicked");
                 } else {
                     // else it has cooldown, so retrieve correct cooldown button
                     normal = testSkin.getDrawable("button_cooldown" + cooldown);

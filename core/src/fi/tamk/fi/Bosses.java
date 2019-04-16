@@ -93,7 +93,7 @@ public class Bosses {
         curName = ROBBER;
         curNormalSize = true;
         curSkillName0 = skills.ATTACK;
-        curSkillName1 = skills.SUCTION;
+        curSkillName1 = skills.FIRE;
         curSkillName2 = skills.DUST;
 
         curDialogStart = "robberDialogStart";

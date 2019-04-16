@@ -26,8 +26,7 @@ public class Skills {
     public final String sound = "sound";
     public final String button = "button";
 
-    // These values are used by actionbuttons (every button will probably not have it's own button,
-    // so some of these values are going to be removed)
+    // Names for localization
     public final String ATTACK = "ATTACK";
     public final String DEFEND = "DEFEND";
     public final String ITEM = "ITEM";
@@ -36,6 +35,13 @@ public class Skills {
     public final String FIRE = "FIRE";
     public final String SUCTION = "SUCTION";
     public final String DUST = "DUST";
+
+    // Names for buttons
+    public final String btnAttack = "ATTACK";
+    public final String btnDefend = "DEFEND";
+    public final String btnItem = "ITEM";
+    public final String btnSkill = "SKILL";
+    public final String btnHeal = "HEAL";
 
     private final String[] allSkills = new String[] {ATTACK, DEFEND, ITEM, REPAIR,
             SHOCK, FIRE, SUCTION, DUST};
@@ -87,6 +93,7 @@ public class Skills {
     - hitAnimationSpd = How fast does the animation move (on default use 8, this variable might be
       deleted in the future)
     - sound = The sound effect what plays on the start of move
+    - button = Select correct button type for skill
      */
 
     /*
@@ -127,6 +134,7 @@ public class Skills {
         map.put(cooldown, 0);
         map.put(hitAnimation, physicalHit);
         map.put(sound, null);
+        map.put(button, btnAttack);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -144,6 +152,7 @@ public class Skills {
         map.put(cooldown, 3);
         map.put(hitAnimation, null);
         map.put(sound, null);
+        map.put(button, btnDefend);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -161,6 +170,7 @@ public class Skills {
         map.put(cooldown, 0);
         map.put(hitAnimation, null);
         map.put(sound, null);
+        map.put(button, btnItem);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -178,6 +188,7 @@ public class Skills {
         map.put(cooldown, 2);
         map.put(hitAnimation, null);
         map.put(sound, null);
+        map.put(button, btnHeal);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -195,6 +206,7 @@ public class Skills {
         map.put(cooldown, 3);
         map.put(hitAnimation, physicalHit);
         map.put(sound, null);
+        map.put(button, btnSkill);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -212,6 +224,7 @@ public class Skills {
         map.put(cooldown, 2);
         map.put(hitAnimation, null);
         map.put(sound, null);
+        map.put(button, btnSkill);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -229,6 +242,7 @@ public class Skills {
         map.put(cooldown, 2);
         map.put(hitAnimation, physicalHit);
         map.put(sound, files.sndSuction);
+        map.put(button, btnSkill);
 
         mapSkills.put((String) map.get(name), map);
     }
@@ -246,6 +260,7 @@ public class Skills {
         map.put(cooldown, 3);
         map.put(hitAnimation, null);
         map.put(sound, files.sndDustThrow);
+        map.put(button, btnSkill);
 
         mapSkills.put((String) map.get(name), map);
     }

@@ -10,7 +10,7 @@ button_ATTACK
   orig: 384, 240
   offset: 0, 0
   index: -1
-button_clicked
+button_ATTACK_clicked
   rotate: false
   xy: 1, 485
   size: 384, 240
@@ -45,7 +45,7 @@ button_DEFEND
   orig: 384, 240
   offset: 0, 0
   index: -1
-button_DUST
+button_DEFEND_clicked
   rotate: false
   xy: 387, 243
   size: 384, 240
@@ -71,58 +71,72 @@ actionButtons2.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+button_HEAL
+  rotate: false
+  xy: 1, 731
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_HEAL_clicked
+  rotate: false
+  xy: 1, 489
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
 button_ITEM
   rotate: false
-  xy: 1, 729
+  xy: 387, 731
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
-button_REPAIR
+button_ITEM_clicked
   rotate: false
-  xy: 1, 487
+  xy: 1, 247
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
-button_SHOCK
+button_SKILL
   rotate: false
-  xy: 387, 729
+  xy: 387, 489
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
-button_SUCTION
+button_SKILL_clicked
   rotate: false
-  xy: 1, 245
+  xy: 1, 5
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
 button_escape
   rotate: false
-  xy: 387, 607
+  xy: 387, 367
   size: 360, 120
   orig: 360, 120
   offset: 0, 0
   index: -1
 button_escape_clicked
   rotate: false
-  xy: 1, 123
+  xy: 387, 245
   size: 360, 120
   orig: 360, 120
   offset: 0, 0
   index: -1
 button_settings
   rotate: false
-  xy: 387, 485
+  xy: 387, 123
   size: 360, 120
   orig: 360, 120
   offset: 0, 0
   index: -1
 button_settings_clicked
   rotate: false
-  xy: 1, 1
+  xy: 387, 1
   size: 360, 120
   orig: 360, 120
   offset: 0, 0
