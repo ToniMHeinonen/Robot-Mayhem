@@ -22,7 +22,6 @@ import java.awt.SystemTray;
 import java.util.ArrayList;
 
 public class RoomTestailua extends RoomParent {
-    private Skin testSkin;
 
     UtilPowerUp utilPowerUp;
 
@@ -50,7 +49,6 @@ public class RoomTestailua extends RoomParent {
     RoomTestailua(MainGame game) {
         super(game);
         this.game = game;
-        testSkin = game.getTestSkin();
         utilDialog = game.getDialog();
         createButtonSettings();
         //createConstants();

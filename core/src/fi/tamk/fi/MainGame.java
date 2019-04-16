@@ -42,6 +42,7 @@ public class MainGame extends Game {
 	public final float pixelHeight = 1080f;
 	public final float gridSize = 1920f / 16f;
 	private OrthographicCamera camera;
+	private FitViewport fitViewport;
 
 	private Stage stage;
 	private Skin skin;
@@ -124,7 +125,6 @@ public class MainGame extends Game {
 	// Dialog
 	private static UtilDialog dialog;
 	private TextureAtlas testButtonAtlas;
-	private Skin testSkin;
 	private Label.LabelStyle labelStyle;
 	private Label.LabelStyle descriptionLabelStyle;
 	private Window.WindowStyle windowStyle;
@@ -157,8 +157,8 @@ public class MainGame extends Game {
 		bosses = new Bosses(this);
 		items = new Item();
 		batch = new SpriteBatch();
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, pixelWidth, pixelHeight);
+		camera = new OrthographicCamera(pixelWidth, pixelHeight);
+		fitViewport = new FitViewport(pixelWidth, pixelHeight, camera);
 		initStats();
 		loadStats();
 		checkDate();
@@ -182,6 +182,12 @@ public class MainGame extends Game {
 	public void render () {
 		super.render();
 		controlSaveTimer();
+		camera.update();
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		fitViewport.update(width, height, true);
 	}
 
 	@Override
@@ -191,7 +197,7 @@ public class MainGame extends Game {
 		fontSteps.dispose();
 		descriptionFont.dispose();
 		testButtonAtlas.dispose();
-		testSkin.dispose();
+		finalSkin.dispose();
 		progBarAtlas.dispose();
 		progBarSkin.dispose();
 		files.manager.dispose();
@@ -358,8 +364,7 @@ public class MainGame extends Game {
                 Gdx.files.internal("descriptionfont/descriptionfont.png"),
                 false);
 		testButtonAtlas = new TextureAtlas("testbuttons/actionButtons.pack");
-		testSkin = new Skin(testButtonAtlas);
-		windowStyle = new Window.WindowStyle(fontSteps, fontColor, testSkin.getDrawable("dialog_bg"));
+		//windowStyle = new Window.WindowStyle(fontSteps, fontColor, testSkin.getDrawable("dialog_bg"));
 		emptyWindowStyle = new Window.WindowStyle(fontSteps, fontColor, null);
 		labelStyle = new Label.LabelStyle(fontSteps, fontColor);
 		descriptionLabelStyle = new Label.LabelStyle(descriptionFont, fontColor);
@@ -664,7 +669,7 @@ public class MainGame extends Game {
 	}
 
     private void createSkinAndStage() {
-        stage = new Stage(new FitViewport(pixelWidth, pixelHeight), batch);
+        stage = new Stage(fitViewport, batch);
 
 		skin = files.skin;
 		finalSkin = files.finalSkin;
@@ -853,10 +858,6 @@ public class MainGame extends Game {
 
 	public TextureAtlas getTestButtonAtlas() {
 		return testButtonAtlas;
-	}
-
-	public Skin getTestSkin() {
-		return testSkin;
 	}
 
 	public Label.LabelStyle getLabelStyle() {
