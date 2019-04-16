@@ -104,6 +104,19 @@ public class UtilDialog {
         }, 1f);
     }
 
+    public Dialog createInstructionsDialog(String text) {
+        Label label = new Label(text, finalSkin);
+        label.setWrap(true);
+        label.setAlignment(1);
+
+        Dialog dialog = new Dialog("", finalSkin, "dialog_player");
+        dialog.setSize(780, 540);
+        dialog.setPosition(game.pixelWidth/2 - 780f/2, 300f);
+        dialog.getContentTable().add(label).prefWidth(780f - 80f);
+
+        return dialog;
+    }
+
     public boolean isDialogOn() {
         return dialogOn;
     }

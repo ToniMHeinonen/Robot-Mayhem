@@ -32,12 +32,14 @@ public class RoomGame extends RoomParent {
     private boolean milestoneReached;
     private ImageButton fightButton;
     private Skin finalSkin;
+    private boolean firstPlayTime;
 
     RoomGame(final MainGame game) {
         super(game);
         createProgressBar();
         curSteps = game.getStepCount();
         finalSkin = files.finalSkin;
+        firstPlayTime = game.isFirstPlayTime();
 
         calculateBankSpeed();
 
@@ -49,6 +51,10 @@ public class RoomGame extends RoomParent {
 
         createMenuButton("hall");
         //createButtonFight(); // For playtesting
+
+        if (firstPlayTime) {
+            FirstPlay firstPlay = new FirstPlay(game);
+        }
     }
 
     @Override

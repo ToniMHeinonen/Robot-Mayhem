@@ -831,6 +831,10 @@ public class MainGame extends Game {
 		return skill2;
 	}
 
+	public void setPlayerName(String playerName) {
+	    this.playerName = playerName;
+    }
+
 	public String getPlayerName() {
 		return playerName;
 	}
@@ -838,6 +842,10 @@ public class MainGame extends Game {
 	public void setSkill2(String skill2) {
 		this.skill2 = skill2;
 	}
+
+	public void setFirstPlayTime(boolean firstPlayTime) {
+	    this.firstPlayTime = firstPlayTime;
+    }
 
 	public boolean isFirstPlayTime() {
 		return firstPlayTime;
