@@ -27,6 +27,7 @@ public class Stats {
     private ArrayList<String> inventory;
     private Skills skills;
     private String[] allSkills;
+    private int defeatedBossesCounter;
 
     private Dialog statsDialog;
 
@@ -47,6 +48,7 @@ public class Stats {
     private Label labelBuyedItems;
     private Label labelAllSteps;
     private Label labelOwnedSkills;
+    private Label labelBossesDefeated;
 
     private float labelWidth = 600;
     private float spaceBetween = 30;
@@ -67,6 +69,7 @@ public class Stats {
         inventory = game.getInventory();
         skills = game.getSkills();
         allSkills = skills.getAllSkills();
+        defeatedBossesCounter = game.getDefeatedBossesCounter();
 
         ownedSkillsAmount();
         createStatsDialog();
@@ -176,6 +179,12 @@ public class Stats {
         bossesDefeated.setSize(labelWidth, bossesDefeated.getPrefHeight());
         bossesDefeated.setAlignment(Align.right);
         statsDialog.addActor(bossesDefeated);
+
+        labelBossesDefeated = new Label(String.valueOf(defeatedBossesCounter), finalSkin);
+        labelBossesDefeated.setPosition(bossesDefeated.getX(Align.right) + spaceBetween, bossesDefeated.getY());
+        labelBossesDefeated.setSize(labelWidth, labelBossesDefeated.getPrefHeight());
+        labelBossesDefeated.setAlignment(Align.left);
+        statsDialog.addActor(labelBossesDefeated);
     }
 
     private void createMenuButtons() {
