@@ -18,8 +18,7 @@ public class FirstPlay {
     private String name;
 
     private Dialog whoAmI;
-    private Dialog welcome;
-    private Dialog stepGoals;
+    int hallCounter = 0;
 
     FirstPlay(MainGame game) {
         this.game = game;
@@ -44,13 +43,13 @@ public class FirstPlay {
                 name = text;
                 game.setPlayerName(text);
                 whoAmI.remove();
-                hallInstructionCommon();
+                hallAllInstructions();
             }
 
             @Override
             public void canceled() {
                 whoAmI.remove();
-                hallInstructionCommon();
+                hallAllInstructions();
             }
         };
 
@@ -62,14 +61,24 @@ public class FirstPlay {
         });
     }
 
-    private void hallInstructionCommon() {
-        welcome = utilDialog.createInstructionsDialog("Welcome to Robot Mayhem, " + name + "!");
-        stage.addActor(welcome);
+    private void hallAllInstructions() {
+        final String[] hallGuide = new String[] {
+                "Welcome to Robot Mayhem, " + name + "!",
+                "First text",
+                "Second text",
+                "Third text"};
 
-        welcome.addListener(new ClickListener(){
+        final Dialog dialog = utilDialog.createInstructionsDialog(hallGuide[hallCounter]);
+        stage.addActor(dialog);
+
+        dialog.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                welcome.remove();
+                hallCounter++;
+                dialog.remove();
+                if (hallCounter < hallGuide.length) {
+                    hallAllInstructions();
+                }
             }
         });
     }
