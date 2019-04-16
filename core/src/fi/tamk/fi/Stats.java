@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.I18NBundle;
 
+import java.util.ArrayList;
+
 public class Stats {
     private MainGame game;
     private Skin finalSkin;
@@ -20,6 +22,11 @@ public class Stats {
     private String playerName;
     private int buyedItemsCounter;
     private float stepAllCount;
+    private String skill1;
+    private String skill2;
+    private ArrayList<String> inventory;
+    private Skills skills;
+    private String[] allSkills;
 
     private Dialog statsDialog;
 
@@ -39,9 +46,11 @@ public class Stats {
     private Label labelPlayerName;
     private Label labelBuyedItems;
     private Label labelAllSteps;
+    private Label labelOwnedSkills;
 
     private float labelWidth = 600;
     private float spaceBetween = 30;
+    private int ownedSkillAmount;
 
     Stats (MainGame game, String room, RoomParent curRoom) {
         this.game = game;
@@ -53,7 +62,13 @@ public class Stats {
         playerName = game.getPlayerName();
         buyedItemsCounter = game.getBuyedItemsCounter();
         stepAllCount = game.getStepAllCount();
+        skill1 = game.getSkill1();
+        skill2 = game.getSkill2();
+        inventory = game.getInventory();
+        skills = game.getSkills();
+        allSkills = skills.getAllSkills();
 
+        ownedSkillsAmount();
         createStatsDialog();
         createHeader();
         createPlayerName();
@@ -64,6 +79,19 @@ public class Stats {
         createMenuButtons();
         createExitButton();
         stage.addActor(statsDialog);
+    }
+
+    private void ownedSkillsAmount() {
+        // Attack & Defend
+        ownedSkillAmount = 2;
+
+        for (int i = 0; i < allSkills.length; i++) {
+            if (allSkills[i].equals(skill1)) ownedSkillAmount += 1;
+            if (allSkills[i].equals(skill2)) ownedSkillAmount += 1;
+            for (int j = 0; j < inventory.size(); j++) {
+                if (inventory.get(j).equals(allSkills[i])) ownedSkillAmount += 1;
+            }
+        }
     }
 
     private void createStatsDialog() {
@@ -132,6 +160,14 @@ public class Stats {
         ownedSkills.setSize(labelWidth, ownedSkills.getPrefHeight());
         ownedSkills.setAlignment(Align.right);
         statsDialog.addActor(ownedSkills);
+
+        labelOwnedSkills = new Label(String.valueOf(ownedSkillAmount) + "/" +
+                String.valueOf(allSkills.length-1),
+                finalSkin);
+        labelOwnedSkills.setPosition(ownedSkills.getX(Align.right) + spaceBetween, ownedSkills.getY());
+        labelOwnedSkills.setSize(labelWidth, labelOwnedSkills.getPrefHeight());
+        labelOwnedSkills.setAlignment(Align.left);
+        statsDialog.addActor(labelOwnedSkills);
     }
 
     private void createBossesDefeated() {
