@@ -217,7 +217,7 @@ public class Skills {
         map.put(description, "fireDesc");
         map.put(damage, 0.0);
         map.put(critChance, 0);
-        map.put(missChance, 0);
+        map.put(missChance, defMiss);
         map.put(damageOverTime, 20.0);
         map.put(damageOverTimeTurns, 3);
         map.put(dotPurePercent, true);
@@ -253,7 +253,7 @@ public class Skills {
         map.put(description, "dustDesc");
         map.put(damage, 0.0);
         map.put(critChance, 0);
-        map.put(missChance, 0);
+        map.put(missChance, defMiss);
         map.put(damageOverTime, 1.0);
         map.put(damageOverTimeTurns, 2);
         map.put(dotPurePercent, false);

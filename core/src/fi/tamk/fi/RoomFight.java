@@ -993,7 +993,6 @@ public class RoomFight extends RoomParent {
             wholeDmg = defaultDmg + (defaultDmg * dmgBoost);
             skillState = SKILL_RESET;
             boolean actionSelected = false;
-            int curAnimSpd = 0;
 
             if (action.equals(skills.ATTACK))
             {

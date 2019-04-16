@@ -32,6 +32,7 @@ public class Item {
     public final String DIAMOND_COAT = "DIAMOND_COAT";
 
     private final int basePrice = 10;
+    public final int mostExpensivePowerup = basePrice*3; // Used in UtilPowerUp
     private ArrayList<String> allItems = new ArrayList<String>();
     private HashMap<String,HashMap<String,Object>> mapItems;
 
