@@ -78,6 +78,7 @@ public class MainGame extends Game {
 	private String keyPoolMult = E.encrypt("poolMult");
 	private String keyInventorySize = E.encrypt("inventorySize");
 	private String keyInventory = E.encrypt("inventory");
+	private String keyBuyedItemsCounter = E.encrypt("buyedItemsCounter");
 	private String keyDefeatedBossesSize = E.encrypt("defeatedBossesSize");
 	private String keyDefeatedBosses = E.encrypt("defeatedBosses");
 	private String keyName = E.encrypt("name");
@@ -100,7 +101,7 @@ public class MainGame extends Game {
 	private Preferences prefsStats;
 	private SaveAndLoad stats;
 	private float stepCount, stepBank, stepAllCount;
-	private int pool, poolMult, money, fightsWon, prevDayGift;
+	private int pool, poolMult, money, fightsWon, prevDayGift, buyedItemsCounter;
 	private String skill1, skill2, currentBoss, playerName;
 	private boolean firstPlayTime;
 	private int critBoost, missBoost, permaCritBoost, permaMissBoost;
@@ -500,6 +501,7 @@ public class MainGame extends Game {
 		playerName = stats.loadValue(keyName, "");
 		fightsWon = stats.loadValue(keyFightsWon, 0);
 		prevDayGift = stats.loadValue(keyPrevDayGift, -1);
+		buyedItemsCounter = stats.loadValue(keyBuyedItemsCounter, 0);
 
 		critBoost = stats.loadValue(keyCritBoost, 0);
 		missBoost = stats.loadValue(keyMissBoost, 0);
@@ -541,6 +543,7 @@ public class MainGame extends Game {
 		stats.saveValue(keyName, playerName);
 		stats.saveValue(keyFightsWon, fightsWon);
 		stats.saveValue(keyPrevDayGift, prevDayGift);
+		stats.saveValue(keyBuyedItemsCounter, buyedItemsCounter);
 
 		stats.saveValue(keyCritBoost, critBoost);
 		stats.saveValue(keyMissBoost, missBoost);
@@ -1014,5 +1017,13 @@ public class MainGame extends Game {
 
     public String getDifficulty() {
         return difficulty;
+    }
+
+    public void setBuyedItemsCounter(int buyedItemsCounter) {
+	    this.buyedItemsCounter = buyedItemsCounter;
+    }
+
+    public int getBuyedItemsCounter() {
+	    return buyedItemsCounter;
     }
 }

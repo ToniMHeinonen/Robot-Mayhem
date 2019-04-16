@@ -28,6 +28,7 @@ public class UtilItem {
     private Files files;
     private Item items;
     private Skills skills;
+    private int buyedItemsCounter;
     private String fontSize;
 
     private Table tableBuyableItems;
@@ -88,6 +89,7 @@ public class UtilItem {
         utilDialog = game.getDialog();
         lan = game.getLanguage();
         files = game.getFiles();
+        buyedItemsCounter = game.getBuyedItemsCounter();
         amounts = new int[allItems.length];
 
         setValues();
@@ -351,6 +353,7 @@ public class UtilItem {
                     files.sndPurchaseItem.play();
                     game.decreaseMoney(price);
                     game.addToInventory(allItems[index], false);
+                    game.setBuyedItemsCounter(buyedItemsCounter += 1);
                     popupBuyableItem.remove();
                     dialogItems.remove();
                     UtilItem utilItem;

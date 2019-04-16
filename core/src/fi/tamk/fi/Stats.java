@@ -17,6 +17,8 @@ public class Stats {
     private String room;
     private RoomParent curRoom;
     private I18NBundle localize;
+    private String playerName;
+    private int buyedItemsCounter;
 
     private Dialog statsDialog;
 
@@ -25,6 +27,7 @@ public class Stats {
     private ImageButton buttonSettings;
     private ImageButton buttonExit;
 
+    // Headers
     private Label header;
     private Label name;
     private Label allSteps;
@@ -32,7 +35,11 @@ public class Stats {
     private Label ownedSkills;
     private Label bossesDefeated;
 
+    private Label labelPlayerName;
+    private Label labelBuyedItems;
+
     private float labelWidth = 600;
+    private float spaceBetween = 30;
 
     Stats (MainGame game, String room, RoomParent curRoom) {
         this.game = game;
@@ -41,6 +48,8 @@ public class Stats {
         finalSkin = game.getFinalSkin();
         stage = game.getStage();
         localize = game.getLocalize();
+        playerName = game.getPlayerName();
+        buyedItemsCounter = game.getBuyedItemsCounter();
 
         createStatsDialog();
         createHeader();
@@ -78,6 +87,12 @@ public class Stats {
         name.setSize(labelWidth, name.getPrefHeight());
         name.setAlignment(Align.right);
         statsDialog.addActor(name);
+
+        labelPlayerName = new Label(playerName, finalSkin);
+        labelPlayerName.setPosition(name.getX(Align.right) + spaceBetween, name.getY());
+        labelPlayerName.setSize(labelWidth, name.getPrefHeight());
+        labelPlayerName.setAlignment(Align.left);
+        statsDialog.addActor(labelPlayerName);
     }
 
     private void createAllSteps() {
@@ -94,6 +109,12 @@ public class Stats {
         buyedItems.setSize(labelWidth, buyedItems.getPrefHeight());
         buyedItems.setAlignment(Align.right);
         statsDialog.addActor(buyedItems);
+
+        labelBuyedItems = new Label(String.valueOf(buyedItemsCounter), finalSkin);
+        labelBuyedItems.setPosition(buyedItems.getX(Align.right) + spaceBetween, buyedItems.getY());
+        labelBuyedItems.setSize(labelWidth, labelBuyedItems.getPrefHeight());
+        labelBuyedItems.setAlignment(Align.left);
+        statsDialog.addActor(labelBuyedItems);
     }
 
     private void createOwnedSkills() {
