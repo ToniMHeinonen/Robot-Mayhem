@@ -61,11 +61,19 @@ public class RoomFight extends RoomParent {
     private ShaderProgram shFlashWhite;
     private Hacking hacking;
     private UtilPowerUp powerUp;
+    private boolean firstPlayTimeFight;
 
     RoomFight(MainGame game) {
         super(game);
         imgBg = files.imgBgBoss;
         escapeBg = files.escapeBg;
+        firstPlayTimeFight = game.isFirstPlayTimeFight();
+
+        /*
+        if (firstPlayTimeFight) {
+            FirstPlay firstPlay = new FirstPlay(game, "fight");
+        }
+        */
 
         createHealthBars();
         createShader(); // Used for flashing white

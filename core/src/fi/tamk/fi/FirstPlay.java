@@ -16,21 +16,31 @@ public class FirstPlay {
     private I18NBundle localize;
     private UtilDialog utilDialog;
     private String name;
+    private boolean firstPlayTime;
+    private boolean firstPlayTimeFight;
 
     private Dialog whoAmI;
-    int hallCounter = 0;
+    private int hallCounter = 0;
+    private int fightCounter = 0;
 
-    FirstPlay(MainGame game) {
+    FirstPlay(MainGame game, String room) {
         this.game = game;
         stage = game.getStage();
         finalSkin = game.getFinalSkin();
         localize = game.getLocalize();
         utilDialog = game.getDialog();
         name = game.getPlayerName();
+        firstPlayTime = game.isFirstPlayTime();
+        firstPlayTimeFight = game.isFirstPlayTimeFight();
 
-        game.setFirstPlayTime(false);
-
-        hallInstructionsName();
+        if (firstPlayTime && room.equals("hall")) {
+            game.setFirstPlayTime(false);
+            hallInstructionsName();
+        }
+        if (firstPlayTimeFight && room.equals("fight")) {
+            game.setfirstPlayTimeFight(false);
+            fightAllInstructions();
+        }
     }
 
     private void hallInstructionsName() {
@@ -78,6 +88,27 @@ public class FirstPlay {
                 dialog.remove();
                 if (hallCounter < hallGuide.length) {
                     hallAllInstructions();
+                }
+            }
+        });
+    }
+
+    private void fightAllInstructions() {
+        final String[] fightGuide = new String[] {
+                "First text",
+                "Second text",
+                "Third text"};
+
+        final Dialog dialog = utilDialog.createInstructionsDialog(fightGuide[fightCounter]);
+        stage.addActor(dialog);
+
+        dialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                fightCounter++;
+                dialog.remove();
+                if (fightCounter < fightGuide.length) {
+                    fightAllInstructions();
                 }
             }
         });

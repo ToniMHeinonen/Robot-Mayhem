@@ -53,7 +53,7 @@ public class RoomGame extends RoomParent {
         //createButtonFight(); // For playtesting
 
         if (firstPlayTime) {
-            FirstPlay firstPlay = new FirstPlay(game);
+            FirstPlay firstPlay = new FirstPlay(game, "hall");
         }
     }
 

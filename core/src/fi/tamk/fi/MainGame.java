@@ -75,6 +75,7 @@ public class MainGame extends Game {
 	private String keySkill2 = E.encrypt("skill2");
 	private String keyCurrentBoss = E.encrypt("currentBoss");
 	private String keyFirstPlayTime = E.encrypt("firstPlayTime");
+	private String keyFirstPlayTimeFight = E.encrypt("firstPlayTimeFight");
 	private String keyPool = E.encrypt("pool");
 	private String keyPoolMult = E.encrypt("poolMult");
 	private String keyInventorySize = E.encrypt("inventorySize");
@@ -104,7 +105,7 @@ public class MainGame extends Game {
 	private float stepCount, stepBank, stepAllCount;
 	private int pool, poolMult, money, fightsWon, prevDayGift, buyedItemsCounter;
 	private String skill1, skill2, currentBoss, playerName;
-	private boolean firstPlayTime;
+	private boolean firstPlayTime, firstPlayTimeFight;
 	private int critBoost, missBoost, permaCritBoost, permaMissBoost;
 	private float armorBoost, dmgBoost, healBoost, permaArmorBoost, permaDmgBoost, permaHealBoost;
 	// Stat arrays
@@ -501,6 +502,7 @@ public class MainGame extends Game {
 		skill2 = stats.loadValue(keySkill2, "");
 		currentBoss = stats.loadValue(keyCurrentBoss, bosses.ROOMBOT);
 		firstPlayTime = stats.loadValue(keyFirstPlayTime, true);
+		firstPlayTimeFight = stats.loadValue(keyFirstPlayTimeFight, true);
 		pool = stats.loadValue(keyPool, 1);
 		poolMult = stats.loadValue(keyPoolMult, 0);
 		playerName = stats.loadValue(keyName, "");
@@ -543,6 +545,7 @@ public class MainGame extends Game {
 		stats.saveValue(keySkill2, skill2);
 		stats.saveValue(keyCurrentBoss, currentBoss);
 		stats.saveValue(keyFirstPlayTime, firstPlayTime);
+		stats.saveValue(keyFirstPlayTimeFight, firstPlayTimeFight);
 		stats.saveValue(keyPool, pool);
 		stats.saveValue(keyPoolMult, poolMult);
 		stats.saveValue(keyName, playerName);
@@ -855,6 +858,14 @@ public class MainGame extends Game {
 	public boolean isFirstPlayTime() {
 		return firstPlayTime;
 	}
+
+	public void setfirstPlayTimeFight(boolean firstPlayTimeFight) {
+	    this.firstPlayTimeFight = firstPlayTimeFight;
+    }
+
+    public boolean isFirstPlayTimeFight() {
+	    return firstPlayTimeFight;
+    }
 
 	public TextureAtlas getTestButtonAtlas() {
 		return testButtonAtlas;
