@@ -146,7 +146,7 @@ public class MainGame extends Game {
     private final int pool3HackShieldAmount = 15;
     private final int pool3InnerHackShieldAmount = 7;
 
-    private boolean resetting;
+    private boolean resetting, pauseWalking;
 
 	@Override
 	public void create () {
@@ -680,16 +680,20 @@ public class MainGame extends Game {
 
 	// Receive steps on Desktop, if milestone is not reached, else add them to stepBank
     public void simulateStep() {
-		stepAllCount++;
-		if (stepCount < progressBarMilestone) this.stepCount++;
-		else if (stepBank < 3000) stepBank++;
+		if (!pauseWalking) {
+			stepAllCount++;
+			if (stepCount < progressBarMilestone) this.stepCount++;
+			else if (stepBank < 3000) stepBank++;
+		}
 	}
 
     // Receive steps on Android, if milestone is not reached, else add them to stepBank
 	public void receiveSteps(float stepCount) {
-		stepAllCount++;
-		if (this.stepCount < progressBarMilestone && curRoom == ROOM_GAME) this.stepCount++;
-		else stepBank++;
+		if (!pauseWalking) {
+			stepAllCount++;
+			if (this.stepCount < progressBarMilestone && curRoom == ROOM_GAME) this.stepCount++;
+			else stepBank++;
+		}
 	}
 
 	// Deleted steps from bank, when retrieving them on RoomGame
@@ -749,6 +753,10 @@ public class MainGame extends Game {
 	/*
 	GETTERS
 	 */
+
+	public void setPauseWalking(boolean pauseWalking) {
+		this.pauseWalking = pauseWalking;
+	}
 
 	public int getCritBoost() {
 		int wholeBoost = critBoost + permaCritBoost;

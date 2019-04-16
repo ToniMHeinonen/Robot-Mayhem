@@ -28,6 +28,7 @@ public class RoomFight extends RoomParent {
 
     // Enums give simple constants, which decreases the chance for coding mistakes
     enum State {
+        TUTORIAL,
         START_ROOM,
         DIALOG_START,
         DIALOG_END,
@@ -53,7 +54,7 @@ public class RoomFight extends RoomParent {
     private Player player;
     private Enemy enemy;
     private int btnCounter; // Used for button classes to get the correct value
-    private State state = State.START_ROOM;
+    private State state;
     private boolean escapePopup, spawnHacking, actionButtonsOn, spawnPowerUp;
     private boolean firstHack = true;
     private int deathTimer = 240;
@@ -63,17 +64,19 @@ public class RoomFight extends RoomParent {
     private UtilPowerUp powerUp;
     private boolean firstPlayTimeFight;
 
-    RoomFight(MainGame game) {
+    RoomFight(final MainGame game) {
         super(game);
         imgBg = files.imgBgBoss;
         escapeBg = files.escapeBg;
         firstPlayTimeFight = game.isFirstPlayTimeFight();
 
-        /*
+
         if (firstPlayTimeFight) {
-            FirstPlay firstPlay = new FirstPlay(game, "fight");
+            state = State.TUTORIAL;
+            FirstPlay firstPlay = new FirstPlay(game, "fight", thisRoom);
+        } else {
+            state = State.START_ROOM;
         }
-        */
 
         createHealthBars();
         createShader(); // Used for flashing white
@@ -109,6 +112,9 @@ public class RoomFight extends RoomParent {
     public void selectItem(String item) {
         player.selectItem(item);
     }
+
+    @Override
+    public void tutorialFinished() { state = State.START_ROOM; }
 
     private void universalStateChecks() {
         switch (state) {
@@ -1221,6 +1227,7 @@ public class RoomFight extends RoomParent {
         private int[] critChances, missChances, cooldownAmount, damageOverTimeTurns;
         private boolean[] dotPurePercents;
         private Sound[] sounds;
+        private int showFirstDialogTimer = 60;
 
         Enemy() {
             retrieveBoss();
@@ -1240,8 +1247,6 @@ public class RoomFight extends RoomParent {
             cooldowns.put("Skill1", 0);
             cooldowns.put("Skill2", 0);
 
-            startDialogTimer();
-
             //hitAnimList = new ArrayList<Animation<TextureRegion>>();
             //Collections.addAll(hitAnimList, skill1_hit, skill2_hit, skill3_hit);
 
@@ -1249,6 +1254,7 @@ public class RoomFight extends RoomParent {
         }
 
         public void update() {
+            startDialogTimer();
             updateStart();
 
             if (!pauseStates) {
@@ -1421,13 +1427,13 @@ public class RoomFight extends RoomParent {
 
         // When the fight begins, wait for some time to start the dialogue
         private void startDialogTimer() {
-            Timer.schedule(new Timer.Task() {
-                @Override
-                public void run() {
+            if (state == State.START_ROOM) {
+                if (showFirstDialogTimer > 0) showFirstDialogTimer--;
+                else {
                     state = State.DIALOG_START;
                     dialog.createDialog(dialogStart, "dialog_enemy");
                 }
-            }, 1);
+            }
         }
 
         // Room calls this after hack is successful

@@ -32,14 +32,12 @@ public class RoomGame extends RoomParent {
     private boolean milestoneReached;
     private ImageButton fightButton;
     private Skin finalSkin;
-    private boolean firstPlayTime;
 
     RoomGame(final MainGame game) {
         super(game);
         createProgressBar();
         curSteps = game.getStepCount();
         finalSkin = files.finalSkin;
-        firstPlayTime = game.isFirstPlayTime();
 
         calculateBankSpeed();
 
@@ -52,8 +50,8 @@ public class RoomGame extends RoomParent {
         createMenuButton("hall");
         //createButtonFight(); // For playtesting
 
-        if (firstPlayTime) {
-            FirstPlay firstPlay = new FirstPlay(game, "hall");
+        if (game.isFirstPlayTime()) {
+            FirstPlay firstPlay = new FirstPlay(game, "hall", thisRoom);
         }
     }
 
@@ -62,20 +60,26 @@ public class RoomGame extends RoomParent {
         super.render(delta);
 
         if (!game.haveWeChangedTheRoom) {
+            checkToPause();
             // Set correct milestone in case of difficulty gets changed
             progressBar.setRange(0f, game.getProgressBarMilestone());
             batch.begin();
             controlBackground();
             drawTopAndBottomBar();
-            progressBar.setValue(curSteps); // Control progress bar
             drawSteps();
             player.update();
             retrieveBankSteps();
+            progressBar.setValue(curSteps); // Control progress bar
             checkToChangeRoom();
             batch.end();
             stage.act(Gdx.graphics.getDeltaTime());
             stage.draw();
         }
+    }
+
+    private void checkToPause() {
+        if (game.isFirstPlayTime()) game.setPauseWalking(true);
+        else game.setPauseWalking(false);
     }
 
     public void createButtonFight() {
@@ -241,8 +245,8 @@ public class RoomGame extends RoomParent {
     }
 
     /*
-    Create class for player
-     */
+        Create class for player
+         */
     private class Player {
         private Animation<TextureRegion> idle, moving, item;
         private Animating anim;

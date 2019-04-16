@@ -8,9 +8,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.I18NBundle;
+import com.badlogic.gdx.utils.Timer;
 
 public class FirstPlay {
     private MainGame game;
+    private RoomParent curRoom;
     private Stage stage;
     private Skin finalSkin;
     private I18NBundle localize;
@@ -23,8 +25,9 @@ public class FirstPlay {
     private int hallCounter = 0;
     private int fightCounter = 0;
 
-    FirstPlay(MainGame game, String room) {
+    FirstPlay(final MainGame game, String room, RoomParent curRoom) {
         this.game = game;
+        this.curRoom = curRoom;
         stage = game.getStage();
         finalSkin = game.getFinalSkin();
         localize = game.getLocalize();
@@ -34,12 +37,20 @@ public class FirstPlay {
         firstPlayTimeFight = game.isFirstPlayTimeFight();
 
         if (firstPlayTime && room.equals("hall")) {
-            game.setFirstPlayTime(false);
-            hallInstructionsName();
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    hallInstructionsName();
+                }
+            }, 1);
         }
         if (firstPlayTimeFight && room.equals("fight")) {
-            game.setfirstPlayTimeFight(false);
-            fightAllInstructions();
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    fightAllInstructions();
+                }
+            }, 1);
         }
     }
 
@@ -86,18 +97,17 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 hallCounter++;
                 dialog.remove();
-                if (hallCounter < hallGuide.length) {
-                    hallAllInstructions();
-                }
+                if (hallCounter < hallGuide.length) hallAllInstructions();
+                else game.setFirstPlayTime(false);
             }
         });
     }
 
     private void fightAllInstructions() {
         final String[] fightGuide = new String[] {
-                "First text",
-                "Second text",
-                "Third text"};
+                "This game has turn based combat.",
+                "If you don't know how that works, it's your own fault.",
+                "L2P"};
 
         final Dialog dialog = utilDialog.createInstructionsDialog(fightGuide[fightCounter]);
         stage.addActor(dialog);
@@ -107,8 +117,10 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 fightCounter++;
                 dialog.remove();
-                if (fightCounter < fightGuide.length) {
-                    fightAllInstructions();
+                if (fightCounter < fightGuide.length) fightAllInstructions();
+                else {
+                    curRoom.tutorialFinished();
+                    game.setfirstPlayTimeFight(false);
                 }
             }
         });
