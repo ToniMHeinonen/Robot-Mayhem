@@ -19,6 +19,7 @@ public class Stats {
     private I18NBundle localize;
     private String playerName;
     private int buyedItemsCounter;
+    private float stepAllCount;
 
     private Dialog statsDialog;
 
@@ -37,6 +38,7 @@ public class Stats {
 
     private Label labelPlayerName;
     private Label labelBuyedItems;
+    private Label labelAllSteps;
 
     private float labelWidth = 600;
     private float spaceBetween = 30;
@@ -50,6 +52,7 @@ public class Stats {
         localize = game.getLocalize();
         playerName = game.getPlayerName();
         buyedItemsCounter = game.getBuyedItemsCounter();
+        stepAllCount = game.getStepAllCount();
 
         createStatsDialog();
         createHeader();
@@ -101,6 +104,12 @@ public class Stats {
         allSteps.setSize(labelWidth, allSteps.getPrefHeight());
         allSteps.setAlignment(Align.right);
         statsDialog.addActor(allSteps);
+
+        labelAllSteps = new Label(String.valueOf((int)stepAllCount), finalSkin);
+        labelAllSteps.setPosition(allSteps.getX(Align.right) + spaceBetween, allSteps.getY());
+        labelAllSteps.setSize(labelWidth, allSteps.getPrefHeight());
+        labelAllSteps.setAlignment(Align.left);
+        statsDialog.addActor(labelAllSteps);
     }
 
     private void createBuyedItems() {
