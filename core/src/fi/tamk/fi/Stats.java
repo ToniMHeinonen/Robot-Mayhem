@@ -27,7 +27,7 @@ public class Stats {
     private ArrayList<String> inventory;
     private Skills skills;
     private String[] allSkills;
-    private int defeatedBossesCounter;
+    private int fightsWon;
 
     private Dialog statsDialog;
 
@@ -69,7 +69,7 @@ public class Stats {
         inventory = game.getInventory();
         skills = game.getSkills();
         allSkills = skills.getAllSkills();
-        defeatedBossesCounter = game.getDefeatedBossesCounter();
+        fightsWon = game.getFightsWon();
 
         ownedSkillsAmount();
         createStatsDialog();
@@ -180,7 +180,7 @@ public class Stats {
         bossesDefeated.setAlignment(Align.right);
         statsDialog.addActor(bossesDefeated);
 
-        labelBossesDefeated = new Label(String.valueOf(defeatedBossesCounter), finalSkin);
+        labelBossesDefeated = new Label(String.valueOf(fightsWon), finalSkin);
         labelBossesDefeated.setPosition(bossesDefeated.getX(Align.right) + spaceBetween, bossesDefeated.getY());
         labelBossesDefeated.setSize(labelWidth, labelBossesDefeated.getPrefHeight());
         labelBossesDefeated.setAlignment(Align.left);

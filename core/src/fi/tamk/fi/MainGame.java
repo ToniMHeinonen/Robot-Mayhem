@@ -79,7 +79,6 @@ public class MainGame extends Game {
 	private String keyInventorySize = E.encrypt("inventorySize");
 	private String keyInventory = E.encrypt("inventory");
 	private String keyBuyedItemsCounter = E.encrypt("buyedItemsCounter");
-	private String keyDefeatedBossesCounter = E.encrypt("defeatedBossesCounter");
 	private String keyDefeatedBossesSize = E.encrypt("defeatedBossesSize");
 	private String keyDefeatedBosses = E.encrypt("defeatedBosses");
 	private String keyName = E.encrypt("name");
@@ -102,7 +101,7 @@ public class MainGame extends Game {
 	private Preferences prefsStats;
 	private SaveAndLoad stats;
 	private float stepCount, stepBank, stepAllCount;
-	private int pool, poolMult, money, fightsWon, prevDayGift, buyedItemsCounter, defeatedBossesCounter;
+	private int pool, poolMult, money, fightsWon, prevDayGift, buyedItemsCounter;
 	private String skill1, skill2, currentBoss, playerName;
 	private boolean firstPlayTime;
 	private int critBoost, missBoost, permaCritBoost, permaMissBoost;
@@ -503,7 +502,6 @@ public class MainGame extends Game {
 		fightsWon = stats.loadValue(keyFightsWon, 0);
 		prevDayGift = stats.loadValue(keyPrevDayGift, -1);
 		buyedItemsCounter = stats.loadValue(keyBuyedItemsCounter, 0);
-		defeatedBossesCounter = stats.loadValue(keyDefeatedBossesCounter, 0);
 
 		critBoost = stats.loadValue(keyCritBoost, 0);
 		missBoost = stats.loadValue(keyMissBoost, 0);
@@ -546,7 +544,6 @@ public class MainGame extends Game {
 		stats.saveValue(keyFightsWon, fightsWon);
 		stats.saveValue(keyPrevDayGift, prevDayGift);
 		stats.saveValue(keyBuyedItemsCounter, buyedItemsCounter);
-		stats.saveValue(keyDefeatedBossesCounter, defeatedBossesCounter);
 
 		stats.saveValue(keyCritBoost, critBoost);
 		stats.saveValue(keyMissBoost, missBoost);
@@ -611,8 +608,6 @@ public class MainGame extends Game {
 	public void bossDefeated() {
 		// defeatedBosses.add(currentBoss); Add when all the bosses exist
 
-        // defeatedBossesCounter is for stats-class.
-        defeatedBossesCounter += 1;
 		stepCount = 0; // Reset step count
 		money += MathUtils.random(5, 10);
 		poolMult++;
@@ -1032,7 +1027,7 @@ public class MainGame extends Game {
 	    return buyedItemsCounter;
     }
 
-    public int getDefeatedBossesCounter() {
-	    return defeatedBossesCounter;
+    public int getFightsWon() {
+	    return fightsWon;
     }
 }
