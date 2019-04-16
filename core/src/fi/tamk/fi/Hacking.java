@@ -387,8 +387,8 @@ public class Hacking {
     }
 
     private void createButtonShoot() {
-        Drawable normal = finalSkin.getDrawable("button_ATTACK");
-        Drawable clicked = finalSkin.getDrawable("button_ATTACK_clicked");
+        Drawable normal = finalSkin.getDrawable("button_SHOOT");
+        Drawable clicked = finalSkin.getDrawable("button_SHOOT_clicked");
         final ImageButton btn = new ImageButton(normal, clicked);
         btn.setPosition(game.pixelWidth /2 - btn.getWidth() /2,
                 0);
