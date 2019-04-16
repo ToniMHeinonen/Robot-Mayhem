@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.I18NBundle;
 
 import java.util.HashMap;
@@ -30,7 +31,6 @@ public class UtilPowerUp {
     private Item items;
     private Bosses bosses;
     private Stage stage;
-    private Skin skin;
     private Skin finalSkin;
     private Texture background, popup;
     private float backgroundX, backgroundY, popupX, popupY;
@@ -68,7 +68,6 @@ public class UtilPowerUp {
         descriptionLabelStyle = game.getDescriptionLabelStyle();
         emptyWindowsStyle = game.getEmptyWindowStyle();
         bigFont = game.getFontSteps();
-        skin = game.getSkin();
 
         // Spawn powerups and add everything to stage
         spawnRandomPowerUps();
@@ -216,11 +215,14 @@ public class UtilPowerUp {
         float[] yPos = new float[] {416, 216, 416};
         spawnedPowerups[pos] = name;
         final String localizedName = localize.get(name);
-        TextButton btn = new TextButton(localizedName, finalSkin);
-        btn.setWidth(420f);
-        btn.getLabelCell().width(384);
-        btn.getLabel().setWrap(true);
-        btn.invalidate();
+        String button;
+        Drawable normal, clicked;
+        if (type == MONEY) button = "money";
+        else if (type == HALL_ITEM || type == BATTLE_ITEM) button = "ITEM";
+        else button = (String) skills.getSkill(name).get(skills.button);
+        normal = finalSkin.getDrawable("button_" + button);
+        clicked = finalSkin.getDrawable("button_" + button + "_clicked");
+        ImageButton btn = new ImageButton(normal, clicked);
         btn.setPosition(xPos[pos],  yPos[pos]);
 
         powerups.addActor(btn);
