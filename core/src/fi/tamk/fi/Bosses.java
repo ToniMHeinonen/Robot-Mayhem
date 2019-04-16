@@ -26,12 +26,13 @@ public class Bosses {
     public final String skillName = "skillName";
     public final String dialogStart = "dialogstart";
     public final String dialogEnd = "dialogend";
+    public final String attackName = "attackName";
 
     private HashMap<String, HashMap<String,Object>> mapBosses;
 
     private Animation<TextureRegion> animIdle, animStun, animAttack, animDamage;
 
-    private String curName, curSkillName0, curSkillName1, curSkillName2,
+    private String curName, curAttackName, curSkillName0, curSkillName1, curSkillName2,
                             curDialogStart, curDialogEnd;
     private Boolean curNormalSize;
 
@@ -91,6 +92,7 @@ public class Bosses {
 
     private void bossRobber() {
         curName = ROBBER;
+        curAttackName = "robberAttackName";
         curNormalSize = true;
         curSkillName0 = skills.ATTACK;
         curSkillName1 = skills.FIRE;
@@ -109,6 +111,7 @@ public class Bosses {
 
     private void bossRoombot() {
         curName = ROOMBOT;
+        curAttackName = "roombotAttackName";
         curNormalSize = false;
         curSkillName0 = skills.ATTACK;
         curSkillName1 = skills.SUCTION;
@@ -126,6 +129,7 @@ public class Bosses {
 
     private void bossCopper() {
         curName = COPPER;
+        curAttackName = "copperAttackName";
         curNormalSize = true;
         curSkillName0 = skills.ATTACK;
         curSkillName1 = skills.SHOCK;
@@ -144,6 +148,7 @@ public class Bosses {
     private void addToMap() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, curName);
+        map.put(attackName, curAttackName);
         map.put(normalSize, curNormalSize);
         map.put(idle, animIdle);
         map.put(skill, animAttack);

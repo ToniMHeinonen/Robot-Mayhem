@@ -414,7 +414,7 @@ public class RoomFight extends RoomParent {
                 skillAnim, takeHitAnim, healthPlus, healthMinus, criticalHitAnim, missAnim,
                 dotMinus, dotPlus;
         protected HashMap<String,Integer> cooldowns;
-        protected String usedItem;
+        protected String usedItem, attackName;
 
         Fighters() {
             healthPlus = files.animHealthPlusDoT;
@@ -936,6 +936,7 @@ public class RoomFight extends RoomParent {
             defaultDmg = defaultDamages[game.getPoolMult()];
             ifDead = State.DEAD;
             ID = PLAYER;
+            attackName = "playerAttack";
 
             //Retrieve saved boosts
             critBoost = game.getCritBoost();
@@ -1003,6 +1004,7 @@ public class RoomFight extends RoomParent {
             if (action.equals(skills.ATTACK))
             {
                 skillState = SKILL_DAMAGE;
+                action = attackName;
                 actionSelected = true;
                 curAnimation = skillAnim;
                 // If skill misses, skip everything
@@ -1343,6 +1345,7 @@ public class RoomFight extends RoomParent {
 
             // Retrieve boss's size
             normalSize = (Boolean) mapBoss.get(bosses.normalSize);
+            attackName = (String) mapBoss.get(bosses.attackName);
 
             // Retrieve enemy animations and speed
             idleAnim = (Animation<TextureRegion>) mapBoss.get(bosses.idle);
@@ -1379,7 +1382,11 @@ public class RoomFight extends RoomParent {
                         break;
                     }
                 }
-                String localizedName = localize.get(skillNames[random]);
+
+                // Localize name and show it, if it's attack, then retrieve boss's attackName
+                String localizedName;
+                if (skillNames[random] == skills.ATTACK) localizedName = localize.get(attackName);
+                else localizedName = localize.get(skillNames[random]);
                 dialog.showSkillName(localizedName, "skillname_enemy");
 
                 // Play sound if not null
