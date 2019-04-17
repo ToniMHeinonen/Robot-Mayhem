@@ -139,8 +139,8 @@ public class RoomGame extends RoomParent {
 
                 // Draw on screen retrieving steps from bank
                 int ceiledBank = (int) Math.ceil(game.getStepBank());
-                finalSkin.getFont("font-average").draw(batch, "Retrieving steps\nfrom bank:\n" +
-                                String.valueOf(ceiledBank),
+                finalSkin.getFont("font-average").draw(batch,
+                        localize.get("retrievingSteps") + " " +String.valueOf(ceiledBank),
                         game.gridSize * 7, game.pixelHeight/2);
             }
         }
