@@ -1033,10 +1033,6 @@ public class RoomFight extends RoomParent {
             else if (action.equals(skills.ITEM))
             {
                 UtilItem inventory = new UtilItem(game, "fight", thisRoom);
-                /*actionSelected = true;
-                game.playSound(files.sndUseItem);
-                curAnimation = itemAnim;
-                actionState = TEMP_ANIM;*/
             }
             else { // It's skill
                 for (int i = 0; i < 2; i++) {
@@ -1059,10 +1055,14 @@ public class RoomFight extends RoomParent {
                         boolean miss = randomMissChance((Integer) skillMap.get(skills.missChance));
                         if (miss) skillState = SKILL_MISS;
                         else {
+                            boolean pureDmg = (Boolean) skillMap.get(skills.dmgPurePercent);
+                            double damage = (Double) skillMap.get(skills.damage);
+
                             // Check if skill heals, else do damage
                             if ((Double) skillMap.get(skills.damage) < 0) {
                                 skillState = SKILL_HEAL;
-                                dmgAmount = (Double) skillMap.get(skills.damage);
+                                if (pureDmg) dmgAmount = damage;
+                                else dmgAmount = damage * wholeDmg;
                             } else {
                                 curHitAnimation =
                                         (Animation<TextureRegion>) skillMap.get(skills.hitAnimation);
@@ -1070,8 +1070,11 @@ public class RoomFight extends RoomParent {
                                 if (curHitAnimation != null) {
                                     skillState = SKILL_DAMAGE;
 
+                                    // If pureDmg, value 20 deals 20% of maxHp, else it deals
+                                    // wholeDmg*20
+                                    if (pureDmg) dmgAmount = damage + (damage * dmgBoost);
+                                    else dmgAmount = damage * wholeDmg;
                                     // If critical hit, deal 1.5x damage
-                                    dmgAmount = wholeDmg * (Double) skillMap.get(skills.damage);
                                     dealCriticalHit = randomCritChance((Integer)
                                             skillMap.get(skills.critChance));
                                     if (dealCriticalHit) dmgAmount *= 1.5;
@@ -1227,7 +1230,7 @@ public class RoomFight extends RoomParent {
         private ArrayList<Animation<TextureRegion>> hitAnimList;
         private String[] skillNames;
         private int[] critChances, missChances, cooldownAmount, damageOverTimeTurns;
-        private boolean[] dotPurePercents;
+        private boolean[] dmgPurePercents, dotPurePercents;
         private Sound[] sounds;
         private int showFirstDialogTimer = 60;
 
@@ -1289,6 +1292,7 @@ public class RoomFight extends RoomParent {
             skillNames = new String[3];
             hitAnimList = new ArrayList<Animation<TextureRegion>>();
             damages = new double[3];
+            dmgPurePercents = new boolean[3];
             critChances = new int[3];
             missChances = new int[3];
             cooldownAmount = new int[3];
@@ -1314,6 +1318,10 @@ public class RoomFight extends RoomParent {
                 double dmg = (Double) mapSkill.get(skills.damage);
                 damages[i] = dmg;
 
+                // Retrieve if to deal damage pure percent or comparable to defaultDamage
+                boolean pureDmg = (Boolean) mapSkill.get(skills.dmgPurePercent);
+                dmgPurePercents[i] = pureDmg;
+
                 // Retrieve skill's crit chance percent
                 int crit = (Integer) mapSkill.get(skills.critChance);
                 critChances[i] = crit;
@@ -1334,9 +1342,9 @@ public class RoomFight extends RoomParent {
                 int dotTurn = (Integer) mapSkill.get(skills.damageOverTimeTurns);
                 damageOverTimeTurns[i] = dotTurn;
 
-                // Retrieve if to deal pure percent or comparable to defaultDamage
-                boolean pure = (Boolean) mapSkill.get(skills.dotPurePercent);
-                dotPurePercents[i] = pure;
+                // Retrieve if to deal dot pure percent or comparable to defaultDamage
+                boolean pureDot = (Boolean) mapSkill.get(skills.dotPurePercent);
+                dotPurePercents[i] = pureDot;
 
                 // Retrieve sound effect
                 Sound snd = (Sound) mapSkill.get(skills.sound);
@@ -1395,10 +1403,12 @@ public class RoomFight extends RoomParent {
                 boolean miss = randomMissChance(missChances[random]);
                 if (miss) skillState = SKILL_MISS;
                 else {
+                    double damage = damages[random];
                     // Check if skill heals, else do damage
-                    if (damages[random] < 0) {
+                    if (damage < 0) {
                         skillState = SKILL_HEAL;
-                        dmgAmount = damages[random];
+                        if (dmgPurePercents[random]) dmgAmount = damage;
+                        else dmgAmount = damage * wholeDmg;
                     } else {
                         // If skill does not heal, get hitAnimation
                         curHitAnimation = hitAnimList.get(random);
@@ -1406,8 +1416,10 @@ public class RoomFight extends RoomParent {
                         if (curHitAnimation != null) {
                             skillState = SKILL_DAMAGE;
 
+                            // If pureDmg, value 20 deals 20% of maxHp, else it deal wholeDmg*20
+                            if (dmgPurePercents[random]) dmgAmount = damage + (damage * dmgBoost);
+                            else dmgAmount = damage * wholeDmg;
                             // If critical hit, deal 1.5x damage
-                            dmgAmount = wholeDmg * damages[random];
                             dealCriticalHit = randomCritChance(critChances[random]);
                             if (dealCriticalHit) dmgAmount *= 1.5;
                         }

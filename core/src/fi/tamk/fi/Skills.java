@@ -16,6 +16,7 @@ public class Skills {
     public final String name = "name";
     public final String description = "description";
     public final String damage = "damage";
+    public final String dmgPurePercent = "dmgPurePercent";
     public final String critChance = "critChance";
     public final String missChance = "missChance";
     public final String damageOverTime = "damageOverTime";
@@ -29,12 +30,16 @@ public class Skills {
     // Names for localization
     public final String ATTACK = "ATTACK";
     public final String DEFEND = "DEFEND";
+    public final String REFLECT = "REFLECT";
     public final String ITEM = "ITEM";
     public final String REPAIR = "REPAIR";
     public final String SHOCK = "SHOCK";
     public final String FIRE = "FIRE";
     public final String SUCTION = "SUCTION";
     public final String DUST = "DUST";
+    public final String ELECTRIFY = "ELECTRIFY";
+    public final String MISSILE = "MISSILE";
+    public final String BIG_HEAL = "BIG_HEAL";
 
     // Names for buttons
     public final String btnAttack = "ATTACK";
@@ -43,13 +48,13 @@ public class Skills {
     public final String btnSkill = "SKILL";
     public final String btnHeal = "HEAL";
 
-    private final String[] allSkills = new String[] {ATTACK, DEFEND, ITEM, REPAIR,
-            SHOCK, FIRE, SUCTION, DUST};
+    private final String[] allSkills = new String[] {ATTACK, DEFEND, REFLECT, ITEM, REPAIR,
+            SHOCK, FIRE, SUCTION, DUST, ELECTRIFY, MISSILE, BIG_HEAL};
 
     private final int defCrit = 10; // Default crit chance percent
     private final int defMiss = 5; // Default miss chance percent
 
-    private Animation<TextureRegion> physicalHit;
+    private Animation<TextureRegion> physicalHit, skillHit;
 
     private HashMap<String,HashMap<String,Object>> mapSkills;
 
@@ -61,12 +66,16 @@ public class Skills {
         loadSkillAnimations();
         skillAttack();
         skillDefend();
+        skillReflect();
         skillItem();
         skillRepair();
         skillShock();
         skillFire();
         skillSuction();
         skillDust();
+        skillElectrify();
+        skillMissile();
+        skillBigHeal();
     }
 
     /* NOTE!
@@ -81,6 +90,7 @@ public class Skills {
     - name = Name of the skill
     - description = Description of the skill
     - damage = The amount of damage it deals when it hits
+    - dmgPurePercent = Same logic as in dotPurePercent
     - critChance = The amount of percent chance to deal 1.5x damage
     - missChance = The amount of percent chance to miss an attack
     - damageOverTime (DoT) = The amount of damage it deals before every round when inflicted
@@ -119,6 +129,7 @@ public class Skills {
 
     private void loadSkillAnimations() {
         physicalHit = files.animPhysicalHit;
+        skillHit = files.animSkillHit;
     }
 
     private void skillAttack() {
@@ -126,6 +137,7 @@ public class Skills {
         map.put(name, ATTACK);
         map.put(description, "attackDesc");
         map.put(damage, 1.0);
+        map.put(dmgPurePercent, false);
         map.put(critChance, defCrit);
         map.put(missChance, defMiss);
         map.put(damageOverTime, 0.0);
@@ -144,6 +156,26 @@ public class Skills {
         map.put(name, DEFEND);
         map.put(description, "defendDesc");
         map.put(damage, 0.0);
+        map.put(dmgPurePercent, false);
+        map.put(critChance, 0);
+        map.put(missChance, 0);
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, false);
+        map.put(cooldown, 3);
+        map.put(hitAnimation, null);
+        map.put(sound, null);
+        map.put(button, btnDefend);
+
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillReflect() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, REFLECT);
+        map.put(description, "reflectDesc");
+        map.put(damage, 0.0);
+        map.put(dmgPurePercent, false);
         map.put(critChance, 0);
         map.put(missChance, 0);
         map.put(damageOverTime, 0.0);
@@ -162,6 +194,7 @@ public class Skills {
         map.put(name, ITEM);
         map.put(description, "itemDesc");
         map.put(damage, 0.0);
+        map.put(dmgPurePercent, false);
         map.put(critChance, 0);
         map.put(missChance, 0);
         map.put(damageOverTime, 0.0);
@@ -180,6 +213,7 @@ public class Skills {
         map.put(name, REPAIR);
         map.put(description, "repairDesc");
         map.put(damage, 0.0);
+        map.put(dmgPurePercent, false);
         map.put(critChance, 0);
         map.put(missChance, 0);
         map.put(damageOverTime, -15.0);
@@ -197,14 +231,15 @@ public class Skills {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, SHOCK);
         map.put(description, "shockDesc");
-        map.put(damage, 3.0);
+        map.put(damage, 2.0);
+        map.put(dmgPurePercent, false);
         map.put(critChance, defCrit);
         map.put(missChance, defMiss);
         map.put(damageOverTime, 0.0);
         map.put(damageOverTimeTurns, 0);
         map.put(dotPurePercent, false);
-        map.put(cooldown, 3);
-        map.put(hitAnimation, physicalHit);
+        map.put(cooldown, 2);
+        map.put(hitAnimation, skillHit);
         map.put(sound, null);
         map.put(button, btnSkill);
 
@@ -216,6 +251,7 @@ public class Skills {
         map.put(name, FIRE);
         map.put(description, "fireDesc");
         map.put(damage, 0.0);
+        map.put(dmgPurePercent, false);
         map.put(critChance, 0);
         map.put(missChance, defMiss);
         map.put(damageOverTime, 20.0);
@@ -234,13 +270,14 @@ public class Skills {
         map.put(name, SUCTION);
         map.put(description, "suctionDesc");
         map.put(damage, 1.5);
+        map.put(dmgPurePercent, false);
         map.put(critChance, defCrit + 10);
         map.put(missChance, defMiss);
         map.put(damageOverTime, 0.0);
         map.put(damageOverTimeTurns, 0);
         map.put(dotPurePercent, false);
         map.put(cooldown, 2);
-        map.put(hitAnimation, physicalHit);
+        map.put(hitAnimation, skillHit);
         map.put(sound, files.sndSuction);
         map.put(button, btnSkill);
 
@@ -252,6 +289,7 @@ public class Skills {
         map.put(name, DUST);
         map.put(description, "dustDesc");
         map.put(damage, 0.0);
+        map.put(dmgPurePercent, false);
         map.put(critChance, 0);
         map.put(missChance, defMiss);
         map.put(damageOverTime, 1.0);
@@ -261,6 +299,63 @@ public class Skills {
         map.put(hitAnimation, null);
         map.put(sound, files.sndDustThrow);
         map.put(button, btnSkill);
+
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillElectrify() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, ELECTRIFY);
+        map.put(description, "electrifyDesc");
+        map.put(damage, 1.0);
+        map.put(dmgPurePercent, false);
+        map.put(critChance, defCrit);
+        map.put(missChance, defMiss);
+        map.put(damageOverTime, 0.5);
+        map.put(damageOverTimeTurns, 2);
+        map.put(dotPurePercent, false);
+        map.put(cooldown, 2);
+        map.put(hitAnimation, skillHit);
+        map.put(sound, null);
+        map.put(button, btnSkill);
+
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillMissile() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, MISSILE);
+        map.put(description, "missileDesc");
+        map.put(damage, 3.0);
+        map.put(dmgPurePercent, false);
+        map.put(critChance, defCrit);
+        map.put(missChance, 33);
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, false);
+        map.put(cooldown, 3);
+        map.put(hitAnimation, skillHit);
+        map.put(sound, null);
+        map.put(button, btnSkill);
+
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillBigHeal() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, BIG_HEAL);
+        map.put(description, "bigHealDesc");
+        map.put(damage, -30.0);
+        map.put(dmgPurePercent, true);
+        map.put(critChance, 0);
+        map.put(missChance, 0);
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, true);
+        map.put(cooldown, 3);
+        map.put(hitAnimation, null);
+        map.put(sound, null);
+        map.put(button, btnHeal);
 
         mapSkills.put((String) map.get(name), map);
     }

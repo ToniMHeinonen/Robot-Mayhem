@@ -99,7 +99,7 @@ public class Bosses {
         curNormalSize = true;
         curSkillName0 = skills.ATTACK;
         curSkillName1 = skills.FIRE;
-        curSkillName2 = skills.DUST;
+        curSkillName2 = skills.MISSILE;
 
         curDialogStart = "robberDialogStart";
         curDialogEnd = "robberDialogEnd";
@@ -136,7 +136,7 @@ public class Bosses {
         curNormalSize = true;
         curSkillName0 = skills.ATTACK;
         curSkillName1 = skills.SHOCK;
-        curSkillName2 = skills.DUST;
+        curSkillName2 = skills.BIG_HEAL;
         curDialogStart = "copperDialogStart";
         curDialogEnd = "copperDialogEnd";
 
@@ -149,11 +149,11 @@ public class Bosses {
     }
 
     private void bossCopier() {
-        curName = COPPER;
+        curName = COPIER;
         curAttackName = "copierAttackName";
         curNormalSize = true;
         curSkillName0 = skills.ATTACK;
-        curSkillName1 = skills.SHOCK;
+        curSkillName1 = skills.ELECTRIFY;
         curSkillName2 = skills.REPAIR;
         curDialogStart = "copierDialogStart";
         curDialogEnd = "copierDialogEnd";
