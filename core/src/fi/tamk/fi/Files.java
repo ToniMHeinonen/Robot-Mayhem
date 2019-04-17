@@ -39,6 +39,11 @@ public class Files {
     public final Animation<TextureRegion> a_copperIdle, a_copperAttack, a_copperDamage,
             a_copperStun;
 
+    // Copier textures and animations
+    private final Texture t_copierIdle, t_copierAttack, t_copierDamage, t_copierStun;
+    public final Animation<TextureRegion> a_copierIdle, a_copierAttack, a_copierDamage,
+            a_copierStun;
+
     // Other textures
     public final Texture imgBgHall, imgBgBoss, imgTopBar, imgBottomBar, escapeBg, hpBarLeft,
             hpBarRight, powerUpBg, powerUpPopup, itemBg;
@@ -157,6 +162,15 @@ public class Files {
         a_copperAttack = createAnims.createAnimation(t_copperAttack, 4, 1);
         a_copperDamage = createAnims.createAnimation(t_copperDamage, 4, 1);
         a_copperStun = createAnims.createAnimation(t_copperStun, 4, 2);
+        // Copier
+        t_copierIdle = manager.get("texture/copier/copier_idle.png");
+        t_copierAttack = manager.get("texture/copier/copier_attack.png");
+        t_copierDamage = manager.get("texture/copier/copier_damage.png");
+        t_copierStun = manager.get("texture/copier/copier_stun.png");
+        a_copierIdle = createAnims.createAnimation(t_copierIdle, 4, 4);
+        a_copierAttack = createAnims.createAnimation(t_copierAttack, 4, 1);
+        a_copierDamage = createAnims.createAnimation(t_copierDamage, 4, 1);
+        a_copierStun = createAnims.createAnimation(t_copierStun, 4, 2);
 
         /*
         Skins
@@ -253,6 +267,10 @@ public class Files {
         manager.load("texture/copper/copper_attack.png", Texture.class);
         manager.load("texture/copper/copper_damage.png", Texture.class);
         manager.load("texture/copper/copper_stun.png", Texture.class);
+        manager.load("texture/copier/copier_idle.png", Texture.class);
+        manager.load("texture/copier/copier_attack.png", Texture.class);
+        manager.load("texture/copier/copier_damage.png", Texture.class);
+        manager.load("texture/copier/copier_stun.png", Texture.class);
 
         /*
         Skins

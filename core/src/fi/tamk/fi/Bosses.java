@@ -39,13 +39,15 @@ public class Bosses {
     public final String ROOMBOT = "Roombot";
     public final String COPPER = "Copper";
     public final String ROBBER = "Robber";
-    private String[] allBosses = new String[] {ROOMBOT, COPPER, ROBBER};
+    public final String COPIER = "Copier";
+    private String[] allBosses = new String[] {ROOMBOT, COPPER, ROBBER, COPIER};
 
     /* NOTE!
-    Everytime you add new boss, remember to:
+    Everytime you add a new boss, remember to:
     1. Make a String for it
     2. Add it to the allBosses array
     3. Make a new method for it
+    4. Add attackName, dialogStart and dialogEnd to bundle
      */
 
     /*
@@ -58,6 +60,7 @@ public class Bosses {
         bossRoombot();
         bossCopper();
         bossRobber();
+        bossCopier();
     }
 
     /*
@@ -141,6 +144,24 @@ public class Bosses {
         animAttack = files.a_copperAttack;
         animDamage = files.a_copperDamage;
         animStun = files.a_copperStun;
+
+        addToMap();
+    }
+
+    private void bossCopier() {
+        curName = COPPER;
+        curAttackName = "copierAttackName";
+        curNormalSize = true;
+        curSkillName0 = skills.ATTACK;
+        curSkillName1 = skills.SHOCK;
+        curSkillName2 = skills.REPAIR;
+        curDialogStart = "copierDialogStart";
+        curDialogEnd = "copierDialogEnd";
+
+        animIdle = files.a_copierIdle;
+        animAttack = files.a_copierAttack;
+        animDamage = files.a_copierDamage;
+        animStun = files.a_copierStun;
 
         addToMap();
     }
