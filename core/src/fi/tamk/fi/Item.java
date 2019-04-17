@@ -83,7 +83,7 @@ public class Item {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, BOMB);
         map.put(description, "bombDesc");
-        map.put(value, 50);
+        map.put(value, 50.0);
         map.put(usedInHall, false);
         map.put(isSkill, false);
         map.put(boostType, NO_BOOST);
@@ -97,7 +97,7 @@ public class Item {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, POTION);
         map.put(description, "potionDesc");
-        map.put(value, -50);
+        map.put(value, -50.0);
         map.put(usedInHall, false);
         map.put(isSkill, false);
         map.put(boostType, NO_BOOST);
