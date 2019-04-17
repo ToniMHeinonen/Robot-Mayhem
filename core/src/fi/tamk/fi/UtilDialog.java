@@ -34,7 +34,7 @@ public class UtilDialog {
         label.setAlignment(1);
 
         final Dialog dialog = new Dialog("", finalSkin, style);
-        dialog.getContentTable().add(label).prefWidth(areaWidth - 80);
+        dialog.getContentTable().add(label).prefWidth(areaWidth - 210);
         dialog.setPosition(x, y);
         dialog.setSize(areaWidth,areaHeight);
         stage.addActor(dialog);
@@ -112,7 +112,7 @@ public class UtilDialog {
         Dialog dialog = new Dialog("", finalSkin, "dialog_player");
         dialog.setSize(780, 540);
         dialog.setPosition(game.pixelWidth/2 - 780f/2, 430f);
-        dialog.getContentTable().add(label).prefWidth(780f - 80f);
+        dialog.getContentTable().add(label).prefWidth(780f - 210f);
 
         return dialog;
     }
