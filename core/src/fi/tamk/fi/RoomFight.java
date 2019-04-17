@@ -63,12 +63,14 @@ public class RoomFight extends RoomParent {
     private Hacking hacking;
     private UtilPowerUp powerUp;
     private boolean firstPlayTimeFight;
+    private String lan;
 
     RoomFight(final MainGame game) {
         super(game);
         imgBg = files.imgBgBoss;
         escapeBg = files.escapeBg;
         firstPlayTimeFight = game.isFirstPlayTimeFight();
+        lan = game.getLanguage();
 
 
         if (firstPlayTimeFight) {
@@ -233,7 +235,7 @@ public class RoomFight extends RoomParent {
             escapeLabel.setWrap(true);
             escapeLabel.setWidth(530);
             escapeLabel.setAlignment(1);
-            escapeLabel.setPosition(game.pixelWidth/2 - 260, game.pixelHeight/2 + 120);
+            escapeLabel.setPosition(game.pixelWidth/2 - 260, game.pixelHeight/2);
             escapeLabel.draw(batch, 1);
         }
     }
@@ -327,8 +329,8 @@ public class RoomFight extends RoomParent {
 
     // Creates yes and no buttons for escaping
     private void createYesNo() {
-        final TextButton btn = new TextButton(localize.get("yes"), finalSkin);
-        btn.setPosition(game.pixelWidth/2 - btn.getWidth(), game.pixelHeight/2 - 175);
+        final ImageButton btn = new ImageButton(finalSkin, "confirm_" + lan);
+        btn.setPosition(game.pixelWidth/2 - btn.getWidth(), game.pixelHeight/2 - 325);
         stage.addActor(btn);
 
         btn.addListener(new ClickListener() {
@@ -342,8 +344,8 @@ public class RoomFight extends RoomParent {
             }
         });
 
-        final TextButton btn2 = new TextButton(localize.get("no"), finalSkin);
-        btn2.setPosition(game.pixelWidth/2, game.pixelHeight/2 - 175);
+        final ImageButton btn2 = new ImageButton(finalSkin,"cancel_" + lan);
+        btn2.setPosition(game.pixelWidth/2, game.pixelHeight/2 - 325);
         stage.addActor(btn2);
 
         btn2.addListener(new ClickListener() {
