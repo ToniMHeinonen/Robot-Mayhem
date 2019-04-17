@@ -1,5 +1,6 @@
 package fi.tamk.fi;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -421,12 +422,18 @@ public class UtilItem {
         String description = skills.retrieveSkillDescription(openedSkill);
 
         popupOwnedSkill = utilDialog.createPopupItemAndPowerUp(skillName,
-                description + " " + localize.get("replaceSkill"),
+                description,
                 "popup_powerup");
+
+        Label labelReplaceSkill = new Label(localize.get("replaceSkill"), finalSkin, "font42", Color.BLACK);
+        labelReplaceSkill.setSize(960, labelReplaceSkill.getPrefHeight());
+        labelReplaceSkill.setPosition(480, 300);
+        labelReplaceSkill.setAlignment(1);
+        popupOwnedSkill.addActor(labelReplaceSkill);
 
         TextButton buttonSkill1 = new TextButton(localize.get(game.getSkill1()),
                 finalSkin, "smallest");
-        buttonSkill1.setPosition(480, 210);
+        buttonSkill1.setPosition(480, 180);
         buttonSkill1.setDisabled(true);
         if (room.equals("hall")) {
             buttonSkill1.setDisabled(false);
@@ -445,7 +452,7 @@ public class UtilItem {
 
         TextButton buttonSkill2 = new TextButton(localize.get(game.getSkill2()),
                 finalSkin, "smallest");
-        buttonSkill2.setPosition(830, 210);
+        buttonSkill2.setPosition(830, 180);
         buttonSkill2.setDisabled(true);
         if (room.equals("hall")) {
             buttonSkill2.setDisabled(false);
@@ -463,7 +470,7 @@ public class UtilItem {
         }
 
         TextButton buttonCancel = new TextButton(localize.get("cancel"), finalSkin, "smallest");
-        buttonCancel.setPosition(1185, 210);
+        buttonCancel.setPosition(1185, 180);
         buttonCancel.setSize(250, 120);
         buttonCancel.addListener(new ClickListener() {
             @Override
