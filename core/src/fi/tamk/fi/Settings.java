@@ -307,11 +307,9 @@ public class Settings {
     private void createYesAndNo(Dialog dialog) {
         btnYes = new ImageButton(finalSkin, "confirm_" + lan);
         btnYes.setPosition(dialog.getWidth()/2 - 400, dialog.getHeight()/4 - 55);
-        btnYes.setScale(0.6f);
 
         btnNo = new ImageButton(finalSkin, "cancel_" + lan);
         btnNo.setPosition(btnYes.getX() + 445, btnYes.getY());
-        btnNo.setScale(0.6f);
     }
 
     private void createLanguageButtons() {
