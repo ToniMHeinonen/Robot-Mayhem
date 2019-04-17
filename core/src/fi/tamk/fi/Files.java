@@ -46,7 +46,7 @@ public class Files {
 
     // Other textures
     public final Texture imgBgHall, imgBgBoss, imgTopBar, imgBottomBar, escapeBg, hpBarLeft,
-            hpBarRight, powerUpBg, powerUpPopup, itemBg;
+            hpBarRight, powerUpBg, powerUpPopup, itemBg, retrieveStepsBg;
 
     // Skins
     public final Skin skin, finalSkin;
@@ -107,6 +107,7 @@ public class Files {
         powerUpBg = manager.get("texture/powerUpBg.png");
         powerUpPopup = manager.get("texture/powerUpPopup.jpg");
         itemBg = manager.get("texture/itemBg.jpg");
+        retrieveStepsBg = manager.get("texture/retrieveStepsBg.png");
 
         /*
         Animations
@@ -254,6 +255,7 @@ public class Files {
         manager.load("texture/powerUpBg.png", Texture.class);
         manager.load("texture/powerUpPopup.jpg", Texture.class);
         manager.load("texture/itemBg.jpg", Texture.class);
+        manager.load("texture/retrieveStepsBg.png", Texture.class);
         // Bosses
         manager.load("texture/roombot/roombot_idle.png", Texture.class);
         manager.load("texture/roombot/roombot_attack.png", Texture.class);
