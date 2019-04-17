@@ -482,35 +482,28 @@ public class UtilItem {
     If items or skills are more than 17 characters long, it will put smaller font to them.
      */
     private String getFontSize(Label checkFontSize) {
-        /*
-        fontSize = "default";
-        if (item.length() >= 17) {
-            fontSize = "small";
-        }
-        return fontSize;
-        */
         String returnStyle = "";
-        if (checkFontSize.getWidth() >= 0 && checkFontSize.getWidth() < 480) {
+        if (checkFontSize.getWidth() >= 0 && checkFontSize.getWidth() < 450) {
             returnStyle = "default";
         }
 
-        if (checkFontSize.getWidth() >= 480 && checkFontSize.getWidth() < 650) {
+        if (checkFontSize.getWidth() >= 450 && checkFontSize.getWidth() < 630) {
             returnStyle = "font46";
         }
 
-        if (checkFontSize.getWidth() >= 650 && checkFontSize.getWidth() < 730) {
+        if (checkFontSize.getWidth() >= 630 && checkFontSize.getWidth() < 710) {
             returnStyle = "font42";
         }
 
-        if (checkFontSize.getWidth() >= 730 && checkFontSize.getWidth() < 800) {
+        if (checkFontSize.getWidth() >= 710 && checkFontSize.getWidth() < 780) {
             returnStyle = "font38";
         }
 
-        if (checkFontSize.getWidth() >= 800 && checkFontSize.getWidth() < 890) {
+        if (checkFontSize.getWidth() >= 780 && checkFontSize.getWidth() < 810) {
             returnStyle = "font34";
         }
 
-        if (checkFontSize.getWidth() >= 890) {
+        if (checkFontSize.getWidth() >= 810) {
             returnStyle = "font30";
         }
         return returnStyle;
