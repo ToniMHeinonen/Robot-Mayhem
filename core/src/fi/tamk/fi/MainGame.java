@@ -1069,4 +1069,8 @@ public class MainGame extends Game {
 	public void setReflectiveShield(boolean reflectiveShield) {
 		this.reflectiveShield = reflectiveShield;
 	}
+
+	public float getSoundVol() {
+	    return soundVol;
+    }
 }

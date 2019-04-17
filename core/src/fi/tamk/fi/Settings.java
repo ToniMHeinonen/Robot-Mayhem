@@ -155,7 +155,7 @@ public class Settings {
 
     private void createSoundVolume() {
         soundVolSlider = new Slider(0.0f, 1.0f, 0.1f, false, finalSkin);
-        soundVolSlider.setValue(game.getMusicVol());
+        soundVolSlider.setValue(game.getSoundVol());
         soundVolSlider.setPosition(musicVolSlider.getX(),
                 musicVolSlider.getY() - 120);
         soundVolSlider.setSize(900, 120);
