@@ -97,6 +97,7 @@ public class MainGame extends Game {
 	private String keyPermanentArmorBoost = E.encrypt("permanentArmorBoost");
 	private String keyPermanentDmgBoost = E.encrypt("permanentDmgBoost");
 	private String keyPermanentHealBoost = E.encrypt("permanentHealBoost");
+	private String keyReflectiveShield = E.encrypt("reflectiveShield");
 	// Values
 	private int saveTimerAmount = 3600;
 	private int saveTimer = saveTimerAmount;
@@ -105,7 +106,7 @@ public class MainGame extends Game {
 	private float stepCount, stepBank, stepAllCount;
 	private int pool, poolMult, money, fightsWon, prevDayGift, buyedItemsCounter;
 	private String skill1, skill2, currentBoss, playerName;
-	private boolean firstPlayTime, firstPlayTimeFight;
+	private boolean firstPlayTime, firstPlayTimeFight, reflectiveShield;
 	private int critBoost, missBoost, permaCritBoost, permaMissBoost;
 	private float armorBoost, dmgBoost, healBoost, permaArmorBoost, permaDmgBoost, permaHealBoost;
 	// Stat arrays
@@ -520,6 +521,7 @@ public class MainGame extends Game {
 		permaDmgBoost = stats.loadValue(keyPermanentDmgBoost, 0f);
 		permaArmorBoost = stats.loadValue(keyPermanentArmorBoost, 0f);
 		permaHealBoost = stats.loadValue(keyPermanentHealBoost, 0f);
+		reflectiveShield = stats.loadValue(keyReflectiveShield, false);
 
 		// Load the size of inventory before loading inventory items
 		inventorySize = stats.loadValue(keyInventorySize, 0);
@@ -563,6 +565,7 @@ public class MainGame extends Game {
 		stats.saveValue(keyPermanentDmgBoost, permaDmgBoost);
 		stats.saveValue(keyPermanentArmorBoost, permaArmorBoost);
 		stats.saveValue(keyPermanentHealBoost, permaHealBoost);
+		stats.saveValue(keyReflectiveShield, reflectiveShield);
 
 		// Save inventory's current size on inventorySize key
 		stats.saveValue(keyInventorySize, inventory.size());
@@ -1058,4 +1061,12 @@ public class MainGame extends Game {
     public int getFightsWon() {
 	    return fightsWon;
     }
+
+	public boolean isReflectiveShield() {
+		return reflectiveShield;
+	}
+
+	public void setReflectiveShield(boolean reflectiveShield) {
+		this.reflectiveShield = reflectiveShield;
+	}
 }

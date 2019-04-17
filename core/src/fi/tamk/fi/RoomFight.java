@@ -943,6 +943,7 @@ public class RoomFight extends RoomParent {
             hp = maxHp;
             targetHp = hp;
             defaultDmg = defaultDamages[game.getPoolMult()];
+            reflectingShield = game.isReflectiveShield();
             ifDead = State.DEAD;
             ID = PLAYER;
             attackName = "playerAttack";

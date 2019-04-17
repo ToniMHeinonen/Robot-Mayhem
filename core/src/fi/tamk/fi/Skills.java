@@ -48,8 +48,7 @@ public class Skills {
     public final String btnSkill = "SKILL";
     public final String btnHeal = "HEAL";
 
-    private final String[] allSkills = new String[] {ATTACK, DEFEND, REFLECT, ITEM, REPAIR,
-            SHOCK, FIRE, SUCTION, DUST, ELECTRIFY, MISSILE, BIG_HEAL};
+    private final ArrayList<String> allSkills = new ArrayList<String>();
 
     private final int defCrit = 10; // Default crit chance percent
     private final int defMiss = 5; // Default miss chance percent
@@ -148,6 +147,7 @@ public class Skills {
         map.put(sound, null);
         map.put(button, btnAttack);
 
+        allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
     }
 
@@ -167,6 +167,7 @@ public class Skills {
         map.put(sound, null);
         map.put(button, btnDefend);
 
+        allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
     }
 
@@ -186,6 +187,7 @@ public class Skills {
         map.put(sound, null);
         map.put(button, btnDefend);
 
+        allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
     }
 
@@ -205,6 +207,7 @@ public class Skills {
         map.put(sound, null);
         map.put(button, btnItem);
 
+        allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
     }
 
@@ -224,6 +227,7 @@ public class Skills {
         map.put(sound, null);
         map.put(button, btnHeal);
 
+        allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
     }
 
@@ -243,6 +247,7 @@ public class Skills {
         map.put(sound, null);
         map.put(button, btnSkill);
 
+        allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
     }
 
@@ -262,6 +267,7 @@ public class Skills {
         map.put(sound, null);
         map.put(button, btnSkill);
 
+        allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
     }
 
@@ -281,6 +287,7 @@ public class Skills {
         map.put(sound, files.sndSuction);
         map.put(button, btnSkill);
 
+        allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
     }
 
@@ -300,6 +307,7 @@ public class Skills {
         map.put(sound, files.sndDustThrow);
         map.put(button, btnSkill);
 
+        allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
     }
 
@@ -319,6 +327,7 @@ public class Skills {
         map.put(sound, null);
         map.put(button, btnSkill);
 
+        allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
     }
 
@@ -338,6 +347,7 @@ public class Skills {
         map.put(sound, null);
         map.put(button, btnSkill);
 
+        allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
     }
 
@@ -357,10 +367,12 @@ public class Skills {
         map.put(sound, null);
         map.put(button, btnHeal);
 
+        allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
     }
 
     public String[] getAllSkills() {
-        return allSkills;
+        String[] converted = allSkills.toArray(new String[0]);
+        return converted;
     }
 }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.I18NBundle;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Bosses {
@@ -40,14 +41,13 @@ public class Bosses {
     public final String COPPER = "Copper";
     public final String ROBBER = "Robber";
     public final String COPIER = "Copier";
-    private String[] allBosses = new String[] {ROOMBOT, COPPER, ROBBER, COPIER};
+    private ArrayList<String> allBosses = new ArrayList<String>();
 
     /* NOTE!
     Everytime you add a new boss, remember to:
     1. Make a String for it
-    2. Add it to the allBosses array
-    3. Make a new method for it
-    4. Add attackName, dialogStart and dialogEnd to bundle
+    2. Make a new method for it
+    3. Add attackName, dialogStart and dialogEnd to bundle
      */
 
     /*
@@ -76,8 +76,8 @@ public class Bosses {
 
     public String selectRandomBoss() {
         String selected = "";
-        int random = MathUtils.random(0, allBosses.length - 1);
-        selected = allBosses[random];
+        int random = MathUtils.random(0, allBosses.size() - 1);
+        selected = allBosses.get(random);
 
         return selected;
     }
@@ -181,6 +181,7 @@ public class Bosses {
         map.put(dialogStart, curDialogStart);
         map.put(dialogEnd, curDialogEnd);
 
+        allBosses.add(curName);
         mapBosses.put((String) map.get(name), map);
     }
 }

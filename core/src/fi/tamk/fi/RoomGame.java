@@ -240,6 +240,8 @@ public class RoomGame extends RoomParent {
         } else if (boost == items.HEAL_BOOST) {
             double amount = (Double) item.get(items.value);
             game.addPermaHealBoost(amount);
+        } else if (selected.equals(items.ITEM_REFLECT)) {
+            game.setReflectiveShield(true);
         }
 
     }

@@ -30,8 +30,10 @@ public class Item {
     public final String SUPER_VISION = "SUPER_VISION";
     public final String HARDWARE = "HARDWARE";
     public final String DIAMOND_COAT = "DIAMOND_COAT";
+    public final String ITEM_REFLECT = "ITEM_REFLECT";
 
     private final int basePrice = 10;
+    private final int expensive = 80;
     public final int mostExpensivePowerup = basePrice*3; // Used in UtilPowerUp
     private ArrayList<String> allItems = new ArrayList<String>();
     private HashMap<String,HashMap<String,Object>> mapItems;
@@ -61,6 +63,7 @@ public class Item {
         itemSuperVision();
         itemHardware();
         itemDiamondCoat();
+        itemReflect();
     }
 
     public HashMap<String, Object> getItem(String item) {
@@ -219,7 +222,7 @@ public class Item {
         map.put(usedInHall, true);
         map.put(isSkill, false);
         map.put(boostType, MISS_BOOST);
-        map.put(price, 80);
+        map.put(price, expensive);
 
         allItems.add((String) map.get(name));
         mapItems.put((String) map.get(name), map);
@@ -233,7 +236,7 @@ public class Item {
         map.put(usedInHall, true);
         map.put(isSkill, false);
         map.put(boostType, DMG_BOOST);
-        map.put(price, 80);
+        map.put(price, expensive);
 
         allItems.add((String) map.get(name));
         mapItems.put((String) map.get(name), map);
@@ -247,7 +250,21 @@ public class Item {
         map.put(usedInHall, true);
         map.put(isSkill, false);
         map.put(boostType, ARMOR_BOOST);
-        map.put(price, 80);
+        map.put(price, expensive);
+
+        allItems.add((String) map.get(name));
+        mapItems.put((String) map.get(name), map);
+    }
+
+    private void itemReflect() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, ITEM_REFLECT);
+        map.put(description, "itemReflectDesc");
+        map.put(value, 0.0);
+        map.put(usedInHall, true);
+        map.put(isSkill, false);
+        map.put(boostType, NO_BOOST);
+        map.put(price, expensive);
 
         allItems.add((String) map.get(name));
         mapItems.put((String) map.get(name), map);
