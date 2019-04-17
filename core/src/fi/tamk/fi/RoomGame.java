@@ -28,8 +28,8 @@ public class RoomGame extends RoomParent {
     private final float maxSpd = 15f;
     private float curSteps;
     private float bankSpd;
-    private float bankRetrieved = game.getStepCount();
-    private boolean milestoneReached;
+    private float bankRetrieved;
+    private boolean milestoneReached, retrievingSteps;
     private ImageButton fightButton;
     private Skin finalSkin;
 
@@ -38,8 +38,6 @@ public class RoomGame extends RoomParent {
         createProgressBar();
         curSteps = game.getStepCount();
         finalSkin = files.finalSkin;
-
-        calculateBankSpeed();
 
         player = new Player();
 
@@ -61,6 +59,7 @@ public class RoomGame extends RoomParent {
 
         if (!game.haveWeChangedTheRoom) {
             checkToPause();
+            calculateBankSpeed();
             // Set correct milestone in case of difficulty gets changed
             progressBar.setRange(0f, game.getProgressBarMilestone());
             batch.begin();
@@ -108,13 +107,19 @@ public class RoomGame extends RoomParent {
 
     // Calculates how many steps will be added every frame
     private void calculateBankSpeed() {
-        float bank = game.getStepBank();
-        float mileStone = game.getProgressBarMilestone();
-        // If bank is bigger than mileStone, then count bankSpd using mileStone value
-        if (bank > mileStone) {
-            bank = mileStone;
+        if (!retrievingSteps && game.getStepBank() > 0 &&
+                progressBar.getValue() < progressBar.getMaxValue()) {
+            retrievingSteps = true;
+            game.setStepBank(Math.round(game.getStepBank()));
+            bankRetrieved = game.getStepCount();
+            float bank = game.getStepBank();
+            float mileStone = game.getProgressBarMilestone();
+            // If bank is bigger than mileStone, then count bankSpd using mileStone value
+            if (bank > mileStone) {
+                bank = mileStone;
+            }
+            bankSpd = bank / 400;
         }
-        bankSpd = bank / 400;
     }
 
     private void retrieveBankSteps() {
@@ -139,11 +144,11 @@ public class RoomGame extends RoomParent {
 
                 // Draw on screen retrieving steps from bank
                 int ceiledBank = (int) Math.ceil(game.getStepBank());
-                finalSkin.getFont("font-average").draw(batch, "Retrieving steps\nfrom bank:\n" +
-                                String.valueOf(ceiledBank),
+                finalSkin.getFont("font-average").draw(batch,
+                        localize.get("retrievingSteps") + " " +String.valueOf(ceiledBank),
                         game.gridSize * 7, game.pixelHeight/2);
-            }
-        }
+            } else retrievingSteps = false;
+        }else retrievingSteps = false;
     }
 
     // If milestone has been reached, draw text and

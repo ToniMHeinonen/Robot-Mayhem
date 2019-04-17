@@ -276,6 +276,7 @@ public class MainGame extends Game {
 	    setScreen(room);
 	    curRoom = ROOM_FIGHT;
 	    stepCount /= 2;
+	    stepCount = Math.round(stepCount);
     }
 
 	public void switchToPowerUps() {
@@ -832,6 +833,10 @@ public class MainGame extends Game {
 
 	public float getStepBank() {
 		return stepBank;
+	}
+
+	public void setStepBank(float stepBank) {
+		this.stepBank = stepBank;
 	}
 
 	public float getStepAllCount() {

@@ -334,7 +334,8 @@ public class RoomFight extends RoomParent {
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setStepCount(game.getProgressBarMilestone()*0.75f);
+                float rounded = Math.round(game.getProgressBarMilestone()*0.75f);
+                game.setStepCount(rounded);
                 state = State.ESCAPE;
                 escapePopup = false;
                 stage.clear();
