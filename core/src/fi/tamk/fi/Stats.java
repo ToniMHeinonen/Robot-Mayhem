@@ -31,24 +31,21 @@ public class Stats {
 
     private Dialog statsDialog;
 
-    private ImageButton buttonStats;
-    private ImageButton buttonInventory;
-    private ImageButton buttonSettings;
-    private ImageButton buttonExit;
+    private ImageButton buttonStats, buttonInventory, buttonSettings, buttonExit;
 
     // Headers
-    private Label header;
-    private Label name;
-    private Label allSteps;
-    private Label buyedItems;
-    private Label ownedSkills;
-    private Label bossesDefeated;
+    private Label header, name, allSteps, buyedItems, ownedSkills, bossesDefeated,
+            boosts, critical, miss, damage, armor, heal;
 
-    private Label labelPlayerName;
-    private Label labelBuyedItems;
-    private Label labelAllSteps;
-    private Label labelOwnedSkills;
-    private Label labelBossesDefeated;
+    // Variables
+    private Label labelPlayerName, labelBuyedItems, labelAllSteps, labelOwnedSkills, labelBossesDefeated,
+            labelCritical, labelMiss, labelDamage, labelArmor, labelHeal;
+
+    private int critBoost;
+    private int missBoost;
+    private float dmgBoost;
+    private float armorBoost;
+    private float healBoost;
 
     private float labelWidth = 600;
     private float spaceBetween = 30;
@@ -70,6 +67,11 @@ public class Stats {
         skills = game.getSkills();
         allSkills = skills.getAllSkills();
         fightsWon = game.getFightsWon();
+        critBoost = game.getCritBoost();
+        missBoost = game.getMissBoost();
+        dmgBoost = game.getDmgBoost();
+        armorBoost = game.getArmorBoost();
+        healBoost = game.getHealBoost();
 
         ownedSkillsAmount();
         createStatsDialog();
@@ -79,6 +81,7 @@ public class Stats {
         createBuyedItems();
         createOwnedSkills();
         createBossesDefeated();
+        createBoosts();
         createMenuButtons();
         createExitButton();
         stage.addActor(statsDialog);
@@ -117,7 +120,7 @@ public class Stats {
 
     private void createPlayerName() {
         name = new Label(localize.get("name") + ":", finalSkin);
-        name.setPosition(header.getX() + 110, header.getY() - 150);
+        name.setPosition(header.getX() + 110, header.getY() - 100);
         name.setSize(labelWidth, name.getPrefHeight());
         name.setAlignment(Align.right);
         statsDialog.addActor(name);
@@ -131,7 +134,7 @@ public class Stats {
 
     private void createAllSteps() {
         allSteps = new Label(localize.get("steps") + ":", finalSkin);
-        allSteps.setPosition(name.getX(), name.getY() - 100);
+        allSteps.setPosition(name.getX(), name.getY() - 75);
         allSteps.setSize(labelWidth, allSteps.getPrefHeight());
         allSteps.setAlignment(Align.right);
         statsDialog.addActor(allSteps);
@@ -145,7 +148,7 @@ public class Stats {
 
     private void createBuyedItems() {
         buyedItems = new Label(localize.get("buyedItems") + ":", finalSkin);
-        buyedItems.setPosition(name.getX(), allSteps.getY() - 100);
+        buyedItems.setPosition(name.getX(), allSteps.getY() - 75);
         buyedItems.setSize(labelWidth, buyedItems.getPrefHeight());
         buyedItems.setAlignment(Align.right);
         statsDialog.addActor(buyedItems);
@@ -159,7 +162,7 @@ public class Stats {
 
     private void createOwnedSkills() {
         ownedSkills = new Label(localize.get("ownedSkills") + ":", finalSkin);
-        ownedSkills.setPosition(name.getX(), buyedItems.getY() - 100);
+        ownedSkills.setPosition(name.getX(), buyedItems.getY() - 75);
         ownedSkills.setSize(labelWidth, ownedSkills.getPrefHeight());
         ownedSkills.setAlignment(Align.right);
         statsDialog.addActor(ownedSkills);
@@ -175,7 +178,7 @@ public class Stats {
 
     private void createBossesDefeated() {
         bossesDefeated = new Label(localize.get("bossesDefeated") + ":", finalSkin);
-        bossesDefeated.setPosition(name.getX(), ownedSkills.getY() - 100);
+        bossesDefeated.setPosition(name.getX(), ownedSkills.getY() - 75);
         bossesDefeated.setSize(labelWidth, bossesDefeated.getPrefHeight());
         bossesDefeated.setAlignment(Align.right);
         statsDialog.addActor(bossesDefeated);
@@ -185,6 +188,74 @@ public class Stats {
         labelBossesDefeated.setSize(labelWidth, labelBossesDefeated.getPrefHeight());
         labelBossesDefeated.setAlignment(Align.left);
         statsDialog.addActor(labelBossesDefeated);
+    }
+
+    private void createBoosts() {
+        boosts = new Label(localize.get("boosts") + ":", finalSkin);
+        boosts.setPosition(name.getX(), bossesDefeated.getY() - 75);
+        boosts.setSize(labelWidth, boosts.getPrefHeight());
+        boosts.setAlignment(Align.right);
+        statsDialog.addActor(boosts);
+
+        damage = new Label(localize.get("damage") + ":", finalSkin, "font38");
+        damage.setPosition(name.getX(), boosts.getY() - 50);
+        damage.setSize(labelWidth, damage.getPrefHeight());
+        damage.setAlignment(Align.right);
+        statsDialog.addActor(damage);
+
+        labelDamage = new Label(String.format("%.0f", dmgBoost*100) + " %", finalSkin, "font38");
+        labelDamage.setPosition(damage.getX(Align.right) + spaceBetween, damage.getY());
+        labelDamage.setSize(labelWidth, labelDamage.getPrefHeight());
+        labelDamage.setAlignment(Align.left);
+        statsDialog.addActor(labelDamage);
+
+        critical = new Label(localize.get("critical") + ":", finalSkin, "font38");
+        critical.setPosition(damage.getX(), damage.getY() - 50);
+        critical.setSize(labelWidth, critical.getPrefHeight());
+        critical.setAlignment(Align.right);
+        statsDialog.addActor(critical);
+
+        labelCritical = new Label(String.valueOf(critBoost) + " %", finalSkin, "font38");
+        labelCritical.setPosition(critical.getX(Align.right) + spaceBetween, critical.getY());
+        labelCritical.setSize(labelWidth, labelCritical.getPrefHeight());
+        labelCritical.setAlignment(Align.left);
+        statsDialog.addActor(labelCritical);
+
+        miss = new Label(localize.get("miss")+ ":", finalSkin, "font38");
+        miss.setPosition(damage.getX(), critical.getY() - 50);
+        miss.setSize(labelWidth, miss.getPrefHeight());
+        miss.setAlignment(Align.right);
+        statsDialog.addActor(miss);
+
+        labelMiss = new Label("-" + String.valueOf(missBoost) + " %", finalSkin, "font38");
+        labelMiss.setPosition(miss.getX(Align.right) + spaceBetween, miss.getY());
+        labelMiss.setSize(labelWidth, labelMiss.getPrefHeight());
+        labelMiss.setAlignment(Align.left);
+        statsDialog.addActor(labelMiss);
+
+        armor = new Label(localize.get("armor") + ":", finalSkin, "font38");
+        armor.setPosition(damage.getX(), miss.getY() - 50);
+        armor.setSize(labelWidth, armor.getPrefHeight());
+        armor.setAlignment(Align.right);
+        statsDialog.addActor(armor);
+
+        labelArmor = new Label(String.format("%.0f", armorBoost*100) + " %", finalSkin, "font38");
+        labelArmor.setPosition(armor.getX(Align.right) + spaceBetween, armor.getY());
+        labelArmor.setSize(labelWidth, labelArmor.getPrefHeight());
+        labelArmor.setAlignment(Align.left);
+        statsDialog.addActor(labelArmor);
+
+        heal = new Label(localize.get("heal") + ":", finalSkin, "font38");
+        heal.setPosition(damage.getX(), armor.getY() - 50);
+        heal.setSize(labelWidth, heal.getPrefHeight());
+        heal.setAlignment(Align.right);
+        statsDialog.addActor(heal);
+
+        labelHeal = new Label(String.format("%.0f", healBoost*100) + " %", finalSkin, "font38");
+        labelHeal.setPosition(heal.getX(Align.right) + spaceBetween, heal.getY());
+        labelHeal.setSize(labelWidth, labelHeal.getPrefHeight());
+        labelHeal.setAlignment(Align.left);
+        statsDialog.addActor(labelHeal);
     }
 
     private void createMenuButtons() {
