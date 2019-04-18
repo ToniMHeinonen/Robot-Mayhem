@@ -199,12 +199,12 @@ public class Hacking {
      */
     private void setShieldAttributes() {
         FloatArray poolSpeeds = new FloatArray();
-        poolSpeeds.add(4, 4, 4);
+        poolSpeeds.add(3, 3, 3);
 
         FloatArray poolSizes = new FloatArray();
         poolSizes.add(0.5f, 0.3f, 0.3f);
 
-        float increasedSpeed = poolMult * 0.2f;
+        float increasedSpeed = poolMult * 0.12f;
 
         shieldSpeed = poolSpeeds.get(pool - 1) + increasedSpeed;
         shieldRadius = poolSizes.get(pool - 1);

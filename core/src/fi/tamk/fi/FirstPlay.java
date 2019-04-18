@@ -62,23 +62,23 @@ public class FirstPlay {
         final Input.TextInputListener textInputListener = new Input.TextInputListener() {
             @Override
             public void input(String text) {
-                name = text;
-                game.setPlayerName(text);
-                whoAmI.remove();
-                hallAllInstructions();
+                if (text.length() > 0 && text.length() < 13) {
+                    name = text;
+                    game.setPlayerName(text);
+                    whoAmI.remove();
+                    hallAllInstructions();
+                }
             }
 
             @Override
             public void canceled() {
-                whoAmI.remove();
-                hallAllInstructions();
             }
         };
 
         whoAmI.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                Gdx.input.getTextInput(textInputListener, "Your name", "", "");
+                Gdx.input.getTextInput(textInputListener, "Your name", "", "1-12 characters");
             }
         });
     }
