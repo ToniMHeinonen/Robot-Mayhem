@@ -78,11 +78,7 @@ public class MainGame extends Game {
 	private String keyFirstPlayTimeFight = E.encrypt("firstPlayTimeFight");
 	private String keyPool = E.encrypt("pool");
 	private String keyPoolMult = E.encrypt("poolMult");
-	private String keyInventorySize = E.encrypt("inventorySize");
-	private String keyInventory = E.encrypt("inventory");
 	private String keyBuyedItemsCounter = E.encrypt("buyedItemsCounter");
-	private String keyDefeatedBossesSize = E.encrypt("defeatedBossesSize");
-	private String keyDefeatedBosses = E.encrypt("defeatedBosses");
 	private String keyName = E.encrypt("name");
 	private String keyFightsWon = E.encrypt("fightsWon");
 	private String keyPrevDayGift = E.encrypt("prevDayGift");
@@ -98,6 +94,13 @@ public class MainGame extends Game {
 	private String keyPermanentDmgBoost = E.encrypt("permanentDmgBoost");
 	private String keyPermanentHealBoost = E.encrypt("permanentHealBoost");
 	private String keyReflectiveShield = E.encrypt("reflectiveShield");
+
+	private String keyInventorySize = E.encrypt("inventorySize");
+	private String keyInventory = E.encrypt("inventory");
+	private String keyDefeatedBossesSize = E.encrypt("defeatedBossesSize");
+	private String keyDefeatedBosses = E.encrypt("defeatedBosses");
+	private String keyArrPlayedMusicSize = E.encrypt("arrPlayedMusicSize");
+	private String keyArrPlayedMusic = E.encrypt("arrPlayedMusic");
 	// Values
 	private int saveTimerAmount = 3600;
 	private int saveTimer = saveTimerAmount;
@@ -114,6 +117,8 @@ public class MainGame extends Game {
 	private int inventorySize; // Needed for loading correct amount of array items
 	private ArrayList<String> defeatedBosses;
 	private int defeatedBossesSize;
+	private ArrayList<Integer> arrPlayedMusic;
+	private int arrPlayedMusicSize;
 
 	// Stepmeter in RoomGame
     private BitmapFont fontSteps;
@@ -129,7 +134,6 @@ public class MainGame extends Game {
 	private TextureAtlas testButtonAtlas;
 	private Label.LabelStyle labelStyle;
 	private Label.LabelStyle descriptionLabelStyle;
-	private Window.WindowStyle windowStyle;
 	private Window.WindowStyle emptyWindowStyle;
 	private com.badlogic.gdx.graphics.Color fontColor = com.badlogic.gdx.graphics.Color.BLACK;
 	private BitmapFont descriptionFont;
@@ -171,12 +175,9 @@ public class MainGame extends Game {
 
 		createHackFiles();
 
-		//askForName(); add later
-
 		// Switch to first room
-		switchToRoomGame();
-
 		selectRandomBossMusic();
+		switchToRoomGame();
 	}
 
 	@Override
@@ -225,8 +226,23 @@ public class MainGame extends Game {
 
 	private void selectRandomBossMusic() {
 		int all = files.allBossMusic.length;
-		int random = MathUtils.random(0, all - 1);
+		if (arrPlayedMusic.size() == all) arrPlayedMusic.clear();
+		int random = 0;
+		while (true) {
+			random = MathUtils.random(0, all - 1);
+			if (!arrPlayedMusic.contains(random)) {
+				arrPlayedMusic.add(random);
+				break;
+			}
+		}
+
 		curBossMusic = files.allBossMusic[random];
+		System.out.println("random: " + String.valueOf(random));
+
+		for (int i = 0; i < arrPlayedMusic.size(); i++) {
+			System.out.println("value " + String.valueOf(i));
+			System.out.println("arrvalue " + String.valueOf(arrPlayedMusic.get(i)));
+		}
 	}
 
 	/**
@@ -484,6 +500,7 @@ public class MainGame extends Game {
 	private void initStats() {
 		inventory = new ArrayList<String>();
 		defeatedBosses = new ArrayList<String>();
+		arrPlayedMusic = new ArrayList<Integer>();
 		prefsStats = Gdx.app.getPreferences("Robot_Mayhem_Stats");
 		//prefsStats.clear(); // For testing purposes
 		//prefsStats.flush(); // Without flushing, clear does not work in Android
@@ -533,6 +550,11 @@ public class MainGame extends Game {
 		for (int i = 0; i < defeatedBossesSize; i++) {
 			defeatedBosses.add(i, stats.loadValue(keyDefeatedBosses + String.valueOf(i), ""));
 		}
+		// Played boss music
+		arrPlayedMusicSize = stats.loadValue(keyArrPlayedMusicSize, 0);
+		for (int i = 0; i < arrPlayedMusicSize; i++) {
+			arrPlayedMusic.add(i, stats.loadValue(keyArrPlayedMusic + String.valueOf(i), 0));
+		}
 	}
 
 	/**
@@ -576,6 +598,11 @@ public class MainGame extends Game {
 		stats.saveValue(keyDefeatedBossesSize, defeatedBosses.size());
 		for (int i = 0; i < defeatedBosses.size(); i++) {
 			stats.saveValue(keyDefeatedBosses + String.valueOf(i), defeatedBosses.get(i));
+		}
+		// Played boss music
+		stats.saveValue(keyArrPlayedMusicSize, arrPlayedMusic.size());
+		for (int i = 0; i < arrPlayedMusic.size(); i++) {
+			stats.saveValue(keyArrPlayedMusic + String.valueOf(i), arrPlayedMusic.get(i));
 		}
 
 		prefsStats.flush();
@@ -893,10 +920,6 @@ public class MainGame extends Game {
 	public Label.LabelStyle getDescriptionLabelStyle() {
 	    return descriptionLabelStyle;
     }
-
-	public Window.WindowStyle getWindowStyle() {
-		return windowStyle;
-	}
 
 	public Color getFontColor() {
 		return fontColor;

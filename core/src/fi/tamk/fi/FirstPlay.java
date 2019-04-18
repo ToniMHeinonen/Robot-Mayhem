@@ -149,7 +149,7 @@ public class FirstPlay {
     public void fightActionInstructions() {
         final String[] fightGuide = new String[] {
                 "Select which action to execute.",
-                "If you hold the action button it will tell you what it does.",
+                "If you hold down the button, it will tell you what it does.",
                 "You can also buy and use items from your inventory.",
                 "Now let's help my friend!"};
 
@@ -188,6 +188,7 @@ public class FirstPlay {
                 if (fightHackingStartCounter < fightGuide.length) fightHackingStartInstructions();
                 else {
                     fightHackingStartFinished = true;
+                    game.setfirstPlayTimeFight(false);
                 }
             }
         });
