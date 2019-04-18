@@ -28,7 +28,10 @@ public class RoomFight extends RoomParent {
 
     // Enums give simple constants, which decreases the chance for coding mistakes
     enum State {
-        TUTORIAL,
+        TUTORIAL_START,
+        TUTORIAL_AFTER_HIT,
+        TUTORIAL_ACTION,
+        TUTORIAL_HACKING_START,
         START_ROOM,
         DIALOG_START,
         DIALOG_END,
@@ -60,6 +63,7 @@ public class RoomFight extends RoomParent {
     private int deathTimer = 240;
     private boolean startDeathTimer;
     private ShaderProgram shFlashWhite;
+    private FirstPlay tutorial;
     private Hacking hacking;
     private UtilPowerUp powerUp;
     private boolean firstPlayTimeFight;
@@ -74,8 +78,8 @@ public class RoomFight extends RoomParent {
 
 
         if (firstPlayTimeFight) {
-            state = State.TUTORIAL;
-            FirstPlay firstPlay = new FirstPlay(game, "fight", thisRoom);
+            state = State.TUTORIAL_START;
+            tutorial = new FirstPlay(game, "fight", thisRoom);
         } else {
             state = State.START_ROOM;
         }
@@ -94,6 +98,7 @@ public class RoomFight extends RoomParent {
         if (!game.haveWeChangedTheRoom) {
 
             universalStateChecks();
+            if (tutorial != null) controlTutorial();
 
             batch.begin();
             batch.draw(imgBg, 0,0, imgBg.getWidth(), imgBg.getHeight());
@@ -115,14 +120,14 @@ public class RoomFight extends RoomParent {
         player.selectItem(item);
     }
 
-    @Override
-    public void tutorialFinished() { state = State.START_ROOM; }
-
     private void universalStateChecks() {
         switch (state) {
             // If dialog box has been closed, start the turn
             case DIALOG_START: {
-                if (!dialog.isDialogOn()) player.startTurn();
+                if (!dialog.isDialogOn()) {
+                    if (tutorial != null) enemy.startTurn();
+                    else player.startTurn();
+                }
                 break;
             }
             // If dialog box has been closed, start the
@@ -147,6 +152,59 @@ public class RoomFight extends RoomParent {
 
                 if (deathTimer > 0) deathTimer--;
                 else game.switchToRoomGame();
+            }
+        }
+    }
+
+    private void controlTutorial() {
+        switch (state) {
+            case TUTORIAL_START: {
+                if (tutorial.isFightStartFinished()) {
+                    state = State.START_ROOM;
+                }
+                break;
+            }
+            case PLAYER_TURN: {
+                if (!tutorial.isFightAfterHitFinished()) {
+                    state = State.TUTORIAL_AFTER_HIT;
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            tutorial.fightAfterHitInstructions();
+                        }
+                    }, 1);
+                } else if (!tutorial.isFightActionFinished()) {
+                    if (actionButtonsOn) {
+                        state = State.TUTORIAL_ACTION;
+                        tutorial.fightActionInstructions();
+                    }
+                }
+                break;
+            }
+            case TUTORIAL_AFTER_HIT: {
+                if (tutorial.isFightAfterHitFinished()) {
+                    state = State.PLAYER_TURN;
+                }
+                break;
+            }
+            case TUTORIAL_ACTION: {
+                if (tutorial.isFightActionFinished()) {
+                    state = State.PLAYER_TURN;
+                }
+                break;
+            }
+            case HACK: {
+                if (!tutorial.isFightHackingStartFinished()) {
+                    state = State.TUTORIAL_HACKING_START;
+                    tutorial.fightHackingStartInstructions();
+                }
+                break;
+            }
+            case TUTORIAL_HACKING_START: {
+                if (tutorial.isFightHackingStartFinished()) {
+                    state = State.HACK;
+                }
+                break;
             }
         }
     }
@@ -242,7 +300,7 @@ public class RoomFight extends RoomParent {
 
     // Controls the hacking phase
     private void hackingPhase() {
-        if (state == State.HACK) {
+        if (state == State.HACK || state == State.TUTORIAL_HACKING_START) {
             // If balls has not been spawned, spawn them
             if (!spawnHacking) {
                 spawnHacking = true;
@@ -368,6 +426,8 @@ public class RoomFight extends RoomParent {
 
         return takingDamage;
     }
+
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1394,6 +1454,12 @@ public class RoomFight extends RoomParent {
                 // While skill chosen which is on cooldown, select new one
                 while (true) {
                     random = MathUtils.random(0, cooldowns.size() - 1);
+
+                    // In tutorial, do suction, else use random value
+                    if (tutorial != null && !tutorial.isFightAfterHitFinished()) {
+                        random = 1;
+                    }
+
                     String selSkill = "Skill" + String.valueOf(random);
                     if (cooldowns.get(selSkill) == 0) {
                         addCooldown(selSkill, cooldownAmount[random]);

@@ -176,7 +176,6 @@ public class MainGame extends Game {
 		// Switch to first room
 		switchToRoomGame();
 
-		currentBoss = bosses.selectRandomBoss(); // For testing purposes, remember to remove
 		selectRandomBossMusic();
 	}
 

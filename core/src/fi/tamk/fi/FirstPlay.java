@@ -18,12 +18,13 @@ public class FirstPlay {
     private I18NBundle localize;
     private UtilDialog utilDialog;
     private String name;
-    private boolean firstPlayTime;
-    private boolean firstPlayTimeFight;
+    private boolean firstPlayTime, firstPlayTimeFight, fightStartFinished, fightAfterHitFinished,
+            fightActionFinished, fightHackingStartFinished;
 
     private Dialog whoAmI;
-    private int hallCounter = 0;
-    private int fightCounter = 0;
+    // Olli notice: int default value is 0, it does not have to be declared
+    private int hallCounter, fightStartCounter, fightAfterHitCounter, fightActionCounter,
+            fightHackingStartCounter;
 
     FirstPlay(final MainGame game, String room, RoomParent curRoom) {
         this.game = game;
@@ -48,7 +49,7 @@ public class FirstPlay {
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
-                    fightAllInstructions();
+                    fightStartInstructions();
                 }
             }, 1);
         }
@@ -103,26 +104,108 @@ public class FirstPlay {
         });
     }
 
-    private void fightAllInstructions() {
+    private void fightStartInstructions() {
         final String[] fightGuide = new String[] {
-                "This game has turn based combat.",
-                "If you don't know how that works, it's your own fault.",
-                "L2P"};
+                "Ahh it's my fellow friend.",
+                "How's the cleaning going?"};
 
-        final Dialog dialog = utilDialog.createInstructionsDialog(fightGuide[fightCounter]);
+        final Dialog dialog = utilDialog.createInstructionsDialog(fightGuide[fightStartCounter]);
         stage.addActor(dialog);
 
         dialog.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                fightCounter++;
+                fightStartCounter++;
                 dialog.remove();
-                if (fightCounter < fightGuide.length) fightAllInstructions();
+                if (fightStartCounter < fightGuide.length) fightStartInstructions();
                 else {
-                    curRoom.tutorialFinished();
-                    game.setfirstPlayTimeFight(false);
+                    fightStartFinished = true;
                 }
             }
         });
+    }
+
+    public void fightAfterHitInstructions() {
+        final String[] fightGuide = new String[] {
+                "That robot is out of his mind...",
+                "I'll have to knock some sense into him!"};
+
+        final Dialog dialog = utilDialog.createInstructionsDialog(fightGuide[fightAfterHitCounter]);
+        stage.addActor(dialog);
+
+        dialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                fightAfterHitCounter++;
+                dialog.remove();
+                if (fightAfterHitCounter < fightGuide.length) fightAfterHitInstructions();
+                else {
+                    fightAfterHitFinished = true;
+                }
+            }
+        });
+    }
+
+    public void fightActionInstructions() {
+        final String[] fightGuide = new String[] {
+                "Select which action to execute.",
+                "If you hold the action button it will tell you what it does.",
+                "You can also buy and use items from your inventory.",
+                "Now let's help my friend!"};
+
+        final Dialog dialog = utilDialog.createInstructionsDialog(fightGuide[fightActionCounter]);
+        stage.addActor(dialog);
+
+        dialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                fightActionCounter++;
+                dialog.remove();
+                if (fightActionCounter < fightGuide.length) fightActionInstructions();
+                else {
+                    fightActionFinished = true;
+                }
+            }
+        });
+    }
+
+    public void fightHackingStartInstructions() {
+        final String[] fightGuide = new String[] {
+                "Now is my time to hack through it's firewall.",
+                "Press the button below to stream my data.",
+                "Try to aim inside the ring.",
+                "You can do it!"};
+
+        final Dialog dialog = utilDialog.createInstructionsDialog
+                (fightGuide[fightHackingStartCounter]);
+        stage.addActor(dialog);
+
+        dialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                fightHackingStartCounter++;
+                dialog.remove();
+                if (fightHackingStartCounter < fightGuide.length) fightHackingStartInstructions();
+                else {
+                    fightHackingStartFinished = true;
+                }
+            }
+        });
+    }
+
+    public boolean isFightStartFinished() {
+        return fightStartFinished;
+    }
+
+    public boolean isFightAfterHitFinished() {
+        return fightAfterHitFinished;
+    }
+
+    public boolean isFightActionFinished() {
+        return fightActionFinished;
+    }
+
+    public boolean isFightHackingStartFinished() {
+        return fightHackingStartFinished;
     }
 }

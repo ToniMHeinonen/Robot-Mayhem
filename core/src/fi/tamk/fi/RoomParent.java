@@ -98,10 +98,6 @@ public class RoomParent implements Screen {
         // This is need for this method to work correctly in RoomGame and RoomFight
     }
 
-    public void tutorialFinished() {
-        // This is need for this method to work correctly in RoomGame and RoomFight
-    }
-
     public void defaultColor() {
 
         Gdx.gl.glClearColor(1, 1, 1, 1);
