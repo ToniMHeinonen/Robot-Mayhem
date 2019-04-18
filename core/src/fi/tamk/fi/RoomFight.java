@@ -1474,7 +1474,7 @@ public class RoomFight extends RoomParent {
                 dialog.showSkillName(localizedName, "skillname_enemy");
 
                 // Play sound if not null
-                if (sounds[random] != null) sounds[random].play();
+                if (sounds[random] != null) game.playSound(sounds[random]);
 
                 boolean miss = randomMissChance(missChances[random]);
                 if (miss) skillState = SKILL_MISS;
