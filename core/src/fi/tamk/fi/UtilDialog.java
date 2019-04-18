@@ -22,12 +22,12 @@ public class UtilDialog {
         finalSkin = game.getFinalSkin();
     }
 
-    public void createDialog(String text, String style) {
+    public void createDialog(String text, String style, float yPos) {
         dialogOn = true;
         float areaWidth = 780f;
         float areaHeight = 540f;
         float x = game.pixelWidth/2 - areaWidth/2;
-        float y = 300f;
+        //float y = 300f;
 
         Label label = new Label(text, finalSkin);
         label.setWrap(true);
@@ -35,7 +35,7 @@ public class UtilDialog {
 
         final Dialog dialog = new Dialog("", finalSkin, style);
         dialog.getContentTable().add(label).prefWidth(areaWidth - 210);
-        dialog.setPosition(x, y);
+        dialog.setPosition(x, yPos);
         dialog.setSize(areaWidth,areaHeight);
         stage.addActor(dialog);
 
