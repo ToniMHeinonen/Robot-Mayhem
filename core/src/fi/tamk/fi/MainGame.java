@@ -227,7 +227,7 @@ public class MainGame extends Game {
 	private void selectRandomBossMusic() {
 		int all = files.allBossMusic.length;
 		if (arrPlayedMusic.size() == all) arrPlayedMusic.clear();
-		int random = 0;
+		int random;
 		while (true) {
 			random = MathUtils.random(0, all - 1);
 			if (!arrPlayedMusic.contains(random)) {
@@ -237,12 +237,6 @@ public class MainGame extends Game {
 		}
 
 		curBossMusic = files.allBossMusic[random];
-		System.out.println("random: " + String.valueOf(random));
-
-		for (int i = 0; i < arrPlayedMusic.size(); i++) {
-			System.out.println("value " + String.valueOf(i));
-			System.out.println("arrvalue " + String.valueOf(arrPlayedMusic.get(i)));
-		}
 	}
 
 	/**

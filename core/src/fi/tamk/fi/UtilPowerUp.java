@@ -285,7 +285,7 @@ public class UtilPowerUp {
      */
     private void addToInventory() {
         powerUpChosen = true;
-        files.sndChoosePowerUp.play();
+        game.playSound(files.sndChoosePowerUp);
         if (chosenType == MONEY) {
             game.addMoney(moneyAmount);
         } else if (chosenType == SKILL) {

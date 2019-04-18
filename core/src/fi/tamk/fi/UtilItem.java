@@ -351,7 +351,7 @@ public class UtilItem {
             buttonBuy.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    files.sndPurchaseItem.play();
+                    game.playSound(files.sndPurchaseItem);
                     game.decreaseMoney(price);
                     game.addToInventory(allItems[index], false);
                     game.setBuyedItemsCounter(buyedItemsCounter += 1);
