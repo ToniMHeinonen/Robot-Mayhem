@@ -50,6 +50,8 @@ public class RoomFight extends RoomParent {
 
     private Texture hpBarLeft = files.hpBarLeft;
     private Texture hpBarRight = files.hpBarRight;
+    private Texture imgDoTArrowUp = files.dotArrowUp;
+    private Texture imgDoTArrowDown = files.dotArrowDown;
     private Texture imgBg, escapeBg;
     private Animation<TextureRegion> playerHealthBar, enemyHealthBar;
     private Animating animHealthPlayer = new Animating();
@@ -59,6 +61,7 @@ public class RoomFight extends RoomParent {
     private int btnCounter; // Used for button classes to get the correct value
     private State state;
     private boolean escapePopup, spawnHacking, actionButtonsOn, spawnPowerUp;
+    private int ARROW_NONE = 0, ARROW_UP = 1, ARROW_DOWN = 2;
     private boolean firstHack = true;
     private int deathTimer = 240;
     private boolean startDeathTimer;
@@ -261,27 +264,6 @@ public class RoomFight extends RoomParent {
         stage.clear();
     }
 
-    /*// This array has to be in same order than in Player's action array
-    private void createActionButtons() {
-        float space = (game.pixelWidth - 100) / 5; // Temporary solution
-        for (int i = 0; i < btnTexts.length; i++) {
-            btnCounter = i;
-            final TextButton btn = new TextButton(btnTexts[i], skin);
-            btn.setWidth(300);
-            btn.setHeight(100);
-            btn.setPosition(50f + i*space, 100f);
-            stage.addActor(btn);
-
-            btn.addListener(new ClickListener() {
-                int i = btnCounter;
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    player.doAction(btnTexts[i]);
-                }
-            });
-        }
-    }*/
-
     // Controls the escape button's popup
     private void escaping() {
         if (escapePopup) {
@@ -362,8 +344,21 @@ public class RoomFight extends RoomParent {
         float x1 = game.gridSize*3;
         float x2 = game.pixelWidth - game.gridSize*3 -
                 enemyHealthBar.getKeyFrame(0f).getRegionWidth();
-        animHealthPlayer.draw(batch, x1, game.pixelHeight - 115);
-        animHealthEnemy.draw(batch, x2, game.pixelHeight - 115);
+        float yy = game.pixelHeight - 115;
+        animHealthPlayer.draw(batch, x1, yy);
+        animHealthEnemy.draw(batch, x2, yy);
+
+        // Draw DoT arrows for enemy and player
+        float offset = 20;
+        x1 = x1 + offset;
+        x2 = game.pixelWidth - game.gridSize*4 - offset;
+        float size = imgDoTArrowUp.getWidth();
+
+        if (player.getDotArrow() == ARROW_UP) batch.draw(imgDoTArrowUp, x1, yy, size, size);
+        else if (player.getDotArrow() == ARROW_DOWN) batch.draw(imgDoTArrowDown, x1, yy, size, size);
+
+        if (enemy.getDotArrow() == ARROW_UP) batch.draw(imgDoTArrowUp, x2, yy, size, size);
+        else if (enemy.getDotArrow() == ARROW_DOWN) batch.draw(imgDoTArrowDown, x2, yy, size, size);
     }
 
     // Creates the upper left escape button
@@ -437,7 +432,8 @@ public class RoomFight extends RoomParent {
     public class Fighters {
 
         protected float X, Y;
-        protected double maxHp, hp, targetHp, hpDecreaseSpd, defaultDmg, dmgAmount, dotAmount;
+        protected double maxHp, hp, targetHp, hpDecreaseSpd, defaultDmg, dmgAmount, dotAmount,
+                        takeDoT;
         protected ArrayList<Double> dotDamage = new ArrayList<Double>();
         protected ArrayList<Integer> dotTurns = new ArrayList<Integer>();
         protected Animating anim = new Animating();
@@ -455,6 +451,7 @@ public class RoomFight extends RoomParent {
         protected float flashTime = 0.25f;
         protected State ifDead;
         protected int ID, PLAYER = 0, ENEMY = 1;
+        protected int dotArrow;
         protected Fighters opponent;
         protected int critBoost, missBoost;
         protected double dmgBoost, armorBoost, healBoost;
@@ -494,6 +491,7 @@ public class RoomFight extends RoomParent {
             hpToTarget();
             checkToPause();
             anim.animate();
+            drawStatusArrow();
             if (hitAnim.getAnimation() != null) hitAnim.animate();
             if (critMissAnim.getAnimation() != null) critMissAnim.animate();
         }
@@ -517,6 +515,10 @@ public class RoomFight extends RoomParent {
             } else {
                 if (opponent == null) opponent = player;
             }
+        }
+
+        protected void drawStatusArrow() {
+
         }
 
         // Turn's agenda
@@ -727,9 +729,22 @@ public class RoomFight extends RoomParent {
             else pauseStates = true;
         }
 
-        // Add all the DoTs on top of each other and decrease their turn timers
-        protected void checkDoT() {
-            double takeDoT = 0;
+        // If skill has DoT, it will be added here
+        protected void addDoT(int turns, double damage) {
+            if (skillState == SKILL_DEFEND) {
+                if (reflectingShield) {
+                    opponent.dotTurns.add(turns);
+                    opponent.dotDamage.add(damage);
+                } // else do nothing
+            } else {
+                dotTurns.add(turns);
+                dotDamage.add(damage);
+                calculateNextDoT();
+            }
+        }
+
+        protected void calculateNextDoT() {
+            takeDoT = 0;
             for (int i = 0; i < dotTurns.size(); i++) {
                 double damage = dotDamage.get(i);
                 if (damage > 0) {
@@ -739,6 +754,20 @@ public class RoomFight extends RoomParent {
                     damage -= damage * armorBoost;
                 } else damage += damage * healBoost;
                 takeDoT += damage;
+            }
+
+            // Retrieve correct value to be drawn on top of health bar
+            if (takeDoT > 0) dotArrow = ARROW_DOWN;
+            else if (takeDoT < 0) dotArrow = ARROW_UP;
+            else dotArrow = ARROW_NONE;
+        }
+
+        // Add all the DoTs on top of each other and decrease their turn timers
+        protected void checkDoT() {
+            calculateNextDoT();
+
+            // Decrease DoT turn timers
+            for (int i = 0; i < dotTurns.size(); i++) {
                 dotTurns.set(i, dotTurns.get(i) - 1);
                 if (dotTurns.get(i) == 0) {
                     dotTurns.remove(i);
@@ -761,6 +790,8 @@ public class RoomFight extends RoomParent {
             } else {
                 turnState = START;
             }
+
+            calculateNextDoT();
         }
 
         protected void changeToTakeHitAnimation() {
@@ -912,19 +943,6 @@ public class RoomFight extends RoomParent {
             }
         }
 
-        // If skill has DoT, it will be added here
-        protected void addDoT(int turns, double damage) {
-            if (skillState == SKILL_DEFEND) {
-                if (reflectingShield) {
-                    opponent.dotTurns.add(turns);
-                    opponent.dotDamage.add(damage);
-                } // else do nothing
-            } else {
-                dotTurns.add(turns);
-                dotDamage.add(damage);
-            }
-        }
-
         /*
         Take hit, expect if defending. If reflecting shield is unlocked,
         then return the damage back to the opponent.
@@ -979,6 +997,11 @@ public class RoomFight extends RoomParent {
 
         public double getDmgBoost() {
             return dmgBoost;
+        }
+
+        // Used by room to draw correct arrow on top of health bar
+        public int getDotArrow() {
+            return dotArrow;
         }
     }
 

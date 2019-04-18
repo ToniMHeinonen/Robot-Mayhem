@@ -513,8 +513,9 @@ public class MainGame extends Game {
 		skill1 = stats.loadValue(keySkill1, skills.REPAIR);
 		skill2 = stats.loadValue(keySkill2, "");
 		currentBoss = stats.loadValue(keyCurrentBoss, bosses.ROOMBOT);
-		firstPlayTime = stats.loadValue(keyFirstPlayTime, true);
-		firstPlayTimeFight = stats.loadValue(keyFirstPlayTimeFight, true);
+		// REMEMBER TO CHANGE THESE TO TRUE
+		firstPlayTime = stats.loadValue(keyFirstPlayTime, false);
+		firstPlayTimeFight = stats.loadValue(keyFirstPlayTimeFight, false);
 		pool = stats.loadValue(keyPool, 1);
 		poolMult = stats.loadValue(keyPoolMult, 0);
 		playerName = stats.loadValue(keyName, "");
