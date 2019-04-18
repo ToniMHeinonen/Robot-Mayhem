@@ -232,7 +232,7 @@ public class Item {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, HARDWARE);
         map.put(description, "hardwareDesc");
-        map.put(value, 0.05);
+        map.put(value, 0.1);
         map.put(usedInHall, true);
         map.put(isSkill, false);
         map.put(boostType, DMG_BOOST);

@@ -526,7 +526,7 @@ public class RoomFight extends RoomParent {
             if (turnState == BEFORE) {
                 actionTimer = actionDelay; // reset actionTimer
                 if (!dialog.isSkillNameOn()) {
-                    checkDoT();
+                    inflictDoT();
                 }
 
             } else if (turnState == TAKING_DOT) {
@@ -763,7 +763,7 @@ public class RoomFight extends RoomParent {
         }
 
         // Add all the DoTs on top of each other and decrease their turn timers
-        protected void checkDoT() {
+        protected void inflictDoT() {
             calculateNextDoT();
 
             // Decrease DoT turn timers

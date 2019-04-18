@@ -215,12 +215,12 @@ public class Skills {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, REPAIR);
         map.put(description, "repairDesc");
-        map.put(damage, 0.0);
-        map.put(dmgPurePercent, false);
+        map.put(damage, -15.0);
+        map.put(dmgPurePercent, true);
         map.put(critChance, 0);
         map.put(missChance, 0);
         map.put(damageOverTime, -15.0);
-        map.put(damageOverTimeTurns, 2);
+        map.put(damageOverTimeTurns, 1);
         map.put(dotPurePercent, true);
         map.put(cooldown, 2);
         map.put(hitAnimation, null);

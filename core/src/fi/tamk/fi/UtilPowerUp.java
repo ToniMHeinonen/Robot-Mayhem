@@ -129,7 +129,9 @@ public class UtilPowerUp {
 
             if (pupTypes[pos] == MONEY) {
                 name = "money";
-                moneyAmount = MathUtils.random(15, 20);
+                int extra = 0;
+                if (game.getDifficulty().equals(game.HARD)) extra = 5;
+                moneyAmount = MathUtils.random(15 + extra, 20 + extra);
                 description = String.valueOf(moneyAmount) + " " + localize.get("shinyCoins");
                 break;
             } else {

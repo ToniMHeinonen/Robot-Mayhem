@@ -52,7 +52,7 @@ public class Settings {
 
     // Difficulty
     private Label difficultyLabel;
-    private String[] difficulties = new String[] {"easy", "medium", "hard"};
+    private String[] difficulties;
     private ImageButton[] difficultyButtons = new ImageButton[3];
     private int space = 310;
 
@@ -81,6 +81,7 @@ public class Settings {
         this.game = game;
         this.room = room;
         this.curRoom = curRoom;
+        difficulties = new String[] {game.EASY, game.MEDIUM, game.HARD};
         localize = game.getLocalize();
         files = game.getFiles();
         skin = game.getSkin();

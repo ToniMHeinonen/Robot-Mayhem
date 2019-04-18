@@ -41,6 +41,7 @@ public class MainGame extends Game {
 	public final float pixelWidth = 1920f;
 	public final float pixelHeight = 1080f;
 	public final float gridSize = 1920f / 16f;
+	public final String EASY = "easy", MEDIUM = "medium", HARD = "hard";
 	private OrthographicCamera camera;
 	private FitViewport fitViewport;
 
@@ -176,7 +177,6 @@ public class MainGame extends Game {
 		createHackFiles();
 
 		// Switch to first room
-		selectRandomBossMusic();
 		switchToRoomGame();
 	}
 
@@ -222,6 +222,11 @@ public class MainGame extends Game {
 		prefsStats.clear();
 		prefsStats.flush();
 		restartGame();
+	}
+
+	private void selectLoadedBossMusic() {
+		if (arrPlayedMusicSize == 0) selectRandomBossMusic();
+		else curBossMusic = files.allBossMusic[arrPlayedMusicSize-1];
 	}
 
 	private void selectRandomBossMusic() {
@@ -399,9 +404,9 @@ public class MainGame extends Game {
         // If it's the first boss, make milestone 20
         if (pool == 1 && poolMult == 0) progressBarMilestone = 20;
         else progressBarMilestone = poolMilestones[pool] / 3;
-        if (difficulty.equals("easy")) progressBarMilestone *= 0.5;
-        else if (difficulty.equals("medium")) progressBarMilestone *= 1;
-		else if (difficulty.equals("hard")) progressBarMilestone *= 1.5;
+        if (difficulty.equals(EASY)) progressBarMilestone *= 0.5;
+        else if (difficulty.equals(MEDIUM)) progressBarMilestone *= 1;
+		else if (difficulty.equals(HARD)) progressBarMilestone *= 1.25;
     }
 
     public void changeDifficulty(String dif) {
@@ -462,7 +467,7 @@ public class MainGame extends Game {
 		musicVol = settings.getFloat(keyMusicVol, 0.8f);
 		soundVol = settings.getFloat(keySoundVol, 0.8f);
 		language = settings.getString(keyLanguage, "");
-		difficulty = settings.getString(keyDifficulty, "medium");
+		difficulty = settings.getString(keyDifficulty, MEDIUM);
     }
 
 	/**
@@ -550,6 +555,7 @@ public class MainGame extends Game {
 		for (int i = 0; i < arrPlayedMusicSize; i++) {
 			arrPlayedMusic.add(i, stats.loadValue(keyArrPlayedMusic + String.valueOf(i), 0));
 		}
+		selectLoadedBossMusic();
 	}
 
 	/**
@@ -642,7 +648,9 @@ public class MainGame extends Game {
 		// defeatedBosses.add(currentBoss); Add when all the bosses exist
 
 		stepCount = 0; // Reset step count
-		money += MathUtils.random(5, 10);
+		int extra = 0;
+		if (difficulty.equals(HARD)) extra = 5;
+		money += MathUtils.random(5 + extra, 10 + extra);
 		poolMult++;
 		fightsWon ++;
 		chooseNextMilestone();
