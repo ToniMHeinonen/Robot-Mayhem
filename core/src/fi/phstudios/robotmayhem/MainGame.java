@@ -161,7 +161,7 @@ public class MainGame extends Game {
     private final int pool3HackShieldAmount = 15;
     private final int pool3InnerHackShieldAmount = 7;
 
-    private boolean pauseWalking, initialized;
+    private boolean pauseWalking, assetsLoaded;
 
 	/**
 	 * Initialize these values when the game starts.
@@ -172,13 +172,19 @@ public class MainGame extends Game {
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera(pixelWidth, pixelHeight);
 		fitViewport = new FitViewport(pixelWidth, pixelHeight, camera);
+		/*
+		Load these values too in here to get what language the game is using, then the correct
+		splash screen can be displayed. These values are also initialized in initAfterRestarting.
+		 */
+		loadSettings();
+		createBundle();
 	}
 
 	/**
 	 * Initialize these values after files has been loaded.
 	 */
 	private void initAfterLoaded() {
-		initialized = true;
+		assetsLoaded = true;
 		files = new Files(assetHandler);
 
 		// All the values below requires files to be initialized
@@ -215,20 +221,7 @@ public class MainGame extends Game {
 		batch.setProjectionMatrix(camera.combined);
 		camera.update();
 		controlSaveTimer();
-		// If Asset Manager has finished loading, initialize game values and move to RoomGame
-		if (assetHandler.manager.update()) {
-			if (!initialized) initAfterLoaded();
-		} else {
-			// Display splash screen when loading files
-			AssetManager man = assetHandler.manager;
-			if (man.isLoaded(assetHandler.splashScreen)) {
-				if (splashScreen == null) splashScreen = man.get(assetHandler.splashScreen);
-				batch.begin();
-				batch.draw(splashScreen, 0, 0,
-						splashScreen.getWidth(), splashScreen.getHeight());
-				batch.end();
-			}
-		}
+		controlSplashScreen();
 	}
 
 	@Override
@@ -289,6 +282,39 @@ public class MainGame extends Game {
 		if (currentDate != prevDayGift) {
 			prevDayGift = currentDate;
 			money += MathUtils.random(5, 10);
+		}
+	}
+
+	/**
+	 * If assets are loading, display splash screen.
+	 */
+	private void controlSplashScreen() {
+		AssetManager man = assetHandler.manager;
+		// If Asset Manager has finished loading, initialize game values and move to RoomGame
+		if (assetHandler.manager.update()) {
+			if (!assetsLoaded) {
+				initAfterLoaded();
+				man.unload(assetHandler.splashScreenFIN);
+				man.unload(assetHandler.splashScreenENG);
+			}
+		} else {
+			// Display splash screen when loading files
+			if (splashScreen == null) {
+				if (language.equals("fi")) {
+					if (man.isLoaded(assetHandler.splashScreenFIN)) {
+						splashScreen = man.get(assetHandler.splashScreenFIN);
+					}
+				} else {
+					if (man.isLoaded(assetHandler.splashScreenENG)) {
+						splashScreen = man.get(assetHandler.splashScreenENG);
+					}
+				}
+			} else {
+				batch.begin();
+				batch.draw(splashScreen, 0, 0,
+						splashScreen.getWidth(), splashScreen.getHeight());
+				batch.end();
+			}
 		}
 	}
 

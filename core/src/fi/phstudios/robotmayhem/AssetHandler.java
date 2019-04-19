@@ -10,7 +10,8 @@ public class AssetHandler {
     public final AssetManager manager = new AssetManager();
 
     // Splash Screen
-    public final String splashScreen = "texture/splashScreen.png";
+    public final String splashScreenFIN = "texture/splashScreenFIN.jpg";
+    public final String splashScreenENG = "texture/splashScreenENG.jpg";
 
     // Player
     public final String playerIdle = "texture/player/player_idle.png";
@@ -43,7 +44,8 @@ public class AssetHandler {
         Textures
          */
         // Splash Screen
-        manager.load(splashScreen, Texture.class);
+        manager.load(splashScreenFIN, Texture.class);
+        manager.load(splashScreenENG, Texture.class);
 
         // Player
         manager.load(playerIdle, Texture.class);
