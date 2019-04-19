@@ -44,6 +44,11 @@ public class Files {
     public final Animation<TextureRegion> a_copierIdle, a_copierAttack, a_copierDamage,
             a_copierStun;
 
+    // PC textures and animations
+    private final Texture t_pcIdle, t_pcAttack, t_pcDamage, t_pcStun;
+    public final Animation<TextureRegion> a_pcIdle, a_pcAttack, a_pcDamage,
+            a_pcStun;
+
     // Other textures
     public final Texture imgBgHall, imgBgBoss, imgTopBar, imgBottomBar, escapeBg, hpBarLeft,
             hpBarRight, powerUpBg, powerUpPopup, itemBg, retrieveStepsBg, dotArrowUp, dotArrowDown;
@@ -174,6 +179,15 @@ public class Files {
         a_copierAttack = createAnims.createAnimation(t_copierAttack, 4, 1);
         a_copierDamage = createAnims.createAnimation(t_copierDamage, 4, 1);
         a_copierStun = createAnims.createAnimation(t_copierStun, 4, 2);
+        // PC
+        t_pcIdle = manager.get("texture/pc/pc_idle.png");
+        t_pcAttack = manager.get("texture/pc/pc_attack.png");
+        t_pcDamage = manager.get("texture/pc/pc_damage.png");
+        t_pcStun = manager.get("texture/pc/pc_stun.png");
+        a_pcIdle = createAnims.createAnimation(t_pcIdle, 4, 4);
+        a_pcAttack = createAnims.createAnimation(t_pcAttack, 4, 1);
+        a_pcDamage = createAnims.createAnimation(t_pcDamage, 4, 1);
+        a_pcStun = createAnims.createAnimation(t_pcStun, 4, 2);
 
         /*
         Skins
@@ -277,6 +291,10 @@ public class Files {
         manager.load("texture/copier/copier_attack.png", Texture.class);
         manager.load("texture/copier/copier_damage.png", Texture.class);
         manager.load("texture/copier/copier_stun.png", Texture.class);
+        manager.load("texture/pc/pc_idle.png", Texture.class);
+        manager.load("texture/pc/pc_attack.png", Texture.class);
+        manager.load("texture/pc/pc_damage.png", Texture.class);
+        manager.load("texture/pc/pc_stun.png", Texture.class);
 
         /*
         Skins

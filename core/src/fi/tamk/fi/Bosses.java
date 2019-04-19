@@ -41,6 +41,7 @@ public class Bosses {
     public final String COPPER = "Copper";
     public final String ROBBER = "Robber";
     public final String COPIER = "Copier";
+    public final String PC = "PC";
     private ArrayList<String> allBosses = new ArrayList<String>();
 
     /* NOTE!
@@ -61,6 +62,7 @@ public class Bosses {
         bossCopper();
         bossRobber();
         bossCopier();
+        bossPC();
     }
 
     /*
@@ -162,6 +164,24 @@ public class Bosses {
         animAttack = files.a_copierAttack;
         animDamage = files.a_copierDamage;
         animStun = files.a_copierStun;
+
+        addToMap();
+    }
+
+    private void bossPC() {
+        curName = PC;
+        curAttackName = "pcAttackName";
+        curNormalSize = true;
+        curSkillName0 = skills.ATTACK;
+        curSkillName1 = skills.ELECTRIFY;
+        curSkillName2 = skills.MISSILE;
+        curDialogStart = "pcDialogStart";
+        curDialogEnd = "pcDialogEnd";
+
+        animIdle = files.a_pcIdle;
+        animAttack = files.a_pcAttack;
+        animDamage = files.a_pcDamage;
+        animStun = files.a_pcStun;
 
         addToMap();
     }
