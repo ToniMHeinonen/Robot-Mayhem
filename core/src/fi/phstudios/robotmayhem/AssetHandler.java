@@ -9,6 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public class AssetHandler {
     public final AssetManager manager = new AssetManager();
 
+    /*
+    Textures
+    */
     // Splash Screen
     public final String splashScreenFIN = "texture/splashScreenFIN.jpg";
     public final String splashScreenENG = "texture/splashScreenENG.jpg";
@@ -37,7 +40,23 @@ public class AssetHandler {
     public final String skillHit = "texture/skills/skillHit.png";
     public final String skillHitLow = "texture/skills/skillHitLow.png";
 
-    // Skills
+    // Other
+    public final String bgHall1 = "texture/bg_hall1.png";
+    public final String bgHall1Boss = "texture/bg_hall1_boss.png";
+    public final String topBar = "texture/topbar.png";
+    public final String bottomBar = "texture/bottombar.png";
+    public final String escapeBackground = "texture/escapeBackground.png";
+    public final String hpBarLeft = "texture/hpbar_left.png";
+    public final String hpBarRight = "texture/hpbar_right.png";
+    public final String powerUpBg = "texture/powerUpBg.png";
+    public final String powerUpPopup = "texture/powerUpPopup.jpg";
+    public final String itemBg = "texture/itemBg.jpg";
+    public final String retrieveStepsBg = "texture/retrieveStepsBg.png";
+    public final String statusNegative = "texture/status_negative.png";
+    public final String statusPositive = "texture/status_positive.png";
+
+    // Bosses
+
 
     AssetHandler() {
         /*
@@ -70,19 +89,19 @@ public class AssetHandler {
         manager.load(skillHit, Texture.class);
         manager.load(skillHitLow, Texture.class);
         // Other
-        manager.load("texture/bg_hall1.png", Texture.class);
-        manager.load("texture/bg_hall1_boss.png", Texture.class);
-        manager.load("texture/topbar.png", Texture.class);
-        manager.load("texture/bottombar.png", Texture.class);
-        manager.load("texture/escapeBackground.png", Texture.class);
-        manager.load("texture/hpbar_left.png", Texture.class);
-        manager.load("texture/hpbar_right.png", Texture.class);
-        manager.load("texture/powerUpBg.png", Texture.class);
-        manager.load("texture/powerUpPopup.jpg", Texture.class);
-        manager.load("texture/itemBg.jpg", Texture.class);
-        manager.load("texture/retrieveStepsBg.png", Texture.class);
-        manager.load("texture/status_negative.png", Texture.class);
-        manager.load("texture/status_positive.png", Texture.class);
+        manager.load(bgHall1, Texture.class);
+        manager.load(bgHall1Boss, Texture.class);
+        manager.load(topBar, Texture.class);
+        manager.load(bottomBar, Texture.class);
+        manager.load(escapeBackground, Texture.class);
+        manager.load(hpBarLeft, Texture.class);
+        manager.load(hpBarRight, Texture.class);
+        manager.load(powerUpBg, Texture.class);
+        manager.load(powerUpPopup, Texture.class);
+        manager.load(itemBg, Texture.class);
+        manager.load(retrieveStepsBg, Texture.class);
+        manager.load(statusNegative, Texture.class);
+        manager.load(statusPositive, Texture.class);
         // Bosses
         manager.load("texture/roombot/roombot_idle.png", Texture.class);
         manager.load("texture/roombot/roombot_attack.png", Texture.class);

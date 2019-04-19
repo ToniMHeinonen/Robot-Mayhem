@@ -100,19 +100,19 @@ public class Files {
         skillHit = manager.get(asset.skillHit);
         skillHitLow = manager.get(asset.skillHitLow);
         // Other
-        imgBgHall = manager.get("texture/bg_hall1.png");
-        imgBgBoss = manager.get("texture/bg_hall1_boss.png");
-        imgTopBar = manager.get("texture/topbar.png");
-        imgBottomBar = manager.get("texture/bottombar.png");
-        escapeBg = manager.get("texture/escapeBackground.png");
-        hpBarLeft = manager.get("texture/hpbar_left.png");
-        hpBarRight = manager.get("texture/hpbar_right.png");
-        powerUpBg = manager.get("texture/powerUpBg.png");
-        powerUpPopup = manager.get("texture/powerUpPopup.jpg");
-        itemBg = manager.get("texture/itemBg.jpg");
-        retrieveStepsBg = manager.get("texture/retrieveStepsBg.png");
-        dotArrowUp = manager.get("texture/status_positive.png");
-        dotArrowDown = manager.get("texture/status_negative.png");
+        imgBgHall = manager.get(asset.bgHall1);
+        imgBgBoss = manager.get(asset.bgHall1Boss);
+        imgTopBar = manager.get(asset.topBar);
+        imgBottomBar = manager.get(asset.bottomBar);
+        escapeBg = manager.get(asset.escapeBackground);
+        hpBarLeft = manager.get(asset.hpBarLeft);
+        hpBarRight = manager.get(asset.hpBarRight);
+        powerUpBg = manager.get(asset.powerUpBg);
+        powerUpPopup = manager.get(asset.powerUpPopup);
+        itemBg = manager.get(asset.itemBg);
+        retrieveStepsBg = manager.get(asset.retrieveStepsBg);
+        dotArrowUp = manager.get(asset.statusPositive);
+        dotArrowDown = manager.get(asset.statusNegative);
 
         /*
         Animations
