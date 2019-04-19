@@ -150,7 +150,7 @@ public class RoomParent implements Screen {
 
     @Override
     public void hide() {
-        //System.out.println(clickedOpenSettings);
+        this.dispose();
     }
 
     @Override

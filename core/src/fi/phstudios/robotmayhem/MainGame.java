@@ -54,7 +54,7 @@ public class MainGame extends Game {
 	private Skin finalSkin;
 
 	// Pools and tiers
-	private int[] poolMilestones = new int[] {0, 9000, 18000, 27000, 36000};
+	private int[] poolMilestones = new int[] {0, 150, 300, 450, 600};
 
 	// Settings
 	// Keys
@@ -163,6 +163,8 @@ public class MainGame extends Game {
 
     private boolean pauseWalking, assetsLoaded;
 
+    private int ramTimer;
+
 	/**
 	 * Initialize these values when the game starts.
 	 */
@@ -222,6 +224,8 @@ public class MainGame extends Game {
 		camera.update();
 		controlSaveTimer();
 		controlSplashScreen();
+
+		//checkRAM(); For testing RAM usage, delete when game ready
 	}
 
 	@Override
@@ -242,6 +246,15 @@ public class MainGame extends Game {
 		assetHandler.manager.dispose();
 		saveStats();
 		saveSettings();
+	}
+
+	private void checkRAM() {
+		if (ramTimer > 0) ramTimer--;
+		else {
+			ramTimer = 180;
+			System.out.println(Gdx.app.getJavaHeap());
+			System.out.println(Gdx.app.getNativeHeap());
+		}
 	}
 
 	public void resetGame() {

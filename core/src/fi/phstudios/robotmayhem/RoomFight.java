@@ -233,6 +233,7 @@ public class RoomFight extends RoomParent {
     @Override
     public void hide() {
         if (hacking != null) hacking.dispose();
+        super.hide();
     }
 
     private void createHealthBars() {
@@ -617,13 +618,9 @@ public class RoomFight extends RoomParent {
                     turnState = DOING_ACTION;
                     actionState = DOT_ANIM;
                     if (dealDoTDamage > 0) {
-                        System.out.println("dotDamage");
-                        System.out.println(dealDoTDamage);
                         opponent.addDoT(dealDoTTurns, dealDoTDamage); // Damage
                         opponent.startHitAnimation(dotMinus, animSpeed);
                     } else {
-                        System.out.println("dotHeal");
-                        System.out.println(dealDoTDamage);
                         addDoT(dealDoTTurns, dealDoTDamage); // Healing
                         startHitAnimation(dotPlus, animSpeed);
                     }
