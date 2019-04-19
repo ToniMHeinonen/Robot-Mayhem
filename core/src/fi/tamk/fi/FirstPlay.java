@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.I18NBundle;
@@ -19,7 +20,7 @@ public class FirstPlay {
     private UtilDialog utilDialog;
     private String name;
     private boolean firstPlayTime, firstPlayTimeFight, fightStartFinished, fightAfterHitFinished,
-            fightActionFinished, fightHackingStartFinished;
+            fightActionFinished, fightHackingStartFinished, firstPlayInventory;
 
     private Dialog whoAmI;
     // Olli notice: int default value is 0, it does not have to be declared
@@ -36,6 +37,7 @@ public class FirstPlay {
         name = game.getPlayerName();
         firstPlayTime = game.isFirstPlayTime();
         firstPlayTimeFight = game.isFirstPlayTimeFight();
+        firstPlayInventory = game.isFirstPlayInventory();
 
         if (firstPlayTime && room.equals("hall")) {
             Timer.schedule(new Timer.Task() {
@@ -53,6 +55,10 @@ public class FirstPlay {
                 }
             }, 1);
         }
+        if (firstPlayInventory && room.equals("inventory")) {
+            inventoryInstructions();
+        }
+
     }
 
     private void hallInstructionsName() {
@@ -190,6 +196,29 @@ public class FirstPlay {
                     fightHackingStartFinished = true;
                     game.setfirstPlayTimeFight(false);
                 }
+            }
+        });
+    }
+
+    private void inventoryInstructions() {
+        Label label = new Label("You have just bought your first item! " +
+                "When you want to use it, just select it from the inventory. " +
+                "Some items can only be used in a specific room.", finalSkin, "font42");
+        label.setWrap(true);
+        label.setAlignment(1);
+
+        final Dialog dialog = new Dialog("", finalSkin, "skilldescription");
+        dialog.getContentTable().add(label).prefWidth(760);
+        dialog.setPosition(game.pixelWidth/4, game.pixelHeight/4);
+        dialog.setSize(800, 540);
+        stage.addActor(dialog);
+
+        game.setFirstPlayInventory(false);
+
+        dialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                dialog.remove();
             }
         });
     }

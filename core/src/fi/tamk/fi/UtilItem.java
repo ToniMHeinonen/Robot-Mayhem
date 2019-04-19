@@ -59,15 +59,13 @@ public class UtilItem {
     private Label labelInventory;
 
     // Exit
-    ImageButton buttonExit;
+    private ImageButton buttonExit;
 
     // Money
-    Label labelMoney;
+    private Label labelMoney;
 
     // Menu
-    ImageButton buttonSettings;
-    ImageButton buttonInventory;
-    ImageButton buttonStats;
+    private ImageButton buttonSettings, buttonInventory, buttonStats;
 
     UtilItem(MainGame game, String room, RoomParent curRoom) {
         this.game = game;
@@ -104,6 +102,10 @@ public class UtilItem {
         stage.addActor(dialogItems);
         System.out.println("Item-dialog opened from room: " + room);
         System.out.println("Inventory size: " + inventory.size());
+
+        if (game.isFirstPlayInventory() && buyedItemsCounter == 1) {
+            FirstPlay firstPlay = new FirstPlay(game, "inventory", curRoom);
+        }
     }
 
     public void update() {

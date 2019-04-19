@@ -77,6 +77,7 @@ public class MainGame extends Game {
 	private String keyCurrentBoss = E.encrypt("currentBoss");
 	private String keyFirstPlayTime = E.encrypt("firstPlayTime");
 	private String keyFirstPlayTimeFight = E.encrypt("firstPlayTimeFight");
+	private String keyFirstPlayInventory = E.encrypt("firstPlayInventory");
 	private String keyPool = E.encrypt("pool");
 	private String keyPoolMult = E.encrypt("poolMult");
 	private String keyBuyedItemsCounter = E.encrypt("buyedItemsCounter");
@@ -110,7 +111,7 @@ public class MainGame extends Game {
 	private float stepCount, stepBank, stepAllCount;
 	private int pool, poolMult, money, fightsWon, prevDayGift, buyedItemsCounter;
 	private String skill1, skill2, currentBoss, playerName;
-	private boolean firstPlayTime, firstPlayTimeFight, reflectiveShield;
+	private boolean firstPlayTime, firstPlayTimeFight, firstPlayInventory, reflectiveShield;
 	private int critBoost, missBoost, permaCritBoost, permaMissBoost;
 	private float armorBoost, dmgBoost, healBoost, permaArmorBoost, permaDmgBoost, permaHealBoost;
 	// Stat arrays
@@ -521,6 +522,7 @@ public class MainGame extends Game {
 		// REMEMBER TO CHANGE THESE TO TRUE
 		firstPlayTime = stats.loadValue(keyFirstPlayTime, false);
 		firstPlayTimeFight = stats.loadValue(keyFirstPlayTimeFight, false);
+		firstPlayInventory = stats.loadValue(keyFirstPlayInventory, true);
 		pool = stats.loadValue(keyPool, 1);
 		poolMult = stats.loadValue(keyPoolMult, 0);
 		playerName = stats.loadValue(keyName, "");
@@ -571,6 +573,7 @@ public class MainGame extends Game {
 		stats.saveValue(keyCurrentBoss, currentBoss);
 		stats.saveValue(keyFirstPlayTime, firstPlayTime);
 		stats.saveValue(keyFirstPlayTimeFight, firstPlayTimeFight);
+		stats.saveValue(keyFirstPlayInventory, firstPlayInventory);
 		stats.saveValue(keyPool, pool);
 		stats.saveValue(keyPoolMult, poolMult);
 		stats.saveValue(keyName, playerName);
@@ -910,6 +913,14 @@ public class MainGame extends Game {
 
     public boolean isFirstPlayTimeFight() {
 	    return firstPlayTimeFight;
+    }
+
+    public void setFirstPlayInventory(boolean firstPlayInventory) {
+	    this.firstPlayInventory = firstPlayInventory;
+    }
+
+    public boolean isFirstPlayInventory() {
+	    return firstPlayInventory;
     }
 
 	public TextureAtlas getTestButtonAtlas() {
