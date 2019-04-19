@@ -52,6 +52,7 @@ public class UtilItem {
     private int[] amounts;
     private String[] allSkills;
     private ArrayList<String> boughtPermanent;
+    private ArrayList<String> checkPermanentList;
 
     private int buttonCounterBuyable;
     private int buttonCounterOwned;
@@ -92,6 +93,7 @@ public class UtilItem {
         buyedItemsCounter = game.getBuyedItemsCounter();
         amounts = new int[allItems.length];
         boughtPermanent = game.getBoughtPermanent();
+        checkPermanentList = new ArrayList<String>();
 
         setValues();
         createItemDialog();
@@ -130,34 +132,48 @@ public class UtilItem {
         dialogItems.setSize(game.pixelWidth, game.pixelHeight);
     }
 
+    // Checks if player has bought permanent items.
+    private void checkPermanent() {
+        for (int i = 0; i < boughtPermanent.size(); i++) {
+            for (int j = 0; j < allItems.length; j++) {
+                if (boughtPermanent.get(i).equals(allItems[j])) {
+                    checkPermanentList.add(allItems[j]);
+                }
+            }
+        }
+    }
+
     /*
     Table, which contains shop items.
      */
     private void createBuyableItemsTable() {
         int buyableItems = 0;
         tableBuyableItems = new Table();
+        checkPermanent();
 
         for (int i = 0; i < allItems.length; i++) {
-            buttonCounterBuyable = i;
-            String itemName = localize.get(allItems[i]);
-            Label checkFontSize = new Label(itemName, finalSkin);
-            Label shopItems = new Label(itemName, finalSkin, getFontSize(checkFontSize));
-            tableBuyableItems.add(shopItems).size(505, 75);
-            buyableItems++;
+            if (!checkPermanentList.contains(allItems[i])) {
+                buttonCounterBuyable = i;
+                String itemName = localize.get(allItems[i]);
+                Label checkFontSize = new Label(itemName, finalSkin);
+                Label shopItems = new Label(itemName, finalSkin, getFontSize(checkFontSize));
+                tableBuyableItems.add(shopItems).size(505, 75);
+                buyableItems++;
 
-            final String stringCost = String.valueOf(items.getItem(allItems[i]).get(items.price));
-            Label labelPrice = new Label(stringCost, finalSkin);
-            labelPrice.setAlignment(Align.right);
-            tableBuyableItems.add(labelPrice).size(50, 75).row();
+                final String stringCost = String.valueOf(items.getItem(allItems[i]).get(items.price));
+                Label labelPrice = new Label(stringCost, finalSkin);
+                labelPrice.setAlignment(Align.right);
+                tableBuyableItems.add(labelPrice).size(50, 75).row();
 
-            shopItems.addListener(new ClickListener() {
-                int i = buttonCounterBuyable;
+                shopItems.addListener(new ClickListener() {
+                    int i = buttonCounterBuyable;
 
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    popupForBuyableItem(i);
-                }
-            });
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        popupForBuyableItem(i);
+                    }
+                });
+            }
         }
 
         if (buyableItems > 11) {
