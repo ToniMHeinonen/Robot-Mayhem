@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.I18NBundle;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class MainGame extends Game {
 	private SpriteBatch batch;
 	private I18NBundle localize;
 	private Encryptor E = new Encryptor();
+	private AssetHandler assetHandler;
 	private Files files;
 	private Skills skills;
 	private Item items;
@@ -157,7 +159,8 @@ public class MainGame extends Game {
 
 	@Override
 	public void create () {
-		files = new Files();
+		assetHandler = new AssetHandler();
+		files = new Files(assetHandler);
 		loadSettings();
 		createBundle();
 		// Create skills and bosses when the game launches
@@ -203,7 +206,7 @@ public class MainGame extends Game {
 		finalSkin.dispose();
 		progBarAtlas.dispose();
 		progBarSkin.dispose();
-		files.manager.dispose();
+		assetHandler.manager.dispose();
 		if (resetting) resetting = false;
 		else {
 			saveStats();

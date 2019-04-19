@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class Files {
-    public final AssetManager manager = new AssetManager();
     private final Animating createAnims = new Animating();
 
     // Player textures and animations
@@ -72,35 +71,34 @@ public class Files {
     // Sound effect other
     public final Sound  sndMilestoneAchieved, sndPurchaseItem, sndUseItem, sndNotification;
 
-    Files () {
-        loadAssets();
-        manager.finishLoading();
+    Files (AssetHandler asset) {
+        AssetManager manager = asset.manager;
 
         /*
         Textures and animations
          */
         // Player
-        playerIdle = manager.get("texture/player/player_idle.png");
-        playerAttack = manager.get("texture/player/player_attack.png");
-        playerDefend = manager.get("texture/player/player_defend.png");
-        playerItem = manager.get("texture/player/player_item.png");
-        playerEscape = manager.get("texture/player/player_flee.png");
-        playerHack = manager.get("texture/player/player_hack.png");
-        playerDeath = manager.get("texture/player/player_stun.png");
-        playerTakeHit = manager.get("texture/player/player_damage.png");
-        playerGameMoving = manager.get("texture/player/player_move.png");
+        playerIdle = manager.get(asset.playerIdle);
+        playerAttack = manager.get(asset.playerAttack);
+        playerDefend = manager.get(asset.playerDefend);
+        playerItem = manager.get(asset.playerItem);
+        playerEscape = manager.get(asset.playerFlee);
+        playerHack = manager.get(asset.playerHack);
+        playerDeath = manager.get(asset.playerStun);
+        playerTakeHit = manager.get(asset.playerDamage);
+        playerGameMoving = manager.get(asset.playerMove);
         // Skills
-        healthPlus = manager.get("texture/skills/plusHealth.png");
-        healthMinus = manager.get("texture/skills/minusHealth.png");
-        criticalHit = manager.get("texture/skills/criticalHit.png");
-        miss = manager.get("texture/skills/miss.png");
-        healing = manager.get("texture/skills/healing.png");
-        dotMinus = manager.get("texture/skills/dotNegative.png");
-        dotPlus = manager.get("texture/skills/dotPositive.png");
-        physicalHit = manager.get("texture/skills/physicalHit.png");
-        physicalHitLow = manager.get("texture/skills/physicalHitLow.png");
-        skillHit = manager.get("texture/skills/skillHit.png");
-        skillHitLow = manager.get("texture/skills/skillHitLow.png");
+        healthPlus = manager.get(asset.plusHealth);
+        healthMinus = manager.get(asset.minusHealth);
+        criticalHit = manager.get(asset.criticalHit);
+        miss = manager.get(asset.miss);
+        healing = manager.get(asset.healing);
+        dotMinus = manager.get(asset.dotNegative);
+        dotPlus = manager.get(asset.dotPositive);
+        physicalHit = manager.get(asset.physicalHit);
+        physicalHitLow = manager.get(asset.physicalHitLow);
+        skillHit = manager.get(asset.skillHit);
+        skillHitLow = manager.get(asset.skillHitLow);
         // Other
         imgBgHall = manager.get("texture/bg_hall1.png");
         imgBgBoss = manager.get("texture/bg_hall1_boss.png");
@@ -232,109 +230,5 @@ public class Files {
         sndPurchaseItem = manager.get("sound/PurchaseItemFromShop.mp3");
         sndUseItem = manager.get("sound/GeneralItemUse.mp3");
         sndNotification = manager.get("sound/GeneralNotification.mp3");
-    }
-
-    private void loadAssets() {
-        /*
-        Textures
-         */
-        // Player
-        manager.load("texture/player/player_idle.png", Texture.class);
-        manager.load("texture/player/player_attack.png", Texture.class);
-        manager.load("texture/player/player_defend.png", Texture.class);
-        manager.load("texture/player/player_item.png", Texture.class);
-        manager.load("texture/player/player_flee.png", Texture.class);
-        manager.load("texture/player/player_hack.png", Texture.class);
-        manager.load("texture/player/player_stun.png", Texture.class);
-        manager.load("texture/player/player_damage.png", Texture.class);
-        manager.load("texture/player/player_move.png", Texture.class);
-        // Skills
-        manager.load("texture/skills/plusHealth.png", Texture.class);
-        manager.load("texture/skills/minusHealth.png", Texture.class);
-        manager.load("texture/skills/criticalHit.png", Texture.class);
-        manager.load("texture/skills/miss.png", Texture.class);
-        manager.load("texture/skills/healing.png", Texture.class);
-        manager.load("texture/skills/dotNegative.png", Texture.class);
-        manager.load("texture/skills/dotPositive.png", Texture.class);
-        manager.load("texture/skills/physicalHit.png", Texture.class);
-        manager.load("texture/skills/physicalHitLow.png", Texture.class);
-        manager.load("texture/skills/skillHit.png", Texture.class);
-        manager.load("texture/skills/skillHitLow.png", Texture.class);
-        // Other
-        manager.load("texture/bg_hall1.png", Texture.class);
-        manager.load("texture/bg_hall1_boss.png", Texture.class);
-        manager.load("texture/topbar.png", Texture.class);
-        manager.load("texture/bottombar.png", Texture.class);
-        manager.load("texture/escapeBackground.png", Texture.class);
-        manager.load("texture/hpbar_left.png", Texture.class);
-        manager.load("texture/hpbar_right.png", Texture.class);
-        manager.load("texture/powerUpBg.png", Texture.class);
-        manager.load("texture/powerUpPopup.jpg", Texture.class);
-        manager.load("texture/itemBg.jpg", Texture.class);
-        manager.load("texture/retrieveStepsBg.png", Texture.class);
-        manager.load("texture/status_negative.png", Texture.class);
-        manager.load("texture/status_positive.png", Texture.class);
-        // Bosses
-        manager.load("texture/roombot/roombot_idle.png", Texture.class);
-        manager.load("texture/roombot/roombot_attack.png", Texture.class);
-        manager.load("texture/roombot/roombot_damage.png", Texture.class);
-        manager.load("texture/roombot/roombot_stun.png", Texture.class);
-        manager.load("texture/robber/robber_idle.png", Texture.class);
-        manager.load("texture/robber/robber_attack.png", Texture.class);
-        manager.load("texture/robber/robber_damage.png", Texture.class);
-        manager.load("texture/robber/robber_stun.png", Texture.class);
-        manager.load("texture/copper/copper_idle.png", Texture.class);
-        manager.load("texture/copper/copper_attack.png", Texture.class);
-        manager.load("texture/copper/copper_damage.png", Texture.class);
-        manager.load("texture/copper/copper_stun.png", Texture.class);
-        manager.load("texture/copier/copier_idle.png", Texture.class);
-        manager.load("texture/copier/copier_attack.png", Texture.class);
-        manager.load("texture/copier/copier_damage.png", Texture.class);
-        manager.load("texture/copier/copier_stun.png", Texture.class);
-        manager.load("texture/pc/pc_idle.png", Texture.class);
-        manager.load("texture/pc/pc_attack.png", Texture.class);
-        manager.load("texture/pc/pc_damage.png", Texture.class);
-        manager.load("texture/pc/pc_stun.png", Texture.class);
-
-        /*
-        Skins
-         */
-        manager.load("glassy-ui.json", Skin.class);
-        manager.load("finalskin/finalskin.json", Skin.class);
-
-        /*
-        Music
-         */
-        manager.load("music/mainTheme.mp3", Music.class);
-        manager.load("music/bossRobo.mp3", Music.class);
-        manager.load("music/bossFuturistic.mp3", Music.class);
-        manager.load("music/bossSankari.mp3", Music.class);
-
-        /*
-        Sound effects
-         */
-        // Fight general
-        manager.load("sound/fightGeneral/FastHeal.mp3", Sound.class);
-        manager.load("sound/fightGeneral/HealOverTime.mp3", Sound.class);
-        manager.load("sound/fightGeneral/LoseToBoss.mp3", Sound.class);
-        manager.load("sound/fightGeneral/MissedHit.mp3", Sound.class);
-        manager.load("sound/fightGeneral/CriticalHit.mp3", Sound.class);
-        manager.load("sound/fightGeneral/EnemyMiss.mp3", Sound.class);
-        manager.load("sound/fightGeneral/ReceiveCriticalHit.mp3", Sound.class);
-        manager.load("sound/fightGeneral/ReceiveDot.mp3", Sound.class);
-        manager.load("sound/fightGeneral/BreakFireballOrb.mp3", Sound.class);
-        manager.load("sound/fightGeneral/HitBossWithSuccessfulHack.mp3", Sound.class);
-        manager.load("sound/fightGeneral/PickPowerUpOrItem.mp3", Sound.class);
-        manager.load("sound/fightGeneral/PowerUpsPopUp.mp3", Sound.class);
-        manager.load("sound/fightGeneral/MetallicHit.mp3", Sound.class);
-        // Skills
-        manager.load("sound/skills/DustThrow.mp3", Sound.class);
-        manager.load("sound/skills/Suction.mp3", Sound.class);
-        manager.load("sound/skills/ShieldAbilitySound.mp3", Sound.class);
-        // Other
-        manager.load("sound/MileStoneAchieved.mp3", Sound.class);
-        manager.load("sound/PurchaseItemFromShop.mp3", Sound.class);
-        manager.load("sound/GeneralItemUse.mp3", Sound.class);
-        manager.load("sound/GeneralNotification.mp3", Sound.class);
     }
 }
