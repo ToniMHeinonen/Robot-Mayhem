@@ -445,6 +445,8 @@ public class RoomFight extends RoomParent {
                         SKILL_DEFEND = 4, SKILL_ITEM = 5;
         protected boolean flashWhite, hitAnimationRunning, missCritAnimationRunning, dealDoT,
                             dealCriticalHit;
+        protected int dealDoTTurns;
+        protected double dealDoTDamage;
         protected float flashTime = 0.25f;
         protected State ifDead;
         protected int ID, PLAYER = 0, ENEMY = 1;
@@ -614,8 +616,17 @@ public class RoomFight extends RoomParent {
                     dealDoT = false;
                     turnState = DOING_ACTION;
                     actionState = DOT_ANIM;
-                    if (dotAmount > 0) opponent.startHitAnimation(dotMinus, animSpeed);
-                    else startHitAnimation(dotPlus, animSpeed);
+                    if (dealDoTDamage > 0) {
+                        System.out.println("dotDamage");
+                        System.out.println(dealDoTDamage);
+                        opponent.addDoT(dealDoTTurns, dealDoTDamage); // Damage
+                        opponent.startHitAnimation(dotMinus, animSpeed);
+                    } else {
+                        System.out.println("dotHeal");
+                        System.out.println(dealDoTDamage);
+                        addDoT(dealDoTTurns, dealDoTDamage); // Healing
+                        startHitAnimation(dotPlus, animSpeed);
+                    }
                 } else if (usedItem != null) {
                     usedItem = null;
                     turnState = WAIT_FOR_ACTION;
@@ -726,14 +737,29 @@ public class RoomFight extends RoomParent {
             else pauseStates = true;
         }
 
+        /**
+         * Check if skill deals damage over time. Can deal healing and damage.
+         * @param dmg how much damage does DoT do every turn
+         * @param turns how many turns does DoT last
+         * @param pure whether to deal pure percent
+         */
+        protected void checkToDealDoT(double dmg, int turns, boolean pure) {
+            // If purePercent is true, then dot value 2.0 deals 2 percent of MaxHp
+            // otherwise it deals 2.0*defaultDmg
+            if (pure) dealDoTDamage = dmg;
+            else dealDoTDamage = dmg * defaultDmg;
+            dealDoTTurns = turns;
+            if (dealDoTDamage != 0) dealDoT = true;
+        }
+
         // If skill has DoT, it will be added here
         protected void addDoT(int turns, double damage) {
             if (skillState == SKILL_DEFEND) {
                 if (reflectingShield) {
-                    opponent.dotTurns.add(turns);
-                    opponent.dotDamage.add(damage);
+                    opponent.addDoT(turns, damage);
                 } // else do nothing
             } else {
+                whiteFlash();
                 dotTurns.add(turns);
                 dotDamage.add(damage);
                 calculateNextDoT();
@@ -817,13 +843,8 @@ public class RoomFight extends RoomParent {
             // If target hp is over 0, then move the fighter
             if (targetHp > 0) {
                 positionIncorrect = true;
-                if (X < game.pixelWidth/2) {
-                    // Player
-                    positionOffset = -100f;
-                } else {
-                    // Enemy
-                    positionOffset = 100f;
-                }
+                if (ID == PLAYER) positionOffset = -100f;
+                else positionOffset = 100f;
             }
         }
 
@@ -832,13 +853,8 @@ public class RoomFight extends RoomParent {
             // If target hp is over 0, then move the fighter
             if (targetHp > 0) {
                 positionIncorrect = true;
-                if (X < game.pixelWidth/2) {
-                    // Player
-                    positionOffset = -50f;
-                } else {
-                    // Enemy
-                    positionOffset = 50f;
-                }
+                if (ID == PLAYER) positionOffset = -50;
+                else positionOffset = 50;
             }
         }
 
@@ -1173,20 +1189,9 @@ public class RoomFight extends RoomParent {
                                 }
                             }
 
-                            // Damage over time can happen with healing and damage
-                            double value = (Double) skillMap.get(skills.damageOverTime);
-                            double dot;
-                            // If purePercent is true, then dot value 2.0 deals 2 percent of MaxHp
-                            // otherwise it deals 2.0*defaultDmg
-                            if ((Boolean) skillMap.get(skills.dotPurePercent)) dot = value;
-                            else dot = value * defaultDmg;
-                            dotAmount = dot;
-                            int dotTurns = (Integer) skillMap.get(skills.damageOverTimeTurns);
-                            if (dot != 0) {
-                                dealDoT = true;
-                                if (dot > 0) enemy.addDoT(dotTurns, dot); // Damage
-                                else if (dot < 0) addDoT(dotTurns, dot); // Healing
-                            }
+                            checkToDealDoT((Double) skillMap.get(skills.damageOverTime),
+                                    (Integer) skillMap.get(skills.damageOverTimeTurns),
+                                    (Boolean) skillMap.get(skills.dotPurePercent));
                         }
 
                         actionState = TEMP_ANIM;
@@ -1342,9 +1347,6 @@ public class RoomFight extends RoomParent {
             cooldowns.put("Skill0", 0);
             cooldowns.put("Skill1", 0);
             cooldowns.put("Skill2", 0);
-
-            //hitAnimList = new ArrayList<Animation<TextureRegion>>();
-            //Collections.addAll(hitAnimList, skill1_hit, skill2_hit, skill3_hit);
 
             anim.startAnimation(idleAnim, animSpeed);
         }
@@ -1521,18 +1523,8 @@ public class RoomFight extends RoomParent {
                         }
                     }
 
-                    // Damage over time (can happen with healing and damage)
-                    double dot;
-                    double dmg = damageOverTimes[random];
-                    if (dotPurePercents[random]) dot = dmg;
-                    else dot = dmg * defaultDmg;
-                    int dotTurns = damageOverTimeTurns[random];
-                    dotAmount = dot;
-                    if (dot != 0) {
-                        dealDoT = true;
-                        if (dot > 0) player.addDoT(dotTurns, dot); // Damage
-                        else if (dot < 0) addDoT(dotTurns, dot); // Healing
-                    }
+                    checkToDealDoT(damageOverTimes[random], damageOverTimeTurns[random],
+                            dotPurePercents[random]);
                 }
 
                 curAnimation = skillAnim;
