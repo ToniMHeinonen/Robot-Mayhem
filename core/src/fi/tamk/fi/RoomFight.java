@@ -31,7 +31,7 @@ public class RoomFight extends RoomParent {
         TUTORIAL_START,
         TUTORIAL_AFTER_HIT,
         TUTORIAL_ACTION,
-        TUTORIAL_HACKING_START,
+        TUTORIAL_HACKING,
         START_ROOM,
         DIALOG_START,
         DIALOG_END,
@@ -198,12 +198,12 @@ public class RoomFight extends RoomParent {
             }
             case HACK: {
                 if (!tutorial.isFightHackingStartFinished()) {
-                    state = State.TUTORIAL_HACKING_START;
-                    tutorial.fightHackingStartInstructions();
+                    state = State.TUTORIAL_HACKING;
+                    tutorial.fightHackingInstructions();
                 }
                 break;
             }
-            case TUTORIAL_HACKING_START: {
+            case TUTORIAL_HACKING: {
                 if (tutorial.isFightHackingStartFinished()) {
                     state = State.HACK;
                 }
@@ -282,7 +282,7 @@ public class RoomFight extends RoomParent {
 
     // Controls the hacking phase
     private void hackingPhase() {
-        if (state == State.HACK || state == State.TUTORIAL_HACKING_START) {
+        if (state == State.HACK || state == State.TUTORIAL_HACKING) {
             // If balls has not been spawned, spawn them
             if (!spawnHacking) {
                 spawnHacking = true;

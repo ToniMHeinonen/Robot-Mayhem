@@ -112,8 +112,8 @@ public class FirstPlay {
 
     private void fightStartInstructions() {
         final String[] fightGuide = new String[] {
-                "Ahh it's my fellow friend.",
-                "How's the cleaning going?"};
+                localize.get("tutFightStart1"),
+                localize.get("tutFightStart2")};
 
         final Dialog dialog = utilDialog.createInstructionsDialog(fightGuide[fightStartCounter]);
         stage.addActor(dialog);
@@ -133,8 +133,8 @@ public class FirstPlay {
 
     public void fightAfterHitInstructions() {
         final String[] fightGuide = new String[] {
-                "That robot is out of his mind...",
-                "I'll have to knock some sense into him!"};
+                localize.get("tutFightAfterHit1"),
+                localize.get("tutFightAfterHit2")};
 
         final Dialog dialog = utilDialog.createInstructionsDialog(fightGuide[fightAfterHitCounter]);
         stage.addActor(dialog);
@@ -154,10 +154,10 @@ public class FirstPlay {
 
     public void fightActionInstructions() {
         final String[] fightGuide = new String[] {
-                "Select which action to execute.",
-                "If you hold down the button, it will tell you what it does.",
-                "You can also buy and use items from your inventory.",
-                "Now let's help my friend!"};
+                localize.get("tutFightAction1"),
+                localize.get("tutFightAction2"),
+                localize.get("tutFightAction3"),
+                localize.get("tutFightAction4")};
 
         final Dialog dialog = utilDialog.createInstructionsDialog(fightGuide[fightActionCounter]);
         stage.addActor(dialog);
@@ -175,12 +175,12 @@ public class FirstPlay {
         });
     }
 
-    public void fightHackingStartInstructions() {
+    public void fightHackingInstructions() {
         final String[] fightGuide = new String[] {
-                "Now is my time to hack through it's firewall.",
-                "Press the button below to stream my data.",
-                "Try to aim inside the ring.",
-                "You can do it!"};
+                localize.get("tutFightHacking1"),
+                localize.get("tutFightHacking2"),
+                localize.get("tutFightHacking3"),
+                localize.get("tutFightHacking4")};
 
         final Dialog dialog = utilDialog.createInstructionsDialog
                 (fightGuide[fightHackingStartCounter]);
@@ -191,7 +191,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 fightHackingStartCounter++;
                 dialog.remove();
-                if (fightHackingStartCounter < fightGuide.length) fightHackingStartInstructions();
+                if (fightHackingStartCounter < fightGuide.length) fightHackingInstructions();
                 else {
                     fightHackingStartFinished = true;
                     game.setfirstPlayTimeFight(false);
@@ -201,9 +201,7 @@ public class FirstPlay {
     }
 
     private void inventoryInstructions() {
-        Label label = new Label("You have just bought your first item! " +
-                "When you want to use it, just select it from the inventory. " +
-                "Some items can only be used in a specific room.", finalSkin, "font42");
+        Label label = new Label(localize.get("tutInventory"), finalSkin, "font42");
         label.setWrap(true);
         label.setAlignment(1);
 
