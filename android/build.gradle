@@ -17,7 +17,7 @@ android {
         exclude 'META-INF/robovm/ios/robovm.xml'
     }
     defaultConfig {
-        applicationId "fi.tamk.fi"
+        applicationId "fi.phstudios.robotmayhem"
         minSdkVersion 9
         targetSdkVersion 27
         versionCode 1
@@ -86,7 +86,7 @@ task run(type: Exec) {
     }
 
     def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'fi.tamk.fi/fi.tamk.fi.AndroidLauncher'
+    commandLine "$adb", 'shell', 'am', 'start', '-n', 'fi.phstudios.robotmayhem/fi.phstudios.robotmayhem.AndroidLauncher'
 }
 
 // sets up the Android Eclipse project, using the old Ant based build.
