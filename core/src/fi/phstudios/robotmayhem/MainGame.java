@@ -4,10 +4,12 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -32,6 +34,7 @@ public class MainGame extends Game {
 	private I18NBundle localize;
 	private Encryptor E = new Encryptor();
 	private AssetHandler assetHandler;
+	private Texture splashScreen;
 	private Files files;
 	private Skills skills;
 	private Item items;
@@ -158,31 +161,50 @@ public class MainGame extends Game {
     private final int pool3HackShieldAmount = 15;
     private final int pool3InnerHackShieldAmount = 7;
 
-    private boolean resetting, pauseWalking;
+    private boolean pauseWalking, initialized;
 
-	@Override
+	/**
+	 * Initialize these values when the game starts.
+	 */
+    @Override
 	public void create () {
 		assetHandler = new AssetHandler();
-		files = new Files(assetHandler);
-		loadSettings();
-		createBundle();
-		// Create skills and bosses when the game launches
-		skills = new Skills(this);
-		bosses = new Bosses(this);
-		items = new Item();
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera(pixelWidth, pixelHeight);
 		fitViewport = new FitViewport(pixelWidth, pixelHeight, camera);
-		initStats();
-		loadStats();
-		checkDate();
+	}
+
+	/**
+	 * Initialize these values after files has been loaded.
+	 */
+	private void initAfterLoaded() {
+		initialized = true;
+		files = new Files(assetHandler);
+
+		// All the values below requires files to be initialized
+		skills = new Skills(this);
+		bosses = new Bosses(this);
+		items = new Item();
 
 		createSkinAndStage();
 		createProgressBarFiles();
 		createDialogConstants();
-
 		createHackFiles();
 
+		initAfterRestarting();
+	}
+
+	/**
+	 * Initialize these values after restarting the game, mainly used when changing language and
+	 * when resetting stats.
+	 */
+	public void initAfterRestarting() {
+		loadSettings();
+		createBundle();
+		initStats();
+		loadStats();
+		checkDate();
+		chooseNextMilestone();
 		// Switch to first room
 		switchToRoomGame();
 	}
@@ -190,8 +212,23 @@ public class MainGame extends Game {
 	@Override
 	public void render () {
 		super.render();
-		controlSaveTimer();
+		batch.setProjectionMatrix(camera.combined);
 		camera.update();
+		controlSaveTimer();
+		// If Asset Manager has finished loading, initialize game values and move to RoomGame
+		if (assetHandler.manager.update()) {
+			if (!initialized) initAfterLoaded();
+		} else {
+			// Display splash screen when loading files
+			AssetManager man = assetHandler.manager;
+			if (man.isLoaded(assetHandler.splashScreen)) {
+				if (splashScreen == null) splashScreen = man.get(assetHandler.splashScreen);
+				batch.begin();
+				batch.draw(splashScreen, 0, 0,
+						splashScreen.getWidth(), splashScreen.getHeight());
+				batch.end();
+			}
+		}
 	}
 
 	@Override
@@ -210,25 +247,16 @@ public class MainGame extends Game {
 		progBarAtlas.dispose();
 		progBarSkin.dispose();
 		assetHandler.manager.dispose();
-		if (resetting) resetting = false;
-		else {
-			saveStats();
-			saveSettings();
-		}
-	}
-
-	public void restartGame() {
-		dispose();
-		create();
+		saveStats();
+		saveSettings();
 	}
 
 	public void resetGame() {
-		resetting = true;
 		settings.clear();
 		settings.flush();
 		prefsStats.clear();
 		prefsStats.flush();
-		restartGame();
+		initAfterRestarting();
 	}
 
 	private void selectLoadedBossMusic() {
@@ -403,8 +431,6 @@ public class MainGame extends Game {
 	    progBarStyle = new ProgressBar.ProgressBarStyle();
 	    progBarStyle.knob = progBarSkin.getDrawable("tripmarker");
 	    progBarStyle.background = progBarSkin.getDrawable("tripmeter");
-
-	    chooseNextMilestone();
     }
 
     private void chooseNextMilestone() {
@@ -448,7 +474,7 @@ public class MainGame extends Game {
 		language = "fi";
 		saveSettings();
 		saveStats();
-		restartGame();
+		initAfterRestarting();
 	}
 
 	/**
@@ -461,7 +487,7 @@ public class MainGame extends Game {
 		language = "en";
 		saveSettings();
 		saveStats();
-		restartGame();
+		initAfterRestarting();
 	}
 
 	/**

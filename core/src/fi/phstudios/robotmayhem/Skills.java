@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 public class Skills {
 
+    private MainGame game;
     private Files files;
     private I18NBundle localize;
 
@@ -57,8 +58,8 @@ public class Skills {
     private HashMap<String,HashMap<String,Object>> mapSkills;
 
     Skills(MainGame game) {
+        this.game = game;
         files = game.getFiles();
-        localize = game.getLocalize();
 
         mapSkills = new HashMap<String, HashMap<String,Object>>();
         loadSkillAnimations();
@@ -120,6 +121,8 @@ public class Skills {
         HashMap<String, Object> skillMap = getSkill(skill);
 
         desc = (String) skillMap.get(description);
+        // Get current localize version
+        localize = game.getLocalize();
         desc = localize.get(desc);
 
         return desc;

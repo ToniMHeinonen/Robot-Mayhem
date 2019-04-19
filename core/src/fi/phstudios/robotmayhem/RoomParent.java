@@ -69,8 +69,6 @@ public class RoomParent implements Screen {
     @Override
     public void render(float delta) {
 
-        batch.setProjectionMatrix(camera.combined);
-
         if (game.haveWeChangedTheRoom) {
 
             transitionColor();

@@ -9,6 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public class AssetHandler {
     public final AssetManager manager = new AssetManager();
 
+    // Splash Screen
+    public final String splashScreen = "texture/splashScreen.png";
+
     // Player
     public final String playerIdle = "texture/player/player_idle.png";
     public final String playerAttack = "texture/player/player_attack.png";
@@ -36,14 +39,12 @@ public class AssetHandler {
     // Skills
 
     AssetHandler() {
-        loadAssets();
-        manager.finishLoading();
-    }
-
-    private void loadAssets() {
         /*
         Textures
          */
+        // Splash Screen
+        manager.load(splashScreen, Texture.class);
+
         // Player
         manager.load(playerIdle, Texture.class);
         manager.load(playerAttack, Texture.class);
