@@ -15,6 +15,7 @@ public class Item {
     public final String isSkill = "isSkill";
     public final String price = "price";
     public final String boostType = "boostType";
+    public final String isPermanent = "isPermanent";
 
     public final int NO_BOOST = 0, CRIT_BOOST = 1, MISS_BOOST = 2, DMG_BOOST = 3, ARMOR_BOOST = 4,
     HEAL_BOOST = 5;
@@ -91,6 +92,7 @@ public class Item {
         map.put(isSkill, false);
         map.put(boostType, NO_BOOST);
         map.put(price, 5);
+        map.put(isPermanent, false);
 
         allItems.add((String) map.get(name));
         mapItems.put((String) map.get(name), map);
@@ -105,6 +107,7 @@ public class Item {
         map.put(isSkill, false);
         map.put(boostType, NO_BOOST);
         map.put(price, 10);
+        map.put(isPermanent, false);
 
         allItems.add((String) map.get(name));
         mapItems.put((String) map.get(name), map);
@@ -119,6 +122,7 @@ public class Item {
         map.put(isSkill, false);
         map.put(boostType, NO_BOOST);
         map.put(price, 15);
+        map.put(isPermanent, false);
 
         allItems.add((String) map.get(name));
         mapItems.put((String) map.get(name), map);
@@ -136,6 +140,7 @@ public class Item {
             map.put(isSkill, false);
             map.put(boostType, CRIT_BOOST);
             map.put(price, basePrice * i);
+            map.put(isPermanent, false);
 
             allItems.add((String) map.get(name));
             mapItems.put((String) map.get(name), map);
@@ -154,6 +159,7 @@ public class Item {
             map.put(isSkill, false);
             map.put(boostType, MISS_BOOST);
             map.put(price, basePrice * i);
+            map.put(isPermanent, false);
 
             allItems.add((String) map.get(name));
             mapItems.put((String) map.get(name), map);
@@ -172,6 +178,7 @@ public class Item {
             map.put(isSkill, false);
             map.put(boostType, DMG_BOOST);
             map.put(price, basePrice * i);
+            map.put(isPermanent, false);
 
             allItems.add((String) map.get(name));
             mapItems.put((String) map.get(name), map);
@@ -190,6 +197,7 @@ public class Item {
             map.put(isSkill, false);
             map.put(boostType, ARMOR_BOOST);
             map.put(price, basePrice * i);
+            map.put(isPermanent, false);
 
             allItems.add((String) map.get(name));
             mapItems.put((String) map.get(name), map);
@@ -208,6 +216,7 @@ public class Item {
             map.put(isSkill, false);
             map.put(boostType, HEAL_BOOST);
             map.put(price, basePrice * i);
+            map.put(isPermanent, false);
 
             allItems.add((String) map.get(name));
             mapItems.put((String) map.get(name), map);
@@ -223,6 +232,7 @@ public class Item {
         map.put(isSkill, false);
         map.put(boostType, MISS_BOOST);
         map.put(price, expensive);
+        map.put(isPermanent, true);
 
         allItems.add((String) map.get(name));
         mapItems.put((String) map.get(name), map);
@@ -237,6 +247,7 @@ public class Item {
         map.put(isSkill, false);
         map.put(boostType, DMG_BOOST);
         map.put(price, expensive);
+        map.put(isPermanent, true);
 
         allItems.add((String) map.get(name));
         mapItems.put((String) map.get(name), map);
@@ -251,6 +262,7 @@ public class Item {
         map.put(isSkill, false);
         map.put(boostType, ARMOR_BOOST);
         map.put(price, expensive);
+        map.put(isPermanent, true);
 
         allItems.add((String) map.get(name));
         mapItems.put((String) map.get(name), map);
@@ -265,6 +277,7 @@ public class Item {
         map.put(isSkill, false);
         map.put(boostType, NO_BOOST);
         map.put(price, expensive);
+        map.put(isPermanent, true);
 
         allItems.add((String) map.get(name));
         mapItems.put((String) map.get(name), map);

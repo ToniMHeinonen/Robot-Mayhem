@@ -99,6 +99,8 @@ public class MainGame extends Game {
 
 	private String keyInventorySize = E.encrypt("inventorySize");
 	private String keyInventory = E.encrypt("inventory");
+	private String keyBoughtPermanent = E.encrypt("boughtPermanent");
+	private String keyBoughtPermanentSize = E.encrypt("boughtPermanentSize");
 	private String keyDefeatedBossesSize = E.encrypt("defeatedBossesSize");
 	private String keyDefeatedBosses = E.encrypt("defeatedBosses");
 	private String keyArrPlayedMusicSize = E.encrypt("arrPlayedMusicSize");
@@ -121,6 +123,8 @@ public class MainGame extends Game {
 	private int defeatedBossesSize;
 	private ArrayList<Integer> arrPlayedMusic;
 	private int arrPlayedMusicSize;
+	private ArrayList<String> boughtPermanent;
+	private int boughtPermanentSize;
 
 	// Stepmeter in RoomGame
     private BitmapFont fontSteps;
@@ -501,6 +505,7 @@ public class MainGame extends Game {
 		inventory = new ArrayList<String>();
 		defeatedBosses = new ArrayList<String>();
 		arrPlayedMusic = new ArrayList<Integer>();
+		boughtPermanent = new ArrayList<String>();
 		prefsStats = Gdx.app.getPreferences("Robot_Mayhem_Stats");
 		//prefsStats.clear(); // For testing purposes
 		//prefsStats.flush(); // Without flushing, clear does not work in Android
@@ -557,6 +562,11 @@ public class MainGame extends Game {
 		for (int i = 0; i < arrPlayedMusicSize; i++) {
 			arrPlayedMusic.add(i, stats.loadValue(keyArrPlayedMusic + String.valueOf(i), 0));
 		}
+		// Bought permanent items
+        boughtPermanentSize = stats.loadValue(keyBoughtPermanentSize, 0);
+		for (int i = 0; i < boughtPermanentSize; i++) {
+		    boughtPermanent.add(i, stats.loadValue(keyBoughtPermanent + String.valueOf(i), ""));
+        }
 		selectLoadedBossMusic();
 	}
 
@@ -608,6 +618,11 @@ public class MainGame extends Game {
 		for (int i = 0; i < arrPlayedMusic.size(); i++) {
 			stats.saveValue(keyArrPlayedMusic + String.valueOf(i), arrPlayedMusic.get(i));
 		}
+		// Bought permanent items
+        stats.saveValue(keyBoughtPermanentSize, boughtPermanent.size());
+		for (int i = 0; i < boughtPermanent.size(); i++) {
+		    stats.saveValue(keyBoughtPermanent + String.valueOf(i), boughtPermanent.get(i));
+        }
 
 		prefsStats.flush();
 	}
@@ -706,6 +721,11 @@ public class MainGame extends Game {
 
 		return contains;
 	}
+
+	public void addToBoughtPermanent(String name) {
+	    boughtPermanent.add(name);
+	    saveStats();
+    }
 
     private void createSkinAndStage() {
         stage = new Stage(fitViewport, batch);
@@ -1053,6 +1073,10 @@ public class MainGame extends Game {
 
     public ArrayList<String> getInventory() {
         return inventory;
+    }
+
+    public ArrayList<String> getBoughtPermanent() {
+	    return boughtPermanent;
     }
 
     public Skin getFinalSkin() {

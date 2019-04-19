@@ -51,6 +51,7 @@ public class UtilItem {
     private ArrayList<String> inventory;
     private int[] amounts;
     private String[] allSkills;
+    private ArrayList<String> boughtPermanent;
 
     private int buttonCounterBuyable;
     private int buttonCounterOwned;
@@ -90,6 +91,7 @@ public class UtilItem {
         files = game.getFiles();
         buyedItemsCounter = game.getBuyedItemsCounter();
         amounts = new int[allItems.length];
+        boughtPermanent = game.getBoughtPermanent();
 
         setValues();
         createItemDialog();
@@ -102,6 +104,7 @@ public class UtilItem {
         stage.addActor(dialogItems);
         System.out.println("Item-dialog opened from room: " + room);
         System.out.println("Inventory size: " + inventory.size());
+        System.out.println("BoughtpermanentSize " + boughtPermanent.size());
 
         if (game.isFirstPlayInventory() && buyedItemsCounter == 1) {
             FirstPlay firstPlay = new FirstPlay(game, "inventory", curRoom);
@@ -147,10 +150,11 @@ public class UtilItem {
             labelPrice.setAlignment(Align.right);
             tableBuyableItems.add(labelPrice).size(50, 75).row();
 
-            shopItems.addListener(new ClickListener(){
+            shopItems.addListener(new ClickListener() {
                 int i = buttonCounterBuyable;
+
                 @Override
-                public void clicked(InputEvent event, float x, float y){
+                public void clicked(InputEvent event, float x, float y) {
                     popupForBuyableItem(i);
                 }
             });
@@ -353,10 +357,15 @@ public class UtilItem {
             buttonBuy.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
+                    String boughtItem = allItems[index];
+                    String checkPermanent = String.valueOf(items.getItem(boughtItem).get(items.isPermanent));
                     game.playSound(files.sndPurchaseItem);
                     game.decreaseMoney(price);
                     game.addToInventory(allItems[index], false);
                     game.setBuyedItemsCounter(buyedItemsCounter += 1);
+                    if (checkPermanent.equals("true")) {
+                        game.addToBoughtPermanent(boughtItem);
+                    }
                     popupBuyableItem.remove();
                     dialogItems.remove();
                     UtilItem utilItem;
