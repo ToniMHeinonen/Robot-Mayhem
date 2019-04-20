@@ -1099,6 +1099,7 @@ public class RoomFight extends RoomParent {
             targetHp = hp;
             defaultDmg = defaultDamages[game.getPoolMult()];
             reflectingShield = game.isReflectiveShield();
+            if (reflectingShield) btnTexts[1] = skills.REFLECT;
             ifDead = State.DEAD;
             ID = PLAYER;
             attackName = "playerAttack";
@@ -1183,7 +1184,7 @@ public class RoomFight extends RoomParent {
 
                 actionState = TEMP_ANIM;
             }
-            else if (action.equals(skills.DEFEND))
+            else if (action.equals(skills.DEFEND) || action.equals(skills.REFLECT))
             {
                 if (cooldowns.get(skills.DEFEND) == 0) {
                     actionSelected = true;

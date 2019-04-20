@@ -22,14 +22,17 @@ public class Item {
     public final String BOMB = "BOMB";
     public final String POTION = "POTION";
     public final String DOUBLE_STEPS = "DOUBLE_STEPS";
+    public final String GLITTER_BOMB = "GLITTER_BOMB";
     public final String OVERCLOCK = "OVERCLOCK";
     public final String LONG_SCOPE = "LONG_SCOPE";
     public final String POWER_POTION = "POWER_POTION";
     public final String IRON_CASE = "IRON_CASE";
     public final String REPAIR_BOT = "REPAIR_BOT";
     public final String SUPER_VISION = "SUPER_VISION";
+    public final String EXPERIMENTAL = "EXPERIMENTAL";
     public final String HARDWARE = "HARDWARE";
     public final String DIAMOND_COAT = "DIAMOND_COAT";
+    public final String HEAL_COOLANT = "HEAL_COOLANT";
     public final String ITEM_REFLECT = "ITEM_REFLECT";
 
     private final int basePrice = 10;
@@ -55,14 +58,17 @@ public class Item {
         itemBomb();
         itemPotion();
         itemDoubleSteps();
+        //itemGlitterBomb();
         itemOverclock();
         itemLongScope();
         itemPowerPotion();
         itemIronCase();
         itemRepairBot();
         itemSuperVision();
+        itemExperimental();
         itemHardware();
         itemDiamondCoat();
+        itemHealCoolant();
         itemReflect();
     }
 
@@ -121,6 +127,21 @@ public class Item {
         map.put(isSkill, false);
         map.put(boostType, NO_BOOST);
         map.put(price, 15);
+        map.put(isPermanent, false);
+
+        allItems.add((String) map.get(name));
+        mapItems.put((String) map.get(name), map);
+    }
+
+    private void itemGlitterBomb() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, GLITTER_BOMB);
+        map.put(description, "glitterBombDesc");
+        map.put(value, 50.0);
+        map.put(usedInHall, false);
+        map.put(isSkill, false);
+        map.put(boostType, NO_BOOST);
+        map.put(price, 5);
         map.put(isPermanent, false);
 
         allItems.add((String) map.get(name));
@@ -237,6 +258,21 @@ public class Item {
         mapItems.put((String) map.get(name), map);
     }
 
+    private void itemExperimental() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, EXPERIMENTAL);
+        map.put(description, "experimentalDesc");
+        map.put(value, 10);
+        map.put(usedInHall, true);
+        map.put(isSkill, false);
+        map.put(boostType, CRIT_BOOST);
+        map.put(price, expensive);
+        map.put(isPermanent, true);
+
+        allItems.add((String) map.get(name));
+        mapItems.put((String) map.get(name), map);
+    }
+
     private void itemHardware() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, HARDWARE);
@@ -260,6 +296,21 @@ public class Item {
         map.put(usedInHall, true);
         map.put(isSkill, false);
         map.put(boostType, ARMOR_BOOST);
+        map.put(price, expensive);
+        map.put(isPermanent, true);
+
+        allItems.add((String) map.get(name));
+        mapItems.put((String) map.get(name), map);
+    }
+
+    private void itemHealCoolant() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, HEAL_COOLANT);
+        map.put(description, "healCoolantDesc");
+        map.put(value, 0.15);
+        map.put(usedInHall, true);
+        map.put(isSkill, false);
+        map.put(boostType, HEAL_BOOST);
         map.put(price, expensive);
         map.put(isPermanent, true);
 
