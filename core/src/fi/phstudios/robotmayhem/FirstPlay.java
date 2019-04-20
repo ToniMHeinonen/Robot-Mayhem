@@ -211,7 +211,7 @@ public class FirstPlay {
         label.setAlignment(1);
 
         final Dialog dialog = new Dialog("", finalSkin, "skilldescription");
-        dialog.getContentTable().add(label).prefWidth(760);
+        dialog.getContentTable().add(label).prefWidth(720);
         dialog.setPosition(game.pixelWidth/4, game.pixelHeight/4);
         dialog.setSize(800, 540);
         stage.addActor(dialog);
