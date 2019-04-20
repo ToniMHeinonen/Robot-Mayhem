@@ -158,12 +158,11 @@ public class Hacking {
     }
 
     private void createConstants() {
-        //this.pool = game.getPool();
-        //this.poolMult = game.getPoolMult();
+        this.pool = game.getPool();
+        this.poolMult = game.getPoolMult();
+        if (pool > 3) pool = 3;
 
         // Change these to test the effects of different pools/poolmultipliers.
-        pool = 1;
-        poolMult = 0;
         if (pool == 1) {
             shieldTexture = new Texture("texture/hacking/shield_medium.png");
         } else {
@@ -203,7 +202,7 @@ public class Hacking {
         FloatArray poolSizes = new FloatArray();
         poolSizes.add(0.5f, 0.3f, 0.3f);
 
-        float increasedSpeed = poolMult * 0.12f;
+        float increasedSpeed = poolMult * 0.8f;
 
         shieldSpeed = poolSpeeds.get(pool - 1) + increasedSpeed;
         shieldRadius = poolSizes.get(pool - 1);

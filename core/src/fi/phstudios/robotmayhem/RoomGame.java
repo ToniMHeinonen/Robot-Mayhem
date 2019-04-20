@@ -188,6 +188,9 @@ public class RoomGame extends RoomParent {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             game.simulateStep();
         }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.U)) {
+            game.bossDefeated();
+        }
 
         // Move every step
         if (curSteps != game.getStepCount()) {

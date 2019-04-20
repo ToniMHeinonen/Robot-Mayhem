@@ -48,6 +48,11 @@ public class Files {
     public final Animation<TextureRegion> a_pcIdle, a_pcAttack, a_pcDamage,
             a_pcStun;
 
+    // Fabio textures and animations
+    private final Texture t_fabioIdle, t_fabioAttack, t_fabioDamage, t_fabioStun;
+    public final Animation<TextureRegion> a_fabioIdle, a_fabioAttack, a_fabioDamage,
+            a_fabioStun;
+
     // Other textures
     public final Texture imgBgHall, imgBgBoss, imgTopBar, imgBottomBar, escapeBg, hpBarLeft,
             hpBarRight, powerUpBg, powerUpPopup, itemBg, retrieveStepsBg, dotArrowUp, dotArrowDown;
@@ -186,6 +191,15 @@ public class Files {
         a_pcAttack = createAnims.createAnimation(t_pcAttack, 4, 1);
         a_pcDamage = createAnims.createAnimation(t_pcDamage, 4, 1);
         a_pcStun = createAnims.createAnimation(t_pcStun, 4, 2);
+        // Fabio
+        t_fabioIdle = manager.get(asset.fabioIdle);
+        t_fabioAttack = manager.get(asset.fabioAttack);
+        t_fabioDamage = manager.get(asset.fabioDamage);
+        t_fabioStun = manager.get(asset.fabioStun);
+        a_fabioIdle = createAnims.createAnimation(t_fabioIdle, 4, 4);
+        a_fabioAttack = createAnims.createAnimation(t_fabioAttack, 4, 1);
+        a_fabioDamage = createAnims.createAnimation(t_fabioDamage, 4, 1);
+        a_fabioStun = createAnims.createAnimation(t_fabioStun, 4, 2);
 
         /*
         Skins

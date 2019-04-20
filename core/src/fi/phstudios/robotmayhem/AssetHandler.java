@@ -76,6 +76,10 @@ public class AssetHandler {
     public final String pcAttack = "texture/pc/pc_attack.png";
     public final String pcDamage = "texture/pc/pc_damage.png";
     public final String pcStun = "texture/pc/pc_stun.png";
+    public final String fabioIdle = "texture/player/player_idle.png"; // Change later
+    public final String fabioAttack = "texture/player/player_attack.png"; // Change later
+    public final String fabioDamage = "texture/player/player_damage.png"; // Change later
+    public final String fabioStun = "texture/player/player_stun.png"; // Change later
 
 
     AssetHandler() {
@@ -143,6 +147,10 @@ public class AssetHandler {
         manager.load(pcAttack, Texture.class);
         manager.load(pcDamage, Texture.class);
         manager.load(pcStun, Texture.class);
+        manager.load(fabioIdle, Texture.class);
+        manager.load(fabioAttack, Texture.class);
+        manager.load(fabioDamage, Texture.class);
+        manager.load(fabioStun, Texture.class);
 
         /*
         Skins

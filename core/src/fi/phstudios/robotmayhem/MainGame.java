@@ -365,7 +365,7 @@ public class MainGame extends Game {
 	    RoomFight room = new RoomFight(this);
 	    setScreen(room);
 	    curRoom = ROOM_FIGHT;
-	    stepCount /= 2;
+	    stepCount = progressBarMilestone / 2;
 	    stepCount = Math.round(stepCount);
     }
 
@@ -597,7 +597,7 @@ public class MainGame extends Game {
 		currentBoss = stats.loadValue(keyCurrentBoss, bosses.ROOMBOT);
 		// REMEMBER TO CHANGE THESE TO TRUE
 		firstPlayTime = stats.loadValue(keyFirstPlayTime, true);
-		firstPlayTimeFight = stats.loadValue(keyFirstPlayTimeFight, false);
+		firstPlayTimeFight = stats.loadValue(keyFirstPlayTimeFight, true);
 		firstPlayInventory = stats.loadValue(keyFirstPlayInventory, true);
 		firstPlayBank = stats.loadValue(keyFirstPlayBank, true);
 		pool = stats.loadValue(keyPool, 1);
@@ -736,15 +736,14 @@ public class MainGame extends Game {
 	}
 
 	public void bossDefeated() {
-		// defeatedBosses.add(currentBoss); Add when all the bosses exist
+		defeatedBosses.add(currentBoss);
 
 		stepCount = 0; // Reset step count
 		int extra = 0;
 		if (difficulty.equals(HARD)) extra = 5;
 		money += MathUtils.random(5 + extra, 10 + extra);
-		poolMult++;
 		fightsWon ++;
-		chooseNextMilestone();
+		poolMult++;
 
 		// Reset boost values
 		critBoost = 0;
@@ -756,17 +755,28 @@ public class MainGame extends Game {
 		currentBoss = bosses.selectRandomBoss(); // Randomize new boss
 		selectRandomBossMusic(); // Randomize new song
 
-		// Add when all the bosses exist
-		/*while (defeatedBosses.contains(currentBoss)) {
-			currentBoss = Bosses.selectRandomBoss();
-		}
 		// If all the bosses of the pool defeated, reset bosses, else add number++
-		if (poolMult < 8) poolMult++;
-		else {
+		if (poolMult < bosses.poolBossesSize) {
+			while (defeatedBosses.contains(currentBoss)) {
+				currentBoss = bosses.selectRandomBoss();
+			}
+		} else {
+			defeatedBosses.clear();
 			pool++;
 			poolMult = 0;
+			// If last pool, then Fabio remains
+			if (pool > 3) {
+				poolMult = bosses.poolBossesSize-1;
+				currentBoss=bosses.FABIO;
+			}
 		}
-		*/
+		// Add later code what happen after Fabio is defeated
+
+		chooseNextMilestone();
+
+		System.out.println(pool);
+		System.out.println(poolMult);
+		System.out.println(currentBoss);
 	}
 
 	public void addToInventory(String name, boolean isSkill) {
