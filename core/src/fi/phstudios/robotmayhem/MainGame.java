@@ -596,8 +596,8 @@ public class MainGame extends Game {
 		skill2 = stats.loadValue(keySkill2, "");
 		currentBoss = stats.loadValue(keyCurrentBoss, bosses.ROOMBOT);
 		// REMEMBER TO CHANGE THESE TO TRUE
-		firstPlayTime = stats.loadValue(keyFirstPlayTime, true);
-		firstPlayTimeFight = stats.loadValue(keyFirstPlayTimeFight, true);
+		firstPlayTime = stats.loadValue(keyFirstPlayTime, false);
+		firstPlayTimeFight = stats.loadValue(keyFirstPlayTimeFight, false);
 		firstPlayInventory = stats.loadValue(keyFirstPlayInventory, true);
 		firstPlayBank = stats.loadValue(keyFirstPlayBank, true);
 		pool = stats.loadValue(keyPool, 1);

@@ -439,15 +439,15 @@ public class RoomFight extends RoomParent {
         protected Animating critMissAnim = new Animating();
 
         protected int turnState, BEFORE = 0, TAKING_DOT = 1, START = 2, WAIT_FOR_ACTION = 3,
-                                DOING_ACTION = 4, END_ACTION = 5;
+                                DOING_ACTION = 4, END_TURN = 5;
         protected int actionState, TEMP_ANIM = 0, HIT_ANIM = 1, LONG_ANIM = 2, MISS_ANIM = 3,
-                        HEAL_ANIM = 4, DOT_ANIM = 5, DELAY_ANIM = 6, ITEM_ANIM = 7;
+                        HEAL_ANIM = 4, DOT_ANIM = 5, DELAY_ANIM = 6, ITEM_ANIM = 7, END_ACTION = 8;
         protected int skillState, SKILL_RESET = 0, SKILL_DAMAGE = 1, SKILL_HEAL = 2, SKILL_MISS = 3,
                         SKILL_DEFEND = 4, SKILL_ITEM = 5;
         protected boolean flashWhite, hitAnimationRunning, missCritAnimationRunning, dealDoT,
-                            dealCriticalHit;
-        protected int dealDoTTurns;
-        protected double dealDoTDamage;
+                            dealCriticalHit, dealBoost;
+        protected int dealDoTTurns, dealBoostType;
+        protected double dealDoTDamage, dealBoostValue;
         protected float flashTime = 0.25f;
         protected State ifDead;
         protected int ID, PLAYER = 0, ENEMY = 1;
@@ -491,7 +491,6 @@ public class RoomFight extends RoomParent {
             hpToTarget();
             checkToPause();
             anim.animate();
-            drawStatusArrow();
             if (hitAnim.getAnimation() != null) hitAnim.animate();
             if (critMissAnim.getAnimation() != null) critMissAnim.animate();
         }
@@ -517,10 +516,6 @@ public class RoomFight extends RoomParent {
             }
         }
 
-        protected void drawStatusArrow() {
-
-        }
-
         // Turn's agenda
         protected void controlTurnStates() {
             if (turnState == BEFORE) {
@@ -544,7 +539,7 @@ public class RoomFight extends RoomParent {
 
             } else if (turnState == DOING_ACTION) {
                 controlActionStates();
-            } else if (turnState == END_ACTION) {
+            } else if (turnState == END_TURN) {
                 if (!fightersTakingDamage()) {
                     opponent.startTurn();
                     opponent.checkIfAlive();
@@ -572,7 +567,7 @@ public class RoomFight extends RoomParent {
                         useItem();
                     } else {
                         // Else it's only DoT move
-                        turnState = END_ACTION;
+                        actionState = END_ACTION;
                     }
                     startIdle();
                 }
@@ -580,7 +575,7 @@ public class RoomFight extends RoomParent {
                 // Hit animation is drawn on top of enemy
                 if (!opponent.isHitAnimationRunning()) {
                     opponent.takeHit(dmgAmount);
-                    turnState = END_ACTION;
+                    actionState = END_ACTION;
                     game.playSound(files.sndMetallicHit);
                     if (dealCriticalHit) {
                         dealCriticalHit = false;
@@ -589,15 +584,15 @@ public class RoomFight extends RoomParent {
                 }
             } else if (actionState == LONG_ANIM) {
                 // Animation lasts until next round
-                turnState = END_ACTION;
+                actionState = END_ACTION;
             } else if (actionState == HEAL_ANIM) {
                 if (!isHitAnimationRunning()) {
-                    turnState = END_ACTION;
+                    actionState = END_ACTION;
                 }
             } else if (actionState == MISS_ANIM) {
                 // Miss animation is drawn on top of enemy
                 if (!opponent.isMissCritAnimationRunning()) {
-                    turnState = END_ACTION;
+                    actionState = END_ACTION;
                 }
             } else if (actionState == DOT_ANIM) {
                 if (!isHitAnimationRunning() && !opponent.isHitAnimationRunning()) {
@@ -605,14 +600,11 @@ public class RoomFight extends RoomParent {
                     Timer.schedule(new Timer.Task() {
                         @Override
                         public void run() {
-                            turnState = END_ACTION;
+                            actionState = END_ACTION;
                         }
                     }, 0.5f);
                 }
-            }
-
-            // If doing action has ended, but DoT was inflicted during turn, then do DoT animation
-            if (turnState == END_ACTION) {
+            } else if (actionState == END_ACTION) {
                 if (dealDoT) {
                     dealDoT = false;
                     turnState = DOING_ACTION;
@@ -624,9 +616,22 @@ public class RoomFight extends RoomParent {
                         addDoT(dealDoTTurns, dealDoTDamage); // Healing
                         startHitAnimation(dotPlus, animSpeed);
                     }
+                } else if (dealBoost) {
+                    dealBoost = false;
+                    turnState = DOING_ACTION;
+                    actionState = DOT_ANIM;
+                    if (dealBoostValue > 0) {
+                        inflictBoost(dealBoostType, dealBoostValue);
+                        startHitAnimation(dotPlus, animSpeed);
+                    } else {
+                        opponent.inflictBoost(dealBoostType, dealBoostValue);
+                        opponent.startHitAnimation(dotMinus, animSpeed);
+                    }
                 } else if (usedItem != null) {
                     usedItem = null;
                     turnState = WAIT_FOR_ACTION;
+                } else {
+                    turnState = END_TURN;
                 }
             }
         }
@@ -638,27 +643,27 @@ public class RoomFight extends RoomParent {
                 int amount = (Integer) item.get(items.value);
                 critBoost += amount;
                 game.addCritBoost(amount);
-                turnState = END_ACTION;
+                turnState = END_TURN;
             } else if (boost == items.MISS_BOOST) {
                 int amount = (Integer) item.get(items.value);
                 missBoost += amount;
                 game.addMissBoost(amount);
-                turnState = END_ACTION;
+                turnState = END_TURN;
             } else if (boost == items.DMG_BOOST) {
                 double amount = (Double) item.get(items.value);
                 dmgBoost += amount;
                 game.addDmgBoost(amount);
-                turnState = END_ACTION;
+                turnState = END_TURN;
             } else if (boost == items.ARMOR_BOOST) {
                 double amount = (Double) item.get(items.value);
                 armorBoost += amount;
                 game.addArmorBoost(amount);
-                turnState = END_ACTION;
+                turnState = END_TURN;
             } else if (boost == items.HEAL_BOOST) {
                 double amount = (Double) item.get(items.value);
                 healBoost += amount;
                 game.addHealBoost(amount);
-                turnState = END_ACTION;
+                turnState = END_TURN;
             } else if (usedItem == items.POTION) {
                 double amount = (Double) item.get(items.value);
                 amount += amount * healBoost;
@@ -749,8 +754,13 @@ public class RoomFight extends RoomParent {
             if (dealDoTDamage != 0) dealDoT = true;
         }
 
-        // If skill has DoT, it will be added here
+        /**
+         * If skill has DoT, it will be added here.
+         * @param turns how many turns the DoT lasts
+         * @param damage how much damage does the DoT deal
+         */
         protected void addDoT(int turns, double damage) {
+            // If defending, either do nothing or reflect DoT back, else take DoT
             if (skillState == SKILL_DEFEND) {
                 if (reflectingShield) {
                     opponent.addDoT(turns, damage);
@@ -763,6 +773,10 @@ public class RoomFight extends RoomParent {
             }
         }
 
+        /**
+         * Calculate next DoT to show the correct status arrow on health and to deal correct
+         * amount of DoT damage.
+         */
         protected void calculateNextDoT() {
             takeDoT = 0;
             for (int i = 0; i < dotTurns.size(); i++) {
@@ -782,7 +796,9 @@ public class RoomFight extends RoomParent {
             else dotArrow = ARROW_NONE;
         }
 
-        // Add all the DoTs on top of each other and decrease their turn timers
+        /**
+         * Add all the DoTs on top of each other and decrease their turn timers
+         */
         protected void inflictDoT() {
             calculateNextDoT();
 
@@ -811,7 +827,50 @@ public class RoomFight extends RoomParent {
                 turnState = START;
             }
 
+            // Calculate next DoT to show the correct status arrow on health
             calculateNextDoT();
+        }
+
+        /**
+         * Check if the skill has boost value, then updates instance variables.
+         * @param type the type of boost
+         * @param value the amount to boost
+         */
+        protected void checkToDealBoost(int type, double value) {
+            if (type != skills.BOOST_NONE) {
+                dealBoost = true;
+                dealBoostType = type;
+                dealBoostValue = value;
+            }
+        }
+
+        /**
+         * Once skill animations has ended, boost values will be inflicted.
+         * @param type which type of boost
+         * @param value the boost amount
+         */
+        protected void inflictBoost(int type, double value) {
+            // Value is positive
+            if (value > 0) {
+                if (type == skills.BOOST_CRIT) critBoost += value;
+                else if (type == skills.BOOST_MISS) missBoost += value;
+                else if (type == skills.BOOST_DMG) dmgBoost += value;
+                else if (type == skills.BOOST_ARMOR) armorBoost += value;
+                else if (type == skills.BOOST_HEAL) healBoost += value;
+            } else {
+                // If defending, either deal nothing or reflect it back
+                if (skillState == SKILL_DEFEND) {
+                    if (reflectingShield) {
+                        opponent.inflictBoost(type, value);
+                    } // else do nothing
+                } else {
+                    if (type == skills.BOOST_CRIT) critBoost -= value;
+                    else if (type == skills.BOOST_MISS) missBoost -= value;
+                    else if (type == skills.BOOST_DMG) dmgBoost -= value;
+                    else if (type == skills.BOOST_ARMOR) armorBoost -= value;
+                    else if (type == skills.BOOST_HEAL) healBoost -= value;
+                }
+            }
         }
 
         protected void changeToTakeHitAnimation() {
@@ -1189,6 +1248,9 @@ public class RoomFight extends RoomParent {
                             checkToDealDoT((Double) skillMap.get(skills.damageOverTime),
                                     (Integer) skillMap.get(skills.damageOverTimeTurns),
                                     (Boolean) skillMap.get(skills.dotPurePercent));
+
+                            checkToDealBoost((Integer) skillMap.get(skills.boostType),
+                                    (Double) skillMap.get(skills.boostValue));
                         }
 
                         actionState = TEMP_ANIM;
@@ -1319,10 +1381,10 @@ public class RoomFight extends RoomParent {
         private String dialogStart, dialogEnd;
         private HashMap<String,Object> mapBoss;
 
-        private double[] damages, damageOverTimes;
+        private double[] damages, damageOverTimes, boostValues;
         private ArrayList<Animation<TextureRegion>> hitAnimList;
         private String[] skillNames;
-        private int[] critChances, missChances, cooldownAmount, damageOverTimeTurns;
+        private int[] critChances, missChances, cooldownAmount, damageOverTimeTurns, boostTypes;
         private boolean[] dmgPurePercents, dotPurePercents;
         private Sound[] sounds;
         private int showFirstDialogTimer = 60;
@@ -1391,6 +1453,8 @@ public class RoomFight extends RoomParent {
             damageOverTimeTurns = new int[3];
             dotPurePercents = new boolean[3];
             sounds = new Sound[3];
+            boostTypes = new int[3];
+            boostValues = new double[3];
 
             for (int i = 0; i < 3; i++) {
                 // Retrieve skill's name from boss and add it to the array
@@ -1440,6 +1504,13 @@ public class RoomFight extends RoomParent {
                 // Retrieve sound effect
                 Sound snd = (Sound) mapSkill.get(skills.sound);
                 sounds[i] = snd;
+
+                // Retrieve Boost type and value
+                int bstType = (Integer) mapSkill.get(skills.boostType);
+                boostTypes[i] = bstType;
+                double bstVal = (Double) mapSkill.get(skills.boostValue);
+                boostValues[i] = bstVal;
+
             }
 
             // Retrieve boss's size
@@ -1525,6 +1596,8 @@ public class RoomFight extends RoomParent {
 
                     checkToDealDoT(damageOverTimes[random], damageOverTimeTurns[random],
                             dotPurePercents[random]);
+
+                    checkToDealBoost(boostTypes[random], boostValues[random]);
                 }
 
                 curAnimation = skillAnim;

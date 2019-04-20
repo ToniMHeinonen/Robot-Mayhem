@@ -26,6 +26,12 @@ public class Skills {
     public final String hitAnimation = "hitAnimation";
     public final String sound = "sound";
     public final String button = "button";
+    public final String boostType = "boostType";
+    public final String boostValue = "boostValue";
+
+    // Notice 5% on miss and crit is 5 and in every other boost 0.05
+    public final int BOOST_NONE = 0, BOOST_CRIT = 1, BOOST_MISS = 2, BOOST_DMG = 3, BOOST_ARMOR = 4,
+    BOOST_HEAL = 5;
 
     // Names for localization
     public final String ATTACK = "ATTACK";
@@ -148,6 +154,8 @@ public class Skills {
         map.put(hitAnimation, physicalHit);
         map.put(sound, null);
         map.put(button, btnAttack);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
 
         allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
@@ -168,6 +176,8 @@ public class Skills {
         map.put(hitAnimation, null);
         map.put(sound, null);
         map.put(button, btnDefend);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
 
         allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
@@ -188,6 +198,8 @@ public class Skills {
         map.put(hitAnimation, null);
         map.put(sound, null);
         map.put(button, btnDefend);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
 
         allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
@@ -208,6 +220,8 @@ public class Skills {
         map.put(hitAnimation, null);
         map.put(sound, null);
         map.put(button, btnItem);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
 
         allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
@@ -228,6 +242,8 @@ public class Skills {
         map.put(hitAnimation, null);
         map.put(sound, null);
         map.put(button, btnHeal);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
 
         allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
@@ -248,6 +264,8 @@ public class Skills {
         map.put(hitAnimation, skillHit);
         map.put(sound, null);
         map.put(button, btnSkill);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
 
         allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
@@ -268,6 +286,8 @@ public class Skills {
         map.put(hitAnimation, null);
         map.put(sound, null);
         map.put(button, btnSkill);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
 
         allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
@@ -288,6 +308,8 @@ public class Skills {
         map.put(hitAnimation, skillHit);
         map.put(sound, files.sndSuction);
         map.put(button, btnSkill);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
 
         allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
@@ -308,6 +330,8 @@ public class Skills {
         map.put(hitAnimation, null);
         map.put(sound, files.sndDustThrow);
         map.put(button, btnSkill);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
 
         allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
@@ -328,6 +352,8 @@ public class Skills {
         map.put(hitAnimation, skillHit);
         map.put(sound, null);
         map.put(button, btnSkill);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
 
         allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
@@ -348,6 +374,8 @@ public class Skills {
         map.put(hitAnimation, skillHit);
         map.put(sound, null);
         map.put(button, btnSkill);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
 
         allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
@@ -368,6 +396,8 @@ public class Skills {
         map.put(hitAnimation, null);
         map.put(sound, null);
         map.put(button, btnHeal);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
 
         allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
