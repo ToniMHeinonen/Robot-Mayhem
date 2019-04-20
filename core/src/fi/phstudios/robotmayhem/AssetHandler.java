@@ -56,6 +56,26 @@ public class AssetHandler {
     public final String statusPositive = "texture/status_positive.png";
 
     // Bosses
+    public final String roombotIdle = "texture/roombot/roombot_idle.png";
+    public final String roombotAttack = "texture/roombot/roombot_attack.png";
+    public final String roombotDamage = "texture/roombot/roombot_damage.png";
+    public final String roombotStun = "texture/roombot/roombot_stun.png";
+    public final String robberIdle = "texture/robber/robber_idle.png";
+    public final String robberAttack = "texture/robber/robber_attack.png";
+    public final String robberDamage = "texture/robber/robber_damage.png";
+    public final String robberStun = "texture/robber/robber_stun.png";
+    public final String copperIdle = "texture/copper/copper_idle.png";
+    public final String copperAttack = "texture/copper/copper_attack.png";
+    public final String copperDamage = "texture/copper/copper_damage.png";
+    public final String copperStun = "texture/copper/copper_stun.png";
+    public final String copierIdle = "texture/copier/copier_idle.png";
+    public final String copierAttack = "texture/copier/copier_attack.png";
+    public final String copierDamage = "texture/copier/copier_damage.png";
+    public final String copierStun = "texture/copier/copier_stun.png";
+    public final String pcIdle = "texture/pc/pc_idle.png";
+    public final String pcAttack = "texture/pc/pc_attack.png";
+    public final String pcDamage = "texture/pc/pc_damage.png";
+    public final String pcStun = "texture/pc/pc_stun.png";
 
 
     AssetHandler() {
@@ -103,26 +123,26 @@ public class AssetHandler {
         manager.load(statusNegative, Texture.class);
         manager.load(statusPositive, Texture.class);
         // Bosses
-        manager.load("texture/roombot/roombot_idle.png", Texture.class);
-        manager.load("texture/roombot/roombot_attack.png", Texture.class);
-        manager.load("texture/roombot/roombot_damage.png", Texture.class);
-        manager.load("texture/roombot/roombot_stun.png", Texture.class);
-        manager.load("texture/robber/robber_idle.png", Texture.class);
-        manager.load("texture/robber/robber_attack.png", Texture.class);
-        manager.load("texture/robber/robber_damage.png", Texture.class);
-        manager.load("texture/robber/robber_stun.png", Texture.class);
-        manager.load("texture/copper/copper_idle.png", Texture.class);
-        manager.load("texture/copper/copper_attack.png", Texture.class);
-        manager.load("texture/copper/copper_damage.png", Texture.class);
-        manager.load("texture/copper/copper_stun.png", Texture.class);
-        manager.load("texture/copier/copier_idle.png", Texture.class);
-        manager.load("texture/copier/copier_attack.png", Texture.class);
-        manager.load("texture/copier/copier_damage.png", Texture.class);
-        manager.load("texture/copier/copier_stun.png", Texture.class);
-        manager.load("texture/pc/pc_idle.png", Texture.class);
-        manager.load("texture/pc/pc_attack.png", Texture.class);
-        manager.load("texture/pc/pc_damage.png", Texture.class);
-        manager.load("texture/pc/pc_stun.png", Texture.class);
+        manager.load(roombotIdle, Texture.class);
+        manager.load(roombotAttack, Texture.class);
+        manager.load(roombotDamage, Texture.class);
+        manager.load(roombotStun, Texture.class);
+        manager.load(robberIdle, Texture.class);
+        manager.load(robberAttack, Texture.class);
+        manager.load(robberDamage, Texture.class);
+        manager.load(robberStun, Texture.class);
+        manager.load(copperIdle, Texture.class);
+        manager.load(copperAttack, Texture.class);
+        manager.load(copperDamage, Texture.class);
+        manager.load(copperStun, Texture.class);
+        manager.load(copierIdle, Texture.class);
+        manager.load(copierAttack, Texture.class);
+        manager.load(copierDamage, Texture.class);
+        manager.load(copierStun, Texture.class);
+        manager.load(pcIdle, Texture.class);
+        manager.load(pcAttack, Texture.class);
+        manager.load(pcDamage, Texture.class);
+        manager.load(pcStun, Texture.class);
 
         /*
         Skins

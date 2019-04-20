@@ -142,46 +142,46 @@ public class Files {
         Bosses Textures and animations
          */
         // Roombot
-        t_roombotIdle = manager.get("texture/roombot/roombot_idle.png");
-        t_roombotAttack = manager.get("texture/roombot/roombot_attack.png");
-        t_roombotDamage = manager.get("texture/roombot/roombot_damage.png");
-        t_roombotStun = manager.get("texture/roombot/roombot_stun.png");
+        t_roombotIdle = manager.get(asset.roombotIdle);
+        t_roombotAttack = manager.get(asset.roombotAttack);
+        t_roombotDamage = manager.get(asset.roombotDamage);
+        t_roombotStun = manager.get(asset.roombotStun);
         a_roombotIdle = createAnims.createAnimation(t_roombotIdle, 4, 4);
         a_roombotAttack = createAnims.createAnimation(t_roombotAttack, 4, 1);
         a_roombotDamage = createAnims.createAnimation(t_roombotDamage, 4, 1);
         a_roombotStun = createAnims.createAnimation(t_roombotStun, 4, 2);
         // Robber
-        t_robberIdle = manager.get("texture/robber/robber_idle.png");
-        t_robberAttack = manager.get("texture/robber/robber_attack.png");
-        t_robberDamage = manager.get("texture/robber/robber_damage.png");
-        t_robberStun = manager.get("texture/robber/robber_stun.png");
+        t_robberIdle = manager.get(asset.robberIdle);
+        t_robberAttack = manager.get(asset.robberAttack);
+        t_robberDamage = manager.get(asset.robberDamage);
+        t_robberStun = manager.get(asset.robberStun);
         a_robberIdle = createAnims.createAnimation(t_robberIdle, 4, 4);
         a_robberAttack = createAnims.createAnimation(t_robberAttack, 4, 1);
         a_robberDamage = createAnims.createAnimation(t_robberDamage, 4, 1);
         a_robberStun = createAnims.createAnimation(t_robberStun, 4, 2);
         // Copper
-        t_copperIdle = manager.get("texture/copper/copper_idle.png");
-        t_copperAttack = manager.get("texture/copper/copper_attack.png");
-        t_copperDamage = manager.get("texture/copper/copper_damage.png");
-        t_copperStun = manager.get("texture/copper/copper_stun.png");
+        t_copperIdle = manager.get(asset.copperIdle);
+        t_copperAttack = manager.get(asset.copperAttack);
+        t_copperDamage = manager.get(asset.copperDamage);
+        t_copperStun = manager.get(asset.copperStun);
         a_copperIdle = createAnims.createAnimation(t_copperIdle, 4, 4);
         a_copperAttack = createAnims.createAnimation(t_copperAttack, 4, 1);
         a_copperDamage = createAnims.createAnimation(t_copperDamage, 4, 1);
         a_copperStun = createAnims.createAnimation(t_copperStun, 4, 2);
         // Copier
-        t_copierIdle = manager.get("texture/copier/copier_idle.png");
-        t_copierAttack = manager.get("texture/copier/copier_attack.png");
-        t_copierDamage = manager.get("texture/copier/copier_damage.png");
-        t_copierStun = manager.get("texture/copier/copier_stun.png");
+        t_copierIdle = manager.get(asset.copierIdle);
+        t_copierAttack = manager.get(asset.copierAttack);
+        t_copierDamage = manager.get(asset.copierDamage);
+        t_copierStun = manager.get(asset.copierStun);
         a_copierIdle = createAnims.createAnimation(t_copierIdle, 4, 4);
         a_copierAttack = createAnims.createAnimation(t_copierAttack, 4, 1);
         a_copierDamage = createAnims.createAnimation(t_copierDamage, 4, 1);
         a_copierStun = createAnims.createAnimation(t_copierStun, 4, 2);
         // PC
-        t_pcIdle = manager.get("texture/pc/pc_idle.png");
-        t_pcAttack = manager.get("texture/pc/pc_attack.png");
-        t_pcDamage = manager.get("texture/pc/pc_damage.png");
-        t_pcStun = manager.get("texture/pc/pc_stun.png");
+        t_pcIdle = manager.get(asset.pcIdle);
+        t_pcAttack = manager.get(asset.pcAttack);
+        t_pcDamage = manager.get(asset.pcDamage);
+        t_pcStun = manager.get(asset.pcStun);
         a_pcIdle = createAnims.createAnimation(t_pcIdle, 4, 4);
         a_pcAttack = createAnims.createAnimation(t_pcAttack, 4, 1);
         a_pcDamage = createAnims.createAnimation(t_pcDamage, 4, 1);

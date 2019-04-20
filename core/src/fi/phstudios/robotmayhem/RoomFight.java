@@ -1326,6 +1326,7 @@ public class RoomFight extends RoomParent {
         private boolean[] dmgPurePercents, dotPurePercents;
         private Sound[] sounds;
         private int showFirstDialogTimer = 60;
+        private float dialogY;
 
         Enemy() {
             retrieveBoss();
@@ -1454,6 +1455,8 @@ public class RoomFight extends RoomParent {
             // Retrieve dialog start and end from Boss
             dialogStart = localize.get((String) mapBoss.get(bosses.dialogStart));
             dialogEnd = localize.get((String) mapBoss.get(bosses.dialogEnd));
+            if (normalSize) dialogY = 430;
+            else dialogY = 300;
         }
 
         // Select skill
@@ -1535,7 +1538,7 @@ public class RoomFight extends RoomParent {
                 if (showFirstDialogTimer > 0) showFirstDialogTimer--;
                 else {
                     state = State.DIALOG_START;
-                    dialog.createDialog(dialogStart, "dialog_enemy", 430);
+                    dialog.createDialog(dialogStart, "dialog_enemy", dialogY);
                 }
             }
         }
@@ -1548,7 +1551,7 @@ public class RoomFight extends RoomParent {
                 public void run() {
                     startIdle();
                     state = State.DIALOG_END;
-                    dialog.createDialog(dialogEnd, "dialog_enemy", 430);
+                    dialog.createDialog(dialogEnd, "dialog_enemy", dialogY);
                 }
             }, 2);
         }

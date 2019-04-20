@@ -169,7 +169,7 @@ public class Bosses {
     private void bossPC() {
         curName = PC;
         curAttackName = "pcAttackName";
-        curNormalSize = true;
+        curNormalSize = false;
         curSkillName0 = skills.ATTACK;
         curSkillName1 = skills.ELECTRIFY;
         curSkillName2 = skills.MISSILE;
