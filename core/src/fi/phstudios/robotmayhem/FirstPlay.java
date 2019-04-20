@@ -25,7 +25,7 @@ public class FirstPlay {
     private Dialog whoAmI;
     // Olli notice: int default value is 0, it does not have to be declared
     private int hallCounter, fightStartCounter, fightAfterHitCounter, fightActionCounter,
-            fightHackingStartCounter;
+            fightHackingStartCounter, inventoryCounter;
 
     FirstPlay(final MainGame game, String room, RoomParent curRoom) {
         this.game = game;
@@ -201,7 +201,12 @@ public class FirstPlay {
     }
 
     private void inventoryInstructions() {
-        Label label = new Label(localize.get("tutInventory"), finalSkin, "font42");
+        final String[] fightGuide = new String[] {
+                localize.get("tutInventory1"),
+                localize.get("tutInventory2"),
+                localize.get("tutInventory3"),
+                localize.get("tutInventory4")};
+        Label label = new Label(fightGuide[inventoryCounter], finalSkin, "font46");
         label.setWrap(true);
         label.setAlignment(1);
 
@@ -211,12 +216,13 @@ public class FirstPlay {
         dialog.setSize(800, 540);
         stage.addActor(dialog);
 
-        game.setFirstPlayInventory(false);
-
         dialog.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
+                inventoryCounter++;
                 dialog.remove();
+                if (inventoryCounter < fightGuide.length) inventoryInstructions();
+                else game.setFirstPlayInventory(false);
             }
         });
     }

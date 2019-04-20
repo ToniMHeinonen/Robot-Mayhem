@@ -54,7 +54,7 @@ public class MainGame extends Game {
 	private Skin finalSkin;
 
 	// Pools and tiers
-	private int[] poolMilestones = new int[] {0, 150, 300, 450, 600};
+	private int[] poolMilestones = new int[] {20, 100, 250, 500, 1000, 1500};
 
 	// Settings
 	// Keys
@@ -474,11 +474,13 @@ public class MainGame extends Game {
 
     private void chooseNextMilestone() {
         // If it's the first boss, make milestone 20
-        if (pool == 1 && poolMult == 0) progressBarMilestone = 20;
-        else progressBarMilestone = poolMilestones[pool] / 3;
+		if (pool == 1) progressBarMilestone = poolMilestones[poolMult];
+		else if (pool == 2) progressBarMilestone = 2000;
+		else if (pool == 3) progressBarMilestone = 3000;
+		else if (pool == 4) progressBarMilestone = 4000;
         if (difficulty.equals(EASY)) progressBarMilestone *= 0.5;
         else if (difficulty.equals(MEDIUM)) progressBarMilestone *= 1;
-		else if (difficulty.equals(HARD)) progressBarMilestone *= 1.25;
+		else if (difficulty.equals(HARD)) progressBarMilestone *= 1.5;
     }
 
     public void changeDifficulty(String dif) {
