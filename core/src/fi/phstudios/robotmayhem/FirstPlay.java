@@ -19,15 +19,15 @@ public class FirstPlay {
     private I18NBundle localize;
     private UtilDialog utilDialog;
     private String name;
-    private boolean firstPlayTime, firstPlayTimeFight, fightStartFinished, fightAfterHitFinished,
-            fightActionFinished, fightHackingStartFinished, firstPlayInventory;
+    private boolean fightStartFinished, fightAfterHitFinished, fightActionFinished,
+            fightHackingStartFinished;
 
     private Dialog whoAmI;
     // Olli notice: int default value is 0, it does not have to be declared
     private int hallCounter, fightStartCounter, fightAfterHitCounter, fightActionCounter,
-            fightHackingStartCounter, inventoryCounter;
+            fightHackingStartCounter, inventoryCounter, bankCounter;
 
-    FirstPlay(final MainGame game, String room, RoomParent curRoom) {
+    FirstPlay(final MainGame game, String tutorial, RoomParent curRoom) {
         this.game = game;
         this.curRoom = curRoom;
         stage = game.getStage();
@@ -35,34 +35,36 @@ public class FirstPlay {
         localize = game.getLocalize();
         utilDialog = game.getDialog();
         name = game.getPlayerName();
-        firstPlayTime = game.isFirstPlayTime();
-        firstPlayTimeFight = game.isFirstPlayTimeFight();
-        firstPlayInventory = game.isFirstPlayInventory();
 
-        if (firstPlayTime && room.equals("hall")) {
+        if (tutorial.equals("firstPlay")) {
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
                     hallInstructionsName();
                 }
             }, 1);
-        }
-        if (firstPlayTimeFight && room.equals("fight")) {
+        } else if (tutorial.equals("fight")) {
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
                     fightStartInstructions();
                 }
             }, 1);
-        }
-        if (firstPlayInventory && room.equals("inventory")) {
+        } else if (tutorial.equals("inventory")) {
             inventoryInstructions();
+        } else if (tutorial.equals("bank")) {
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    bankInstructions();
+                }
+            }, 0.5f);
         }
 
     }
 
     private void hallInstructionsName() {
-        whoAmI = utilDialog.createInstructionsDialog("Who am I...");
+        whoAmI = utilDialog.createInstructionsDialog(localize.get("tutFirstPlay1"));
         stage.addActor(whoAmI);
 
         final Input.TextInputListener textInputListener = new Input.TextInputListener() {
@@ -91,10 +93,12 @@ public class FirstPlay {
 
     private void hallAllInstructions() {
         final String[] hallGuide = new String[] {
-                "Welcome to Robot Mayhem, " + name + "!",
-                "First text",
-                "Second text",
-                "Third text"};
+                localize.format("tutFirstPlay2") + " " + name + "!",
+                localize.get("tutFirstPlay3"),
+                localize.get("tutFirstPlay4"),
+                localize.get("tutFirstPlay5"),
+                localize.get("tutFirstPlay6"),
+                localize.get("tutFirstPlay7")};
 
         final Dialog dialog = utilDialog.createInstructionsDialog(hallGuide[hallCounter]);
         stage.addActor(dialog);
@@ -223,6 +227,30 @@ public class FirstPlay {
                 dialog.remove();
                 if (inventoryCounter < fightGuide.length) inventoryInstructions();
                 else game.setFirstPlayInventory(false);
+            }
+        });
+    }
+
+    private void bankInstructions() {
+        final String[] fightGuide = new String[] {
+                localize.get("tutBank1"),
+                localize.get("tutBank2"),
+                localize.get("tutBank3"),
+                localize.get("tutBank4"),
+                localize.get("tutBank5"),};
+
+        final Dialog dialog = utilDialog.createInstructionsDialog(fightGuide[bankCounter]);
+        stage.addActor(dialog);
+
+        dialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                bankCounter++;
+                dialog.remove();
+                if (bankCounter < fightGuide.length) bankInstructions();
+                else {
+                    game.setFirstPlayBank(false);
+                }
             }
         });
     }

@@ -44,7 +44,7 @@ public class RoomGame extends RoomParent {
         //createButtonFight(); // For playtesting
 
         if (game.isFirstPlayTime()) {
-            FirstPlay firstPlay = new FirstPlay(game, "hall", thisRoom);
+            FirstPlay firstPlay = new FirstPlay(game, "firstPlay", thisRoom);
         }
     }
 
@@ -62,7 +62,7 @@ public class RoomGame extends RoomParent {
             drawTopAndBottomBar();
             drawSteps();
             player.update();
-            retrieveBankSteps();
+            if (!game.isFirstPlayBank()) retrieveBankSteps();
             progressBar.setValue(curSteps); // Control progress bar
             checkToChangeRoom();
             batch.end();
@@ -73,6 +73,7 @@ public class RoomGame extends RoomParent {
 
     private void checkToPause() {
         if (game.isFirstPlayTime()) game.setPauseWalking(true);
+        else if(game.isFirstPlayBank() && retrievingSteps) game.setPauseWalking(true);
         else game.setPauseWalking(false);
     }
 
@@ -104,6 +105,9 @@ public class RoomGame extends RoomParent {
     private void calculateBankSpeed() {
         if (!retrievingSteps && game.getStepBank() > 0 &&
                 progressBar.getValue() < progressBar.getMaxValue()) {
+            if (game.isFirstPlayBank()) {
+                FirstPlay bank = new FirstPlay(game, "bank", this);
+            }
             retrievingSteps = true;
             game.setStepBank(Math.round(game.getStepBank()));
             bankRetrieved = game.getStepCount();
@@ -138,11 +142,12 @@ public class RoomGame extends RoomParent {
                 }
 
                 // Draw on screen retrieving steps from bank
-                batch.draw(files.retrieveStepsBg, game.gridSize * 6.5f, game.pixelHeight/6);
+                batch.draw(files.retrieveStepsBg, game.gridSize * 6.5f,
+                        game.pixelHeight/2 - files.retrieveStepsBg.getHeight()/2);
                 int ceiledBank = (int) Math.ceil(game.getStepBank());
                 finalSkin.getFont("font-average").draw(batch,
                         localize.get("retrievingSteps") + " " +String.valueOf(ceiledBank),
-                        game.gridSize * 7, game.pixelHeight/2);
+                        game.gridSize * 8.5f, game.pixelHeight/2 + 100);
             } else retrievingSteps = false;
         }else retrievingSteps = false;
     }

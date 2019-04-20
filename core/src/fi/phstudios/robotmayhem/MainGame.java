@@ -82,6 +82,7 @@ public class MainGame extends Game {
 	private String keyFirstPlayTime = E.encrypt("firstPlayTime");
 	private String keyFirstPlayTimeFight = E.encrypt("firstPlayTimeFight");
 	private String keyFirstPlayInventory = E.encrypt("firstPlayInventory");
+	private String keyFirstPlayBank = E.encrypt("firstPlayBank");
 	private String keyPool = E.encrypt("pool");
 	private String keyPoolMult = E.encrypt("poolMult");
 	private String keyBuyedItemsCounter = E.encrypt("buyedItemsCounter");
@@ -117,7 +118,8 @@ public class MainGame extends Game {
 	private float stepCount, stepBank, stepAllCount;
 	private int pool, poolMult, money, fightsWon, prevDayGift, buyedItemsCounter;
 	private String skill1, skill2, currentBoss, playerName;
-	private boolean firstPlayTime, firstPlayTimeFight, firstPlayInventory, reflectiveShield;
+	private boolean firstPlayTime, firstPlayTimeFight, firstPlayInventory, firstPlayBank,
+			reflectiveShield;
 	private int critBoost, missBoost, permaCritBoost, permaMissBoost;
 	private float armorBoost, dmgBoost, healBoost, permaArmorBoost, permaDmgBoost, permaHealBoost;
 	// Stat arrays
@@ -594,9 +596,10 @@ public class MainGame extends Game {
 		skill2 = stats.loadValue(keySkill2, "");
 		currentBoss = stats.loadValue(keyCurrentBoss, bosses.ROOMBOT);
 		// REMEMBER TO CHANGE THESE TO TRUE
-		firstPlayTime = stats.loadValue(keyFirstPlayTime, false);
+		firstPlayTime = stats.loadValue(keyFirstPlayTime, true);
 		firstPlayTimeFight = stats.loadValue(keyFirstPlayTimeFight, false);
 		firstPlayInventory = stats.loadValue(keyFirstPlayInventory, true);
+		firstPlayBank = stats.loadValue(keyFirstPlayBank, true);
 		pool = stats.loadValue(keyPool, 1);
 		poolMult = stats.loadValue(keyPoolMult, 0);
 		playerName = stats.loadValue(keyName, "");
@@ -653,6 +656,7 @@ public class MainGame extends Game {
 		stats.saveValue(keyFirstPlayTime, firstPlayTime);
 		stats.saveValue(keyFirstPlayTimeFight, firstPlayTimeFight);
 		stats.saveValue(keyFirstPlayInventory, firstPlayInventory);
+		stats.saveValue(keyFirstPlayBank, firstPlayBank);
 		stats.saveValue(keyPool, pool);
 		stats.saveValue(keyPoolMult, poolMult);
 		stats.saveValue(keyName, playerName);
@@ -1011,6 +1015,14 @@ public class MainGame extends Game {
     public boolean isFirstPlayInventory() {
 	    return firstPlayInventory;
     }
+
+	public boolean isFirstPlayBank() {
+		return firstPlayBank;
+	}
+
+	public void setFirstPlayBank(boolean firstPlayBank) {
+		this.firstPlayBank = firstPlayBank;
+	}
 
 	public TextureAtlas getTestButtonAtlas() {
 		return testButtonAtlas;
