@@ -147,6 +147,14 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
 		up: button_money
 		down: button_money_clicked
 	}
+	ach_steps: {
+		up: unlock
+		down: unlock
+	}
+	ach_steps_locked: {
+		up: lock
+		down: lock
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	default: {
