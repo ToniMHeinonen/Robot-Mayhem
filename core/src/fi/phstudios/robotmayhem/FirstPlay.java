@@ -20,7 +20,7 @@ public class FirstPlay {
     private UtilDialog utilDialog;
     private String name;
     private boolean fightStartFinished, fightAfterHitFinished, fightActionFinished,
-            fightHackingStartFinished;
+            fightHackingFinished, fightPowerupFinished;
 
     private Dialog whoAmI;
     // Olli notice: int default value is 0, it does not have to be declared
@@ -230,7 +230,32 @@ public class FirstPlay {
                 dialog.remove();
                 if (diaCounter < texts.length) fightHackingInstructions();
                 else {
-                    fightHackingStartFinished = true;
+                    fightHackingFinished = true;
+                    diaCounter = 0;
+                }
+            }
+        });
+    }
+
+    public void fightPowerupInstructions() {
+        final String[] texts = new String[] {
+                localize.get("tutFightPowerUp1"),
+                localize.get("tutFightPowerUp2"),
+                localize.get("tutFightPowerUp3"),
+                localize.get("tutFightPowerUp4")};
+
+        final Dialog dialog = utilDialog.createInstructionsDialog
+                (texts[diaCounter]);
+        stage.addActor(dialog);
+
+        dialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                diaCounter++;
+                dialog.remove();
+                if (diaCounter < texts.length) fightPowerupInstructions();
+                else {
+                    fightPowerupFinished = true;
                     game.setfirstPlayTimeFight(false);
                     diaCounter = 0;
                 }
@@ -395,7 +420,11 @@ public class FirstPlay {
         return fightActionFinished;
     }
 
-    public boolean isFightHackingStartFinished() {
-        return fightHackingStartFinished;
+    public boolean isFightHackingFinished() {
+        return fightHackingFinished;
+    }
+
+    public boolean isFightPowerupFinished() {
+        return fightPowerupFinished;
     }
 }

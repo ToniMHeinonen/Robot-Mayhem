@@ -54,7 +54,7 @@ public class RoomGame extends RoomParent {
         super.render(delta);
 
         if (!game.haveWeChangedTheRoom) {
-            checkToPause();
+            checkTutorialDialogs();
             calculateBankSpeed();
             // Set correct milestone in case of difficulty gets changed
             progressBar.setRange(0f, game.getProgressBarMilestone());
@@ -72,7 +72,10 @@ public class RoomGame extends RoomParent {
         }
     }
 
-    private void checkToPause() {
+    /**
+     * Check if to show tutorial dialog and pause walking.
+     */
+    private void checkTutorialDialogs() {
         if (game.isFirstPlayTime()) game.setPauseWalking(true);
         else if(game.isFirstPlayBank() && retrievingSteps) game.setPauseWalking(true);
         else if(game.isFirstPlayVictory() && game.getPoolMult() > 0) {

@@ -29,6 +29,7 @@ public class RoomFight extends RoomParent {
         TUTORIAL_AFTER_HIT,
         TUTORIAL_ACTION,
         TUTORIAL_HACKING,
+        TUTORIAL_POWERUP,
         START_ROOM,
         DIALOG_START,
         DIALOG_END,
@@ -194,15 +195,28 @@ public class RoomFight extends RoomParent {
                 break;
             }
             case HACK: {
-                if (!tutorial.isFightHackingStartFinished()) {
+                if (!tutorial.isFightHackingFinished()) {
                     state = State.TUTORIAL_HACKING;
                     tutorial.fightHackingInstructions();
                 }
                 break;
             }
             case TUTORIAL_HACKING: {
-                if (tutorial.isFightHackingStartFinished()) {
+                if (tutorial.isFightHackingFinished()) {
                     state = State.HACK;
+                }
+                break;
+            }
+            case POWER_UP: {
+                if (!tutorial.isFightPowerupFinished()) {
+                    state = State.TUTORIAL_POWERUP;
+                    tutorial.fightPowerupInstructions();
+                }
+                break;
+            }
+            case TUTORIAL_POWERUP: {
+                if (tutorial.isFightPowerupFinished()) {
+                    state = State.POWER_UP;
                 }
                 break;
             }
@@ -774,7 +788,7 @@ public class RoomFight extends RoomParent {
                     opponent.addDoT(turns, damage);
                 } // else do nothing
             } else {
-                whiteFlash();
+                //whiteFlash();
                 dotTurns.add(turns);
                 dotDamage.add(damage);
                 calculateNextDoT();

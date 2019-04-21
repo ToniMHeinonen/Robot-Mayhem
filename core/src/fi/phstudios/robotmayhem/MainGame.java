@@ -610,15 +610,6 @@ public class MainGame extends Game {
 		skill1 = stats.loadValue(keySkill1, skills.REPAIR);
 		skill2 = stats.loadValue(keySkill2, "");
 		currentBoss = stats.loadValue(keyCurrentBoss, bosses.ROOMBOT);
-		// REMEMBER TO CHANGE THESE TO TRUE
-		firstPlayTime = stats.loadValue(keyFirstPlayTime, false);
-		firstPlayTimeFight = stats.loadValue(keyFirstPlayTimeFight, false);
-		firstPlayInventory = stats.loadValue(keyFirstPlayInventory, true);
-		firstPlayBank = stats.loadValue(keyFirstPlayBank, true);
-		firstPlayVictory = stats.loadValue(keyFirstPlayVictory, true);
-		firstPlayPoolComplete1 = stats.loadValue(keyFirstPlayPoolComplete1, true);
-		firstPlayPoolComplete2 = stats.loadValue(keyFirstPlayPoolComplete2, true);
-		firstPlayPoolComplete3 = stats.loadValue(keyFirstPlayPoolComplete3, true);
 		finishedGame = stats.loadValue(keyFinishedGame, false);
 		pool = stats.loadValue(keyPool, 1);
 		poolMult = stats.loadValue(keyPoolMult, 0);
@@ -627,6 +618,7 @@ public class MainGame extends Game {
 		prevDayGift = stats.loadValue(keyPrevDayGift, -1);
 		buyedItemsCounter = stats.loadValue(keyBuyedItemsCounter, 0);
 
+		// Boosts and item values
 		critBoost = stats.loadValue(keyCritBoost, 0);
 		missBoost = stats.loadValue(keyMissBoost, 0);
 		dmgBoost = stats.loadValue(keyDmgBoost, 0f);
@@ -638,6 +630,16 @@ public class MainGame extends Game {
 		permaArmorBoost = stats.loadValue(keyPermanentArmorBoost, 0f);
 		permaHealBoost = stats.loadValue(keyPermanentHealBoost, 0f);
 		reflectiveShield = stats.loadValue(keyReflectiveShield, false);
+
+		// Tutorial // REMEMBER TO CHANGE THESE TO TRUE
+		firstPlayTime = stats.loadValue(keyFirstPlayTime, false);
+		firstPlayTimeFight = stats.loadValue(keyFirstPlayTimeFight, false);
+		firstPlayInventory = stats.loadValue(keyFirstPlayInventory, true);
+		firstPlayBank = stats.loadValue(keyFirstPlayBank, true);
+		firstPlayVictory = stats.loadValue(keyFirstPlayVictory, true);
+		firstPlayPoolComplete1 = stats.loadValue(keyFirstPlayPoolComplete1, true);
+		firstPlayPoolComplete2 = stats.loadValue(keyFirstPlayPoolComplete2, true);
+		firstPlayPoolComplete3 = stats.loadValue(keyFirstPlayPoolComplete3, true);
 
 		// Load the size of inventory before loading inventory items
 		inventorySize = stats.loadValue(keyInventorySize, 0);
@@ -674,14 +676,6 @@ public class MainGame extends Game {
 		stats.saveValue(keySkill1, skill1);
 		stats.saveValue(keySkill2, skill2);
 		stats.saveValue(keyCurrentBoss, currentBoss);
-		stats.saveValue(keyFirstPlayTime, firstPlayTime);
-		stats.saveValue(keyFirstPlayTimeFight, firstPlayTimeFight);
-		stats.saveValue(keyFirstPlayInventory, firstPlayInventory);
-		stats.saveValue(keyFirstPlayBank, firstPlayBank);
-		stats.saveValue(keyFirstPlayVictory, firstPlayVictory);
-		stats.saveValue(keyFirstPlayPoolComplete1, firstPlayPoolComplete1);
-		stats.saveValue(keyFirstPlayPoolComplete2, firstPlayPoolComplete2);
-		stats.saveValue(keyFirstPlayPoolComplete3, firstPlayPoolComplete3);
 		stats.saveValue(keyFinishedGame, finishedGame);
 		stats.saveValue(keyPool, pool);
 		stats.saveValue(keyPoolMult, poolMult);
@@ -690,6 +684,7 @@ public class MainGame extends Game {
 		stats.saveValue(keyPrevDayGift, prevDayGift);
 		stats.saveValue(keyBuyedItemsCounter, buyedItemsCounter);
 
+		// Boosts and item values
 		stats.saveValue(keyCritBoost, critBoost);
 		stats.saveValue(keyMissBoost, missBoost);
 		stats.saveValue(keyDmgBoost, dmgBoost);
@@ -701,6 +696,16 @@ public class MainGame extends Game {
 		stats.saveValue(keyPermanentArmorBoost, permaArmorBoost);
 		stats.saveValue(keyPermanentHealBoost, permaHealBoost);
 		stats.saveValue(keyReflectiveShield, reflectiveShield);
+
+		// Tutorial
+		stats.saveValue(keyFirstPlayTime, firstPlayTime);
+		stats.saveValue(keyFirstPlayTimeFight, firstPlayTimeFight);
+		stats.saveValue(keyFirstPlayInventory, firstPlayInventory);
+		stats.saveValue(keyFirstPlayBank, firstPlayBank);
+		stats.saveValue(keyFirstPlayVictory, firstPlayVictory);
+		stats.saveValue(keyFirstPlayPoolComplete1, firstPlayPoolComplete1);
+		stats.saveValue(keyFirstPlayPoolComplete2, firstPlayPoolComplete2);
+		stats.saveValue(keyFirstPlayPoolComplete3, firstPlayPoolComplete3);
 
 		// Save inventory's current size on inventorySize key
 		stats.saveValue(keyInventorySize, inventory.size());
