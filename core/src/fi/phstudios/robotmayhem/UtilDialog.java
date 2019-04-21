@@ -31,7 +31,14 @@ public class UtilDialog {
         if (normalPos) y = dialogY;
         else y = dialogYsmall;
 
-        Label label = new Label(text, finalSkin);
+        String fontSize;
+        if (style.equals("dialog_enemy")) {
+            fontSize = "small";
+        } else {
+            fontSize = "default";
+        }
+
+        Label label = new Label(text, finalSkin, fontSize);
         label.setWrap(true);
         label.setAlignment(1);
 
