@@ -110,7 +110,7 @@ public class UtilDialog {
     }
 
     public Dialog createInstructionsDialog(String text) {
-        Label label = new Label(text, finalSkin);
+        Label label = new Label(text, finalSkin, "small");
         label.setWrap(true);
         label.setAlignment(1);
 
