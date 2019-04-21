@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -97,8 +98,11 @@ public class RoomGame extends RoomParent {
     public void drawSteps() {
         String strCurSteps = String.valueOf((int) progressBar.getValue());
         String strGoalSteps = String.valueOf((int) progressBar.getMaxValue());
-        finalSkin.getFont("font-average").draw(batch,strCurSteps + "/" + strGoalSteps,
-                50, game.pixelHeight - finalSkin.getFont("font-average").getXHeight() - 10);
+        Label steps = new Label(strCurSteps + "/" + strGoalSteps, finalSkin);
+        steps.setPosition(40, 975);
+        steps.setWidth(300);
+        steps.setAlignment(1);
+        steps.draw(batch, 1);
     }
 
     // Calculates how many steps will be added every frame
