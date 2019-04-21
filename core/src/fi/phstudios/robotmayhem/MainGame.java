@@ -773,6 +773,8 @@ public class MainGame extends Game {
 			if (pool > 3) {
 				poolMult = bosses.poolBossesSize-1;
 				currentBoss=bosses.FABIO;
+			} else if (pool > 4) {
+				gameFinished();
 			}
 		}
 		// Add later code what happen after Fabio is defeated
@@ -782,6 +784,15 @@ public class MainGame extends Game {
 		System.out.println(pool);
 		System.out.println(poolMult);
 		System.out.println(currentBoss);
+	}
+
+	/**
+	 * Do everything what happens after game is finished here.
+	 */
+	private void gameFinished() {
+		// Reset necessary values
+		pool = 1;
+		poolMult = 0;
 	}
 
 	public void addToInventory(String name, boolean isSkill) {

@@ -651,27 +651,27 @@ public class RoomFight extends RoomParent {
                     int amount = (Integer) item.get(items.value);
                     critBoost += amount;
                     game.addCritBoost(amount);
-                    turnState = END_TURN;
+                    actionState = END_ACTION;
                 } else if (boost == items.MISS_BOOST) {
                     int amount = (Integer) item.get(items.value);
                     missBoost += amount;
                     game.addMissBoost(amount);
-                    turnState = END_TURN;
+                    actionState = END_ACTION;
                 } else if (boost == items.DMG_BOOST) {
                     double amount = (Double) item.get(items.value);
                     dmgBoost += amount;
                     game.addDmgBoost(amount);
-                    turnState = END_TURN;
+                    actionState = END_ACTION;
                 } else if (boost == items.ARMOR_BOOST) {
                     double amount = (Double) item.get(items.value);
                     armorBoost += amount;
                     game.addArmorBoost(amount);
-                    turnState = END_TURN;
+                    actionState = END_ACTION;
                 } else if (boost == items.HEAL_BOOST) {
                     double amount = (Double) item.get(items.value);
                     healBoost += amount;
                     game.addHealBoost(amount);
-                    turnState = END_TURN;
+                    actionState = END_ACTION;
                 }
             } else if (itemType == items.TYPE_POTION) {
                 double amount = (Double) item.get(items.value);
@@ -1095,7 +1095,8 @@ public class RoomFight extends RoomParent {
         private ArrayList<String> descriptions = new ArrayList<String>();
         private ArrayList<HashMap<String,Object>> mapSkills;
         private String[] skillNames;
-        private double[] defaultDamages = new double[] {34, 25, 20, 25, 20, 15, 20, 15, 10};
+        private double[][] defaultDamages = new double[][] {{34, 25, 20, 20, 15, 15},
+                {20, 20, 15, 15, 10, 10}, {15, 15, 10, 10, 5, 5}, {5, 5, 5, 5, 5, 5}};
         private String[] btnTexts = new String[] {skills.ATTACK, skills.DEFEND, skills.ITEM,
                 game.getSkill1(), game.getSkill2()};
 
@@ -1105,7 +1106,8 @@ public class RoomFight extends RoomParent {
             maxHp = 100;
             hp = maxHp;
             targetHp = hp;
-            defaultDmg = defaultDamages[game.getPoolMult()];
+            defaultDmg = defaultDamages[game.getPool() - 1][game.getPoolMult()];
+            System.out.println(defaultDmg);
             reflectingShield = game.isReflectiveShield();
             if (reflectingShield) btnTexts[1] = skills.REFLECT;
             ifDead = State.DEAD;
