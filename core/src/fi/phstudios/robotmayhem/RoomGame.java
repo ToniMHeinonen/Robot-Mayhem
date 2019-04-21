@@ -237,24 +237,32 @@ public class RoomGame extends RoomParent {
         player.setUseItem(true);
         game.playSound(files.sndUseItem);
         HashMap<String, Object> item = items.getItem(selected);
-        int boost = (Integer) item.get(items.boostType);
-        if (boost == items.CRIT_BOOST) {
-            int amount = (Integer) item.get(items.value);
-            game.addPermaCritBoost(amount);
-        } else if (boost == items.MISS_BOOST) {
-            int amount = (Integer) item.get(items.value);
-            game.addPermaMissBoost(amount);
-        } else if (boost == items.DMG_BOOST) {
-            double amount = (Double) item.get(items.value);
-            game.addPermaDmgBoost(amount);
-        } else if (boost == items.ARMOR_BOOST) {
-            double amount = (Double) item.get(items.value);
-            game.addPermaArmorBoost(amount);
-        } else if (boost == items.HEAL_BOOST) {
-            double amount = (Double) item.get(items.value);
-            game.addPermaHealBoost(amount);
-        } else if (selected.equals(items.ITEM_REFLECT)) {
-            game.setReflectiveShield(true);
+        int itemType = (Integer) item.get(items.itemType);
+        if (itemType == items.TYPE_BOOST) {
+            int boost = (Integer) item.get(items.boostType);
+            if (boost == items.CRIT_BOOST) {
+                int amount = (Integer) item.get(items.value);
+                game.addPermaCritBoost(amount);
+            } else if (boost == items.MISS_BOOST) {
+                int amount = (Integer) item.get(items.value);
+                game.addPermaMissBoost(amount);
+            } else if (boost == items.DMG_BOOST) {
+                double amount = (Double) item.get(items.value);
+                game.addPermaDmgBoost(amount);
+            } else if (boost == items.ARMOR_BOOST) {
+                double amount = (Double) item.get(items.value);
+                game.addPermaArmorBoost(amount);
+            } else if (boost == items.HEAL_BOOST) {
+                double amount = (Double) item.get(items.value);
+                game.addPermaHealBoost(amount);
+            }
+        } else if (itemType == items.TYPE_BANK) {
+            float amount = (Float) item.get(items.value);
+            game.increaseStepBankSize(amount);
+        } else if (itemType == items.TYPE_UNIQUE) {
+            if (selected.equals(items.ITEM_REFLECT)) {
+                game.setReflectiveShield(true);
+            }
         }
 
     }

@@ -24,6 +24,7 @@ public class Item {
 
     public final String BOMB = "BOMB";
     public final String POTION = "POTION";
+    public final String BANK_UPGRADE = "BANK_UPGRADE";
     public final String HEAL_LIQUID = "HEAL_LIQUID";
     public final String GLITTER_BOMB = "GLITTER_BOMB";
     public final String OVERCLOCK = "OVERCLOCK";
@@ -58,8 +59,7 @@ public class Item {
      */
     Item() {
         mapItems = new HashMap<String, HashMap<String,Object>>();
-        itemBomb();
-        itemPotion();
+        itemBankUpgrade();
         itemHealLiquid();
         //itemGlitterBomb();
         itemOverclock();
@@ -91,40 +91,28 @@ public class Item {
         return selected;
     }
 
-    private void itemBomb() {
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put(name, BOMB);
-        map.put(description, "bombDesc");
-        map.put(value, 50.0);
-        map.put(usedInHall, false);
-        map.put(isSkill, false);
-        map.put(itemType, TYPE_BOMB);
-        map.put(boostType, NO_BOOST);
-        map.put(price, 5);
-        map.put(isPermanent, false);
+    private void itemBankUpgrade() {
+        float baseValue = 1000f;
+        for (int i = 1; i <= 3; i++) {
+            String index = String.valueOf(i);
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            map.put(name, BANK_UPGRADE + index);
+            map.put(description, "bankUpgradeDesc" + index);
+            map.put(value, baseValue*i);
+            map.put(usedInHall, true);
+            map.put(isSkill, false);
+            map.put(itemType, TYPE_BANK);
+            map.put(boostType, NO_BOOST);
+            map.put(price, basePrice*i);
+            map.put(isPermanent, true);
 
-        allItems.add((String) map.get(name));
-        mapItems.put((String) map.get(name), map);
-    }
-
-    private void itemPotion() {
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put(name, POTION);
-        map.put(description, "potionDesc");
-        map.put(value, -50.0);
-        map.put(usedInHall, false);
-        map.put(isSkill, false);
-        map.put(itemType, TYPE_POTION);
-        map.put(boostType, NO_BOOST);
-        map.put(price, 10);
-        map.put(isPermanent, false);
-
-        allItems.add((String) map.get(name));
-        mapItems.put((String) map.get(name), map);
+            allItems.add((String) map.get(name));
+            mapItems.put((String) map.get(name), map);
+        }
     }
 
     private void itemHealLiquid() {
-        int baseValue = -20;
+        double baseValue = -20.0;
         for (int i = 1; i <= 3; i++) {
             String index = String.valueOf(i);
             HashMap<String, Object> map = new HashMap<String, Object>();
