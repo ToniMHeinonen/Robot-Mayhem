@@ -18,9 +18,11 @@ public class Achievements {
     private RoomParent curRoom;
     private I18NBundle localize;
     private float stepAllCount;
+    private String lan;
+    private boolean finishedGame;
 
     private Dialog dialogAch;
-    private ImageButton btnSteps;
+    private ImageButton btnCancel;
 
     private String[] achHeaders;
     private String[] achDescriptions;
@@ -33,6 +35,9 @@ public class Achievements {
         stage = game.getStage();
         finalSkin = game.getFinalSkin();
         stepAllCount = game.getStepAllCount();
+        lan = game.getLanguage();
+        localize = game.getLocalize();
+        finishedGame = game.isFinishedGame();
 
         createAchDialog();
         createHeadersAndDescriptions();
@@ -51,13 +56,13 @@ public class Achievements {
 
     private void createHeadersAndDescriptions() {
         achHeaders = new String[] {
-                "Achievement 1",
-                "Achievement 2",
+                localize.get("sundayWalker"),
+                localize.get("finisher"),
                 "Achievement 3"};
 
         achDescriptions = new String[] {
-                "Achievement 1 description (10 steps)",
-                "Achievement 2 description (15 steps)",
+                localize.get("sundayWalkerDesc"),
+                localize.get("finisherDesc"),
                 "Achievement 3 description (20 steps)"};
 
         achLocked = new String[] {
@@ -67,11 +72,11 @@ public class Achievements {
     }
 
     private void checkAchievements() {
-        // Achievement 1
-        if (stepAllCount >= 10) achLocked[0] = "unlocked";
+        // Achievement 1 / Sunday Walker
+        if (stepAllCount >= 50) achLocked[0] = "unlocked";
 
-        // Achievement 2
-        if (stepAllCount >= 15) achLocked[1] = "unlocked";
+        // Achievement 2 / Finisher
+        if (finishedGame) achLocked[1] = "unlocked";
 
         // Achievement 3
         if (stepAllCount >= 20) achLocked[2] = "unlocked";
@@ -87,13 +92,13 @@ public class Achievements {
                 int i = btnCounter;
                 @Override
                 public void clicked(InputEvent event, float x, float y){
-                    popupStepAch(i);
+                    popupAchievement(i);
                 }
             });
         }
     }
 
-    private void popupStepAch(int index) {
+    private void popupAchievement(int index) {
         Label label = new Label(achDescriptions[index], finalSkin, "font46");
         label.setWrap(true);
         label.setAlignment(1);
@@ -109,8 +114,8 @@ public class Achievements {
         header.setAlignment(1);
         dialog.addActor(header);
 
-        String stringLocked = "Locked";
-        if (achLocked[index].equals("unlocked")) stringLocked = "Unlocked";
+        String stringLocked = localize.get("locked");
+        if (achLocked[index].equals("unlocked")) stringLocked = localize.get("unlocked");
 
         Label locked = new Label(stringLocked, finalSkin);
         locked.setPosition(game.pixelWidth / 4, 350);
@@ -118,14 +123,17 @@ public class Achievements {
         locked.setAlignment(1);
         dialog.addActor(locked);
 
-        stage.addActor(dialog);
-
-        dialog.addListener(new ClickListener(){
+        btnCancel = new ImageButton(finalSkin, "cancel_" + lan);
+        btnCancel.setPosition(game.pixelWidth / 2 - btnCancel.getWidth()/2, 210);
+        dialog.addActor(btnCancel);
+        btnCancel.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
                 dialog.remove();
             }
         });
+
+        stage.addActor(dialog);
     }
 
     private void createExitButton() {

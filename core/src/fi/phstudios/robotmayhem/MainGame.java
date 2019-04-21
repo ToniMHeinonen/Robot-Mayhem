@@ -88,6 +88,7 @@ public class MainGame extends Game {
 	private String keyFirstPlayPoolComplete1 = E.encrypt("firstplayPoolComplete1");
 	private String keyFirstPlayPoolComplete2 = E.encrypt("firstplayPoolComplete2");
 	private String keyFirstPlayPoolComplete3 = E.encrypt("firstplayPoolComplete3");
+	private String keyFinishedGame = E.encrypt("finishedGame");
 	private String keyPool = E.encrypt("pool");
 	private String keyPoolMult = E.encrypt("poolMult");
 	private String keyBuyedItemsCounter = E.encrypt("buyedItemsCounter");
@@ -125,7 +126,7 @@ public class MainGame extends Game {
 	private String skill1, skill2, currentBoss, playerName;
 	private boolean firstPlayTime, firstPlayTimeFight, firstPlayInventory, firstPlayBank,
 			firstPlayVictory, firstPlayPoolComplete1, firstPlayPoolComplete2,
-			firstPlayPoolComplete3, reflectiveShield;
+			firstPlayPoolComplete3, reflectiveShield, finishedGame;
 	private int critBoost, missBoost, permaCritBoost, permaMissBoost;
 	private float armorBoost, dmgBoost, healBoost, permaArmorBoost, permaDmgBoost, permaHealBoost;
 	// Stat arrays
@@ -618,6 +619,7 @@ public class MainGame extends Game {
 		firstPlayPoolComplete1 = stats.loadValue(keyFirstPlayPoolComplete1, true);
 		firstPlayPoolComplete2 = stats.loadValue(keyFirstPlayPoolComplete2, true);
 		firstPlayPoolComplete3 = stats.loadValue(keyFirstPlayPoolComplete3, true);
+		finishedGame = stats.loadValue(keyFinishedGame, false);
 		pool = stats.loadValue(keyPool, 1);
 		poolMult = stats.loadValue(keyPoolMult, 0);
 		playerName = stats.loadValue(keyName, "");
@@ -680,6 +682,7 @@ public class MainGame extends Game {
 		stats.saveValue(keyFirstPlayPoolComplete1, firstPlayPoolComplete1);
 		stats.saveValue(keyFirstPlayPoolComplete2, firstPlayPoolComplete2);
 		stats.saveValue(keyFirstPlayPoolComplete3, firstPlayPoolComplete3);
+		stats.saveValue(keyFinishedGame, finishedGame);
 		stats.saveValue(keyPool, pool);
 		stats.saveValue(keyPoolMult, poolMult);
 		stats.saveValue(keyName, playerName);
@@ -811,6 +814,7 @@ public class MainGame extends Game {
 		// Reset necessary values
 		pool = 1;
 		poolMult = 0;
+		finishedGame = true;
 	}
 
 	public void addToInventory(String name, boolean isSkill) {
@@ -1107,6 +1111,14 @@ public class MainGame extends Game {
 	public void setFirstPlayPoolComplete3(boolean firstPlayPoolComplete3) {
 		this.firstPlayPoolComplete3 = firstPlayPoolComplete3;
 	}
+
+	public void setFinishedGame(boolean finishedGame) {
+	    this.finishedGame = finishedGame;
+    }
+
+    public boolean isFinishedGame() {
+	    return finishedGame;
+    }
 
 	public TextureAtlas getTestButtonAtlas() {
 		return testButtonAtlas;
