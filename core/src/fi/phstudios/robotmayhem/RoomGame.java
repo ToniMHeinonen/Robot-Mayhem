@@ -79,6 +79,24 @@ public class RoomGame extends RoomParent {
             if (victory == null) victory = new FirstPlay(game, "victory", thisRoom);
             game.setPauseWalking(true);
         }
+        else if (game.isFirstPlayPoolComplete1() && game.getPool() == 2) {
+            if (pool1Complete == null) {
+                pool1Complete = new FirstPlay(game, "pool1Complete", thisRoom);
+            }
+            game.setPauseWalking(true);
+        }
+        else if (game.isFirstPlayPoolComplete2() && game.getPool() == 3) {
+            if (pool2Complete == null) {
+                pool2Complete = new FirstPlay(game, "pool2Complete", thisRoom);
+            }
+            game.setPauseWalking(true);
+        }
+        else if (game.isFirstPlayPoolComplete3() && game.getPool() == 4) {
+            if (pool3Complete == null) {
+                pool3Complete = new FirstPlay(game, "pool3Complete", thisRoom);
+            }
+            game.setPauseWalking(true);
+        }
         else game.setPauseWalking(false);
     }
 

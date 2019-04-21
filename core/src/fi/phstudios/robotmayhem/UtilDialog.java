@@ -13,6 +13,8 @@ public class UtilDialog {
     private Stage stage;
     private boolean dialogOn, skillNameOn;
     private Skin finalSkin;
+    private float dialogY = 390f;
+    private float dialogYsmall = 300f;
 
     UtilDialog(MainGame game) {
         this.game = game;
@@ -20,12 +22,14 @@ public class UtilDialog {
         finalSkin = game.getFinalSkin();
     }
 
-    public void createDialog(String text, String style, float yPos) {
+    public void createDialog(String text, String style, boolean normalPos) {
         dialogOn = true;
         float areaWidth = 780f;
         float areaHeight = 540f;
         float x = game.pixelWidth/2 - areaWidth/2;
-        //float y = 300f;
+        float y;
+        if (normalPos) y = dialogY;
+        else y = dialogYsmall;
 
         Label label = new Label(text, finalSkin);
         label.setWrap(true);
@@ -38,9 +42,11 @@ public class UtilDialog {
             offset = 210;
         }
 
+
+
         final Dialog dialog = new Dialog("", finalSkin, style);
         dialog.getContentTable().add(label).prefWidth(areaWidth - offset);
-        dialog.setPosition(x, yPos);
+        dialog.setPosition(x, y);
         dialog.setSize(areaWidth,areaHeight);
         stage.addActor(dialog);
 
@@ -116,7 +122,7 @@ public class UtilDialog {
 
         Dialog dialog = new Dialog("", finalSkin, "dialog_player");
         dialog.setSize(780, 540);
-        dialog.setPosition(game.pixelWidth/2 - 780f/2, 390f);
+        dialog.setPosition(game.pixelWidth/2 - 780f/2, dialogY);
         dialog.getContentTable().add(label).prefWidth(780f - 210f);
 
         return dialog;
