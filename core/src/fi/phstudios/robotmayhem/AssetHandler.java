@@ -81,6 +81,46 @@ public class AssetHandler {
     public final String fabioDamage = "texture/player/player_damage.png"; // Change later
     public final String fabioStun = "texture/player/player_stun.png"; // Change later
 
+    /*
+    Skins
+     */
+    public final String skin = "glassy-ui.json";
+    public final String finalSkin = "finalskin/finalskin.json";
+
+    /*
+    Music
+     */
+    public final String musMainTheme = "music/mainTheme.mp3";
+    public final String musBossRobo = "music/bossRobo.mp3";
+    public final String musBossFuturistic = "music/bossFuturistic.mp3";
+    public final String musBossSankari = "music/bossSankari.mp3";
+
+    /*
+    Sound effects
+     */
+    // Fight general
+    public final String sndFastHeal = "sound/fightGeneral/FastHeal.mp3";
+    public final String sndHealOverTime = "sound/fightGeneral/HealOverTime.mp3";
+    public final String sndLoseToBoss = "sound/fightGeneral/LoseToBoss.mp3";
+    public final String sndMissedHit = "sound/fightGeneral/MissedHit.mp3";
+    public final String sndCriticalHit = "sound/fightGeneral/CriticalHit.mp3";
+    public final String sndEnemyMiss = "sound/fightGeneral/EnemyMiss.mp3";
+    public final String sndReceiveCriticalHit = "sound/fightGeneral/ReceiveCriticalHit.mp3";
+    public final String sndReceiveDoT = "sound/fightGeneral/ReceiveDot.mp3";
+    public final String sndBreakFireballOrb = "sound/fightGeneral/BreakFireballOrb.mp3";
+    public final String sndSuccessfulHack = "sound/fightGeneral/HitBossWithSuccessfulHack.mp3";
+    public final String sndPickPowerupOrItem = "sound/fightGeneral/PickPowerUpOrItem.mp3";
+    public final String sndPowerupsPopup = "sound/fightGeneral/PowerUpsPopUp.mp3";
+    public final String sndMetallicHit = "sound/fightGeneral/MetallicHit.mp3";
+    // Skills
+    public final String sndDustThrow = "sound/skills/DustThrow.mp3";
+    public final String sndSuction = "sound/skills/Suction.mp3";
+    public final String sndShieldAbility = "sound/skills/ShieldAbilitySound.mp3";
+    // Other
+    public final String sndMilestoneAchieved = "sound/MileStoneAchieved.mp3";
+    public final String sndPurchaseItem = "sound/PurchaseItemFromShop.mp3";
+    public final String sndGeneralItemUse = "sound/GeneralItemUse.mp3";
+    public final String sndGeneralNotification = "sound/GeneralNotification.mp3";
 
     AssetHandler() {
         /*
@@ -155,42 +195,42 @@ public class AssetHandler {
         /*
         Skins
          */
-        manager.load("glassy-ui.json", Skin.class);
-        manager.load("finalskin/finalskin.json", Skin.class);
+        manager.load(skin, Skin.class);
+        manager.load(finalSkin, Skin.class);
 
         /*
         Music
          */
-        manager.load("music/mainTheme.mp3", Music.class);
-        manager.load("music/bossRobo.mp3", Music.class);
-        manager.load("music/bossFuturistic.mp3", Music.class);
-        manager.load("music/bossSankari.mp3", Music.class);
+        manager.load(musMainTheme, Music.class);
+        manager.load(musBossRobo, Music.class);
+        manager.load(musBossFuturistic, Music.class);
+        manager.load(musBossSankari, Music.class);
 
         /*
         Sound effects
          */
         // Fight general
-        manager.load("sound/fightGeneral/FastHeal.mp3", Sound.class);
-        manager.load("sound/fightGeneral/HealOverTime.mp3", Sound.class);
-        manager.load("sound/fightGeneral/LoseToBoss.mp3", Sound.class);
-        manager.load("sound/fightGeneral/MissedHit.mp3", Sound.class);
-        manager.load("sound/fightGeneral/CriticalHit.mp3", Sound.class);
-        manager.load("sound/fightGeneral/EnemyMiss.mp3", Sound.class);
-        manager.load("sound/fightGeneral/ReceiveCriticalHit.mp3", Sound.class);
-        manager.load("sound/fightGeneral/ReceiveDot.mp3", Sound.class);
-        manager.load("sound/fightGeneral/BreakFireballOrb.mp3", Sound.class);
-        manager.load("sound/fightGeneral/HitBossWithSuccessfulHack.mp3", Sound.class);
-        manager.load("sound/fightGeneral/PickPowerUpOrItem.mp3", Sound.class);
-        manager.load("sound/fightGeneral/PowerUpsPopUp.mp3", Sound.class);
-        manager.load("sound/fightGeneral/MetallicHit.mp3", Sound.class);
+        manager.load(sndFastHeal, Sound.class);
+        manager.load(sndHealOverTime, Sound.class);
+        manager.load(sndLoseToBoss, Sound.class);
+        manager.load(sndMissedHit, Sound.class);
+        manager.load(sndCriticalHit, Sound.class);
+        manager.load(sndEnemyMiss, Sound.class);
+        manager.load(sndReceiveCriticalHit, Sound.class);
+        manager.load(sndReceiveDoT, Sound.class);
+        manager.load(sndBreakFireballOrb, Sound.class);
+        manager.load(sndSuccessfulHack, Sound.class);
+        manager.load(sndPickPowerupOrItem, Sound.class);
+        manager.load(sndPowerupsPopup, Sound.class);
+        manager.load(sndMetallicHit, Sound.class);
         // Skills
-        manager.load("sound/skills/DustThrow.mp3", Sound.class);
-        manager.load("sound/skills/Suction.mp3", Sound.class);
-        manager.load("sound/skills/ShieldAbilitySound.mp3", Sound.class);
+        manager.load(sndDustThrow, Sound.class);
+        manager.load(sndSuction, Sound.class);
+        manager.load(sndShieldAbility, Sound.class);
         // Other
-        manager.load("sound/MileStoneAchieved.mp3", Sound.class);
-        manager.load("sound/PurchaseItemFromShop.mp3", Sound.class);
-        manager.load("sound/GeneralItemUse.mp3", Sound.class);
-        manager.load("sound/GeneralNotification.mp3", Sound.class);
+        manager.load(sndMilestoneAchieved, Sound.class);
+        manager.load(sndPurchaseItem, Sound.class);
+        manager.load(sndGeneralItemUse, Sound.class);
+        manager.load(sndGeneralNotification, Sound.class);
     }
 }

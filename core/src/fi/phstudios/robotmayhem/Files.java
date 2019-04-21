@@ -204,45 +204,45 @@ public class Files {
         /*
         Skins
          */
-        skin = manager.get("glassy-ui.json");
-        finalSkin = manager.get("finalskin/finalskin.json");
+        skin = manager.get(asset.skin);
+        finalSkin = manager.get(asset.finalSkin);
 
         /*
         Music
          */
-        musMainTheme = manager.get("music/mainTheme.mp3");
-        musBossRobo = manager.get("music/bossRobo.mp3");
-        musBossFuturistic = manager.get("music/bossFuturistic.mp3");
-        musBossSankari = manager.get("music/bossSankari.mp3");
+        musMainTheme = manager.get(asset.musMainTheme);
+        musBossRobo = manager.get(asset.musBossRobo);
+        musBossFuturistic = manager.get(asset.musBossFuturistic);
+        musBossSankari = manager.get(asset.musBossSankari);
 
-        // Remember to add all new music here
+        // Remember to add all new boss music here
         allBossMusic = new Music[] {musBossRobo, musBossFuturistic, musBossSankari};
 
         /*
         Sound effects
          */
         // Fight general
-        sndFastHeal = manager.get("sound/fightGeneral/FastHeal.mp3");
-        sndHealOverTime = manager.get("sound/fightGeneral/HealOverTime.mp3");
-        sndLoseToBoss = manager.get("sound/fightGeneral/LoseToBoss.mp3");
-        sndPlayerMiss = manager.get("sound/fightGeneral/MissedHit.mp3");
-        sndPlayerCriticalHit = manager.get("sound/fightGeneral/CriticalHit.mp3");
-        sndEnemyMiss = manager.get("sound/fightGeneral/EnemyMiss.mp3");
-        sndEnemyCriticalHit = manager.get("sound/fightGeneral/ReceiveCriticalHit.mp3");
-        sndDamageOverTime = manager.get("sound/fightGeneral/ReceiveDot.mp3");
-        sndBreakShield = manager.get("sound/fightGeneral/BreakFireballOrb.mp3");
-        sndHackSuccessful = manager.get("sound/fightGeneral/HitBossWithSuccessfulHack.mp3");
-        sndChoosePowerUp = manager.get("sound/fightGeneral/PickPowerUpOrItem.mp3");
-        sndPowerUpPopup = manager.get("sound/fightGeneral/PowerUpsPopUp.mp3");
-        sndMetallicHit = manager.get("sound/fightGeneral/MetallicHit.mp3");
+        sndFastHeal = manager.get(asset.sndFastHeal);
+        sndHealOverTime = manager.get(asset.sndHealOverTime);
+        sndLoseToBoss = manager.get(asset.sndLoseToBoss);
+        sndPlayerMiss = manager.get(asset.sndMissedHit);
+        sndPlayerCriticalHit = manager.get(asset.sndCriticalHit);
+        sndEnemyMiss = manager.get(asset.sndEnemyMiss);
+        sndEnemyCriticalHit = manager.get(asset.sndReceiveCriticalHit);
+        sndDamageOverTime = manager.get(asset.sndReceiveDoT);
+        sndBreakShield = manager.get(asset.sndBreakFireballOrb);
+        sndHackSuccessful = manager.get(asset.sndSuccessfulHack);
+        sndChoosePowerUp = manager.get(asset.sndPickPowerupOrItem);
+        sndPowerUpPopup = manager.get(asset.sndPowerupsPopup);
+        sndMetallicHit = manager.get(asset.sndMetallicHit);
         // Skills
-        sndDustThrow = manager.get("sound/skills/DustThrow.mp3");
-        sndSuction = manager.get("sound/skills/Suction.mp3");
-        sndDefend = manager.get("sound/skills/ShieldAbilitySound.mp3");
+        sndDustThrow = manager.get(asset.sndDustThrow);
+        sndSuction = manager.get(asset.sndSuction);
+        sndDefend = manager.get(asset.sndShieldAbility);
         // Other
-        sndMilestoneAchieved = manager.get("sound/MileStoneAchieved.mp3");
-        sndPurchaseItem = manager.get("sound/PurchaseItemFromShop.mp3");
-        sndUseItem = manager.get("sound/GeneralItemUse.mp3");
-        sndNotification = manager.get("sound/GeneralNotification.mp3");
+        sndMilestoneAchieved = manager.get(asset.sndMilestoneAchieved);
+        sndPurchaseItem = manager.get(asset.sndPurchaseItem);
+        sndUseItem = manager.get(asset.sndGeneralItemUse);
+        sndNotification = manager.get(asset.sndGeneralNotification);
     }
 }
