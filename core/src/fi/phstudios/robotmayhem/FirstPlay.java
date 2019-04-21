@@ -65,6 +65,27 @@ public class FirstPlay {
                     victoryInstructions();
                 }
             }, 0.5f);
+        } else if (tutorial.equals("pool1Complete")) {
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    pool1CompleteInstructions();
+                }
+            }, 0.5f);
+        } else if (tutorial.equals("pool2Complete")) {
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    pool2CompleteInstructions();
+                }
+            }, 0.5f);
+        } else if (tutorial.equals("pool3Complete")) {
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    pool3CompleteInstructions();
+                }
+            }, 0.5f);
         }
 
     }
@@ -98,7 +119,7 @@ public class FirstPlay {
     }
 
     private void hallAllInstructions() {
-        final String[] hallGuide = new String[] {
+        final String[] texts = new String[] {
                 localize.format("tutFirstPlay2") + " " + name + "!",
                 localize.get("tutFirstPlay3"),
                 localize.get("tutFirstPlay4"),
@@ -106,7 +127,7 @@ public class FirstPlay {
                 localize.get("tutFirstPlay6"),
                 localize.get("tutFirstPlay7")};
 
-        final Dialog dialog = utilDialog.createInstructionsDialog(hallGuide[diaCounter]);
+        final Dialog dialog = utilDialog.createInstructionsDialog(texts[diaCounter]);
         stage.addActor(dialog);
 
         dialog.addListener(new ClickListener(){
@@ -114,7 +135,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 diaCounter++;
                 dialog.remove();
-                if (diaCounter < hallGuide.length) hallAllInstructions();
+                if (diaCounter < texts.length) hallAllInstructions();
                 else {
                     game.setFirstPlayTime(false);
                     diaCounter = 0;
@@ -124,11 +145,11 @@ public class FirstPlay {
     }
 
     private void fightStartInstructions() {
-        final String[] fightGuide = new String[] {
+        final String[] texts = new String[] {
                 localize.get("tutFightStart1"),
                 localize.get("tutFightStart2")};
 
-        final Dialog dialog = utilDialog.createInstructionsDialog(fightGuide[diaCounter]);
+        final Dialog dialog = utilDialog.createInstructionsDialog(texts[diaCounter]);
         stage.addActor(dialog);
 
         dialog.addListener(new ClickListener(){
@@ -136,7 +157,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 diaCounter++;
                 dialog.remove();
-                if (diaCounter < fightGuide.length) fightStartInstructions();
+                if (diaCounter < texts.length) fightStartInstructions();
                 else {
                     fightStartFinished = true;
                     diaCounter = 0;
@@ -146,11 +167,11 @@ public class FirstPlay {
     }
 
     public void fightAfterHitInstructions() {
-        final String[] fightGuide = new String[] {
+        final String[] texts = new String[] {
                 localize.get("tutFightAfterHit1"),
                 localize.get("tutFightAfterHit2")};
 
-        final Dialog dialog = utilDialog.createInstructionsDialog(fightGuide[diaCounter]);
+        final Dialog dialog = utilDialog.createInstructionsDialog(texts[diaCounter]);
         stage.addActor(dialog);
 
         dialog.addListener(new ClickListener(){
@@ -158,7 +179,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 diaCounter++;
                 dialog.remove();
-                if (diaCounter < fightGuide.length) fightAfterHitInstructions();
+                if (diaCounter < texts.length) fightAfterHitInstructions();
                 else {
                     fightAfterHitFinished = true;
                     diaCounter = 0;
@@ -168,13 +189,13 @@ public class FirstPlay {
     }
 
     public void fightActionInstructions() {
-        final String[] fightGuide = new String[] {
+        final String[] texts = new String[] {
                 localize.get("tutFightAction1"),
                 localize.get("tutFightAction2"),
                 localize.get("tutFightAction3"),
                 localize.get("tutFightAction4")};
 
-        final Dialog dialog = utilDialog.createInstructionsDialog(fightGuide[diaCounter]);
+        final Dialog dialog = utilDialog.createInstructionsDialog(texts[diaCounter]);
         stage.addActor(dialog);
 
         dialog.addListener(new ClickListener(){
@@ -182,7 +203,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 diaCounter++;
                 dialog.remove();
-                if (diaCounter < fightGuide.length) fightActionInstructions();
+                if (diaCounter < texts.length) fightActionInstructions();
                 else {
                     fightActionFinished = true;
                     diaCounter = 0;
@@ -192,14 +213,14 @@ public class FirstPlay {
     }
 
     public void fightHackingInstructions() {
-        final String[] fightGuide = new String[] {
+        final String[] texts = new String[] {
                 localize.get("tutFightHacking1"),
                 localize.get("tutFightHacking2"),
                 localize.get("tutFightHacking3"),
                 localize.get("tutFightHacking4")};
 
         final Dialog dialog = utilDialog.createInstructionsDialog
-                (fightGuide[diaCounter]);
+                (texts[diaCounter]);
         stage.addActor(dialog);
 
         dialog.addListener(new ClickListener(){
@@ -207,7 +228,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 diaCounter++;
                 dialog.remove();
-                if (diaCounter < fightGuide.length) fightHackingInstructions();
+                if (diaCounter < texts.length) fightHackingInstructions();
                 else {
                     fightHackingStartFinished = true;
                     game.setfirstPlayTimeFight(false);
@@ -218,12 +239,12 @@ public class FirstPlay {
     }
 
     private void inventoryInstructions() {
-        final String[] fightGuide = new String[] {
+        final String[] texts = new String[] {
                 localize.get("tutInventory1"),
                 localize.get("tutInventory2"),
                 localize.get("tutInventory3"),
                 localize.get("tutInventory4")};
-        Label label = new Label(fightGuide[diaCounter], finalSkin, "font46");
+        Label label = new Label(texts[diaCounter], finalSkin, "font46");
         label.setWrap(true);
         label.setAlignment(1);
 
@@ -238,7 +259,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 diaCounter++;
                 dialog.remove();
-                if (diaCounter < fightGuide.length) inventoryInstructions();
+                if (diaCounter < texts.length) inventoryInstructions();
                 else {
                     game.setFirstPlayInventory(false);
                     diaCounter = 0;
@@ -248,14 +269,14 @@ public class FirstPlay {
     }
 
     private void bankInstructions() {
-        final String[] fightGuide = new String[] {
+        final String[] texts = new String[] {
                 localize.get("tutBank1"),
                 localize.get("tutBank2"),
                 localize.get("tutBank3"),
                 localize.get("tutBank4"),
                 localize.get("tutBank5"),};
 
-        final Dialog dialog = utilDialog.createInstructionsDialog(fightGuide[diaCounter]);
+        final Dialog dialog = utilDialog.createInstructionsDialog(texts[diaCounter]);
         stage.addActor(dialog);
 
         dialog.addListener(new ClickListener(){
@@ -263,7 +284,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 diaCounter++;
                 dialog.remove();
-                if (diaCounter < fightGuide.length) bankInstructions();
+                if (diaCounter < texts.length) bankInstructions();
                 else {
                     game.setFirstPlayBank(false);
                     diaCounter = 0;
@@ -273,11 +294,11 @@ public class FirstPlay {
     }
 
     private void victoryInstructions() {
-        final String[] fightGuide = new String[] {
+        final String[] texts = new String[] {
                 localize.get("tutVictory1"),
                 localize.get("tutVictory2")};
 
-        final Dialog dialog = utilDialog.createInstructionsDialog(fightGuide[diaCounter]);
+        final Dialog dialog = utilDialog.createInstructionsDialog(texts[diaCounter]);
         stage.addActor(dialog);
 
         dialog.addListener(new ClickListener(){
@@ -285,9 +306,77 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 diaCounter++;
                 dialog.remove();
-                if (diaCounter < fightGuide.length) victoryInstructions();
+                if (diaCounter < texts.length) victoryInstructions();
                 else {
                     game.setFirstPlayVictory(false);
+                    diaCounter = 0;
+                }
+            }
+        });
+    }
+
+    private void pool1CompleteInstructions() {
+        final String[] texts = new String[] {
+                localize.get("tutPool1Complete1"),
+                localize.get("tutPool1Complete2")};
+
+        final Dialog dialog = utilDialog.createInstructionsDialog(texts[diaCounter]);
+        stage.addActor(dialog);
+
+        dialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                diaCounter++;
+                dialog.remove();
+                if (diaCounter < texts.length) pool1CompleteInstructions();
+                else {
+                    game.setFirstPlayPoolComplete1(false);
+                    diaCounter = 0;
+                }
+            }
+        });
+    }
+
+    private void pool2CompleteInstructions() {
+        final String[] texts = new String[] {
+                localize.get("tutPool2Complete1"),
+                localize.get("tutPool2Complete2"),
+                localize.get("tutPool2Complete3")};
+
+        final Dialog dialog = utilDialog.createInstructionsDialog(texts[diaCounter]);
+        stage.addActor(dialog);
+
+        dialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                diaCounter++;
+                dialog.remove();
+                if (diaCounter < texts.length) pool2CompleteInstructions();
+                else {
+                    game.setFirstPlayPoolComplete2(false);
+                    diaCounter = 0;
+                }
+            }
+        });
+    }
+
+    private void pool3CompleteInstructions() {
+        final String[] texts = new String[] {
+                localize.get("tutPool3Complete1"),
+                localize.get("tutPool3Complete2"),
+                localize.get("tutPool3Complete3")};
+
+        final Dialog dialog = utilDialog.createInstructionsDialog(texts[diaCounter]);
+        stage.addActor(dialog);
+
+        dialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                diaCounter++;
+                dialog.remove();
+                if (diaCounter < texts.length) pool3CompleteInstructions();
+                else {
+                    game.setFirstPlayPoolComplete3(false);
                     diaCounter = 0;
                 }
             }
