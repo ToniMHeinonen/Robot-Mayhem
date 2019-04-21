@@ -116,7 +116,6 @@ public class Achievements {
         locked.setPosition(game.pixelWidth / 4, 350);
         locked.setSize(960, 100);
         locked.setAlignment(1);
-        locked.debug();
         dialog.addActor(locked);
 
         stage.addActor(dialog);
