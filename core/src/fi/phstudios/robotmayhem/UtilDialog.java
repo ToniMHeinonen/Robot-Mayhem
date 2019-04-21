@@ -109,7 +109,7 @@ public class UtilDialog {
 
         Dialog dialog = new Dialog("", finalSkin, "dialog_player");
         dialog.setSize(780, 540);
-        dialog.setPosition(game.pixelWidth/2 - 780f/2, 430f);
+        dialog.setPosition(game.pixelWidth/2 - 780f/2, 390f);
         dialog.getContentTable().add(label).prefWidth(780f - 210f);
 
         return dialog;

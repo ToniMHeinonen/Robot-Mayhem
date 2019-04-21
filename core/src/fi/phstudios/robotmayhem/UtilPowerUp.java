@@ -106,7 +106,7 @@ public class UtilPowerUp {
         final GlyphLayout layout = new GlyphLayout(finalSkin.getFont("font-large"),
                 localize.get("choosePowerup"));
         final float fontX = game.pixelWidth/2 - layout.width / 2;
-        final float fontY = game.pixelHeight -200 - layout.height / 2;
+        final float fontY = game.pixelHeight -240 - layout.height / 2;
         finalSkin.getFont("font-large").draw(batch, layout, fontX, fontY);
     }
 
@@ -201,8 +201,8 @@ public class UtilPowerUp {
      * @param desc description of the selection
      */
     private void createPowerUp(int pos, final int type, final String name, final String desc) {
-        float[] xPos = new float[] {450f, 750f, 1050f};
-        float[] yPos = new float[] {416, 216, 416};
+        float[] xPos = new float[] {465f, 765f, 1065f};
+        float[] yPos = new float[] {310, 190, 310};
 
         // Add name to spawned powerups and localize name
         spawnedPowerups[pos] = name;

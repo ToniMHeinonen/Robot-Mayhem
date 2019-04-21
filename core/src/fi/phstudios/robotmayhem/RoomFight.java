@@ -275,6 +275,12 @@ public class RoomFight extends RoomParent {
             escapeLabel.setAlignment(1);
             escapeLabel.setPosition(game.pixelWidth/2 - 260, game.pixelHeight/2);
             escapeLabel.draw(batch, 1);
+
+            Label escapeHeader = new Label(localize.get("escapeHeader"), finalSkin, "big");
+            escapeHeader.setWidth(530);
+            escapeHeader.setAlignment(1);
+            escapeHeader.setPosition(game.pixelWidth/2 - 260, game.pixelHeight/2 + 210);
+            escapeHeader.draw(batch, 1);
         }
     }
 
@@ -381,7 +387,7 @@ public class RoomFight extends RoomParent {
     // Creates yes and no buttons for escaping
     private void createYesNo() {
         final ImageButton btn = new ImageButton(finalSkin, "confirm_" + lan);
-        btn.setPosition(game.pixelWidth/2 - btn.getWidth(), game.pixelHeight/2 - 325);
+        btn.setPosition(game.pixelWidth/2 - 400, game.pixelHeight/4 - 55);
         stage.addActor(btn);
 
         btn.addListener(new ClickListener() {
@@ -396,7 +402,7 @@ public class RoomFight extends RoomParent {
         });
 
         final ImageButton btn2 = new ImageButton(finalSkin,"cancel_" + lan);
-        btn2.setPosition(game.pixelWidth/2, game.pixelHeight/2 - 325);
+        btn2.setPosition(btn.getX() + 445, btn.getY());
         stage.addActor(btn2);
 
         btn2.addListener(new ClickListener() {
