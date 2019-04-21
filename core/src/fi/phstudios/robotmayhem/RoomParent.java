@@ -130,7 +130,7 @@ public class RoomParent implements Screen {
         batch.draw(imgTopBar, 0,game.pixelHeight - imgTopBar.getHeight(),
                 imgTopBar.getWidth(), imgTopBar.getHeight());
         batch.draw(imgBottomBar, 0,0,
-                imgTopBar.getWidth(), imgTopBar.getHeight());
+                imgBottomBar.getWidth(), imgBottomBar.getHeight());
     }
 
     @Override
