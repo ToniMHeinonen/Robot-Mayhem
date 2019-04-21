@@ -88,6 +88,7 @@ public class MainGame extends Game {
 	private String keyFirstPlayPoolComplete1 = E.encrypt("firstplayPoolComplete1");
 	private String keyFirstPlayPoolComplete2 = E.encrypt("firstplayPoolComplete2");
 	private String keyFirstPlayPoolComplete3 = E.encrypt("firstplayPoolComplete3");
+    private String keyFirstPlayMoney = E.encrypt("firstPlayMoney");
 	private String keyFinishedGame = E.encrypt("finishedGame");
 	private String keyPool = E.encrypt("pool");
 	private String keyPoolMult = E.encrypt("poolMult");
@@ -126,7 +127,7 @@ public class MainGame extends Game {
 	private String skill1, skill2, currentBoss, playerName;
 	private boolean firstPlayTime, firstPlayTimeFight, firstPlayInventory, firstPlayBank,
 			firstPlayVictory, firstPlayPoolComplete1, firstPlayPoolComplete2,
-			firstPlayPoolComplete3, reflectiveShield, finishedGame;
+			firstPlayPoolComplete3, firstPlayMoney, reflectiveShield, finishedGame;
 	private int critBoost, missBoost, permaCritBoost, permaMissBoost;
 	private float armorBoost, dmgBoost, healBoost, permaArmorBoost, permaDmgBoost, permaHealBoost;
 	// Stat arrays
@@ -640,6 +641,7 @@ public class MainGame extends Game {
 		firstPlayPoolComplete1 = stats.loadValue(keyFirstPlayPoolComplete1, true);
 		firstPlayPoolComplete2 = stats.loadValue(keyFirstPlayPoolComplete2, true);
 		firstPlayPoolComplete3 = stats.loadValue(keyFirstPlayPoolComplete3, true);
+		firstPlayMoney = stats.loadValue(keyFirstPlayMoney, true);
 
 		// Load the size of inventory before loading inventory items
 		inventorySize = stats.loadValue(keyInventorySize, 0);
@@ -706,6 +708,7 @@ public class MainGame extends Game {
 		stats.saveValue(keyFirstPlayPoolComplete1, firstPlayPoolComplete1);
 		stats.saveValue(keyFirstPlayPoolComplete2, firstPlayPoolComplete2);
 		stats.saveValue(keyFirstPlayPoolComplete3, firstPlayPoolComplete3);
+		stats.saveValue(keyFirstPlayMoney, firstPlayMoney);
 
 		// Save inventory's current size on inventorySize key
 		stats.saveValue(keyInventorySize, inventory.size());
@@ -1117,7 +1120,15 @@ public class MainGame extends Game {
 		this.firstPlayPoolComplete3 = firstPlayPoolComplete3;
 	}
 
-	public void setFinishedGame(boolean finishedGame) {
+    public boolean isFirstPlayMoney() {
+        return firstPlayMoney;
+    }
+
+    public void setFirstPlayMoney(boolean firstPlayMoney) {
+        this.firstPlayMoney = firstPlayMoney;
+    }
+
+    public void setFinishedGame(boolean finishedGame) {
 	    this.finishedGame = finishedGame;
     }
 

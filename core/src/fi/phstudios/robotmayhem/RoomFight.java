@@ -1424,7 +1424,8 @@ public class RoomFight extends RoomParent {
             maxHp = 100;
             hp = maxHp;
             targetHp = hp;
-            defaultDmg = 15;
+            if (game.getPool() < 3) defaultDmg = 15;
+            else defaultDmg = 10;
             ifDead = State.HACK;
             ID = ENEMY;
 

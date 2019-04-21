@@ -106,7 +106,9 @@ public class UtilItem {
         System.out.println("Inventory size: " + inventory.size());
         System.out.println("BoughtpermanentSize " + boughtPermanent.size());
 
-        if (game.isFirstPlayInventory() && buyedItemsCounter == 1) {
+        if (game.isFirstPlayMoney()) {
+            FirstPlay firstPlay = new FirstPlay(game, "money", curRoom);
+        } else if (game.isFirstPlayInventory() && buyedItemsCounter == 1) {
             FirstPlay firstPlay = new FirstPlay(game, "inventory", curRoom);
         }
     }

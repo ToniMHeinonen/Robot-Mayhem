@@ -50,7 +50,12 @@ public class FirstPlay {
                 }
             }, 1);
         } else if (tutorial.equals("inventory")) {
-            inventoryInstructions();
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    inventoryInstructions();
+                }
+            }, 0.5f);
         } else if (tutorial.equals("bank")) {
             Timer.schedule(new Timer.Task() {
                 @Override
@@ -84,6 +89,13 @@ public class FirstPlay {
                 @Override
                 public void run() {
                     pool3CompleteInstructions();
+                }
+            }, 0.5f);
+        } else if (tutorial.equals("money")) {
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    moneyInstructions();
                 }
             }, 0.5f);
         }
@@ -402,6 +414,37 @@ public class FirstPlay {
                 if (diaCounter < texts.length) pool3CompleteInstructions();
                 else {
                     game.setFirstPlayPoolComplete3(false);
+                    diaCounter = 0;
+                }
+            }
+        });
+    }
+
+    private void moneyInstructions() {
+        final String[] texts = new String[] {
+                localize.get("tutMoney1"),
+                localize.get("tutMoney2"),
+                localize.get("tutMoney3"),
+                localize.get("tutMoney4")};
+
+        Label label = new Label(texts[diaCounter], finalSkin, "font46");
+        label.setWrap(true);
+        label.setAlignment(1);
+
+        final Dialog dialog = new Dialog("", finalSkin, "skilldescription");
+        dialog.getContentTable().add(label).prefWidth(720);
+        dialog.setPosition(game.pixelWidth/4, game.pixelHeight/4);
+        dialog.setSize(800, 540);
+        stage.addActor(dialog);
+
+        dialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                diaCounter++;
+                dialog.remove();
+                if (diaCounter < texts.length) moneyInstructions();
+                else {
+                    game.setFirstPlayMoney(false);
                     diaCounter = 0;
                 }
             }
