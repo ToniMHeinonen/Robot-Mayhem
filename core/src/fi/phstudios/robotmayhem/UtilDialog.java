@@ -95,8 +95,8 @@ public class UtilDialog {
         label.setAlignment(1);
 
         final Dialog dialog = new Dialog("", finalSkin, skillStyle);
-        dialog.getContentTable().add(label).prefWidth(areaSize);
-        dialog.setSize(areaSize,label.getHeight()*2);
+        dialog.getContentTable().add(label).prefWidth(900);
+        dialog.setSize(900,180);
         dialog.setPosition(x,y);
         stage.addActor(dialog);
 
