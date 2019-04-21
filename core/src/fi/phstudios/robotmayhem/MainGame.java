@@ -89,6 +89,8 @@ public class MainGame extends Game {
 	private String keyFirstPlayPoolComplete2 = E.encrypt("firstplayPoolComplete2");
 	private String keyFirstPlayPoolComplete3 = E.encrypt("firstplayPoolComplete3");
     private String keyFirstPlayMoney = E.encrypt("firstPlayMoney");
+    private String keyFirstPlayEscape = E.encrypt("firstPlayEscape");
+	private String keyFirstPlayDeath = E.encrypt("firstPlayDeath");
 	private String keyFinishedGame = E.encrypt("finishedGame");
 	private String keyPool = E.encrypt("pool");
 	private String keyPoolMult = E.encrypt("poolMult");
@@ -127,7 +129,8 @@ public class MainGame extends Game {
 	private String skill1, skill2, currentBoss, playerName;
 	private boolean firstPlayTime, firstPlayTimeFight, firstPlayInventory, firstPlayBank,
 			firstPlayVictory, firstPlayPoolComplete1, firstPlayPoolComplete2,
-			firstPlayPoolComplete3, firstPlayMoney, reflectiveShield, finishedGame;
+			firstPlayPoolComplete3, firstPlayMoney, firstPlayEscape, firstPlayDeath,
+			reflectiveShield, finishedGame;
 	private int critBoost, missBoost, permaCritBoost, permaMissBoost;
 	private float armorBoost, dmgBoost, healBoost, permaArmorBoost, permaDmgBoost, permaHealBoost;
 	// Stat arrays
@@ -633,7 +636,7 @@ public class MainGame extends Game {
 		reflectiveShield = stats.loadValue(keyReflectiveShield, false);
 
 		// Tutorial // REMEMBER TO CHANGE THESE TO TRUE
-		firstPlayTime = stats.loadValue(keyFirstPlayTime, false);
+		firstPlayTime = stats.loadValue(keyFirstPlayTime, true);
 		firstPlayTimeFight = stats.loadValue(keyFirstPlayTimeFight, false);
 		firstPlayInventory = stats.loadValue(keyFirstPlayInventory, true);
 		firstPlayBank = stats.loadValue(keyFirstPlayBank, true);
@@ -642,6 +645,8 @@ public class MainGame extends Game {
 		firstPlayPoolComplete2 = stats.loadValue(keyFirstPlayPoolComplete2, true);
 		firstPlayPoolComplete3 = stats.loadValue(keyFirstPlayPoolComplete3, true);
 		firstPlayMoney = stats.loadValue(keyFirstPlayMoney, true);
+		firstPlayEscape = stats.loadValue(keyFirstPlayEscape, true);
+		firstPlayDeath = stats.loadValue(keyFirstPlayDeath, true);
 
 		// Load the size of inventory before loading inventory items
 		inventorySize = stats.loadValue(keyInventorySize, 0);
@@ -709,6 +714,8 @@ public class MainGame extends Game {
 		stats.saveValue(keyFirstPlayPoolComplete2, firstPlayPoolComplete2);
 		stats.saveValue(keyFirstPlayPoolComplete3, firstPlayPoolComplete3);
 		stats.saveValue(keyFirstPlayMoney, firstPlayMoney);
+		stats.saveValue(keyFirstPlayEscape, firstPlayEscape);
+		stats.saveValue(keyFirstPlayDeath, firstPlayDeath);
 
 		// Save inventory's current size on inventorySize key
 		stats.saveValue(keyInventorySize, inventory.size());
@@ -940,7 +947,7 @@ public class MainGame extends Game {
 	}
 
 	/*
-	GETTERS
+	GETTERS AND SETTERS
 	 */
 
 	public void setPauseWalking(boolean pauseWalking) {
@@ -1128,7 +1135,23 @@ public class MainGame extends Game {
         this.firstPlayMoney = firstPlayMoney;
     }
 
-    public void setFinishedGame(boolean finishedGame) {
+	public boolean isFirstPlayEscape() {
+		return firstPlayEscape;
+	}
+
+	public void setFirstPlayEscape(boolean firstPlayEscape) {
+		this.firstPlayEscape = firstPlayEscape;
+	}
+
+	public boolean isFirstPlayDeath() {
+		return firstPlayDeath;
+	}
+
+	public void setFirstPlayDeath(boolean firstPlayDeath) {
+		this.firstPlayDeath = firstPlayDeath;
+	}
+
+	public void setFinishedGame(boolean finishedGame) {
 	    this.finishedGame = finishedGame;
     }
 

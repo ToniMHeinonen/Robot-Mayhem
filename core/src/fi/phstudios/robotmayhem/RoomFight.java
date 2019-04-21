@@ -149,10 +149,15 @@ public class RoomFight extends RoomParent {
                 if (!startDeathTimer) {
                     startDeathTimer = true;
                     game.playSound(files.sndLoseToBoss);
+                    if (game.isFirstPlayDeath()) {
+                        FirstPlay death = new FirstPlay(game, "death", thisRoom);
+                    }
                 }
 
-                if (deathTimer > 0) deathTimer--;
-                else game.switchToRoomGame();
+                if (!game.isFirstPlayDeath()) {
+                    if (deathTimer > 0) deathTimer--;
+                    else game.switchToRoomGame();
+                }
             }
         }
     }
@@ -393,6 +398,9 @@ public class RoomFight extends RoomParent {
                     escapePopup = true;
                     stage.clear();
                     createYesNo();
+                    if (game.isFirstPlayEscape()) {
+                        FirstPlay escape = new FirstPlay(game, "escape", thisRoom);
+                    }
                 }
             }
         });
@@ -1426,6 +1434,7 @@ public class RoomFight extends RoomParent {
             targetHp = hp;
             if (game.getPool() < 3) defaultDmg = 15;
             else defaultDmg = 10;
+            defaultDmg = 50;
             ifDead = State.HACK;
             ID = ENEMY;
 
