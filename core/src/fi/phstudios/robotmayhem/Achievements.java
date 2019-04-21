@@ -57,29 +57,34 @@ public class Achievements {
     private void createHeadersAndDescriptions() {
         achHeaders = new String[] {
                 localize.get("sundayWalker"),
+                localize.get("marathonist"),
                 localize.get("finisher"),
                 "Achievement 3"};
 
         achDescriptions = new String[] {
                 localize.get("sundayWalkerDesc"),
+                localize.get("marathonistDesc"),
                 localize.get("finisherDesc"),
                 "Achievement 3 description (20 steps)"};
 
-        achLocked = new String[] {
-                "locked",
-                "locked",
-                "locked"};
+        achLocked = new String[achHeaders.length];
+        for (int i = 0; i < achHeaders.length; i++) {
+                achLocked[i] = "locked";
+        }
     }
 
     private void checkAchievements() {
-        // Achievement 1 / Sunday Walker
+        // Achievement 0 / Sunday Walker / Walk 50 steps
         if (stepAllCount >= 50) achLocked[0] = "unlocked";
 
-        // Achievement 2 / Finisher
-        if (finishedGame) achLocked[1] = "unlocked";
+        // Achievement 1 / Marathonist / Walk 10 000 steps
+        if (stepAllCount >= 10000) achLocked[1] = "unlocked";
+
+        // Achievement 2 / Finisher / Finish the game
+        if (finishedGame) achLocked[2] = "unlocked";
 
         // Achievement 3
-        if (stepAllCount >= 20) achLocked[2] = "unlocked";
+        if (stepAllCount >= 20) achLocked[3] = "unlocked";
     }
 
     private void createButtons() {
