@@ -84,6 +84,10 @@ public class MainGame extends Game {
 	private String keyFirstPlayTimeFight = E.encrypt("firstPlayTimeFight");
 	private String keyFirstPlayInventory = E.encrypt("firstPlayInventory");
 	private String keyFirstPlayBank = E.encrypt("firstPlayBank");
+	private String keyFirstPlayVictory = E.encrypt("firstPlayVictory");
+	private String keyFirstPlayPoolComplete1 = E.encrypt("firstplayPoolComplete1");
+	private String keyFirstPlayPoolComplete2 = E.encrypt("firstplayPoolComplete2");
+	private String keyFirstPlayPoolComplete3 = E.encrypt("firstplayPoolComplete3");
 	private String keyPool = E.encrypt("pool");
 	private String keyPoolMult = E.encrypt("poolMult");
 	private String keyBuyedItemsCounter = E.encrypt("buyedItemsCounter");
@@ -120,7 +124,8 @@ public class MainGame extends Game {
 	private int pool, poolMult, money, fightsWon, prevDayGift, buyedItemsCounter;
 	private String skill1, skill2, currentBoss, playerName;
 	private boolean firstPlayTime, firstPlayTimeFight, firstPlayInventory, firstPlayBank,
-			reflectiveShield;
+			firstPlayVictory, firstPlayPoolComplete1, firstPlayPoolComplete2,
+			firstPlayPoolComplete3, reflectiveShield;
 	private int critBoost, missBoost, permaCritBoost, permaMissBoost;
 	private float armorBoost, dmgBoost, healBoost, permaArmorBoost, permaDmgBoost, permaHealBoost;
 	// Stat arrays
@@ -370,6 +375,11 @@ public class MainGame extends Game {
 	    stepCount = progressBarMilestone / 2;
 	    stepCount = Math.round(stepCount);
 	    saveStats();
+
+	    // Add money for trying fighting
+        if (pool == 2) money += MathUtils.random(3,7);
+        else if (pool == 3) money += MathUtils.random(8, 12);
+        else if (pool == 4) money += MathUtils.random(13, 17);
     }
 
 	public void switchToPowerUps() {
@@ -604,6 +614,10 @@ public class MainGame extends Game {
 		firstPlayTimeFight = stats.loadValue(keyFirstPlayTimeFight, false);
 		firstPlayInventory = stats.loadValue(keyFirstPlayInventory, true);
 		firstPlayBank = stats.loadValue(keyFirstPlayBank, true);
+		firstPlayVictory = stats.loadValue(keyFirstPlayVictory, true);
+		firstPlayPoolComplete1 = stats.loadValue(keyFirstPlayPoolComplete1, true);
+		firstPlayPoolComplete2 = stats.loadValue(keyFirstPlayPoolComplete2, true);
+		firstPlayPoolComplete3 = stats.loadValue(keyFirstPlayPoolComplete3, true);
 		pool = stats.loadValue(keyPool, 1);
 		poolMult = stats.loadValue(keyPoolMult, 0);
 		playerName = stats.loadValue(keyName, "");
@@ -662,6 +676,10 @@ public class MainGame extends Game {
 		stats.saveValue(keyFirstPlayTimeFight, firstPlayTimeFight);
 		stats.saveValue(keyFirstPlayInventory, firstPlayInventory);
 		stats.saveValue(keyFirstPlayBank, firstPlayBank);
+		stats.saveValue(keyFirstPlayVictory, firstPlayVictory);
+		stats.saveValue(keyFirstPlayPoolComplete1, firstPlayPoolComplete1);
+		stats.saveValue(keyFirstPlayPoolComplete2, firstPlayPoolComplete2);
+		stats.saveValue(keyFirstPlayPoolComplete3, firstPlayPoolComplete3);
 		stats.saveValue(keyPool, pool);
 		stats.saveValue(keyPoolMult, poolMult);
 		stats.saveValue(keyName, playerName);
@@ -917,6 +935,10 @@ public class MainGame extends Game {
 		this.pauseWalking = pauseWalking;
 	}
 
+	public boolean isPauseWalking() {
+		return pauseWalking;
+	}
+
 	public int getCritBoost() {
 		int wholeBoost = critBoost + permaCritBoost;
 		return wholeBoost;
@@ -1052,6 +1074,38 @@ public class MainGame extends Game {
 
 	public void setFirstPlayBank(boolean firstPlayBank) {
 		this.firstPlayBank = firstPlayBank;
+	}
+
+	public boolean isFirstPlayVictory() {
+		return firstPlayVictory;
+	}
+
+	public void setFirstPlayVictory(boolean firstPlayVictory) {
+		this.firstPlayVictory = firstPlayVictory;
+	}
+
+	public boolean isFirstPlayPoolComplete1() {
+		return firstPlayPoolComplete1;
+	}
+
+	public void setFirstPlayPoolComplete1(boolean firstPlayPoolComplete1) {
+		this.firstPlayPoolComplete1 = firstPlayPoolComplete1;
+	}
+
+	public boolean isFirstPlayPoolComplete2() {
+		return firstPlayPoolComplete2;
+	}
+
+	public void setFirstPlayPoolComplete2(boolean firstPlayPoolComplete2) {
+		this.firstPlayPoolComplete2 = firstPlayPoolComplete2;
+	}
+
+	public boolean isFirstPlayPoolComplete3() {
+		return firstPlayPoolComplete3;
+	}
+
+	public void setFirstPlayPoolComplete3(boolean firstPlayPoolComplete3) {
+		this.firstPlayPoolComplete3 = firstPlayPoolComplete3;
 	}
 
 	public TextureAtlas getTestButtonAtlas() {

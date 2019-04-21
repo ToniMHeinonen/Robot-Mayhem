@@ -28,6 +28,7 @@ public class RoomGame extends RoomParent {
     private boolean milestoneReached, retrievingSteps;
     private ImageButton fightButton;
     private Skin finalSkin;
+    private FirstPlay victory, pool1Complete, pool2Complete, pool3Complete;
 
     RoomGame(final MainGame game) {
         super(game);
@@ -42,7 +43,6 @@ public class RoomGame extends RoomParent {
         imgBG.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 
         createMenuButton("hall");
-        //createButtonFight(); // For playtesting
 
         if (game.isFirstPlayTime()) {
             FirstPlay firstPlay = new FirstPlay(game, "firstPlay", thisRoom);
@@ -75,6 +75,10 @@ public class RoomGame extends RoomParent {
     private void checkToPause() {
         if (game.isFirstPlayTime()) game.setPauseWalking(true);
         else if(game.isFirstPlayBank() && retrievingSteps) game.setPauseWalking(true);
+        else if(game.isFirstPlayVictory() && game.getPoolMult() > 0) {
+            if (victory == null) victory = new FirstPlay(game, "victory", thisRoom);
+            game.setPauseWalking(true);
+        }
         else game.setPauseWalking(false);
     }
 
@@ -107,21 +111,23 @@ public class RoomGame extends RoomParent {
 
     // Calculates how many steps will be added every frame
     private void calculateBankSpeed() {
-        if (!retrievingSteps && game.getStepBank() > 0 &&
-                progressBar.getValue() < progressBar.getMaxValue()) {
-            if (game.isFirstPlayBank()) {
-                FirstPlay bank = new FirstPlay(game, "bank", this);
+        if (!game.isPauseWalking()) {
+            if (!retrievingSteps && game.getStepBank() > 0 &&
+                    progressBar.getValue() < progressBar.getMaxValue()) {
+                if (game.isFirstPlayBank()) {
+                    FirstPlay bank = new FirstPlay(game, "bank", this);
+                }
+                retrievingSteps = true;
+                game.setStepBank(Math.round(game.getStepBank()));
+                bankRetrieved = game.getStepCount();
+                float bank = game.getStepBank();
+                float mileStone = game.getProgressBarMilestone();
+                // If bank is bigger than mileStone, then count bankSpd using mileStone value
+                if (bank > mileStone) {
+                    bank = mileStone;
+                }
+                bankSpd = bank / 200;
             }
-            retrievingSteps = true;
-            game.setStepBank(Math.round(game.getStepBank()));
-            bankRetrieved = game.getStepCount();
-            float bank = game.getStepBank();
-            float mileStone = game.getProgressBarMilestone();
-            // If bank is bigger than mileStone, then count bankSpd using mileStone value
-            if (bank > mileStone) {
-                bank = mileStone;
-            }
-            bankSpd = bank / 400;
         }
     }
 

@@ -24,8 +24,7 @@ public class FirstPlay {
 
     private Dialog whoAmI;
     // Olli notice: int default value is 0, it does not have to be declared
-    private int hallCounter, fightStartCounter, fightAfterHitCounter, fightActionCounter,
-            fightHackingStartCounter, inventoryCounter, bankCounter;
+    private int diaCounter;
 
     FirstPlay(final MainGame game, String tutorial, RoomParent curRoom) {
         this.game = game;
@@ -57,6 +56,13 @@ public class FirstPlay {
                 @Override
                 public void run() {
                     bankInstructions();
+                }
+            }, 0.5f);
+        } else if (tutorial.equals("victory")) {
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    victoryInstructions();
                 }
             }, 0.5f);
         }
@@ -100,16 +106,19 @@ public class FirstPlay {
                 localize.get("tutFirstPlay6"),
                 localize.get("tutFirstPlay7")};
 
-        final Dialog dialog = utilDialog.createInstructionsDialog(hallGuide[hallCounter]);
+        final Dialog dialog = utilDialog.createInstructionsDialog(hallGuide[diaCounter]);
         stage.addActor(dialog);
 
         dialog.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                hallCounter++;
+                diaCounter++;
                 dialog.remove();
-                if (hallCounter < hallGuide.length) hallAllInstructions();
-                else game.setFirstPlayTime(false);
+                if (diaCounter < hallGuide.length) hallAllInstructions();
+                else {
+                    game.setFirstPlayTime(false);
+                    diaCounter = 0;
+                }
             }
         });
     }
@@ -119,17 +128,18 @@ public class FirstPlay {
                 localize.get("tutFightStart1"),
                 localize.get("tutFightStart2")};
 
-        final Dialog dialog = utilDialog.createInstructionsDialog(fightGuide[fightStartCounter]);
+        final Dialog dialog = utilDialog.createInstructionsDialog(fightGuide[diaCounter]);
         stage.addActor(dialog);
 
         dialog.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                fightStartCounter++;
+                diaCounter++;
                 dialog.remove();
-                if (fightStartCounter < fightGuide.length) fightStartInstructions();
+                if (diaCounter < fightGuide.length) fightStartInstructions();
                 else {
                     fightStartFinished = true;
+                    diaCounter = 0;
                 }
             }
         });
@@ -140,17 +150,18 @@ public class FirstPlay {
                 localize.get("tutFightAfterHit1"),
                 localize.get("tutFightAfterHit2")};
 
-        final Dialog dialog = utilDialog.createInstructionsDialog(fightGuide[fightAfterHitCounter]);
+        final Dialog dialog = utilDialog.createInstructionsDialog(fightGuide[diaCounter]);
         stage.addActor(dialog);
 
         dialog.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                fightAfterHitCounter++;
+                diaCounter++;
                 dialog.remove();
-                if (fightAfterHitCounter < fightGuide.length) fightAfterHitInstructions();
+                if (diaCounter < fightGuide.length) fightAfterHitInstructions();
                 else {
                     fightAfterHitFinished = true;
+                    diaCounter = 0;
                 }
             }
         });
@@ -163,17 +174,18 @@ public class FirstPlay {
                 localize.get("tutFightAction3"),
                 localize.get("tutFightAction4")};
 
-        final Dialog dialog = utilDialog.createInstructionsDialog(fightGuide[fightActionCounter]);
+        final Dialog dialog = utilDialog.createInstructionsDialog(fightGuide[diaCounter]);
         stage.addActor(dialog);
 
         dialog.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                fightActionCounter++;
+                diaCounter++;
                 dialog.remove();
-                if (fightActionCounter < fightGuide.length) fightActionInstructions();
+                if (diaCounter < fightGuide.length) fightActionInstructions();
                 else {
                     fightActionFinished = true;
+                    diaCounter = 0;
                 }
             }
         });
@@ -187,18 +199,19 @@ public class FirstPlay {
                 localize.get("tutFightHacking4")};
 
         final Dialog dialog = utilDialog.createInstructionsDialog
-                (fightGuide[fightHackingStartCounter]);
+                (fightGuide[diaCounter]);
         stage.addActor(dialog);
 
         dialog.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                fightHackingStartCounter++;
+                diaCounter++;
                 dialog.remove();
-                if (fightHackingStartCounter < fightGuide.length) fightHackingInstructions();
+                if (diaCounter < fightGuide.length) fightHackingInstructions();
                 else {
                     fightHackingStartFinished = true;
                     game.setfirstPlayTimeFight(false);
+                    diaCounter = 0;
                 }
             }
         });
@@ -210,7 +223,7 @@ public class FirstPlay {
                 localize.get("tutInventory2"),
                 localize.get("tutInventory3"),
                 localize.get("tutInventory4")};
-        Label label = new Label(fightGuide[inventoryCounter], finalSkin, "font46");
+        Label label = new Label(fightGuide[diaCounter], finalSkin, "font46");
         label.setWrap(true);
         label.setAlignment(1);
 
@@ -223,10 +236,13 @@ public class FirstPlay {
         dialog.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                inventoryCounter++;
+                diaCounter++;
                 dialog.remove();
-                if (inventoryCounter < fightGuide.length) inventoryInstructions();
-                else game.setFirstPlayInventory(false);
+                if (diaCounter < fightGuide.length) inventoryInstructions();
+                else {
+                    game.setFirstPlayInventory(false);
+                    diaCounter = 0;
+                }
             }
         });
     }
@@ -239,17 +255,40 @@ public class FirstPlay {
                 localize.get("tutBank4"),
                 localize.get("tutBank5"),};
 
-        final Dialog dialog = utilDialog.createInstructionsDialog(fightGuide[bankCounter]);
+        final Dialog dialog = utilDialog.createInstructionsDialog(fightGuide[diaCounter]);
         stage.addActor(dialog);
 
         dialog.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                bankCounter++;
+                diaCounter++;
                 dialog.remove();
-                if (bankCounter < fightGuide.length) bankInstructions();
+                if (diaCounter < fightGuide.length) bankInstructions();
                 else {
                     game.setFirstPlayBank(false);
+                    diaCounter = 0;
+                }
+            }
+        });
+    }
+
+    private void victoryInstructions() {
+        final String[] fightGuide = new String[] {
+                localize.get("tutVictory1"),
+                localize.get("tutVictory2")};
+
+        final Dialog dialog = utilDialog.createInstructionsDialog(fightGuide[diaCounter]);
+        stage.addActor(dialog);
+
+        dialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                diaCounter++;
+                dialog.remove();
+                if (diaCounter < fightGuide.length) victoryInstructions();
+                else {
+                    game.setFirstPlayVictory(false);
+                    diaCounter = 0;
                 }
             }
         });
