@@ -90,6 +90,8 @@ public class MainGame extends Game {
 	private String keyFirstPlayPoolComplete3 = E.encrypt("firstplayPoolComplete3");
     private String keyFirstPlayMoney = E.encrypt("firstPlayMoney");
 	private String keyFinishedGame = E.encrypt("finishedGame");
+	private String keyCheckHard = E.encrypt("checkHard");
+	private String keyFinishedGameHard = E.encrypt("finishedGameHard");
 	private String keyPool = E.encrypt("pool");
 	private String keyPoolMult = E.encrypt("poolMult");
 	private String keyBuyedItemsCounter = E.encrypt("buyedItemsCounter");
@@ -127,7 +129,8 @@ public class MainGame extends Game {
 	private String skill1, skill2, currentBoss, playerName;
 	private boolean firstPlayTime, firstPlayTimeFight, firstPlayInventory, firstPlayBank,
 			firstPlayVictory, firstPlayPoolComplete1, firstPlayPoolComplete2,
-			firstPlayPoolComplete3, firstPlayMoney, reflectiveShield, finishedGame;
+			firstPlayPoolComplete3, firstPlayMoney, reflectiveShield, finishedGame, checkHard,
+            finishedGameHard;
 	private int critBoost, missBoost, permaCritBoost, permaMissBoost;
 	private float armorBoost, dmgBoost, healBoost, permaArmorBoost, permaDmgBoost, permaHealBoost;
 	// Stat arrays
@@ -612,6 +615,8 @@ public class MainGame extends Game {
 		skill2 = stats.loadValue(keySkill2, "");
 		currentBoss = stats.loadValue(keyCurrentBoss, bosses.ROOMBOT);
 		finishedGame = stats.loadValue(keyFinishedGame, false);
+		checkHard = stats.loadValue(keyCheckHard, false);
+		finishedGameHard = stats.loadValue(keyFinishedGameHard, false);
 		pool = stats.loadValue(keyPool, 1);
 		poolMult = stats.loadValue(keyPoolMult, 0);
 		playerName = stats.loadValue(keyName, "");
@@ -679,6 +684,8 @@ public class MainGame extends Game {
 		stats.saveValue(keySkill2, skill2);
 		stats.saveValue(keyCurrentBoss, currentBoss);
 		stats.saveValue(keyFinishedGame, finishedGame);
+		stats.saveValue(keyCheckHard, checkHard);
+		stats.saveValue(keyFinishedGameHard, finishedGameHard);
 		stats.saveValue(keyPool, pool);
 		stats.saveValue(keyPoolMult, poolMult);
 		stats.saveValue(keyName, playerName);
@@ -823,6 +830,7 @@ public class MainGame extends Game {
 		pool = 1;
 		poolMult = 0;
 		finishedGame = true;
+		if (checkHard) finishedGameHard = true;
 	}
 
 	public void addToInventory(String name, boolean isSkill) {
@@ -1134,6 +1142,18 @@ public class MainGame extends Game {
 
     public boolean isFinishedGame() {
 	    return finishedGame;
+    }
+
+    public void setCheckHard(boolean checkHard) {
+	    this.checkHard = checkHard;
+    }
+
+    public boolean isCheckHard() {
+	    return checkHard;
+    }
+
+    public boolean isFinishedGameHard() {
+	    return finishedGameHard;
     }
 
 	public TextureAtlas getTestButtonAtlas() {
