@@ -90,6 +90,13 @@ skillname
   orig: 900, 180
   offset: 0, 0
   index: -1
+skillname_enemy
+  rotate: false
+  xy: 903, 665
+  size: 900, 180
+  orig: 900, 180
+  offset: 0, 0
+  index: -1
 volumebar
   rotate: false
   xy: 1, 543
@@ -109,13 +116,6 @@ window_small
   xy: 1, 1
   size: 780, 540
   orig: 780, 540
-  offset: 0, 0
-  index: -1
-skillname_enemy
-  rotate: false
-  xy: 903, 665
-  size: 900, 180
-  orig: 900, 180
   offset: 0, 0
   index: -1
 
@@ -182,56 +182,56 @@ button_ITEM_clicked
   index: -1
 button_SHOOT
   rotate: false
-  xy: 773, 177
+  xy: 774, 419
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
 button_SHOOT_clicked
   rotate: false
-  xy: 1159, 27
+  xy: 1160, 269
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
 button_SKILL
   rotate: false
-  xy: 1545, 27
+  xy: 1546, 269
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
 button_empty
   rotate: false
-  xy: 774, 419
+  xy: 387, 210
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
 button_money
   rotate: false
-  xy: 1160, 269
+  xy: 1, 180
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
 button_normal0
   rotate: false
-  xy: 1546, 269
+  xy: 773, 177
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
 button_normal1
   rotate: false
-  xy: 387, 210
+  xy: 1159, 27
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
 button_normal2
   rotate: false
-  xy: 1, 180
+  xy: 1545, 27
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
@@ -336,6 +336,41 @@ repeat: none
 button_SKILL_clicked
   rotate: false
   xy: 1, 1772
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_cooldown1
+  rotate: false
+  xy: 387, 1772
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_cooldown2
+  rotate: false
+  xy: 1, 1288
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_cooldown3
+  rotate: false
+  xy: 387, 1530
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_cooldown4
+  rotate: false
+  xy: 773, 1772
+  size: 384, 240
+  orig: 384, 240
+  offset: 0, 0
+  index: -1
+button_cooldown5
+  rotate: false
+  xy: 1, 1046
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
@@ -744,41 +779,6 @@ use2_fi
   xy: 1449, 798
   size: 360, 120
   orig: 360, 120
-  offset: 0, 0
-  index: -1
-button_cooldown1
-  rotate: false
-  xy: 387, 1772
-  size: 384, 240
-  orig: 384, 240
-  offset: 0, 0
-  index: -1
-button_cooldown2
-  rotate: false
-  xy: 1, 1288
-  size: 384, 240
-  orig: 384, 240
-  offset: 0, 0
-  index: -1
-button_cooldown3
-  rotate: false
-  xy: 387, 1530
-  size: 384, 240
-  orig: 384, 240
-  offset: 0, 0
-  index: -1
-button_cooldown4
-  rotate: false
-  xy: 773, 1772
-  size: 384, 240
-  orig: 384, 240
-  offset: 0, 0
-  index: -1
-button_cooldown5
-  rotate: false
-  xy: 1, 1046
-  size: 384, 240
-  orig: 384, 240
   offset: 0, 0
   index: -1
 

@@ -147,11 +147,11 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
 		up: button_money
 		down: button_money_clicked
 	}
-	ach_steps: {
+	unlocked: {
 		up: unlock
 		down: unlock
 	}
-	ach_steps_locked: {
+	locked: {
 		up: lock
 		down: lock
 	}
