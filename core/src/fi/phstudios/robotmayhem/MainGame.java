@@ -131,10 +131,8 @@ public class MainGame extends Game {
 	private String skill1, skill2, currentBoss, playerName;
 	private boolean firstPlayTime, firstPlayTimeFight, firstPlayInventory, firstPlayBank,
 			firstPlayVictory, firstPlayPoolComplete1, firstPlayPoolComplete2,
-			firstPlayPoolComplete3, firstPlayMoney, reflectiveShield, finishedGame, checkHard,
-            finishedGameHard;
 			firstPlayPoolComplete3, firstPlayMoney, firstPlayEscape, firstPlayDeath,
-			reflectiveShield, finishedGame;
+            reflectiveShield, finishedGame, checkHard, finishedGameHard;
 	private int critBoost, missBoost, permaCritBoost, permaMissBoost;
 	private float armorBoost, dmgBoost, healBoost, permaArmorBoost, permaDmgBoost, permaHealBoost;
 	// Stat arrays
