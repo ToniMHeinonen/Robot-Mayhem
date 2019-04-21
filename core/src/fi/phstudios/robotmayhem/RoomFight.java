@@ -644,40 +644,42 @@ public class RoomFight extends RoomParent {
 
         protected void useItem() {
             HashMap<String, Object> item = items.getItem(usedItem);
-            int boost = (Integer) item.get(items.boostType);
-            if (boost == items.CRIT_BOOST) {
-                int amount = (Integer) item.get(items.value);
-                critBoost += amount;
-                game.addCritBoost(amount);
-                turnState = END_TURN;
-            } else if (boost == items.MISS_BOOST) {
-                int amount = (Integer) item.get(items.value);
-                missBoost += amount;
-                game.addMissBoost(amount);
-                turnState = END_TURN;
-            } else if (boost == items.DMG_BOOST) {
-                double amount = (Double) item.get(items.value);
-                dmgBoost += amount;
-                game.addDmgBoost(amount);
-                turnState = END_TURN;
-            } else if (boost == items.ARMOR_BOOST) {
-                double amount = (Double) item.get(items.value);
-                armorBoost += amount;
-                game.addArmorBoost(amount);
-                turnState = END_TURN;
-            } else if (boost == items.HEAL_BOOST) {
-                double amount = (Double) item.get(items.value);
-                healBoost += amount;
-                game.addHealBoost(amount);
-                turnState = END_TURN;
-            } else if (usedItem == items.POTION) {
+            int itemType = (Integer) item.get(items.itemType);
+            if (itemType == items.TYPE_BOOST) {
+                int boost = (Integer) item.get(items.boostType);
+                if (boost == items.CRIT_BOOST) {
+                    int amount = (Integer) item.get(items.value);
+                    critBoost += amount;
+                    game.addCritBoost(amount);
+                    turnState = END_TURN;
+                } else if (boost == items.MISS_BOOST) {
+                    int amount = (Integer) item.get(items.value);
+                    missBoost += amount;
+                    game.addMissBoost(amount);
+                    turnState = END_TURN;
+                } else if (boost == items.DMG_BOOST) {
+                    double amount = (Double) item.get(items.value);
+                    dmgBoost += amount;
+                    game.addDmgBoost(amount);
+                    turnState = END_TURN;
+                } else if (boost == items.ARMOR_BOOST) {
+                    double amount = (Double) item.get(items.value);
+                    armorBoost += amount;
+                    game.addArmorBoost(amount);
+                    turnState = END_TURN;
+                } else if (boost == items.HEAL_BOOST) {
+                    double amount = (Double) item.get(items.value);
+                    healBoost += amount;
+                    game.addHealBoost(amount);
+                    turnState = END_TURN;
+                }
+            } else if (itemType == items.TYPE_POTION) {
                 double amount = (Double) item.get(items.value);
                 amount += amount * healBoost;
                 takeHeal(amount);
                 startHitAnimation(healthPlus, animSpeed);
                 actionState = HEAL_ANIM;
             }
-
         }
 
         // Before starting turn, reset turnState
@@ -1220,7 +1222,7 @@ public class RoomFight extends RoomParent {
 
                         // Play sound if not null
                         Sound snd = (Sound) skillMap.get(skills.sound);
-                        if (snd != null) snd.play();
+                        if (snd != null) game.playSound(snd);
 
                         // If skill misses, skip everything
                         boolean miss = randomMissChance((Integer) skillMap.get(skills.missChance));

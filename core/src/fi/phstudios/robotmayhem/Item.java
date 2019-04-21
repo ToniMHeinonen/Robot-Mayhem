@@ -13,15 +13,18 @@ public class Item {
     public final String usedInHall = "usedInHall";
     public final String isSkill = "isSkill";
     public final String price = "price";
+    public final String itemType = "itemType";
     public final String boostType = "boostType";
     public final String isPermanent = "isPermanent";
 
     public final int NO_BOOST = 0, CRIT_BOOST = 1, MISS_BOOST = 2, DMG_BOOST = 3, ARMOR_BOOST = 4,
     HEAL_BOOST = 5;
 
+    public final int TYPE_POTION = 1, TYPE_BOMB = 2, TYPE_BOOST = 3, TYPE_BANK = 4, TYPE_UNIQUE = 5;
+
     public final String BOMB = "BOMB";
     public final String POTION = "POTION";
-    public final String DOUBLE_STEPS = "DOUBLE_STEPS";
+    public final String HEAL_LIQUID = "HEAL_LIQUID";
     public final String GLITTER_BOMB = "GLITTER_BOMB";
     public final String OVERCLOCK = "OVERCLOCK";
     public final String LONG_SCOPE = "LONG_SCOPE";
@@ -57,7 +60,7 @@ public class Item {
         mapItems = new HashMap<String, HashMap<String,Object>>();
         itemBomb();
         itemPotion();
-        itemDoubleSteps();
+        itemHealLiquid();
         //itemGlitterBomb();
         itemOverclock();
         itemLongScope();
@@ -95,6 +98,7 @@ public class Item {
         map.put(value, 50.0);
         map.put(usedInHall, false);
         map.put(isSkill, false);
+        map.put(itemType, TYPE_BOMB);
         map.put(boostType, NO_BOOST);
         map.put(price, 5);
         map.put(isPermanent, false);
@@ -110,6 +114,7 @@ public class Item {
         map.put(value, -50.0);
         map.put(usedInHall, false);
         map.put(isSkill, false);
+        map.put(itemType, TYPE_POTION);
         map.put(boostType, NO_BOOST);
         map.put(price, 10);
         map.put(isPermanent, false);
@@ -118,19 +123,24 @@ public class Item {
         mapItems.put((String) map.get(name), map);
     }
 
-    private void itemDoubleSteps() {
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put(name, DOUBLE_STEPS);
-        map.put(description, "doubleStepsDesc");
-        map.put(value, 0);
-        map.put(usedInHall, true);
-        map.put(isSkill, false);
-        map.put(boostType, NO_BOOST);
-        map.put(price, 15);
-        map.put(isPermanent, false);
+    private void itemHealLiquid() {
+        int baseValue = -20;
+        for (int i = 1; i <= 3; i++) {
+            String index = String.valueOf(i);
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            map.put(name, HEAL_LIQUID + index);
+            map.put(description, "healLiquidDesc" + index);
+            map.put(value, baseValue*i);
+            map.put(usedInHall, false);
+            map.put(isSkill, false);
+            map.put(itemType, TYPE_POTION);
+            map.put(boostType, NO_BOOST);
+            map.put(price, basePrice*i);
+            map.put(isPermanent, false);
 
-        allItems.add((String) map.get(name));
-        mapItems.put((String) map.get(name), map);
+            allItems.add((String) map.get(name));
+            mapItems.put((String) map.get(name), map);
+        }
     }
 
     private void itemGlitterBomb() {
@@ -140,6 +150,7 @@ public class Item {
         map.put(value, 50.0);
         map.put(usedInHall, false);
         map.put(isSkill, false);
+        map.put(itemType, TYPE_BOMB);
         map.put(boostType, NO_BOOST);
         map.put(price, 5);
         map.put(isPermanent, false);
@@ -149,7 +160,7 @@ public class Item {
     }
 
     private void itemOverclock() {
-        int baseValue = 5;
+        int baseValue = 10;
         for (int i = 1; i <=3; i++) {
             String index = String.valueOf(i);
             HashMap<String, Object> map = new HashMap<String, Object>();
@@ -158,6 +169,7 @@ public class Item {
             map.put(value, baseValue * i);
             map.put(usedInHall, false);
             map.put(isSkill, false);
+            map.put(itemType, TYPE_BOOST);
             map.put(boostType, CRIT_BOOST);
             map.put(price, basePrice * i);
             map.put(isPermanent, false);
@@ -168,7 +180,7 @@ public class Item {
     }
 
     private void itemLongScope() {
-        int baseValue = 5;
+        int baseValue = 10;
         for (int i = 1; i <=3; i++) {
             String index = String.valueOf(i);
             HashMap<String, Object> map = new HashMap<String, Object>();
@@ -177,6 +189,7 @@ public class Item {
             map.put(value, baseValue * i);
             map.put(usedInHall, false);
             map.put(isSkill, false);
+            map.put(itemType, TYPE_BOOST);
             map.put(boostType, MISS_BOOST);
             map.put(price, basePrice * i);
             map.put(isPermanent, false);
@@ -196,6 +209,7 @@ public class Item {
             map.put(value, baseValue * i);
             map.put(usedInHall, false);
             map.put(isSkill, false);
+            map.put(itemType, TYPE_BOOST);
             map.put(boostType, DMG_BOOST);
             map.put(price, basePrice * i);
             map.put(isPermanent, false);
@@ -215,6 +229,7 @@ public class Item {
             map.put(value, values[i]);
             map.put(usedInHall, false);
             map.put(isSkill, false);
+            map.put(itemType, TYPE_BOOST);
             map.put(boostType, ARMOR_BOOST);
             map.put(price, basePrice * i);
             map.put(isPermanent, false);
@@ -234,6 +249,7 @@ public class Item {
             map.put(value, baseValue * i);
             map.put(usedInHall, false);
             map.put(isSkill, false);
+            map.put(itemType, TYPE_BOOST);
             map.put(boostType, HEAL_BOOST);
             map.put(price, basePrice * i);
             map.put(isPermanent, false);
@@ -247,9 +263,10 @@ public class Item {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, SUPER_VISION);
         map.put(description, "superVisionDesc");
-        map.put(value, 10);
+        map.put(value, 20);
         map.put(usedInHall, true);
         map.put(isSkill, false);
+        map.put(itemType, TYPE_BOOST);
         map.put(boostType, MISS_BOOST);
         map.put(price, expensive);
         map.put(isPermanent, true);
@@ -262,9 +279,10 @@ public class Item {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, EXPERIMENTAL);
         map.put(description, "experimentalDesc");
-        map.put(value, 10);
+        map.put(value, 20);
         map.put(usedInHall, true);
         map.put(isSkill, false);
+        map.put(itemType, TYPE_BOOST);
         map.put(boostType, CRIT_BOOST);
         map.put(price, expensive);
         map.put(isPermanent, true);
@@ -277,9 +295,10 @@ public class Item {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, HARDWARE);
         map.put(description, "hardwareDesc");
-        map.put(value, 0.1);
+        map.put(value, 0.2);
         map.put(usedInHall, true);
         map.put(isSkill, false);
+        map.put(itemType, TYPE_BOOST);
         map.put(boostType, DMG_BOOST);
         map.put(price, expensive);
         map.put(isPermanent, true);
@@ -295,6 +314,7 @@ public class Item {
         map.put(value, 0.34);
         map.put(usedInHall, true);
         map.put(isSkill, false);
+        map.put(itemType, TYPE_BOOST);
         map.put(boostType, ARMOR_BOOST);
         map.put(price, expensive);
         map.put(isPermanent, true);
@@ -307,9 +327,10 @@ public class Item {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, HEAL_COOLANT);
         map.put(description, "healCoolantDesc");
-        map.put(value, 0.15);
+        map.put(value, 0.3);
         map.put(usedInHall, true);
         map.put(isSkill, false);
+        map.put(itemType, TYPE_BOOST);
         map.put(boostType, HEAL_BOOST);
         map.put(price, expensive);
         map.put(isPermanent, true);
@@ -325,6 +346,7 @@ public class Item {
         map.put(value, 0.0);
         map.put(usedInHall, true);
         map.put(isSkill, false);
+        map.put(itemType, TYPE_UNIQUE);
         map.put(boostType, NO_BOOST);
         map.put(price, expensive);
         map.put(isPermanent, true);
