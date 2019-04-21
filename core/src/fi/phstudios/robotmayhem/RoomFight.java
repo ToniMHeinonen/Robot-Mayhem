@@ -76,6 +76,7 @@ public class RoomFight extends RoomParent {
         escapeBg = files.escapeBg;
         firstPlayTimeFight = game.isFirstPlayTimeFight();
         lan = game.getLanguage();
+        checkDifficulty();
 
 
         if (firstPlayTimeFight) {
@@ -113,6 +114,12 @@ public class RoomFight extends RoomParent {
 
             hackingPhase();
             powerUpPhase();
+        }
+    }
+
+    private void checkDifficulty() {
+        if (game.getDifficulty().equals(game.HARD) || game.isFinishedGameHard()) {
+            game.setCheckHard(true);
         }
     }
 

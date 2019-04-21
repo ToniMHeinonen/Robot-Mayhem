@@ -20,6 +20,7 @@ public class Achievements {
     private float stepAllCount;
     private String lan;
     private boolean finishedGame;
+    private boolean finishedGameHard;
 
     private Dialog dialogAch;
     private ImageButton btnCancel;
@@ -38,6 +39,7 @@ public class Achievements {
         lan = game.getLanguage();
         localize = game.getLocalize();
         finishedGame = game.isFinishedGame();
+        finishedGameHard = game.isFinishedGameHard();
 
         createAchDialog();
         createHeadersAndDescriptions();
@@ -59,13 +61,15 @@ public class Achievements {
                 localize.get("sundayWalker"),
                 localize.get("marathonist"),
                 localize.get("finisher"),
-                "Achievement 3"};
+                localize.get("pepperyWalker"),
+                "Achievement 4"};
 
         achDescriptions = new String[] {
                 localize.get("sundayWalkerDesc"),
                 localize.get("marathonistDesc"),
                 localize.get("finisherDesc"),
-                "Achievement 3 description (20 steps)"};
+                localize.get("pepperyWalkerDesc"),
+                "Achievement 4 description (20 steps)"};
 
         achLocked = new String[achHeaders.length];
         for (int i = 0; i < achHeaders.length; i++) {
@@ -83,8 +87,11 @@ public class Achievements {
         // Achievement 2 / Finisher / Finish the game
         if (finishedGame) achLocked[2] = "unlocked";
 
-        // Achievement 3
-        if (stepAllCount >= 20) achLocked[3] = "unlocked";
+        // Achievement 3 / Peppery Walker / Finish the game on hard mode
+        if (finishedGameHard) achLocked[3] = "unlocked";
+
+        // Achievement 4
+        if (stepAllCount >= 20) achLocked[4] = "unlocked";
     }
 
     private void createButtons() {
