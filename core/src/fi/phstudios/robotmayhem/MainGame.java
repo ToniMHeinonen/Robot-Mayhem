@@ -76,6 +76,7 @@ public class MainGame extends Game {
 	private String keyStepCount = E.encrypt("stepCount");
 	private String keyStepAllCount = E.encrypt("stepAllCount");
 	private String keyStepBank = E.encrypt("stepBank");
+	private String keyStepBankSize = E.encrypt("stepBankSize");
 	private String keySkill1 = E.encrypt("skill1");
 	private String keySkill2 = E.encrypt("skill2");
 	private String keyCurrentBoss = E.encrypt("currentBoss");
@@ -111,11 +112,11 @@ public class MainGame extends Game {
 	private String keyArrPlayedMusicSize = E.encrypt("arrPlayedMusicSize");
 	private String keyArrPlayedMusic = E.encrypt("arrPlayedMusic");
 	// Values
-	private int saveTimerAmount = 3600;
+	private int saveTimerAmount = 1800;
 	private int saveTimer = saveTimerAmount;
 	private Preferences prefsStats;
 	private SaveAndLoad stats;
-	private float stepCount, stepBank, stepAllCount;
+	private float stepCount, stepBank, stepAllCount, stepBankSize;
 	private int pool, poolMult, money, fightsWon, prevDayGift, buyedItemsCounter;
 	private String skill1, skill2, currentBoss, playerName;
 	private boolean firstPlayTime, firstPlayTimeFight, firstPlayInventory, firstPlayBank,
@@ -357,6 +358,7 @@ public class MainGame extends Game {
 	    RoomGame room = new RoomGame(this);
         setScreen(room);
         curRoom = ROOM_GAME;
+        saveStats();
     }
 
     public void switchToRoomFight() {
@@ -367,6 +369,7 @@ public class MainGame extends Game {
 	    curRoom = ROOM_FIGHT;
 	    stepCount = progressBarMilestone / 2;
 	    stepCount = Math.round(stepCount);
+	    saveStats();
     }
 
 	public void switchToPowerUps() {
@@ -592,6 +595,7 @@ public class MainGame extends Game {
 		stepCount = stats.loadValue(keyStepCount, 0f);
 		stepAllCount = stats.loadValue(keyStepAllCount, 0f);
 		stepBank = stats.loadValue(keyStepBank, 0f);
+		stepBankSize = stats.loadValue(keyStepBankSize, 3000f);
 		skill1 = stats.loadValue(keySkill1, skills.REPAIR);
 		skill2 = stats.loadValue(keySkill2, "");
 		currentBoss = stats.loadValue(keyCurrentBoss, bosses.ROOMBOT);
@@ -650,6 +654,7 @@ public class MainGame extends Game {
 		stats.saveValue(keyStepCount, stepCount);
 		stats.saveValue(keyStepAllCount, stepAllCount);
 		stats.saveValue(keyStepBank, stepBank);
+		stats.saveValue(keyStepBankSize, stepBankSize);
 		stats.saveValue(keySkill1, skill1);
 		stats.saveValue(keySkill2, skill2);
 		stats.saveValue(keyCurrentBoss, currentBoss);
@@ -822,7 +827,7 @@ public class MainGame extends Game {
 		if (!pauseWalking) {
 			stepAllCount++;
 			if (stepCount < progressBarMilestone) this.stepCount++;
-			else if (stepBank < 3000) stepBank++;
+			else if (stepBank < stepBankSize) stepBank++;
 		}
 	}
 
@@ -887,6 +892,10 @@ public class MainGame extends Game {
 
 	public void addPermaHealBoost(double amount) {
 		permaHealBoost += amount;
+	}
+
+	public void increaseStepBankSize(float amount) {
+		stepBankSize += amount;
 	}
 
 	/*
