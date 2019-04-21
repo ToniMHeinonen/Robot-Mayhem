@@ -31,8 +31,15 @@ public class UtilDialog {
         label.setWrap(true);
         label.setAlignment(1);
 
+        float offset;
+        if (style.equals("skilldescription")) {
+            offset = 100;
+        } else {
+            offset = 210;
+        }
+
         final Dialog dialog = new Dialog("", finalSkin, style);
-        dialog.getContentTable().add(label).prefWidth(areaWidth - 210);
+        dialog.getContentTable().add(label).prefWidth(areaWidth - offset);
         dialog.setPosition(x, yPos);
         dialog.setSize(areaWidth,areaHeight);
         stage.addActor(dialog);
