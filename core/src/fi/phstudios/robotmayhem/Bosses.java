@@ -151,10 +151,10 @@ public class Bosses {
         curAttackName = "copperAttackName";
         curNormalSize = true;
         curSkillName0 = skills.ATTACK;
-        curSkillName1 = skills.ATTACK;
-        curSkillName2 = skills.ATTACK;
-        curSkillName3 = skills.ATTACK;
-        curSkillName4 = skills.ATTACK;
+        curSkillName1 = skills.ORDER;
+        curSkillName2 = skills.SPEEDING;
+        curSkillName3 = skills.THE_LAW;
+        curSkillName4 = skills.LOW_SPEED;
         curDialogStart = "copperDialogStart";
         curDialogEnd = "copperDialogEnd";
 

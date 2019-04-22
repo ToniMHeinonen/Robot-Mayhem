@@ -68,7 +68,7 @@ public class Skills {
     public final String REBOOT = "REBOOT";
     // Copper
     public final String SPEEDING = "SPEEDING";
-    public final String LOWSPEED = "LOWSPEED";
+    public final String LOW_SPEED = "LOW_SPEED";
     public final String THE_LAW = "THE_LAW";
     public final String ORDER = "ORDER";
     // Baller
@@ -129,6 +129,11 @@ public class Skills {
         skillPopup();
         skillTrojan();
         skillReboot();
+        // Copper
+        skillSpeeding();
+        skillLowSpeed();
+        skillTheLaw();
+        skillOrder();
         /*skillShock();
         skillFire();
         skillElectrify();
@@ -670,6 +675,98 @@ public class Skills {
         map.put(boostSelf, true);
         map.put(boostType, BOOST_NONE);
         map.put(boostValue, 0.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillSpeeding() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, SPEEDING);
+        map.put(description, "speedingDesc");
+        map.put(damage, 3.0);
+        map.put(dmgPurePercent, false);
+        map.put(critChance, defCrit);
+        map.put(missChance, 33);
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, true);
+        map.put(cooldown, 3);
+        map.put(hitAnimation, skillHit);
+        map.put(sound, null);
+        map.put(button, btnSkill);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillLowSpeed() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, LOW_SPEED);
+        map.put(description, "lowSpeedDesc");
+        map.put(damage, 2.0);
+        map.put(dmgPurePercent, false);
+        map.put(critChance, defCrit + 33);
+        map.put(missChance, 33);
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, true);
+        map.put(cooldown, 3);
+        map.put(hitAnimation, skillHit);
+        map.put(sound, null);
+        map.put(button, btnSkill);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillTheLaw() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, THE_LAW);
+        map.put(description, "theLawDesc");
+        map.put(damage, 0.0);
+        map.put(dmgPurePercent, false);
+        map.put(critChance, 0);
+        map.put(missChance, 0);
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, true);
+        map.put(cooldown, 3);
+        map.put(hitAnimation, null);
+        map.put(sound, null);
+        map.put(button, btnSkill);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_MISS);
+        map.put(boostValue, 15.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillOrder() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, ORDER);
+        map.put(description, "orderDesc");
+        map.put(damage, 0.0);
+        map.put(dmgPurePercent, false);
+        map.put(critChance, 0);
+        map.put(missChance, 0);
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, true);
+        map.put(cooldown, 3);
+        map.put(hitAnimation, null);
+        map.put(sound, null);
+        map.put(button, btnSkill);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_CRIT);
+        map.put(boostValue, 15.0);
 
         allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
