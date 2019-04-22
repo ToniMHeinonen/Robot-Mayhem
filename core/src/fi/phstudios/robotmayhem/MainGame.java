@@ -126,6 +126,7 @@ public class MainGame extends Game {
 
     private String keyAchievComplete = E.encrypt("achievComplete");
     private String keyAchievCompleteSize = E.encrypt("achievCompleteSize");
+    private String keyHasCollected = E.encrypt("hasCollected");
 
 	// Values
 	private int saveTimerAmount = 1800;
@@ -154,6 +155,7 @@ public class MainGame extends Game {
 	private int boughtPermanentSize;
 	private ArrayList<String> achievComplete;
 	private int achievCompleteSize;
+	private ArrayList<String> hasCollected;
 
 	// Stepmeter in RoomGame
     private BitmapFont fontSteps;
@@ -612,6 +614,7 @@ public class MainGame extends Game {
 		arrPlayedMusic = new ArrayList<Integer>();
 		boughtPermanent = new ArrayList<String>();
 		achievComplete = new ArrayList<String>();
+		hasCollected = new ArrayList<String>();
 		prefsStats = Gdx.app.getPreferences("Robot_Mayhem_Stats");
 		//prefsStats.clear(); // For testing purposes
 		//prefsStats.flush(); // Without flushing, clear does not work in Android
@@ -767,6 +770,7 @@ public class MainGame extends Game {
         achievCompleteSize = stats.loadValue(keyAchievCompleteSize, 7);
         for (int i = 0; i < achievCompleteSize; i++) {
             achievComplete.add(i, achievs.loadValue(keyAchievComplete + String.valueOf(i), "locked"));
+            hasCollected.add(i, achievs.loadValue(keyHasCollected + String.valueOf(i), "false"));
         }
     }
 
@@ -774,6 +778,7 @@ public class MainGame extends Game {
         achievs.saveValue(keyAchievCompleteSize, achievComplete.size());
         for (int i = 0; i < achievComplete.size(); i++) {
             achievs.saveValue(keyAchievComplete + String.valueOf(i), achievComplete.get(i));
+            achievs.saveValue(keyHasCollected + String.valueOf(i), hasCollected.get(i));
         }
 	    prefsAchievs.flush();
     }
@@ -1411,5 +1416,13 @@ public class MainGame extends Game {
 
     public ArrayList<String> getAchievComplete() {
 	    return achievComplete;
+    }
+
+    public void setHasCollected(int i, String state) {
+	    hasCollected.set(i, state);
+    }
+
+    public ArrayList<String> getHasCollected() {
+	    return hasCollected;
     }
 }
