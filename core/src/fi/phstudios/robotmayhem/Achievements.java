@@ -27,7 +27,6 @@ public class Achievements {
 
     private String[] achHeaders;
     private String[] achDescriptions;
-    private String[] achLocked;
 
     private float space = 200f;
 
@@ -47,6 +46,7 @@ public class Achievements {
         createButtons();
         createExitButton();
         stage.addActor(dialogAch);
+        game.saveAchievements();
     }
 
     private void createAchDialog() {
@@ -70,34 +70,31 @@ public class Achievements {
                 localize.get("finisherDesc"),
                 localize.get("pepperyWalkerDesc"),
                 "Achievement 4 description (20 steps)"};
-
-        achLocked = new String[achHeaders.length];
-        for (int i = 0; i < achHeaders.length; i++) {
-                achLocked[i] = "locked";
-        }
     }
 
     private void checkAchievements() {
+        // REMEMBER to change default-value in MainGame -> loadAchievements()
+
         // Achievement 0 / Sunday Walker / Walk 50 steps
-        if (stepAllCount >= 50) achLocked[0] = "unlocked";
+        if (stepAllCount >= 50) game.setAchievement(0, "unlocked");
 
         // Achievement 1 / Marathonist / Walk 10 000 steps
-        if (stepAllCount >= 10000) achLocked[1] = "unlocked";
+        if (stepAllCount >= 10000) game.setAchievement(1, "unlocked");
 
         // Achievement 2 / Finisher / Finish the game
-        if (finishedGame) achLocked[2] = "unlocked";
+        if (finishedGame) game.setAchievement(2, "unlocked");
 
         // Achievement 3 / Peppery Walker / Finish the game on hard mode
-        if (finishedGameHard) achLocked[3] = "unlocked";
+        if (finishedGameHard) game.setAchievement(3, "unlocked");
 
         // Achievement 4
-        if (stepAllCount >= 20) achLocked[4] = "unlocked";
+        if (stepAllCount >= 20) game.setAchievement(4, "unlocked");
     }
 
     private void createButtons() {
         for (int i = 0; i < achHeaders.length; i++) {
             final int btnCounter = i;
-            ImageButton imgBtn = new ImageButton(finalSkin, achLocked[i]);
+            ImageButton imgBtn = new ImageButton(finalSkin, game.getAchievComplete().get(i));
             imgBtn.setPosition(400 + i*space, 400);
             dialogAch.addActor(imgBtn);
             imgBtn.addListener(new ClickListener(){
@@ -127,7 +124,7 @@ public class Achievements {
         dialog.addActor(header);
 
         String stringLocked = localize.get("locked");
-        if (achLocked[index].equals("unlocked")) stringLocked = localize.get("unlocked");
+        if (game.getAchievComplete().get(index).equals("unlocked")) stringLocked = localize.get("unlocked");
 
         Label locked = new Label(stringLocked, finalSkin);
         locked.setPosition(game.pixelWidth / 4, 350);
@@ -154,6 +151,7 @@ public class Achievements {
         buttonExit.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
+                game.saveAchievements();
                 dialogAch.remove();
             }
         });
