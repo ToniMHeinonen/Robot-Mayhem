@@ -163,7 +163,7 @@ public class UtilPowerUp {
      * Spawn enemy's skill if player does not own it. Else spawn random powerup.
      */
     private void spawnEnemyPowerUp() {
-        String[] bossSkills = bosses.retrieveBossSkills(game.getCurrentBoss());
+        String[] bossSkills = game.getCurBossSkills();
         // Choose from 1 and 2, since 0 is normal attack
         boolean skill1Owned, skill2Owned;
         String chosenSkill = "";

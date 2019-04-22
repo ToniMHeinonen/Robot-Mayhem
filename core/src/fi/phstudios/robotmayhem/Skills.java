@@ -3,6 +3,7 @@ package fi.phstudios.robotmayhem;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.I18NBundle;
+import com.sun.org.apache.bcel.internal.generic.POP;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -123,6 +124,11 @@ public class Skills {
         skillPickpocket();
         skillMischief();
         skillShadowstep();
+        // PC
+        skillVirus();
+        skillPopup();
+        skillTrojan();
+        skillReboot();
         /*skillShock();
         skillFire();
         skillElectrify();
@@ -569,6 +575,98 @@ public class Skills {
         map.put(hitAnimation, skillHit);
         map.put(sound, null);
         map.put(button, btnSkill);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillVirus() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, VIRUS);
+        map.put(description, "virusDesc");
+        map.put(damage, 0.5);
+        map.put(dmgPurePercent, false);
+        map.put(critChance, defCrit);
+        map.put(missChance, defMiss);
+        map.put(damageOverTime, 0.5);
+        map.put(damageOverTimeTurns, 4);
+        map.put(dotPurePercent, false);
+        map.put(cooldown, 4);
+        map.put(hitAnimation, skillHit);
+        map.put(sound, null);
+        map.put(button, btnSkill);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillPopup() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, POPUP);
+        map.put(description, "popupDesc");
+        map.put(damage, 1.0);
+        map.put(dmgPurePercent, false);
+        map.put(critChance, defCrit);
+        map.put(missChance, defMiss - 5);
+        map.put(damageOverTime, 0.5);
+        map.put(damageOverTimeTurns, 2);
+        map.put(dotPurePercent, false);
+        map.put(cooldown, 3);
+        map.put(hitAnimation, skillHit);
+        map.put(sound, null);
+        map.put(button, btnSkill);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillTrojan() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, TROJAN);
+        map.put(description, "trojanDesc");
+        map.put(damage, 0.0);
+        map.put(dmgPurePercent, false);
+        map.put(critChance, 0);
+        map.put(missChance, defMiss);
+        map.put(damageOverTime, 0.75);
+        map.put(damageOverTimeTurns, 3);
+        map.put(dotPurePercent, false);
+        map.put(cooldown, 4);
+        map.put(hitAnimation, null);
+        map.put(sound, null);
+        map.put(button, btnSkill);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillReboot() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, REBOOT);
+        map.put(description, "rebootDesc");
+        map.put(damage, 0.0);
+        map.put(dmgPurePercent, false);
+        map.put(critChance, 0);
+        map.put(missChance, 0);
+        map.put(damageOverTime, -50.0);
+        map.put(damageOverTimeTurns, 1);
+        map.put(dotPurePercent, true);
+        map.put(cooldown, 5);
+        map.put(hitAnimation, null);
+        map.put(sound, null);
+        map.put(button, btnHeal);
         map.put(boostSelf, true);
         map.put(boostType, BOOST_NONE);
         map.put(boostValue, 0.0);

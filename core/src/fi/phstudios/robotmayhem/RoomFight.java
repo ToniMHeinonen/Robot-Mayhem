@@ -1612,6 +1612,9 @@ public class RoomFight extends RoomParent {
             skillNames[1] = (String) mapBoss.get(bosses.skillName + String.valueOf(skillNumber1));
             skillNames[2] = (String) mapBoss.get(bosses.skillName + String.valueOf(skillNumber2));
 
+            // Powerup uses this to give correct skills
+            game.setCurBossSkills(skillNames[0], skillNames[1], skillNames[2]);
+
             for (int i = 0; i < 3; i++) {
                 String skillName = skillNames[i];
 

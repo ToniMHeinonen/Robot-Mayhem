@@ -55,6 +55,7 @@ public class MainGame extends Game {
 
 	// Pools and tiers
 	private int[] poolMilestones = new int[] {20, 100, 250, 500, 1000, 1500};
+	private String[] curBossSkills = new String[3];
 
 	// Settings
 	// Keys
@@ -992,6 +993,16 @@ public class MainGame extends Game {
 	/*
 	GETTERS AND SETTERS
 	 */
+
+	public void setCurBossSkills (String skill0, String skill1, String skill2) {
+		curBossSkills[0] = skill0;
+		curBossSkills[1] = skill1;
+		curBossSkills[2] = skill2;
+	}
+
+	public String[] getCurBossSkills() {
+		return curBossSkills;
+	}
 
 	public void setPauseWalking(boolean pauseWalking) {
 		this.pauseWalking = pauseWalking;

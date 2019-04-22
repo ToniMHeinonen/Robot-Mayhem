@@ -191,10 +191,10 @@ public class Bosses {
         curAttackName = "pcAttackName";
         curNormalSize = false;
         curSkillName0 = skills.ATTACK;
-        curSkillName1 = skills.ATTACK;
-        curSkillName2 = skills.ATTACK;
-        curSkillName3 = skills.ATTACK;
-        curSkillName4 = skills.ATTACK;
+        curSkillName1 = skills.POPUP;
+        curSkillName2 = skills.VIRUS;
+        curSkillName3 = skills.REBOOT;
+        curSkillName4 = skills.TROJAN;
         curDialogStart = "pcDialogStart";
         curDialogEnd = "pcDialogEnd";
 
