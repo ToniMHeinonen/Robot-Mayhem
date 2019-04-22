@@ -25,10 +25,11 @@ public class Achievements {
     private String[] allItems;
 
     private Dialog dialogAch;
-    private ImageButton btnCancel;
+    private ImageButton btnCancel, btnCollect;
 
     private String[] achHeaders;
     private String[] achDescriptions;
+    private int[] achMoney;
 
     private float space = 200f;
     private int permanentCounter;
@@ -79,6 +80,16 @@ public class Achievements {
                 localize.get("pepperyWalkerDesc"),
                 localize.get("materialistDesc"),
                 "Achievement 6 description (20 steps)"};
+
+        achMoney = new int[] {
+                5,      // Sunday Walker / 50 steps
+                15,     // Jogger / 5 000 steps
+                30,     // Marathonist / 10 000 steps
+                30,     // Finisher / Finish the game
+                100,    // Peppery Walker / Finish the game on hard mode
+                25,     // Materialist / Buy every permanent item
+                2       // For the test-achievement
+        };
     }
 
     private void checkAchievements() {
@@ -106,8 +117,7 @@ public class Achievements {
                 permanentCounter++;
             }
         }
-        System.out.println(permanentCounter);
-        System.out.println(game.getBoughtPermanent().size());
+
         if (permanentCounter == game.getBoughtPermanent().size()) {
             game.setAchievement(5, "unlocked");
         }
@@ -132,8 +142,9 @@ public class Achievements {
         }
     }
 
-    private void popupAchievement(int index) {
-        Label label = new Label(achDescriptions[index], finalSkin, "font46");
+    private void popupAchievement(final int index) {
+        Label label = new Label(achDescriptions[index] + " " + localize.get("reward") + " " +
+                String.valueOf(achMoney[index]) + " " + localize.get("shinyCoins"), finalSkin, "font46");
         label.setWrap(true);
         label.setAlignment(1);
 
@@ -157,8 +168,25 @@ public class Achievements {
         locked.setAlignment(1);
         dialog.addActor(locked);
 
+        btnCollect = new ImageButton(finalSkin, "confirm_" + lan);
+        btnCollect.setPosition(dialog.getWidth()/2 - 400, dialog.getHeight()/4 - 55);
+        btnCollect.setDisabled(true);
+        dialog.addActor(btnCollect);
+        if (game.getHasCollected().get(index).equals("false") && game.getAchievComplete().get(index).equals("unlocked")) {
+            btnCollect.setDisabled(false);
+            btnCollect.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    game.setHasCollected(index, "true");
+                    game.addMoney(achMoney[index]);
+                    game.saveAchievements();
+                    dialog.remove();
+                }
+            });
+        }
+
         btnCancel = new ImageButton(finalSkin, "cancel_" + lan);
-        btnCancel.setPosition(game.pixelWidth / 2 - btnCancel.getWidth()/2, 210);
+        btnCancel.setPosition(btnCollect.getX() + 445, btnCollect.getY());
         dialog.addActor(btnCancel);
         btnCancel.addListener(new ClickListener(){
             @Override
@@ -167,7 +195,7 @@ public class Achievements {
             }
         });
 
-        stage.addActor(dialog);
+        dialogAch.addActor(dialog);
     }
 
     private void createExitButton() {
