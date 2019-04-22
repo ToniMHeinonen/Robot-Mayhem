@@ -404,6 +404,10 @@ public class MainGame extends Game {
         if (pool == 2) money += MathUtils.random(3,7);
         else if (pool == 3) money += MathUtils.random(8, 12);
         else if (pool == 4) money += MathUtils.random(13, 17);
+
+        if (!difficulty.equals(HARD) || !finishedGameHard) {
+            checkHard = false;
+        }
     }
 
 	public void switchToPowerUps() {
@@ -638,7 +642,7 @@ public class MainGame extends Game {
 		skill2 = stats.loadValue(keySkill2, "");
 		currentBoss = stats.loadValue(keyCurrentBoss, bosses.ROOMBOT);
 		finishedGame = stats.loadValue(keyFinishedGame, false);
-		checkHard = stats.loadValue(keyCheckHard, false);
+		checkHard = stats.loadValue(keyCheckHard, true);
 		finishedGameHard = stats.loadValue(keyFinishedGameHard, false);
 		pool = stats.loadValue(keyPool, 1);
 		poolMult = stats.loadValue(keyPoolMult, 0);
@@ -874,6 +878,7 @@ public class MainGame extends Game {
 		poolMult = 0;
 		finishedGame = true;
 		if (checkHard) finishedGameHard = true;
+		checkHard = true;
 	}
 
 	public void addToInventory(String name, boolean isSkill) {

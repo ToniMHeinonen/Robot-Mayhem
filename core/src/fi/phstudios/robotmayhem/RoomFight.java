@@ -123,12 +123,6 @@ public class RoomFight extends RoomParent {
         }
     }
 
-    private void checkDifficulty() {
-        if (game.getDifficulty().equals(game.HARD) || game.isFinishedGameHard()) {
-            game.setCheckHard(true);
-        }
-    }
-
     @Override
     public void selectItem(String item) {
         player.selectItem(item);
