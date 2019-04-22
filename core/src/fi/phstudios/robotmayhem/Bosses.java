@@ -40,7 +40,8 @@ public class Bosses {
     public final String ROBBER = "Robber";
     public final String COPIER = "Copier";
     public final String PC = "PC";
-    public final String FABIO = "FABIO";
+    public final String BALLER = "Baller";
+    public final String FABIO = "Fabio";
     private ArrayList<String> allBosses = new ArrayList<String>();
     public final int poolBossesSize;
 
@@ -63,6 +64,7 @@ public class Bosses {
         bossRobber();
         bossCopier();
         bossPC();
+        bossBaller();
         bossFabio();
         allBosses.remove(FABIO); // Don't count Fabio in all bosses
         poolBossesSize = allBosses.size();
@@ -185,6 +187,24 @@ public class Bosses {
         animAttack = files.a_pcAttack;
         animDamage = files.a_pcDamage;
         animStun = files.a_pcStun;
+
+        addToMap();
+    }
+
+    private void bossBaller() {
+        curName = BALLER;
+        curAttackName = "ballerAttackName";
+        curNormalSize = true;
+        curSkillName0 = skills.ATTACK;
+        curSkillName1 = skills.ELECTRIFY;
+        curSkillName2 = skills.MISSILE;
+        curDialogStart = "ballerDialogStart";
+        curDialogEnd = "ballerDialogEnd";
+
+        animIdle = files.a_ballerIdle;
+        animAttack = files.a_ballerAttack;
+        animDamage = files.a_ballerDamage;
+        animStun = files.a_ballerStun;
 
         addToMap();
     }

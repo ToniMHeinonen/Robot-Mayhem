@@ -22,8 +22,6 @@ public class Item {
 
     public final int TYPE_POTION = 1, TYPE_BOMB = 2, TYPE_BOOST = 3, TYPE_BANK = 4, TYPE_UNIQUE = 5;
 
-    public final String BOMB = "BOMB";
-    public final String POTION = "POTION";
     public final String BANK_UPGRADE = "BANK_UPGRADE";
     public final String HEAL_LIQUID = "HEAL_LIQUID";
     public final String GLITTER_BOMB = "GLITTER_BOMB";
@@ -61,7 +59,7 @@ public class Item {
         mapItems = new HashMap<String, HashMap<String,Object>>();
         itemBankUpgrade();
         itemHealLiquid();
-        //itemGlitterBomb();
+        itemGlitterBomb();
         itemOverclock();
         itemLongScope();
         itemPowerPotion();
@@ -112,13 +110,13 @@ public class Item {
     }
 
     private void itemHealLiquid() {
-        double baseValue = -20.0;
+        double[] values = new double[] {0.0, -15.0, -35.0, -70.0};
         for (int i = 1; i <= 3; i++) {
             String index = String.valueOf(i);
             HashMap<String, Object> map = new HashMap<String, Object>();
             map.put(name, HEAL_LIQUID + index);
             map.put(description, "healLiquidDesc" + index);
-            map.put(value, baseValue*i);
+            map.put(value, values[i]);
             map.put(usedInHall, false);
             map.put(isSkill, false);
             map.put(itemType, TYPE_POTION);
@@ -132,19 +130,23 @@ public class Item {
     }
 
     private void itemGlitterBomb() {
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put(name, GLITTER_BOMB);
-        map.put(description, "glitterBombDesc");
-        map.put(value, 50.0);
-        map.put(usedInHall, false);
-        map.put(isSkill, false);
-        map.put(itemType, TYPE_BOMB);
-        map.put(boostType, NO_BOOST);
-        map.put(price, 5);
-        map.put(isPermanent, false);
+        double[] damages = new double[] {0.0, 1.0, 1.5, 2.0};
+        for (int i = 1; i <= 3; i++) {
+            String index = String.valueOf(i);
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            map.put(name, GLITTER_BOMB + index);
+            map.put(description, "glitterBombDesc" + index);
+            map.put(value, damages[i]);
+            map.put(usedInHall, false);
+            map.put(isSkill, false);
+            map.put(itemType, TYPE_BOMB);
+            map.put(boostType, NO_BOOST);
+            map.put(price, basePrice * i);
+            map.put(isPermanent, false);
 
-        allItems.add((String) map.get(name));
-        mapItems.put((String) map.get(name), map);
+            allItems.add((String) map.get(name));
+            mapItems.put((String) map.get(name), map);
+        }
     }
 
     private void itemOverclock() {

@@ -743,8 +743,10 @@ public class RoomFight extends RoomParent {
                         opponent.startHitAnimation(dotMinus, animSpeed);
                     }
                 } else if (usedItem != null) {
-                    usedItem = null;
-                    turnState = WAIT_FOR_ACTION;
+                    if (!fightersTakingDamage()) {
+                        usedItem = null;
+                        turnState = WAIT_FOR_ACTION;
+                    }
                 } else {
                     turnState = END_TURN;
                 }
@@ -788,6 +790,13 @@ public class RoomFight extends RoomParent {
                 takeHeal(amount);
                 startHitAnimation(healthPlus, animSpeed);
                 actionState = HEAL_ANIM;
+            } else if (itemType == items.TYPE_BOMB) {
+                double amount = (Double) item.get(items.value);
+                dmgAmount = amount * defaultDmg;
+                if (opponent.normalSize) curHitAnimation = files.animSkillHit;
+                else curHitAnimation = files.animSkillHitLow;
+                opponent.startHitAnimation(curHitAnimation, animSpeed);
+                actionState = HIT_ANIM;
             }
         }
 
