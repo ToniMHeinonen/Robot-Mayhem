@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.I18NBundle;
 
@@ -25,7 +26,8 @@ public class Achievements {
     private String[] allItems;
 
     private Dialog dialogAch;
-    private ImageButton btnCancel, btnCollect;
+    private TextButton btnCollect;
+    private TextButton btnCancel;
 
     private String[] achHeaders;
     private String[] achDescriptions;
@@ -168,7 +170,11 @@ public class Achievements {
         locked.setAlignment(1);
         dialog.addActor(locked);
 
-        btnCollect = new ImageButton(finalSkin, "confirm_" + lan);
+        String stringCollect = "collect";
+        if (game.getHasCollected().get(index).equals("true")) {
+            stringCollect = "collected";
+        }
+        btnCollect = new TextButton(localize.get(stringCollect), finalSkin, "small");
         btnCollect.setPosition(dialog.getWidth()/2 - 400, dialog.getHeight()/4 - 55);
         btnCollect.setDisabled(true);
         dialog.addActor(btnCollect);
@@ -185,7 +191,7 @@ public class Achievements {
             });
         }
 
-        btnCancel = new ImageButton(finalSkin, "cancel_" + lan);
+        btnCancel = new TextButton(localize.get("cancel"), finalSkin, "small");
         btnCancel.setPosition(btnCollect.getX() + 445, btnCollect.getY());
         dialog.addActor(btnCancel);
         btnCancel.addListener(new ClickListener(){
