@@ -85,7 +85,6 @@ public class RoomFight extends RoomParent {
         imgBg = files.imgBgBoss;
         escapeBg = files.escapeBg;
         lan = game.getLanguage();
-        checkDifficulty();
 
 
         if (game.isFirstPlayTimeFight()) {
@@ -134,16 +133,6 @@ public class RoomFight extends RoomParent {
         }
     }
 
-    private void checkDifficulty() {
-        if (game.getDifficulty().equals(game.HARD) || game.isFinishedGameHard()) {
-            game.setCheckHard(true);
-        }
-    }
-
-    /**
-     * Make player select the correct item from inventory.
-     * @param item selected item
-     */
     @Override
     public void selectItem(String item) {
         player.selectItem(item);

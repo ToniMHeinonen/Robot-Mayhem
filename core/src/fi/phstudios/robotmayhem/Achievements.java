@@ -31,6 +31,7 @@ public class Achievements {
     private String skill1;
     private String skill2;
     private ArrayList<String> inventory;
+    private Files files;
 
     private Dialog dialogAch;
     private TextButton btnCollect;
@@ -60,6 +61,7 @@ public class Achievements {
         skill1 = game.getSkill1();
         skill2 = game.getSkill2();
         inventory = game.getInventory();
+        files = game.getFiles();
 
         createAchDialog();
         createHeadersAndDescriptions();
@@ -215,6 +217,7 @@ public class Achievements {
                     game.setHasCollected(index, "true");
                     game.addMoney(achMoney[index]);
                     game.saveAchievements();
+                    game.playSound(files.sndPurchaseItem);
                     dialog.remove();
                 }
             });
