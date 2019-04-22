@@ -26,6 +26,7 @@ public class Skills {
     public final String hitAnimation = "hitAnimation";
     public final String sound = "sound";
     public final String button = "button";
+    public final String boostSelf = "boostSelf";
     public final String boostType = "boostType";
     public final String boostValue = "boostValue";
 
@@ -39,13 +40,46 @@ public class Skills {
     public final String REFLECT = "REFLECT";
     public final String ITEM = "ITEM";
     public final String REPAIR = "REPAIR";
-    public final String SHOCK = "SHOCK";
+    /*public final String SHOCK = "SHOCK";
     public final String FIRE = "FIRE";
-    public final String SUCTION = "SUCTION";
-    public final String DUST = "DUST";
     public final String ELECTRIFY = "ELECTRIFY";
     public final String MISSILE = "MISSILE";
-    public final String BIG_HEAL = "BIG_HEAL";
+    public final String BIG_HEAL = "BIG_HEAL";*/
+    // Roombot
+    public final String SUCTION = "SUCTION";
+    public final String DUST = "DUST";
+    public final String BUCKET = "BUCKET";
+    public final String SOAP = "SOAP";
+    // Copier
+    public final String DEJA_VU = "DEJA_VU";
+    public final String FLASH = "FLASH";
+    public final String COPYCAT = "COPYCAT";
+    public final String BLACK_INK = "BLACK_INK";
+    // Robber
+    public final String HIJACK = "HIJACK";
+    public final String PICKPOCKET = "PICKPOCKET";
+    public final String MISCHIEF = "MISCHIEF";
+    public final String SHADOWSTEP = "SHADOWSTEP";
+    // PC
+    public final String VIRUS = "VIRUS";
+    public final String POPUP = "POPUP";
+    public final String TROJAN = "TROJAN";
+    public final String REBOOT = "REBOOT";
+    // Copper
+    public final String SPEEDING = "SPEEDING";
+    public final String LOWSPEED = "LOWSPEED";
+    public final String THE_LAW = "THE_LAW";
+    public final String ORDER = "ORDER";
+    // Baller
+    public final String SHINE = "SHINE";
+    public final String COIN_FLIP = "COIN_FLIP";
+    public final String DIAMOND_ROLL = "DIAMOND_ROLL";
+    public final String ENRICHMENT = "ENRICHMENT";
+    // Fabio
+    public final String RUSTIFY = "RUSTIFY";
+    public final String OVERPOWER = "OVERPOWER";
+    public final String MAYHEM = "MAYHEM";
+    public final String VR = "VR";
 
     // Names for buttons
     public final String btnAttack = "ATTACK";
@@ -74,13 +108,21 @@ public class Skills {
         skillReflect();
         skillItem();
         skillRepair();
-        skillShock();
-        skillFire();
+        // Roombot
         skillSuction();
         skillDust();
+        skillBucket();
+        skillSoap();
+        // Copier
+        skillDejaVu();
+        skillFlash();
+        skillCopycat();
+        skillBlackInk();
+        /*skillShock();
+        skillFire();
         skillElectrify();
         skillMissile();
-        skillBigHeal();
+        skillBigHeal();*/
     }
 
     /* NOTE!
@@ -154,6 +196,7 @@ public class Skills {
         map.put(hitAnimation, physicalHit);
         map.put(sound, null);
         map.put(button, btnAttack);
+        map.put(boostSelf, true);
         map.put(boostType, BOOST_NONE);
         map.put(boostValue, 0.0);
 
@@ -176,6 +219,7 @@ public class Skills {
         map.put(hitAnimation, null);
         map.put(sound, null);
         map.put(button, btnDefend);
+        map.put(boostSelf, true);
         map.put(boostType, BOOST_NONE);
         map.put(boostValue, 0.0);
 
@@ -198,6 +242,7 @@ public class Skills {
         map.put(hitAnimation, null);
         map.put(sound, null);
         map.put(button, btnDefend);
+        map.put(boostSelf, true);
         map.put(boostType, BOOST_NONE);
         map.put(boostValue, 0.0);
 
@@ -220,6 +265,7 @@ public class Skills {
         map.put(hitAnimation, null);
         map.put(sound, null);
         map.put(button, btnItem);
+        map.put(boostSelf, true);
         map.put(boostType, BOOST_NONE);
         map.put(boostValue, 0.0);
 
@@ -242,6 +288,7 @@ public class Skills {
         map.put(hitAnimation, null);
         map.put(sound, null);
         map.put(button, btnHeal);
+        map.put(boostSelf, true);
         map.put(boostType, BOOST_NONE);
         map.put(boostValue, 0.0);
 
@@ -249,7 +296,191 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
-    private void skillShock() {
+    private void skillSuction() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, SUCTION);
+        map.put(description, "suctionDesc");
+        map.put(damage, 1.5);
+        map.put(dmgPurePercent, false);
+        map.put(critChance, defCrit + 10);
+        map.put(missChance, defMiss);
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, false);
+        map.put(cooldown, 2);
+        map.put(hitAnimation, skillHit);
+        map.put(sound, files.sndSuction);
+        map.put(button, btnSkill);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillDust() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, DUST);
+        map.put(description, "dustDesc");
+        map.put(damage, 0.0);
+        map.put(dmgPurePercent, false);
+        map.put(critChance, 0);
+        map.put(missChance, defMiss);
+        map.put(damageOverTime, 1.0);
+        map.put(damageOverTimeTurns, 2);
+        map.put(dotPurePercent, false);
+        map.put(cooldown, 3);
+        map.put(hitAnimation, null);
+        map.put(sound, files.sndDustThrow);
+        map.put(button, btnSkill);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillBucket() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, BUCKET);
+        map.put(description, "bucketDesc");
+        map.put(damage, -60.0);
+        map.put(dmgPurePercent, true);
+        map.put(critChance, 0);
+        map.put(missChance, 0);
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, false);
+        map.put(cooldown, 5);
+        map.put(hitAnimation, null);
+        map.put(sound, null);
+        map.put(button, btnHeal);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillSoap() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, SOAP);
+        map.put(description, "soapDesc");
+        map.put(damage, 0.0);
+        map.put(dmgPurePercent, true);
+        map.put(critChance, 0);
+        map.put(missChance, 0);
+        map.put(damageOverTime, -10.0);
+        map.put(damageOverTimeTurns, 5);
+        map.put(dotPurePercent, true);
+        map.put(cooldown, 5);
+        map.put(hitAnimation, null);
+        map.put(sound, null);
+        map.put(button, btnHeal);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillDejaVu() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, DEJA_VU);
+        map.put(description, "dejaVuDesc");
+        map.put(damage, 0.0);
+        map.put(dmgPurePercent, true);
+        map.put(critChance, 0);
+        map.put(missChance, defMiss);
+        map.put(damageOverTime, 1.5);
+        map.put(damageOverTimeTurns, 2);
+        map.put(dotPurePercent, false);
+        map.put(cooldown, 3);
+        map.put(hitAnimation, null);
+        map.put(sound, null);
+        map.put(button, btnSkill);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillFlash() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, FLASH);
+        map.put(description, "flashDesc");
+        map.put(damage, 0.0);
+        map.put(dmgPurePercent, true);
+        map.put(critChance, 0);
+        map.put(missChance, 0);
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, false);
+        map.put(cooldown, 2);
+        map.put(hitAnimation, null);
+        map.put(sound, null);
+        map.put(button, btnSkill);
+        map.put(boostSelf, false);
+        map.put(boostType, BOOST_MISS);
+        map.put(boostValue, -10.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillCopycat() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, COPYCAT);
+        map.put(description, "copycatDesc");
+        map.put(damage, 3.0);
+        map.put(dmgPurePercent, false);
+        map.put(critChance, defCrit + 15);
+        map.put(missChance, 0);
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, false);
+        map.put(cooldown, 4);
+        map.put(hitAnimation, skillHit);
+        map.put(sound, null);
+        map.put(button, btnSkill);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_MISS);
+        map.put(boostValue, -25.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillBlackInk() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, BLACK_INK);
+        map.put(description, "blackInkDesc");
+        map.put(damage, 1.5);
+        map.put(dmgPurePercent, false);
+        map.put(critChance, defCrit);
+        map.put(missChance, -100);
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, false);
+        map.put(cooldown, 2);
+        map.put(hitAnimation, skillHit);
+        map.put(sound, null);
+        map.put(button, btnSkill);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    /*private void skillShock() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, SHOCK);
         map.put(description, "shockDesc");
@@ -285,50 +516,6 @@ public class Skills {
         map.put(cooldown, 2);
         map.put(hitAnimation, null);
         map.put(sound, null);
-        map.put(button, btnSkill);
-        map.put(boostType, BOOST_NONE);
-        map.put(boostValue, 0.0);
-
-        allSkills.add((String) map.get(name));
-        mapSkills.put((String) map.get(name), map);
-    }
-
-    private void skillSuction() {
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put(name, SUCTION);
-        map.put(description, "suctionDesc");
-        map.put(damage, 1.5);
-        map.put(dmgPurePercent, false);
-        map.put(critChance, defCrit + 10);
-        map.put(missChance, defMiss);
-        map.put(damageOverTime, 0.0);
-        map.put(damageOverTimeTurns, 0);
-        map.put(dotPurePercent, false);
-        map.put(cooldown, 2);
-        map.put(hitAnimation, skillHit);
-        map.put(sound, files.sndSuction);
-        map.put(button, btnSkill);
-        map.put(boostType, BOOST_NONE);
-        map.put(boostValue, 0.0);
-
-        allSkills.add((String) map.get(name));
-        mapSkills.put((String) map.get(name), map);
-    }
-
-    private void skillDust() {
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put(name, DUST);
-        map.put(description, "dustDesc");
-        map.put(damage, 0.0);
-        map.put(dmgPurePercent, false);
-        map.put(critChance, 0);
-        map.put(missChance, defMiss);
-        map.put(damageOverTime, 1.0);
-        map.put(damageOverTimeTurns, 2);
-        map.put(dotPurePercent, false);
-        map.put(cooldown, 3);
-        map.put(hitAnimation, null);
-        map.put(sound, files.sndDustThrow);
         map.put(button, btnSkill);
         map.put(boostType, BOOST_NONE);
         map.put(boostValue, 0.0);
@@ -401,7 +588,7 @@ public class Skills {
 
         allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
-    }
+    }*/
 
     public String[] getAllSkills() {
         String[] converted = allSkills.toArray(new String[0]);

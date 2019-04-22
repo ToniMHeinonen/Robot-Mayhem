@@ -105,8 +105,8 @@ public class Bosses {
         curAttackName = "robberAttackName";
         curNormalSize = true;
         curSkillName0 = skills.ATTACK;
-        curSkillName1 = skills.FIRE;
-        curSkillName2 = skills.MISSILE;
+        curSkillName1 = skills.ATTACK;
+        curSkillName2 = skills.ATTACK;
 
         curDialogStart = "robberDialogStart";
         curDialogEnd = "robberDialogEnd";
@@ -124,8 +124,8 @@ public class Bosses {
         curAttackName = "roombotAttackName";
         curNormalSize = false;
         curSkillName0 = skills.ATTACK;
-        curSkillName1 = skills.SUCTION;
-        curSkillName2 = skills.DUST;
+        curSkillName1 = skills.SOAP;
+        curSkillName2 = skills.BUCKET;
         curDialogStart = "roombotDialogStart";
         curDialogEnd = "roombotDialogEnd";
 
@@ -142,8 +142,8 @@ public class Bosses {
         curAttackName = "copperAttackName";
         curNormalSize = true;
         curSkillName0 = skills.ATTACK;
-        curSkillName1 = skills.SHOCK;
-        curSkillName2 = skills.BIG_HEAL;
+        curSkillName1 = skills.ATTACK;
+        curSkillName2 = skills.ATTACK;
         curDialogStart = "copperDialogStart";
         curDialogEnd = "copperDialogEnd";
 
@@ -160,7 +160,7 @@ public class Bosses {
         curAttackName = "copierAttackName";
         curNormalSize = true;
         curSkillName0 = skills.ATTACK;
-        curSkillName1 = skills.ELECTRIFY;
+        curSkillName1 = skills.ATTACK;
         curSkillName2 = skills.REPAIR;
         curDialogStart = "copierDialogStart";
         curDialogEnd = "copierDialogEnd";
@@ -178,8 +178,8 @@ public class Bosses {
         curAttackName = "pcAttackName";
         curNormalSize = false;
         curSkillName0 = skills.ATTACK;
-        curSkillName1 = skills.ELECTRIFY;
-        curSkillName2 = skills.MISSILE;
+        curSkillName1 = skills.ATTACK;
+        curSkillName2 = skills.ATTACK;
         curDialogStart = "pcDialogStart";
         curDialogEnd = "pcDialogEnd";
 
@@ -196,8 +196,8 @@ public class Bosses {
         curAttackName = "ballerAttackName";
         curNormalSize = true;
         curSkillName0 = skills.ATTACK;
-        curSkillName1 = skills.ELECTRIFY;
-        curSkillName2 = skills.MISSILE;
+        curSkillName1 = skills.ATTACK;
+        curSkillName2 = skills.ATTACK;
         curDialogStart = "ballerDialogStart";
         curDialogEnd = "ballerDialogEnd";
 
@@ -214,8 +214,8 @@ public class Bosses {
         curAttackName = "fabioAttackName";
         curNormalSize = true;
         curSkillName0 = skills.ATTACK;
-        curSkillName1 = skills.BIG_HEAL;
-        curSkillName2 = skills.MISSILE;
+        curSkillName1 = skills.ATTACK;
+        curSkillName2 = skills.ATTACK;
         curDialogStart = "fabioDialogStart";
         curDialogEnd = "fabioDialogEnd";
 

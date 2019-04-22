@@ -560,7 +560,7 @@ public class RoomFight extends RoomParent {
         protected int skillState, SKILL_RESET = 0, SKILL_DAMAGE = 1, SKILL_HEAL = 2, SKILL_MISS = 3,
                         SKILL_DEFEND = 4, SKILL_ITEM = 5;
         protected boolean flashWhite, hitAnimationRunning, missCritAnimationRunning, dealDoT,
-                            dealCriticalHit, dealBoost;
+                            dealCriticalHit, dealBoost, dealBoostToSelf;
         protected int dealDoTTurns, dealBoostType;
         protected double dealDoTDamage, dealBoostValue;
         protected float flashTime = 0.25f;
@@ -586,7 +586,7 @@ public class RoomFight extends RoomParent {
         protected int animSpeed = 8;
         protected Animation<TextureRegion> curAnimation, curHitAnimation, idleAnim, hackAnim,
                 skillAnim, takeHitAnim, healthPlus, healthMinus, criticalHitAnim, missAnim,
-                dotMinus, dotPlus;
+                dotMinus, dotPlus, curBoostAnim;
         protected HashMap<String,Integer> cooldowns;
         protected String usedItem, attackName;
 
@@ -637,6 +637,11 @@ public class RoomFight extends RoomParent {
                 actionTimer = actionDelay; // reset actionTimer
                 if (!dialog.isSkillNameOn()) {
                     inflictDoT();
+                    System.out.println("crit: " + String.valueOf(critBoost));
+                    System.out.println("miss: " + String.valueOf(missBoost));
+                    System.out.println("dmg: " + String.valueOf(dmgBoost));
+                    System.out.println("armor: " + String.valueOf(armorBoost));
+                    System.out.println("heal: " + String.valueOf(healBoost));
                 }
 
             } else if (turnState == TAKING_DOT) {
@@ -735,12 +740,12 @@ public class RoomFight extends RoomParent {
                     dealBoost = false;
                     turnState = DOING_ACTION;
                     actionState = DOT_ANIM;
-                    if (dealBoostValue > 0) {
+                    if (dealBoostToSelf) {
                         inflictBoost(dealBoostType, dealBoostValue);
-                        startHitAnimation(dotPlus, animSpeed);
+                        startHitAnimation(curBoostAnim, animSpeed);
                     } else {
                         opponent.inflictBoost(dealBoostType, dealBoostValue);
-                        opponent.startHitAnimation(dotMinus, animSpeed);
+                        opponent.startHitAnimation(curBoostAnim, animSpeed);
                     }
                 } else if (usedItem != null) {
                     if (!fightersTakingDamage()) {
@@ -962,11 +967,14 @@ public class RoomFight extends RoomParent {
          * @param type the type of boost
          * @param value the amount to boost
          */
-        protected void checkToDealBoost(int type, double value) {
+        protected void checkToDealBoost(int type, double value, boolean self) {
             if (type != skills.BOOST_NONE) {
                 dealBoost = true;
+                dealBoostToSelf = self;
                 dealBoostType = type;
                 dealBoostValue = value;
+                if (value > 0) curBoostAnim = dotPlus;
+                else curBoostAnim = dotMinus;
             }
         }
 
@@ -976,26 +984,17 @@ public class RoomFight extends RoomParent {
          * @param value the boost amount
          */
         protected void inflictBoost(int type, double value) {
-            // Value is positive
-            if (value > 0) {
+            // If defending, either deal nothing or reflect it back
+            if (skillState == SKILL_DEFEND) {
+                if (reflectingShield) {
+                    opponent.inflictBoost(type, value);
+                } // else do nothing
+            } else {
                 if (type == skills.BOOST_CRIT) critBoost += value;
                 else if (type == skills.BOOST_MISS) missBoost += value;
                 else if (type == skills.BOOST_DMG) dmgBoost += value;
                 else if (type == skills.BOOST_ARMOR) armorBoost += value;
                 else if (type == skills.BOOST_HEAL) healBoost += value;
-            } else {
-                // If defending, either deal nothing or reflect it back
-                if (skillState == SKILL_DEFEND) {
-                    if (reflectingShield) {
-                        opponent.inflictBoost(type, value);
-                    } // else do nothing
-                } else {
-                    if (type == skills.BOOST_CRIT) critBoost -= value;
-                    else if (type == skills.BOOST_MISS) missBoost -= value;
-                    else if (type == skills.BOOST_DMG) dmgBoost -= value;
-                    else if (type == skills.BOOST_ARMOR) armorBoost -= value;
-                    else if (type == skills.BOOST_HEAL) healBoost -= value;
-                }
             }
         }
 
@@ -1378,7 +1377,8 @@ public class RoomFight extends RoomParent {
                                     (Boolean) skillMap.get(skills.dotPurePercent));
 
                             checkToDealBoost((Integer) skillMap.get(skills.boostType),
-                                    (Double) skillMap.get(skills.boostValue));
+                                    (Double) skillMap.get(skills.boostValue),
+                                    (Boolean) skillMap.get(skills.boostSelf));
                         }
 
                         actionState = TEMP_ANIM;
@@ -1514,7 +1514,7 @@ public class RoomFight extends RoomParent {
         private ArrayList<Animation<TextureRegion>> hitAnimList;
         private String[] skillNames;
         private int[] critChances, missChances, cooldownAmount, damageOverTimeTurns, boostTypes;
-        private boolean[] dmgPurePercents, dotPurePercents;
+        private boolean[] dmgPurePercents, dotPurePercents, boostSelves;
         private Sound[] sounds;
         private int showFirstDialogTimer = 60;
 
@@ -1586,6 +1586,7 @@ public class RoomFight extends RoomParent {
             sounds = new Sound[3];
             boostTypes = new int[3];
             boostValues = new double[3];
+            boostSelves = new boolean[3];
 
             for (int i = 0; i < 3; i++) {
                 // Retrieve skill's name from boss and add it to the array
@@ -1636,12 +1637,13 @@ public class RoomFight extends RoomParent {
                 Sound snd = (Sound) mapSkill.get(skills.sound);
                 sounds[i] = snd;
 
-                // Retrieve Boost type and value
+                // Retrieve Boost type, value and self
                 int bstType = (Integer) mapSkill.get(skills.boostType);
                 boostTypes[i] = bstType;
                 double bstVal = (Double) mapSkill.get(skills.boostValue);
                 boostValues[i] = bstVal;
-
+                boolean bstSelf = (Boolean) mapSkill.get(skills.boostSelf);
+                boostSelves[i] = bstSelf;
             }
 
             // Retrieve boss's size
@@ -1672,61 +1674,61 @@ public class RoomFight extends RoomParent {
 
                 turnState = DOING_ACTION;
                 actionState = TEMP_ANIM;
-                int random;
+                int R;
                 // While skill chosen which is on cooldown, select new one
                 while (true) {
-                    random = MathUtils.random(0, cooldowns.size() - 1);
+                    R = MathUtils.random(0, cooldowns.size() - 1);
 
                     // In tutorial, do suction, else use random value
                     if (tutorial != null && !tutorial.isFightAfterHitFinished()) {
-                        random = 1;
+                        R = 1;
                     }
 
-                    String selSkill = "Skill" + String.valueOf(random);
+                    String selSkill = "Skill" + String.valueOf(R);
                     if (cooldowns.get(selSkill) == 0) {
-                        addCooldown(selSkill, cooldownAmount[random]);
+                        addCooldown(selSkill, cooldownAmount[R]);
                         break;
                     }
                 }
 
                 // Localize name and show it, if it's attack, then retrieve boss's attackName
                 String localizedName;
-                if (skillNames[random] == skills.ATTACK) localizedName = localize.get(attackName);
-                else localizedName = localize.get(skillNames[random]);
+                if (skillNames[R] == skills.ATTACK) localizedName = localize.get(attackName);
+                else localizedName = localize.get(skillNames[R]);
                 dialog.showSkillName(localizedName, "skillname_enemy");
 
                 // Play sound if not null
-                if (sounds[random] != null) game.playSound(sounds[random]);
+                if (sounds[R] != null) game.playSound(sounds[R]);
 
-                boolean miss = randomMissChance(missChances[random]);
+                boolean miss = randomMissChance(missChances[R]);
                 if (miss) skillState = SKILL_MISS;
                 else {
-                    double damage = damages[random];
+                    double damage = damages[R];
                     // Check if skill heals, else do damage
                     if (damage < 0) {
                         skillState = SKILL_HEAL;
-                        if (dmgPurePercents[random]) dmgAmount = damage;
+                        if (dmgPurePercents[R]) dmgAmount = damage;
                         else dmgAmount = damage * defaultDmg;
                     } else {
                         // If skill does not heal, get hitAnimation
-                        curHitAnimation = hitAnimList.get(random);
+                        curHitAnimation = hitAnimList.get(R);
                         // If hitAnimation is null, then it does no damage
                         if (curHitAnimation != null) {
                             skillState = SKILL_DAMAGE;
 
                             // If pureDmg, value 20 deals 20% of maxHp, else it deal wholeDmg*20
-                            if (dmgPurePercents[random]) dmgAmount = damage;
+                            if (dmgPurePercents[R]) dmgAmount = damage;
                             else dmgAmount = damage * defaultDmg;
                             // If critical hit, deal 1.5x damage
-                            dealCriticalHit = randomCritChance(critChances[random]);
+                            dealCriticalHit = randomCritChance(critChances[R]);
                             if (dealCriticalHit) dmgAmount *= 1.5;
                         }
                     }
 
-                    checkToDealDoT(damageOverTimes[random], damageOverTimeTurns[random],
-                            dotPurePercents[random]);
+                    checkToDealDoT(damageOverTimes[R], damageOverTimeTurns[R],
+                            dotPurePercents[R]);
 
-                    checkToDealBoost(boostTypes[random], boostValues[random]);
+                    checkToDealBoost(boostTypes[R], boostValues[R], boostSelves[R]);
                 }
 
                 curAnimation = skillAnim;
