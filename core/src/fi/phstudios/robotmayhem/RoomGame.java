@@ -30,6 +30,10 @@ public class RoomGame extends RoomParent {
     private Skin finalSkin;
     private FirstPlay victory, pool1Complete, pool2Complete, pool3Complete;
 
+    /**
+     * Retrieve values from game and create necessary variables.
+     * @param game main game instance
+     */
     RoomGame(final MainGame game) {
         super(game);
         createProgressBar();
@@ -49,6 +53,10 @@ public class RoomGame extends RoomParent {
         }
     }
 
+    /**
+     * Renders all the frames of the game. Handles player, background and progressbar.
+     * @param delta time
+     */
     @Override
     public void render(float delta) {
         super.render(delta);
@@ -103,6 +111,9 @@ public class RoomGame extends RoomParent {
         else game.setPauseWalking(false);
     }
 
+    /**
+     * When milestone has been reached, create button for switching rooms.
+     */
     public void createButtonFight() {
         milestoneReached = true;
         Drawable normal = finalSkin.getDrawable("button_ATTACK");
@@ -120,6 +131,9 @@ public class RoomGame extends RoomParent {
         });
     }
 
+    /**
+     * Draws current steps and milestone.
+     */
     public void drawSteps() {
         String strCurSteps = String.valueOf((int) progressBar.getValue());
         String strGoalSteps = String.valueOf((int) progressBar.getMaxValue());
@@ -130,7 +144,9 @@ public class RoomGame extends RoomParent {
         steps.draw(batch, 1);
     }
 
-    // Calculates how many steps will be added every frame
+    /**
+     * Calculates how many steps will be added every frame.
+     */
     private void calculateBankSpeed() {
         if (!game.isPauseWalking()) {
             if (!retrievingSteps && game.getStepBank() > 0 &&
@@ -152,6 +168,9 @@ public class RoomGame extends RoomParent {
         }
     }
 
+    /**
+     * Retrieves steps from bank and add them to stepCount.
+     */
     private void retrieveBankSteps() {
         // If bank still has steps
         if (game.getStepBank() > 0) {
@@ -183,7 +202,9 @@ public class RoomGame extends RoomParent {
         }else retrievingSteps = false;
     }
 
-    // If milestone has been reached, draw text and
+    /**
+     * If milestone has been reached, create button for switching rooms.
+     */
     public void checkToChangeRoom() {
         if (curSteps >= progressBar.getMaxValue()) {
             if (!milestoneReached) {
@@ -202,6 +223,9 @@ public class RoomGame extends RoomParent {
         }
     }
 
+    /**
+     * Initializes progress bar.
+     */
     public void createProgressBar() {
         progressBar = new ProgressBar(0, game.getProgressBarMilestone(),
                 1, false, game.getProgBarStyle());
@@ -214,6 +238,9 @@ public class RoomGame extends RoomParent {
         stage.addActor(progressBar);
     }
 
+    /**
+     * Controls background moving and player's animation speed.
+     */
     public void controlBackground() {
         // USE THIS TO TEST THE MOVEMENT
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
@@ -262,6 +289,10 @@ public class RoomGame extends RoomParent {
         batch.draw(imgBG, 0,0, bgPos, 0, imgBG.getWidth(), imgBG.getHeight());
     }
 
+    /**
+     * Controls what different items do.
+     * @param selected used item
+     */
     @Override
     public void selectItem(String selected) {
         player.setUseItem(true);
@@ -296,10 +327,10 @@ public class RoomGame extends RoomParent {
         }
 
     }
-
-    /*
-        Create class for player
-         */
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Create player instance
+     */
     private class Player {
         private Animation<TextureRegion> idle, moving, item;
         private Animating anim;
@@ -307,6 +338,9 @@ public class RoomGame extends RoomParent {
         private float X;
         private float Y;
 
+        /**
+         * Retrieve correct animations and set position.
+         */
         Player() {
             anim = new Animating();
             X = game.gridSize;
@@ -319,6 +353,9 @@ public class RoomGame extends RoomParent {
             anim.startAnimation(idle, 8);
         }
 
+        /**
+         * Update this method every frame. Controls player animations.
+         */
         public void update() {
             if (useItem) {
                 if (anim.getAnimation() != item) anim.startAnimation(item, 8);
@@ -337,6 +374,10 @@ public class RoomGame extends RoomParent {
             anim.draw(batch, X, Y);
         }
 
+        /**
+         * Room uses this to let player know when to do item animation.
+         * @param useItem if item was used
+         */
         public void setUseItem(boolean useItem) {
             this.useItem = useItem;
         }
