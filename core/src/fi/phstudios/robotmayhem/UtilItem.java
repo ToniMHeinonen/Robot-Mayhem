@@ -186,7 +186,7 @@ public class UtilItem {
         scrollBuyable.setVisible(true);
         scrollBuyable.setVariableSizeKnobs(false);
         scrollBuyable.setSize(660, 810);
-        scrollBuyable.setPosition(105, 75);
+        scrollBuyable.setPosition(97, 75);
         dialogItems.addActor(scrollBuyable);
     }
 
@@ -275,7 +275,7 @@ public class UtilItem {
         scrollOwned.setVisible(true);
         scrollOwned.setVariableSizeKnobs(false);
         scrollOwned.setSize(660, 810);
-        scrollOwned.setPosition(825, 75);
+        scrollOwned.setPosition(817, 75);
         dialogItems.addActor(scrollOwned);
     }
 
@@ -494,9 +494,8 @@ public class UtilItem {
             });
         }
 
-        TextButton buttonCancel = new TextButton(localize.get("cancel"), finalSkin, "smallest");
-        buttonCancel.setPosition(1185, 180);
-        buttonCancel.setSize(250, 120);
+        TextButton buttonCancel = new TextButton(localize.get("cancel"), finalSkin, "skill_cancel");
+        buttonCancel.setPosition(1190, 180);
         buttonCancel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

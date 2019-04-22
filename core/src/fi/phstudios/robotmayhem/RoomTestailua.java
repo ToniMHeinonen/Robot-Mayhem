@@ -128,7 +128,7 @@ public class RoomTestailua extends RoomParent {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 game.addToInventory("DUST", true);
-                game.addToInventory("SHOCK", true);
+                game.addToInventory("VIRUS", true);
             }
         });
     }

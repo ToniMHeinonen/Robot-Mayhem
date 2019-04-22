@@ -212,6 +212,12 @@ com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 		up: topbarbutton1
 		down: topbarbutton2
 	}
+	skill_cancel: {
+		font: font34
+		up: smallbutton1
+		down: smallbutton2
+		disabled: smallbutton0
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
 	default: {
