@@ -494,9 +494,8 @@ public class UtilItem {
             });
         }
 
-        TextButton buttonCancel = new TextButton(localize.get("cancel"), finalSkin, "smallest");
-        buttonCancel.setPosition(1185, 180);
-        buttonCancel.setSize(250, 120);
+        TextButton buttonCancel = new TextButton(localize.get("cancel"), finalSkin, "skill_cancel");
+        buttonCancel.setPosition(1190, 180);
         buttonCancel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

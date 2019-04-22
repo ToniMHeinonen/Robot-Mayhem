@@ -72,41 +72,41 @@ window_large
   index: -1
 
 finalskin6.png
-size: 1928,1928
+size: 1988,1988
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 font-large
   rotate: false
-  xy: 903, 151
+  xy: 903, 271
   size: 726, 512
   orig: 726, 512
   offset: 0, 0
   index: -1
 skillname
   rotate: false
-  xy: 1, 665
+  xy: 1, 725
   size: 900, 180
   orig: 900, 180
   offset: 0, 0
   index: -1
 skillname_enemy
   rotate: false
-  xy: 903, 665
+  xy: 1, 543
   size: 900, 180
   orig: 900, 180
   offset: 0, 0
   index: -1
 volumebar
   rotate: false
-  xy: 1, 543
+  xy: 903, 785
   size: 900, 120
   orig: 900, 120
   offset: 0, 0
   index: -1
 window_large_item
   rotate: false
-  xy: 1, 847
+  xy: 1, 907
   size: 1920, 1080
   orig: 1920, 1080
   offset: 0, 0
@@ -342,35 +342,35 @@ button_SKILL_clicked
   index: -1
 button_cooldown1
   rotate: false
-  xy: 387, 1772
+  xy: 1, 1530
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
 button_cooldown2
   rotate: false
-  xy: 1, 1288
+  xy: 387, 1772
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
 button_cooldown3
   rotate: false
-  xy: 387, 1530
+  xy: 1, 1288
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
 button_cooldown4
   rotate: false
-  xy: 773, 1772
+  xy: 387, 1530
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
   index: -1
 button_cooldown5
   rotate: false
-  xy: 1, 1046
+  xy: 773, 1772
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
@@ -391,7 +391,7 @@ button_escape_clicked
   index: -1
 button_money_clicked
   rotate: false
-  xy: 1, 1530
+  xy: 1, 1046
   size: 384, 240
   orig: 384, 240
   offset: 0, 0
@@ -783,77 +783,98 @@ use2_fi
   index: -1
 
 finalskin9.png
-size: 908,906
+size: 908,908
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 diff3_2
   rotate: false
-  xy: 1, 785
+  xy: 1, 787
   size: 300, 120
   orig: 300, 120
   offset: 0, 0
   index: -1
 font30
   rotate: false
-  xy: 657, 401
+  xy: 657, 403
   size: 188, 504
   orig: 188, 504
   offset: 0, 0
   index: -1
 font34
   rotate: false
-  xy: 452, 393
+  xy: 452, 151
   size: 203, 512
   orig: 203, 512
   offset: 0, 0
   index: -1
 font38
   rotate: false
-  xy: 243, 272
+  xy: 243, 152
   size: 207, 511
   orig: 207, 511
   offset: 0, 0
   index: -1
 font42
   rotate: false
-  xy: 1, 273
+  xy: 1, 275
   size: 240, 510
   orig: 240, 510
   offset: 0, 0
   index: -1
 lock
   rotate: false
-  xy: 1, 121
+  xy: 1, 1
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 scrollbar
   rotate: false
-  xy: 847, 50
+  xy: 847, 52
   size: 60, 855
   orig: 60, 855
   offset: 0, 0
   index: -1
 scrollslider
   rotate: false
-  xy: 153, 181
+  xy: 153, 61
   size: 60, 90
   orig: 60, 90
   offset: 0, 0
   index: -1
 unlock
   rotate: false
-  xy: 452, 241
+  xy: 657, 251
   size: 150, 150
   orig: 150, 150
   offset: 0, 0
   index: -1
 volumeslider
   rotate: false
-  xy: 303, 785
+  xy: 485, 665
   size: 120, 120
   orig: 120, 120
+  offset: 0, 0
+  index: -1
+smallbutton0
+  rotate: false
+  xy: 303, 787
+  size: 240, 120
+  orig: 240, 120
+  offset: 0, 0
+  index: -1
+smallbutton1
+  rotate: false
+  xy: 1, 153
+  size: 240, 120
+  orig: 240, 120
+  offset: 0, 0
+  index: -1
+smallbutton2
+  rotate: false
+  xy: 243, 665
+  size: 240, 120
+  orig: 240, 120
   offset: 0, 0
   index: -1
