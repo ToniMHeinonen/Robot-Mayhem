@@ -288,6 +288,9 @@ public class MainGame extends Game {
 		settings.flush();
 		prefsStats.clear();
 		prefsStats.flush();
+		// Delete prefsAchievs.clear and .flush in the final version.
+		prefsAchievs.clear();
+		prefsAchievs.flush();
 		initAfterRestarting();
 	}
 
@@ -761,7 +764,7 @@ public class MainGame extends Game {
 
 	public void loadAchievements() {
         // Change default-value when adding new achievements.
-        achievCompleteSize = stats.loadValue(keyAchievCompleteSize, 5);
+        achievCompleteSize = stats.loadValue(keyAchievCompleteSize, 7);
         for (int i = 0; i < achievCompleteSize; i++) {
             achievComplete.add(i, achievs.loadValue(keyAchievComplete + String.valueOf(i), "locked"));
         }

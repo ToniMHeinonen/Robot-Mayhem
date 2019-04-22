@@ -21,6 +21,8 @@ public class Achievements {
     private String lan;
     private boolean finishedGame;
     private boolean finishedGameHard;
+    private Item items;
+    private String[] allItems;
 
     private Dialog dialogAch;
     private ImageButton btnCancel;
@@ -29,9 +31,12 @@ public class Achievements {
     private String[] achDescriptions;
 
     private float space = 200f;
+    private int permanentCounter;
 
     Achievements(MainGame game) {
         this.game = game;
+        items = game.getItems();
+        allItems = items.getAllItems();
         stage = game.getStage();
         finalSkin = game.getFinalSkin();
         stepAllCount = game.getStepAllCount();
@@ -59,17 +64,21 @@ public class Achievements {
     private void createHeadersAndDescriptions() {
         achHeaders = new String[] {
                 localize.get("sundayWalker"),
+                localize.get("jogger"),
                 localize.get("marathonist"),
                 localize.get("finisher"),
                 localize.get("pepperyWalker"),
-                "Achievement 4"};
+                localize.get("materialist"),
+                "Achievement 6"};
 
         achDescriptions = new String[] {
                 localize.get("sundayWalkerDesc"),
+                localize.get("joggerDesc"),
                 localize.get("marathonistDesc"),
                 localize.get("finisherDesc"),
                 localize.get("pepperyWalkerDesc"),
-                "Achievement 4 description (20 steps)"};
+                localize.get("materialistDesc"),
+                "Achievement 6 description (20 steps)"};
     }
 
     private void checkAchievements() {
@@ -78,17 +87,33 @@ public class Achievements {
         // Achievement 0 / Sunday Walker / Walk 50 steps
         if (stepAllCount >= 50) game.setAchievement(0, "unlocked");
 
-        // Achievement 1 / Marathonist / Walk 10 000 steps
-        if (stepAllCount >= 10000) game.setAchievement(1, "unlocked");
+        // Achievement 1 / Jogger / Walk 5 000 steps
+        if (stepAllCount >= 5000) game.setAchievement(1, "unlocked");
 
-        // Achievement 2 / Finisher / Finish the game
-        if (finishedGame) game.setAchievement(2, "unlocked");
+        // Achievement 2 / Marathonist / Walk 10 000 steps
+        if (stepAllCount >= 10000) game.setAchievement(2, "unlocked");
 
-        // Achievement 3 / Peppery Walker / Finish the game on hard mode
-        if (finishedGameHard) game.setAchievement(3, "unlocked");
+        // Achievement 3 / Finisher / Finish the game
+        if (finishedGame) game.setAchievement(3, "unlocked");
 
-        // Achievement 4
-        if (stepAllCount >= 20) game.setAchievement(4, "unlocked");
+        // Achievement 4 / Peppery Walker / Finish the game on hard mode
+        if (finishedGameHard) game.setAchievement(4, "unlocked");
+
+        // Achievement 5 / Materialist / Buy every permanent item
+        for (int i = 0; i < allItems.length; i++) {
+            String item  = allItems[i];
+            if (items.getItem(item).get(items.isPermanent).equals(true)) {
+                permanentCounter++;
+            }
+        }
+        System.out.println(permanentCounter);
+        System.out.println(game.getBoughtPermanent().size());
+        if (permanentCounter == game.getBoughtPermanent().size()) {
+            game.setAchievement(5, "unlocked");
+        }
+
+        // Achievement 6
+        if (stepAllCount >= 20) game.setAchievement(6, "unlocked");
     }
 
     private void createButtons() {
