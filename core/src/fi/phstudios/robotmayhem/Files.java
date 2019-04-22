@@ -48,6 +48,11 @@ public class Files {
     public final Animation<TextureRegion> a_pcIdle, a_pcAttack, a_pcDamage,
             a_pcStun;
 
+    // Baller textures and animations
+    private final Texture t_ballerIdle, t_ballerAttack, t_ballerDamage, t_ballerStun;
+    public final Animation<TextureRegion> a_ballerIdle, a_ballerAttack, a_ballerDamage,
+            a_ballerStun;
+
     // Fabio textures and animations
     private final Texture t_fabioIdle, t_fabioAttack, t_fabioDamage, t_fabioStun;
     public final Animation<TextureRegion> a_fabioIdle, a_fabioAttack, a_fabioDamage,
@@ -191,6 +196,15 @@ public class Files {
         a_pcAttack = createAnims.createAnimation(t_pcAttack, 4, 1);
         a_pcDamage = createAnims.createAnimation(t_pcDamage, 4, 1);
         a_pcStun = createAnims.createAnimation(t_pcStun, 4, 2);
+        // Baller
+        t_ballerIdle = manager.get(asset.ballerIdle);
+        t_ballerAttack = manager.get(asset.ballerAttack);
+        t_ballerDamage = manager.get(asset.ballerDamage);
+        t_ballerStun = manager.get(asset.ballerStun);
+        a_ballerIdle = createAnims.createAnimation(t_ballerIdle, 4, 4);
+        a_ballerAttack = createAnims.createAnimation(t_ballerAttack, 4, 1);
+        a_ballerDamage = createAnims.createAnimation(t_ballerDamage, 4, 1);
+        a_ballerStun = createAnims.createAnimation(t_ballerStun, 4, 2);
         // Fabio
         t_fabioIdle = manager.get(asset.fabioIdle);
         t_fabioAttack = manager.get(asset.fabioAttack);

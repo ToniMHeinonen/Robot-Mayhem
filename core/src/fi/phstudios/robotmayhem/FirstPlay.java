@@ -22,6 +22,9 @@ public class FirstPlay {
     private boolean fightStartFinished, fightAfterHitFinished, fightActionFinished,
             fightHackingFinished, fightPowerupFinished;
 
+    private boolean finalFightStartFinished, finalFightAfterStartFinished,
+            finalFightBeforeEndFinished, finalFightEndFinished;
+
     private Dialog whoAmI;
 
     private int diaCounter;
@@ -112,6 +115,13 @@ public class FirstPlay {
                 @Override
                 public void run() {
                     deathInstructions();
+                }
+            }, 1f);
+        } else if (tutorial.equals("finalFight")) {
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    finalFightStartInstructions();
                 }
             }, 1f);
         }
@@ -662,6 +672,131 @@ public class FirstPlay {
         });
     }
 
+    private void finalFightStartInstructions() {
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                allowClicking = true;
+            }
+        }, clickTimer);
+        final String[] texts = new String[] {
+                localize.get("tutFinalFightStart1"),
+                localize.get("tutFinalFightStart2")};
+
+        final Dialog dialog = utilDialog.createInstructionsDialog(texts[diaCounter]);
+        stage.addActor(dialog);
+
+        dialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                if (allowClicking) {
+                    allowClicking = false;
+                    diaCounter++;
+                    dialog.remove();
+                    if (diaCounter < texts.length) finalFightStartInstructions();
+                    else {
+                        finalFightStartFinished = true;
+                        diaCounter = 0;
+                    }
+                }
+            }
+        });
+    }
+
+    public void finalFightAfterStartInstructions() {
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                allowClicking = true;
+            }
+        }, clickTimer);
+        final String[] texts = new String[] {
+                localize.get("tutFinalFightAfterStart1"),
+                localize.get("tutFinalFightAfterStart2"),
+                localize.get("tutFinalFightAfterStart3")};
+
+        final Dialog dialog = utilDialog.createInstructionsDialog(texts[diaCounter]);
+        stage.addActor(dialog);
+
+        dialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                if (allowClicking) {
+                    allowClicking = false;
+                    diaCounter++;
+                    dialog.remove();
+                    if (diaCounter < texts.length) finalFightAfterStartInstructions();
+                    else {
+                        finalFightAfterStartFinished = true;
+                        diaCounter = 0;
+                    }
+                }
+            }
+        });
+    }
+
+    public void finalFightBeforeEndInstructions() {
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                allowClicking = true;
+            }
+        }, clickTimer);
+        final String[] texts = new String[] {
+                localize.get("tutFinalFightBeforeEnd1"),
+                localize.get("tutFinalFightBeforeEnd2")};
+
+        final Dialog dialog = utilDialog.createInstructionsDialog(texts[diaCounter]);
+        stage.addActor(dialog);
+
+        dialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                if (allowClicking) {
+                    allowClicking = false;
+                    diaCounter++;
+                    dialog.remove();
+                    if (diaCounter < texts.length) finalFightBeforeEndInstructions();
+                    else {
+                        finalFightBeforeEndFinished = true;
+                        diaCounter = 0;
+                    }
+                }
+            }
+        });
+    }
+
+    public void finalFightEndInstructions() {
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                allowClicking = true;
+            }
+        }, clickTimer);
+        final String[] texts = new String[] {
+                localize.get("tutFinalFightEnd1"),
+                localize.get("tutFinalFightEnd2")};
+
+        final Dialog dialog = utilDialog.createInstructionsDialog(texts[diaCounter]);
+        stage.addActor(dialog);
+
+        dialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                if (allowClicking) {
+                    allowClicking = false;
+                    diaCounter++;
+                    dialog.remove();
+                    if (diaCounter < texts.length) finalFightEndInstructions();
+                    else {
+                        finalFightEndFinished = true;
+                        diaCounter = 0;
+                    }
+                }
+            }
+        });
+    }
+
     public boolean isFightStartFinished() {
         return fightStartFinished;
     }
@@ -680,5 +815,21 @@ public class FirstPlay {
 
     public boolean isFightPowerupFinished() {
         return fightPowerupFinished;
+    }
+
+    public boolean isFinalFightStartFinished() {
+        return finalFightStartFinished;
+    }
+
+    public boolean isFinalFightAfterStartFinished() {
+        return finalFightAfterStartFinished;
+    }
+
+    public boolean isFinalFightBeforeEndFinished() {
+        return finalFightBeforeEndFinished;
+    }
+
+    public boolean isFinalFightEndFinished() {
+        return finalFightEndFinished;
     }
 }

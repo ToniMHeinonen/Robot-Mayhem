@@ -30,6 +30,10 @@ public class RoomFight extends RoomParent {
         TUTORIAL_ACTION,
         TUTORIAL_HACKING,
         TUTORIAL_POWERUP,
+        FINALFIGHT_START,
+        FINALFIGHT_AFTER_START,
+        FINALFIGHT_BEFORE_END,
+        FINALFIGHT_END,
         START_ROOM,
         DIALOG_START,
         DIALOG_END,
@@ -64,24 +68,25 @@ public class RoomFight extends RoomParent {
     private int deathTimer = 240;
     private boolean startDeathTimer;
     private ShaderProgram shFlashWhite;
-    private FirstPlay tutorial;
+    private FirstPlay tutorial, finalFight;
     private Hacking hacking;
     private UtilPowerUp powerUp;
-    private boolean firstPlayTimeFight;
     private String lan;
 
     RoomFight(final MainGame game) {
         super(game);
         imgBg = files.imgBgBoss;
         escapeBg = files.escapeBg;
-        firstPlayTimeFight = game.isFirstPlayTimeFight();
         lan = game.getLanguage();
         checkDifficulty();
 
 
-        if (firstPlayTimeFight) {
+        if (game.isFirstPlayTimeFight()) {
             state = State.TUTORIAL_START;
             tutorial = new FirstPlay(game, "fight", thisRoom);
+        } else if (game.getPool() == 4) {
+            state = State.FINALFIGHT_START;
+            finalFight = new FirstPlay(game, "finalFight", thisRoom);
         } else {
             state = State.START_ROOM;
         }
@@ -101,6 +106,7 @@ public class RoomFight extends RoomParent {
 
             universalStateChecks();
             if (tutorial != null) controlTutorial();
+            if (finalFight != null) controlFinalFight();
 
             batch.begin();
             batch.draw(imgBg, 0,0, imgBg.getWidth(), imgBg.getHeight());
@@ -142,12 +148,14 @@ public class RoomFight extends RoomParent {
             case DIALOG_END: {
                 if (!dialog.isDialogOn()) {
                     state = State.TIMER;
-                    Timer.schedule(new Timer.Task() {
-                        @Override
-                        public void run() {
-                            state = State.POWER_UP;
-                        }
-                    }, 0.5f);
+                    if (finalFight == null) {
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                state = State.POWER_UP;
+                            }
+                        }, 0.5f);
+                    }
                 }
                 break;
             }
@@ -229,6 +237,78 @@ public class RoomFight extends RoomParent {
             case TUTORIAL_POWERUP: {
                 if (tutorial.isFightPowerupFinished()) {
                     state = State.POWER_UP;
+                }
+                break;
+            }
+        }
+    }
+
+    private void controlFinalFight() {
+        switch (state) {
+            case FINALFIGHT_START: {
+                if (finalFight.isFinalFightStartFinished()) {
+                    state = State.START_ROOM;
+                }
+                break;
+            }
+            case PLAYER_TURN: {
+                if (!finalFight.isFinalFightAfterStartFinished()) {
+                    state = State.FINALFIGHT_AFTER_START;
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            finalFight.finalFightAfterStartInstructions();
+                        }
+                    }, 1);
+                }
+                break;
+            }
+            case FINALFIGHT_AFTER_START: {
+                if (finalFight.isFinalFightAfterStartFinished()) {
+                    state = State.PLAYER_TURN;
+                }
+                break;
+            }
+            case HACK_SUCCESS: {
+                if (!finalFight.isFinalFightBeforeEndFinished()) {
+                    state = State.FINALFIGHT_BEFORE_END;
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            finalFight.finalFightBeforeEndInstructions();
+                        }
+                    }, 1);
+                }
+                break;
+            }
+            case FINALFIGHT_BEFORE_END: {
+                if (finalFight.isFinalFightBeforeEndFinished()) {
+                    state = State.HACK_SUCCESS;
+                    enemy.endDialogTimer();
+                }
+                break;
+            }
+            case TIMER: {
+                if (!finalFight.isFinalFightEndFinished()) {
+                    state = State.FINALFIGHT_END;
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            finalFight.finalFightEndInstructions();
+                        }
+                    }, 1);
+                }
+                break;
+            }
+            case FINALFIGHT_END: {
+                if (finalFight.isFinalFightEndFinished()) {
+                    state = State.TIMER;
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            state = State.POWER_UP;
+                        }
+                    }, 0.5f);
                 }
                 break;
             }
@@ -324,7 +404,7 @@ public class RoomFight extends RoomParent {
 
             if (hacking.isBulletHitEnemy()) {
                 state = State.HACK_SUCCESS;
-                enemy.endDialogTimer();
+                if (finalFight == null) enemy.endDialogTimer();
             } else if (hacking.isBulletMissedEnemy()) {
                 state = State.HACK_FAILED;
                 spawnHacking = false; // Reset spawnHacking
@@ -1136,7 +1216,6 @@ public class RoomFight extends RoomParent {
             hp = maxHp;
             targetHp = hp;
             defaultDmg = defaultDamages[game.getPool() - 1][game.getPoolMult()];
-            System.out.println(defaultDmg);
             reflectingShield = game.isReflectiveShield();
             if (reflectingShield) btnTexts[1] = skills.REFLECT;
             ifDead = State.DEAD;
@@ -1439,9 +1518,7 @@ public class RoomFight extends RoomParent {
             maxHp = 100;
             hp = maxHp;
             targetHp = hp;
-            if (game.getPool() < 3) defaultDmg = 15;
-            else defaultDmg = 10;
-            defaultDmg = 50;
+            defaultDmg = 10;
             ifDead = State.HACK;
             ID = ENEMY;
 
@@ -1474,6 +1551,9 @@ public class RoomFight extends RoomParent {
                         startIdle();
                         player.startTurn();
                     }
+                } else if (state == State.FINALFIGHT_BEFORE_END) {
+                    if (anim.getAnimation() != takeHitAnim)
+                        anim.startAnimation(takeHitAnim, animSpeed);
                 }
 }
             updateEnd();
