@@ -32,7 +32,7 @@ public class Bosses {
     private Animation<TextureRegion> animIdle, animStun, animAttack, animDamage;
 
     private String curName, curAttackName, curSkillName0, curSkillName1, curSkillName2,
-                            curDialogStart, curDialogEnd;
+            curSkillName3, curSkillName4, curDialogStart, curDialogEnd;
     private Boolean curNormalSize;
 
     public final String ROOMBOT = "Roombot";
@@ -50,6 +50,12 @@ public class Bosses {
     1. Make a String for it
     2. Make a new method for it
     3. Add attackName, dialogStart and dialogEnd to bundle
+     */
+
+    /* SKILL USAGE
+    - Pool 1 uses skills 1 and 2
+    - Pool 2 uses skills 3 and 4
+    - Pool 3 uses skills 2 and 4
      */
 
     /*
@@ -100,32 +106,15 @@ public class Bosses {
         return skills;
     }
 
-    private void bossRobber() {
-        curName = ROBBER;
-        curAttackName = "robberAttackName";
-        curNormalSize = true;
-        curSkillName0 = skills.ATTACK;
-        curSkillName1 = skills.ATTACK;
-        curSkillName2 = skills.ATTACK;
-
-        curDialogStart = "robberDialogStart";
-        curDialogEnd = "robberDialogEnd";
-
-        animIdle = files.a_robberIdle;
-        animAttack = files.a_robberAttack;
-        animDamage = files.a_robberDamage;
-        animStun = files.a_robberStun;
-
-        addToMap();
-    }
-
     private void bossRoombot() {
         curName = ROOMBOT;
         curAttackName = "roombotAttackName";
         curNormalSize = false;
         curSkillName0 = skills.ATTACK;
-        curSkillName1 = skills.SOAP;
-        curSkillName2 = skills.BUCKET;
+        curSkillName1 = skills.BUCKET;
+        curSkillName2 = skills.DUST;
+        curSkillName3 = skills.SOAP;
+        curSkillName4 = skills.SUCTION;
         curDialogStart = "roombotDialogStart";
         curDialogEnd = "roombotDialogEnd";
 
@@ -137,6 +126,26 @@ public class Bosses {
         addToMap();
     }
 
+    private void bossRobber() {
+        curName = ROBBER;
+        curAttackName = "robberAttackName";
+        curNormalSize = true;
+        curSkillName0 = skills.ATTACK;
+        curSkillName1 = skills.MISCHIEF;
+        curSkillName2 = skills.PICKPOCKET;
+        curSkillName3 = skills.HIJACK;
+        curSkillName4 = skills.SHADOWSTEP;
+        curDialogStart = "robberDialogStart";
+        curDialogEnd = "robberDialogEnd";
+
+        animIdle = files.a_robberIdle;
+        animAttack = files.a_robberAttack;
+        animDamage = files.a_robberDamage;
+        animStun = files.a_robberStun;
+
+        addToMap();
+    }
+
     private void bossCopper() {
         curName = COPPER;
         curAttackName = "copperAttackName";
@@ -144,6 +153,8 @@ public class Bosses {
         curSkillName0 = skills.ATTACK;
         curSkillName1 = skills.ATTACK;
         curSkillName2 = skills.ATTACK;
+        curSkillName3 = skills.ATTACK;
+        curSkillName4 = skills.ATTACK;
         curDialogStart = "copperDialogStart";
         curDialogEnd = "copperDialogEnd";
 
@@ -160,8 +171,10 @@ public class Bosses {
         curAttackName = "copierAttackName";
         curNormalSize = true;
         curSkillName0 = skills.ATTACK;
-        curSkillName1 = skills.ATTACK;
-        curSkillName2 = skills.REPAIR;
+        curSkillName1 = skills.DEJA_VU;
+        curSkillName2 = skills.BLACK_INK;
+        curSkillName3 = skills.FLASH;
+        curSkillName4 = skills.COPYCAT;
         curDialogStart = "copierDialogStart";
         curDialogEnd = "copierDialogEnd";
 
@@ -180,6 +193,8 @@ public class Bosses {
         curSkillName0 = skills.ATTACK;
         curSkillName1 = skills.ATTACK;
         curSkillName2 = skills.ATTACK;
+        curSkillName3 = skills.ATTACK;
+        curSkillName4 = skills.ATTACK;
         curDialogStart = "pcDialogStart";
         curDialogEnd = "pcDialogEnd";
 
@@ -198,6 +213,8 @@ public class Bosses {
         curSkillName0 = skills.ATTACK;
         curSkillName1 = skills.ATTACK;
         curSkillName2 = skills.ATTACK;
+        curSkillName3 = skills.ATTACK;
+        curSkillName4 = skills.ATTACK;
         curDialogStart = "ballerDialogStart";
         curDialogEnd = "ballerDialogEnd";
 
@@ -216,6 +233,8 @@ public class Bosses {
         curSkillName0 = skills.ATTACK;
         curSkillName1 = skills.ATTACK;
         curSkillName2 = skills.ATTACK;
+        curSkillName3 = skills.ATTACK;
+        curSkillName4 = skills.ATTACK;
         curDialogStart = "fabioDialogStart";
         curDialogEnd = "fabioDialogEnd";
 
@@ -239,6 +258,8 @@ public class Bosses {
         map.put(skillName + "0", curSkillName0);
         map.put(skillName + "1", curSkillName1);
         map.put(skillName + "2", curSkillName2);
+        map.put(skillName + "3", curSkillName3);
+        map.put(skillName + "4", curSkillName4);
         map.put(dialogStart, curDialogStart);
         map.put(dialogEnd, curDialogEnd);
 

@@ -118,6 +118,11 @@ public class Skills {
         skillFlash();
         skillCopycat();
         skillBlackInk();
+        // Robber
+        skillHijack();
+        skillPickpocket();
+        skillMischief();
+        skillShadowstep();
         /*skillShock();
         skillFire();
         skillElectrify();
@@ -468,6 +473,98 @@ public class Skills {
         map.put(damageOverTime, 0.0);
         map.put(damageOverTimeTurns, 0);
         map.put(dotPurePercent, false);
+        map.put(cooldown, 2);
+        map.put(hitAnimation, skillHit);
+        map.put(sound, null);
+        map.put(button, btnSkill);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillHijack() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, HIJACK);
+        map.put(description, "hijackDesc");
+        map.put(damage, 1.0);
+        map.put(dmgPurePercent, false);
+        map.put(critChance, defCrit);
+        map.put(missChance, defMiss);
+        map.put(damageOverTime, -10.0);
+        map.put(damageOverTimeTurns, 3);
+        map.put(dotPurePercent, true);
+        map.put(cooldown, 3);
+        map.put(hitAnimation, skillHit);
+        map.put(sound, null);
+        map.put(button, btnSkill);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillPickpocket() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, PICKPOCKET);
+        map.put(description, "pickpocketDesc");
+        map.put(damage, 2.0);
+        map.put(dmgPurePercent, false);
+        map.put(critChance, 50);
+        map.put(missChance, defMiss);
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, true);
+        map.put(cooldown, 3);
+        map.put(hitAnimation, skillHit);
+        map.put(sound, null);
+        map.put(button, btnSkill);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillMischief() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, MISCHIEF);
+        map.put(description, "mischiefDesc");
+        map.put(damage, 1.0);
+        map.put(dmgPurePercent, false);
+        map.put(critChance, defCrit + 25);
+        map.put(missChance, defMiss);
+        map.put(damageOverTime, 0.5);
+        map.put(damageOverTimeTurns, 2);
+        map.put(dotPurePercent, false);
+        map.put(cooldown, 3);
+        map.put(hitAnimation, skillHit);
+        map.put(sound, null);
+        map.put(button, btnSkill);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillShadowstep() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, SHADOWSTEP);
+        map.put(description, "shadowstepDesc");
+        map.put(damage, 2.0);
+        map.put(dmgPurePercent, false);
+        map.put(critChance, defCrit + 30);
+        map.put(missChance, defMiss + 25);
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, true);
         map.put(cooldown, 2);
         map.put(hitAnimation, skillHit);
         map.put(sound, null);

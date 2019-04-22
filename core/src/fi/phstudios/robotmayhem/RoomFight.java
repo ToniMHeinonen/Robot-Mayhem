@@ -1588,10 +1588,32 @@ public class RoomFight extends RoomParent {
             boostValues = new double[3];
             boostSelves = new boolean[3];
 
+            // Retrieve skill names, since bosses have different skill combinations in every pool
+            int skillNumber1, skillNumber2;
+            if (game.getPool() == 1) {
+                skillNumber1 = 1;
+                skillNumber2 = 2;
+            } else if (game.getPool() == 2) {
+                skillNumber1 = 3;
+                skillNumber2 = 4;
+            } else if (game.getPool() == 3) {
+                skillNumber1 = 2;
+                skillNumber2 = 4;
+            } else {
+                // Fabio uses random skills
+                skillNumber1 = MathUtils.random(1, 4);
+                skillNumber2 = MathUtils.random(1, 4);
+                while (skillNumber1 == skillNumber2) {
+                    skillNumber2 = MathUtils.random(1, 4);
+                }
+            }
+
+            skillNames[0] = (String) mapBoss.get(bosses.skillName + String.valueOf(0));
+            skillNames[1] = (String) mapBoss.get(bosses.skillName + String.valueOf(skillNumber1));
+            skillNames[2] = (String) mapBoss.get(bosses.skillName + String.valueOf(skillNumber2));
+
             for (int i = 0; i < 3; i++) {
-                // Retrieve skill's name from boss and add it to the array
-                String skillName = (String) mapBoss.get(bosses.skillName + String.valueOf(i));
-                skillNames[i] = skillName;
+                String skillName = skillNames[i];
 
                 // Retrieve the skills map from Skills class which contains skill values
                 HashMap<String, Object> mapSkill = skills.getSkill(skillName);
