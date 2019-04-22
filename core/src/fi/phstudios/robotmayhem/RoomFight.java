@@ -133,6 +133,10 @@ public class RoomFight extends RoomParent {
         }
     }
 
+    /**
+     * Make player select the correct item from inventory.
+     * @param item selected item
+     */
     @Override
     public void selectItem(String item) {
         player.selectItem(item);
