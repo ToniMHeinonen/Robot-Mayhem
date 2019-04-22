@@ -78,7 +78,6 @@ public class RoomFight extends RoomParent {
         imgBg = files.imgBgBoss;
         escapeBg = files.escapeBg;
         lan = game.getLanguage();
-        checkDifficulty();
 
 
         if (game.isFirstPlayTimeFight()) {
