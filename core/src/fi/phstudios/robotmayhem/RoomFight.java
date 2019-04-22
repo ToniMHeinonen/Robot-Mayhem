@@ -637,11 +637,6 @@ public class RoomFight extends RoomParent {
                 actionTimer = actionDelay; // reset actionTimer
                 if (!dialog.isSkillNameOn()) {
                     inflictDoT();
-                    System.out.println("crit: " + String.valueOf(critBoost));
-                    System.out.println("miss: " + String.valueOf(missBoost));
-                    System.out.println("dmg: " + String.valueOf(dmgBoost));
-                    System.out.println("armor: " + String.valueOf(armorBoost));
-                    System.out.println("heal: " + String.valueOf(healBoost));
                 }
 
             } else if (turnState == TAKING_DOT) {
@@ -1706,7 +1701,7 @@ public class RoomFight extends RoomParent {
 
                     // In tutorial, do suction, else use random value
                     if (tutorial != null && !tutorial.isFightAfterHitFinished()) {
-                        R = 1;
+                        R = 0;
                     }
 
                     String selSkill = "Skill" + String.valueOf(R);

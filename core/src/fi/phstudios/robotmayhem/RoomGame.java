@@ -222,6 +222,9 @@ public class RoomGame extends RoomParent {
         if (Gdx.input.isKeyJustPressed(Input.Keys.U)) {
             game.bossDefeated();
         }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+            game.switchToRoomEnd();
+        }
 
         // Move every step
         if (curSteps != game.getStepCount()) {
