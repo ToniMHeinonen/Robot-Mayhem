@@ -13,7 +13,7 @@ public class UtilDialog {
     private Stage stage;
     private boolean dialogOn, skillNameOn;
     private Skin finalSkin;
-    private float dialogY = 390f;
+    private float dialogY = 380f;
     private float dialogYsmall = 300f;
 
     /**
