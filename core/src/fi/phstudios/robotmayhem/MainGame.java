@@ -123,11 +123,17 @@ public class MainGame extends Game {
 	private String keyFirstPlayMoney = E.encrypt("firstPlayMoney");
 	private String keyFirstPlayEscape = E.encrypt("firstPlayEscape");
 	private String keyFirstPlayDeath = E.encrypt("firstPlayDeath");
+
+    private String keyAchievComplete = E.encrypt("achievComplete");
+    private String keyAchievCompleteSize = E.encrypt("achievCompleteSize");
+
 	// Values
 	private int saveTimerAmount = 1800;
 	private int saveTimer = saveTimerAmount;
 	private Preferences prefsStats;
+	private Preferences prefsAchievs;
 	private SaveAndLoad stats;
+	private SaveAndLoad achievs;
 	private float stepCount, stepBank, stepAllCount, stepBankSize;
 	private int pool, poolMult, money, fightsWon, prevDayGift, buyedItemsCounter;
 	private String skill1, skill2, currentBoss, playerName;
@@ -146,6 +152,8 @@ public class MainGame extends Game {
 	private int arrPlayedMusicSize;
 	private ArrayList<String> boughtPermanent;
 	private int boughtPermanentSize;
+	private ArrayList<String> achievComplete;
+	private int achievCompleteSize;
 
 	// Stepmeter in RoomGame
     private BitmapFont fontSteps;
@@ -228,6 +236,7 @@ public class MainGame extends Game {
 		createBundle();
 		initStats();
 		loadStats();
+		loadAchievements();
 		checkDate();
 		chooseNextMilestone();
 		// Switch to first room
@@ -599,10 +608,13 @@ public class MainGame extends Game {
 		defeatedBosses = new ArrayList<String>();
 		arrPlayedMusic = new ArrayList<Integer>();
 		boughtPermanent = new ArrayList<String>();
+		achievComplete = new ArrayList<String>();
 		prefsStats = Gdx.app.getPreferences("Robot_Mayhem_Stats");
 		//prefsStats.clear(); // For testing purposes
 		//prefsStats.flush(); // Without flushing, clear does not work in Android
 		stats = new SaveAndLoad(E, prefsStats);
+		prefsAchievs = Gdx.app.getPreferences("Robot_Mayhem_Achievements");
+		achievs = new SaveAndLoad(E, prefsAchievs);
 	}
 
 	/**
@@ -746,6 +758,22 @@ public class MainGame extends Game {
 
 		prefsStats.flush();
 	}
+
+	public void loadAchievements() {
+        // Change default-value when adding new achievements.
+        achievCompleteSize = stats.loadValue(keyAchievCompleteSize, 5);
+        for (int i = 0; i < achievCompleteSize; i++) {
+            achievComplete.add(i, achievs.loadValue(keyAchievComplete + String.valueOf(i), "locked"));
+        }
+    }
+
+    public void saveAchievements() {
+        achievs.saveValue(keyAchievCompleteSize, achievComplete.size());
+        for (int i = 0; i < achievComplete.size(); i++) {
+            achievs.saveValue(keyAchievComplete + String.valueOf(i), achievComplete.get(i));
+        }
+	    prefsAchievs.flush();
+    }
 
 	// Methods for name start.
 	public class MyTextInputListener implements Input.TextInputListener {
@@ -1372,5 +1400,13 @@ public class MainGame extends Game {
 
 	public float getSoundVol() {
 	    return soundVol;
+    }
+
+    public void setAchievement(int i, String state) {
+	    achievComplete.set(i, state);
+    }
+
+    public ArrayList<String> getAchievComplete() {
+	    return achievComplete;
     }
 }
