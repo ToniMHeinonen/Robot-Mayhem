@@ -16,12 +16,22 @@ public class UtilDialog {
     private float dialogY = 390f;
     private float dialogYsmall = 300f;
 
+    /**
+     * Initialize all the basic values.
+     * @param game used for retrieving variables
+     */
     UtilDialog(MainGame game) {
         this.game = game;
         stage = game.getStage();
         finalSkin = game.getFinalSkin();
     }
 
+    /**
+     * Create dialog, which is used in enemy's dialog and skill-description.
+     * @param text text, which will show in the dialog
+     * @param style background
+     * @param normalPos check, which position to use
+     */
     public void createDialog(String text, String style, boolean normalPos) {
         dialogOn = true;
         float areaWidth = 780f;
@@ -49,8 +59,6 @@ public class UtilDialog {
             offset = 210;
         }
 
-
-
         final Dialog dialog = new Dialog("", finalSkin, style);
         dialog.getContentTable().add(label).prefWidth(areaWidth - offset);
         dialog.setPosition(x, y);
@@ -66,7 +74,13 @@ public class UtilDialog {
         });
     }
 
-    // Start of all-in-one method.
+    /**
+     * Creates popup-dialog, which is used for items, skills and powerups.
+     * @param header header-text
+     * @param description description of the item/skill/powerup
+     * @param style background
+     * @return dialog
+     */
     public Dialog createPopupItemAndPowerUp(String header, String description, String style) {
         String fontSize = "big";
         if (header.length() >= 17) {
@@ -97,6 +111,11 @@ public class UtilDialog {
         return dialog;
     }
 
+    /**
+     * Show name of the skill/item, when player/enemy is attacking/defending.
+     * @param text name of the skill/item
+     * @param skillStyle background
+     */
     public void showSkillName(String text, String skillStyle) {
         skillNameOn = true;
         float areaSize = 800f;
@@ -122,6 +141,11 @@ public class UtilDialog {
         }, 1f);
     }
 
+    /**
+     * Create instructions-dialog, which is used when player is playing for the first time.
+     * @param text text in the dialog
+     * @return dialog
+     */
     public Dialog createInstructionsDialog(String text) {
         Label label = new Label(text, finalSkin, "small");
         label.setWrap(true);
@@ -135,10 +159,18 @@ public class UtilDialog {
         return dialog;
     }
 
+    /**
+     * Return the boolean-value.
+     * @return dialogOn
+     */
     public boolean isDialogOn() {
         return dialogOn;
     }
 
+    /**
+     * Return the boolean-value.
+     * @return skillNameOn
+     */
     public boolean isSkillNameOn() {
         return skillNameOn;
     }

@@ -28,9 +28,7 @@ public class Settings {
     private Skin finalSkin;
     private String room;
     private String lan;
-    private ArrayList<String> inventory;
     private UtilDialog dialog;
-    private Skills skills;
     private String difficulty;
 
     private float posX;
@@ -76,6 +74,12 @@ public class Settings {
     // Exit
     private ImageButton buttonExit;
 
+    /**
+     * Initialize all the basic values.
+     * @param game used for retrieving variables
+     * @param room room, where player is coming from
+     * @param curRoom currentroom
+     */
     Settings(MainGame game, String room, RoomParent curRoom) {
         this.game = game;
         this.room = room;
@@ -88,8 +92,6 @@ public class Settings {
         finalSkin = game.getFinalSkin();
         lan = game.getLanguage();
         dialog = game.getDialog();
-        inventory = game.getInventory();
-        skills = game.getSkills();
         difficulty = game.getDifficulty();
 
         setValues();
@@ -107,11 +109,17 @@ public class Settings {
         System.out.println("Setting-dialog opened from room: " + room);
     }
 
+    /**
+     * Set values.
+     */
     private void setValues() {
         posX = 0;
         onScreenY = 0;
     }
 
+    /**
+     * Create settings-dialog.
+     */
     private void createSettingsDialog() {
         settingsDialog = new Dialog("", finalSkin, "settings");
         settingsDialog.setMovable(false);
@@ -120,6 +128,9 @@ public class Settings {
         settingsDialog.setSize(game.pixelWidth, game.pixelHeight);
     }
 
+    /**
+     * Create header.
+     */
     private void createHeader() {
         header = new Label(localize.get("settings"), finalSkin, "big");
         header.setPosition(60,
@@ -130,6 +141,9 @@ public class Settings {
         settingsDialog.addActor(header);
     }
 
+    /**
+     * Create music-volume.
+     */
     private void createMusicVolume() {
         musicVolSlider = new Slider(0.0f, 1.0f, 0.1f, false, finalSkin);
         musicVolSlider.setValue(game.getMusicVol());
@@ -153,6 +167,9 @@ public class Settings {
         settingsDialog.addActor(musicVolLabel);
     }
 
+    /**
+     * Create sound-volume.
+     */
     private void createSoundVolume() {
         soundVolSlider = new Slider(0.0f, 1.0f, 0.1f, false, finalSkin);
         soundVolSlider.setValue(game.getSoundVol());
@@ -177,6 +194,9 @@ public class Settings {
         settingsDialog.addActor(soundVolLabel);
     }
 
+    /**
+     * Create difficulty-buttons.
+     */
     private void createDifficultyButtons() {
         for (int i = 0; i < difficultyButtons.length; i++) {
             final int difficultyCounter = i;
@@ -210,6 +230,9 @@ public class Settings {
         settingsDialog.addActor(difficultyLabel);
     }
 
+    /**
+     * Create quit- and reset-buttons.
+     */
     private void createQuitAndResetButtons() {
         buttonQuit = new ImageButton(finalSkin, "quit_" + lan);
         buttonQuit.setPosition(difficultyLabel.getX() - 20,
@@ -235,6 +258,9 @@ public class Settings {
         settingsDialog.addActor(buttonReset);
     }
 
+    /**
+     * Create first confirmation-popup.
+     */
     private void askConfrimation1() {
         confirmation1 = dialog.createPopupItemAndPowerUp(localize.get("reset"),
                 localize.get("resetConf1"), "popup_powerup");
@@ -257,6 +283,9 @@ public class Settings {
         });
     }
 
+    /**
+     * Create second confirmation-popup.
+     */
     private void askConfirmation2() {
         confirmation2 = dialog.createPopupItemAndPowerUp(localize.get("reset"),
                 localize.get("resetConf2"), "popup_powerup");
@@ -279,6 +308,9 @@ public class Settings {
         });
     }
 
+    /**
+     * Create quit-popup.
+     */
     private void askQuit() {
         popupQuit = dialog.createPopupItemAndPowerUp(localize.get("quit"),
                 localize.get("askQuit"), "popup_powerup");
@@ -304,6 +336,10 @@ public class Settings {
         });
     }
 
+    /**
+     * Create confirm- and cancel-buttons.
+     * @param dialog background-dialog
+     */
     private void createYesAndNo(Dialog dialog) {
         btnYes = new ImageButton(finalSkin, "confirm_" + lan);
         btnYes.setPosition(dialog.getWidth()/2 - 400, dialog.getHeight()/4 - 55);
@@ -312,6 +348,9 @@ public class Settings {
         btnNo.setPosition(btnYes.getX() + 445, btnYes.getY());
     }
 
+    /**
+     * Create language-buttons.
+     */
     private void createLanguageButtons() {
         String finnishStyle = "finnish";
         String englishStyle = "english";
@@ -356,6 +395,9 @@ public class Settings {
         settingsDialog.addActor(buttonEn);
     }
 
+    /**
+     * Create menu-buttons.
+     */
     private void createMenuButtons() {
         buttonSettings = new ImageButton(finalSkin, "settings");
         buttonSettings.setPosition(1440, 720);
@@ -387,6 +429,9 @@ public class Settings {
         settingsDialog.addActor(buttonStats);
     }
 
+    /**
+     * Create exit-button.
+     */
     private void createExitButton() {
         buttonExit = new ImageButton(finalSkin, "x");
         buttonExit.setPosition(1550, 960);
@@ -401,6 +446,9 @@ public class Settings {
         settingsDialog.addActor(buttonExit);
     }
 
+    /**
+     * This will be deleted.
+     */
     private void createSettingsRoomButton() {
         settingsRoomButton = new TextButton("SettingsRoom", skin);
         settingsRoomButton.setPosition(1450, 200);

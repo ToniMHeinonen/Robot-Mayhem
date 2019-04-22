@@ -21,7 +21,6 @@ public class UtilItem {
     private RoomParent curRoom;
     private I18NBundle localize;
     private Stage stage;
-    private Skin skin;
     private Skin finalSkin;
     private int money;
     private String room;
@@ -30,22 +29,15 @@ public class UtilItem {
     private Item items;
     private Skills skills;
     private int buyedItemsCounter;
-    private String fontSize;
+    private UtilDialog utilDialog;
 
     private Table tableBuyableItems;
     private Table tableOwnedItems;
-    private Dialog dialogItems;
-    private Dialog popupBuyableItem;
-    private Dialog popupOwnedItem;
-    private Dialog popupOwnedSkill;
+    private Dialog dialogItems, popupBuyableItem, popupOwnedItem, popupOwnedSkill;
 
-    private ScrollPane scrollBuyable;
-    private ScrollPane scrollOwned;
+    private ScrollPane scrollBuyable, scrollOwned;
 
-    private float posX;
-    private float onScreenY;
-
-    private UtilDialog utilDialog;
+    private float posX, onScreenY;
 
     private String[] allItems;
     private ArrayList<String> inventory;
@@ -53,11 +45,9 @@ public class UtilItem {
     private String[] allSkills;
     private ArrayList<String> boughtPermanent;
 
-    private int buttonCounterBuyable;
-    private int buttonCounterOwned;
+    private int buttonCounterBuyable, buttonCounterOwned;
 
-    private Label labelShop;
-    private Label labelInventory;
+    private Label labelShop, labelInventory;
 
     // Exit
     private ImageButton buttonExit;
@@ -68,6 +58,12 @@ public class UtilItem {
     // Menu
     private ImageButton buttonSettings, buttonInventory, buttonStats;
 
+    /**
+     * Initialize all the basic values.
+     * @param game used for retrieving variables
+     * @param room room, where player is coming from
+     * @param curRoom currentroom
+     */
     UtilItem(MainGame game, String room, RoomParent curRoom) {
         this.game = game;
         this.room = room;
@@ -75,10 +71,12 @@ public class UtilItem {
         create();
     }
 
+    /**
+     * Initialize all the basic values.
+     */
     private void create() {
         localize = game.getLocalize();
         stage = game.getStage();
-        skin = game.getSkin();
         finalSkin = game.getFinalSkin();
         money = game.getMoney();
         inventory = game.getInventory();
@@ -113,16 +111,22 @@ public class UtilItem {
         }
     }
 
+    /**
+     * Update.
+     */
     public void update() {
     }
 
+    /**
+     * Set positions.
+     */
     private void setValues() {
         posX = 0;
         onScreenY = 0;
     }
 
-    /*
-    The whole area, where are buyable and owned items.
+    /**
+     * The whole area, where are buyable and owned items.
      */
     private void createItemDialog() {
         dialogItems = new Dialog("", finalSkin, "inventory");
@@ -132,8 +136,8 @@ public class UtilItem {
         dialogItems.setSize(game.pixelWidth, game.pixelHeight);
     }
 
-    /*
-    Table, which contains shop items.
+    /**
+     * Table, which contains shop items.
      */
     private void createBuyableItemsTable() {
         int buyableItems = 0;
@@ -172,8 +176,9 @@ public class UtilItem {
         }
     }
 
-    /*
-    If there are more than 11 items in shop, it creates scrollbar.
+    /**
+     * If there are more than 11 items in shop, it creates scrollbar.
+     * @param table table, where are shop-items.
      */
     private void createScrollTableBuyable(Table table) {
         scrollBuyable = new ScrollPane(table, finalSkin);
@@ -185,8 +190,8 @@ public class UtilItem {
         dialogItems.addActor(scrollBuyable);
     }
 
-    /*
-    Table, which contains owned items and skills.
+    /**
+     * Table, which contains owned items and skills.
      */
     private void createOwnedItemsTable() {
         tableOwnedItems = new Table();
@@ -223,8 +228,7 @@ public class UtilItem {
             }
         }
 
-        // (String.valueOf(amounts[i]), skin);
-
+        // Get owned items.
         for (int i = 0; i < allItems.length; i++) {
             buttonCounterOwned = i;
             if (inventory.contains(allItems[i])) {
@@ -261,9 +265,10 @@ public class UtilItem {
         }
     }
 
-    /*
-    If there are more than 11 items in inventory, it creates scrollbar.
-    */
+    /**
+     * If there are more than 11 items in inventory, it creates scrollbar.
+     * @param table table, where are owned items/skills
+     */
     private void createScrollTableOwned(Table table) {
         scrollOwned = new ScrollPane(table, finalSkin);
         scrollOwned.setFadeScrollBars(false);
@@ -274,8 +279,8 @@ public class UtilItem {
         dialogItems.addActor(scrollOwned);
     }
 
-    /*
-    Creates "Shop" and "Inventory" headers.
+    /**
+     * Create "Shop" and "Inventory" headers.
      */
     private void createHeaders() {
         labelShop = new Label(localize.get("shop"), finalSkin, "big");
@@ -291,6 +296,9 @@ public class UtilItem {
         dialogItems.addActor(labelInventory);
     }
 
+    /**
+     * Show money.
+     */
     private void showMoney() {
         labelMoney = new Label(localize.get("shopMoney") + String.valueOf(money), finalSkin);
         labelMoney.setPosition(1650, 100);
@@ -298,8 +306,8 @@ public class UtilItem {
         dialogItems.addActor(labelMoney);
     }
 
-    /*
-    Creates settings, inventory and stats buttons in the right side of the screen.
+    /**
+     * Creates settings, inventory and stats buttons in the right side of the screen.
      */
     private void createMenuButtons() {
         buttonSettings = new ImageButton(finalSkin.getDrawable("menu_settings1"));
@@ -332,8 +340,9 @@ public class UtilItem {
         dialogItems.addActor(buttonStats);
     }
 
-    /*
-    This will open, when player has clicked one of the items in shop.
+    /**
+     * This will open, when player has clicked one of the items in shop.
+     * @param index index of the item
      */
     private void popupForBuyableItem(final int index) {
         String openedItem = allItems[index];
@@ -382,8 +391,9 @@ public class UtilItem {
         stage.addActor(popupBuyableItem);
     }
 
-    /*
-    This will open, when player has clicked one of owned items.
+    /**
+     * This will open, when player has clicked one of owned items.
+     * @param index index of the item
      */
     private void popupForOwnedItem(final int index) {
         String openedItem = allItems[index];
@@ -427,9 +437,9 @@ public class UtilItem {
         stage.addActor(popupOwnedItem);
     }
 
-    /*
-    This will open, when player has clicked one of owned skills.
-    Player can change skills only in RoomGame.
+    /**
+     * This will open, when player has clicked one of owned skills.
+     * @param index index of the skill
      */
     private void popupForOwnedSkill(final int index) {
         String openedSkill = allSkills[index];
@@ -500,8 +510,10 @@ public class UtilItem {
         stage.addActor(popupOwnedSkill);
     }
 
-    /*
-    If items or skills are more than 17 characters long, it will put smaller font to them.
+    /**
+     * Check, which font to use.
+     * @param checkFontSize the text of the item/skill
+     * @return return labelstyle
      */
     private String getFontSize(Label checkFontSize) {
         String returnStyle = "";
@@ -531,6 +543,10 @@ public class UtilItem {
         return returnStyle;
     }
 
+    /**
+     * Create cancel-button
+     * @param dialog background-dialog
+     */
     private void createBackButton(final Dialog dialog) {
         ImageButton buttonBack = new ImageButton(finalSkin, "cancel_" + lan);
         buttonBack.setPosition(dialog.getWidth()/2 + 35, 210);
@@ -543,8 +559,8 @@ public class UtilItem {
         });
     }
 
-    /*
-    The X-button in the top-right corner of the screen.
+    /**
+     * The X-button in the top-right corner of the screen.
      */
     private void createExitButton() {
         buttonExit = new ImageButton(finalSkin, "x");
@@ -558,9 +574,4 @@ public class UtilItem {
 
         dialogItems.addActor(buttonExit);
     }
-
-    /*
-    If you add this to item-button, it should open inventory:
-    UtilItem utilItem = new UtilItem(game, "fight");
-     */
 }

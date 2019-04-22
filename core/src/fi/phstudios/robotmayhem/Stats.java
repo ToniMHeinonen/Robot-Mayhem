@@ -51,6 +51,12 @@ public class Stats {
     private float spaceBetween = 30;
     private int ownedSkillAmount;
 
+    /**
+     * Initialize all the basic values.
+     * @param game used for retrieving variables
+     * @param room room, where player is coming from
+     * @param curRoom currentroom
+     */
     Stats (MainGame game, String room, RoomParent curRoom) {
         this.game = game;
         this.room = room;
@@ -87,6 +93,9 @@ public class Stats {
         stage.addActor(statsDialog);
     }
 
+    /**
+     * Get amount of owned skills.
+     */
     private void ownedSkillsAmount() {
         // Attack & Defend
         ownedSkillAmount = 2;
@@ -100,6 +109,9 @@ public class Stats {
         }
     }
 
+    /**
+     * Create stats-dialog.
+     */
     private void createStatsDialog() {
         statsDialog = new Dialog("", finalSkin, "stats");
         statsDialog.setMovable(false);
@@ -108,6 +120,9 @@ public class Stats {
         statsDialog.setSize(game.pixelWidth, game.pixelHeight);
     }
 
+    /**
+     * Create header.
+     */
     private void createHeader() {
         header = new Label(localize.get("stats"), finalSkin, "big");
         header.setPosition(60,
@@ -118,6 +133,9 @@ public class Stats {
         statsDialog.addActor(header);
     }
 
+    /**
+     * Create playername.
+     */
     private void createPlayerName() {
         name = new Label(localize.get("name") + ":", finalSkin);
         name.setPosition(header.getX() + 110, header.getY() - 100);
@@ -132,6 +150,9 @@ public class Stats {
         statsDialog.addActor(labelPlayerName);
     }
 
+    /**
+     * Create allsteps.
+     */
     private void createAllSteps() {
         allSteps = new Label(localize.get("steps") + ":", finalSkin);
         allSteps.setPosition(name.getX(), name.getY() - 75);
@@ -146,6 +167,9 @@ public class Stats {
         statsDialog.addActor(labelAllSteps);
     }
 
+    /**
+     * Create buyed items.
+     */
     private void createBuyedItems() {
         buyedItems = new Label(localize.get("buyedItems") + ":", finalSkin);
         buyedItems.setPosition(name.getX(), allSteps.getY() - 75);
@@ -160,6 +184,9 @@ public class Stats {
         statsDialog.addActor(labelBuyedItems);
     }
 
+    /**
+     * Create owned skills.
+     */
     private void createOwnedSkills() {
         ownedSkills = new Label(localize.get("ownedSkills") + ":", finalSkin);
         ownedSkills.setPosition(name.getX(), buyedItems.getY() - 75);
@@ -176,6 +203,9 @@ public class Stats {
         statsDialog.addActor(labelOwnedSkills);
     }
 
+    /**
+     * Create bosses defeated.
+     */
     private void createBossesDefeated() {
         bossesDefeated = new Label(localize.get("bossesDefeated") + ":", finalSkin);
         bossesDefeated.setPosition(name.getX(), ownedSkills.getY() - 75);
@@ -190,6 +220,9 @@ public class Stats {
         statsDialog.addActor(labelBossesDefeated);
     }
 
+    /**
+     * Create boosts.
+     */
     private void createBoosts() {
         boosts = new Label(localize.get("boosts") + ":", finalSkin);
         boosts.setPosition(name.getX(), bossesDefeated.getY() - 75);
@@ -258,6 +291,9 @@ public class Stats {
         statsDialog.addActor(labelHeal);
     }
 
+    /**
+     * Create menu buttons.
+     */
     private void createMenuButtons() {
         buttonSettings = new ImageButton(finalSkin.getDrawable("menu_settings1"));
         buttonSettings.setPosition(1440, 720);
@@ -289,6 +325,9 @@ public class Stats {
         statsDialog.addActor(buttonStats);
     }
 
+    /**
+     * Create exit-button.
+     */
     private void createExitButton() {
         buttonExit = new ImageButton(finalSkin, "x");
         buttonExit.setPosition(1550, 960);
