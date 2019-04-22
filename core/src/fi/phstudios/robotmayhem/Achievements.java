@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.I18NBundle;
 
+import java.util.ArrayList;
+
 public class Achievements {
     private MainGame game;
     private Skin finalSkin;
@@ -24,6 +26,11 @@ public class Achievements {
     private boolean finishedGameHard;
     private Item items;
     private String[] allItems;
+    private Skills skills;
+    private String[] allSkills;
+    private String skill1;
+    private String skill2;
+    private ArrayList<String> inventory;
 
     private Dialog dialogAch;
     private TextButton btnCollect;
@@ -35,6 +42,7 @@ public class Achievements {
 
     private float space = 200f;
     private int permanentCounter;
+    int ownedSkillAmount;
 
     Achievements(MainGame game) {
         this.game = game;
@@ -47,6 +55,11 @@ public class Achievements {
         localize = game.getLocalize();
         finishedGame = game.isFinishedGame();
         finishedGameHard = game.isFinishedGameHard();
+        skills = game.getSkills();
+        allSkills = skills.getAllSkills();
+        skill1 = game.getSkill1();
+        skill2 = game.getSkill2();
+        inventory = game.getInventory();
 
         createAchDialog();
         createHeadersAndDescriptions();
@@ -72,6 +85,7 @@ public class Achievements {
                 localize.get("finisher"),
                 localize.get("pepperyWalker"),
                 localize.get("materialist"),
+                localize.get("jackOfAllTrades"),
                 "Achievement 6"};
 
         achDescriptions = new String[] {
@@ -81,6 +95,7 @@ public class Achievements {
                 localize.get("finisherDesc"),
                 localize.get("pepperyWalkerDesc"),
                 localize.get("materialistDesc"),
+                localize.get("jackOfAllTradesDesc"),
                 "Achievement 6 description (20 steps)"};
 
         achMoney = new int[] {
@@ -90,6 +105,7 @@ public class Achievements {
                 30,     // Finisher / Finish the game
                 100,    // Peppery Walker / Finish the game on hard mode
                 25,     // Materialist / Buy every permanent item
+                40,     // Jack Of All Trades / Own every skill
                 2       // For the test-achievement
         };
     }
@@ -124,15 +140,28 @@ public class Achievements {
             game.setAchievement(5, "unlocked");
         }
 
-        // Achievement 6
-        if (stepAllCount >= 20) game.setAchievement(6, "unlocked");
+        // Achievement 6 / Jack Of All Trades / Own every skill
+        ownedSkillAmount = 2;
+
+        for (int i = 0; i < allSkills.length; i++) {
+            if (allSkills[i].equals(skill1)) ownedSkillAmount += 1;
+            if (allSkills[i].equals(skill2)) ownedSkillAmount += 1;
+            for (int j = 0; j < inventory.size(); j++) {
+                if (inventory.get(j).equals(allSkills[i])) ownedSkillAmount += 1;
+            }
+        }
+
+        if (allSkills.length-1 == ownedSkillAmount) game.setAchievement(6, "unlocked");
+
+        // Achievement 7
+        if (stepAllCount >= 20) game.setAchievement(7, "unlocked");
     }
 
     private void createButtons() {
         for (int i = 0; i < achHeaders.length; i++) {
             final int btnCounter = i;
             ImageButton imgBtn = new ImageButton(finalSkin, game.getAchievComplete().get(i));
-            imgBtn.setPosition(400 + i*space, 400);
+            imgBtn.setPosition(100 + i*space, 400);
             dialogAch.addActor(imgBtn);
             imgBtn.addListener(new ClickListener(){
                 int i = btnCounter;

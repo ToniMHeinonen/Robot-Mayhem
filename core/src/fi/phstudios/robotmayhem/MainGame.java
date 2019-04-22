@@ -768,7 +768,7 @@ public class MainGame extends Game {
 
 	public void loadAchievements() {
         // Change default-value when adding new achievements.
-        achievCompleteSize = stats.loadValue(keyAchievCompleteSize, 7);
+        achievCompleteSize = stats.loadValue(keyAchievCompleteSize, 8);
         for (int i = 0; i < achievCompleteSize; i++) {
             achievComplete.add(i, achievs.loadValue(keyAchievComplete + String.valueOf(i), "locked"));
             hasCollected.add(i, achievs.loadValue(keyHasCollected + String.valueOf(i), "false"));
