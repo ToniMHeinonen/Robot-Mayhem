@@ -535,8 +535,6 @@ public class RoomFight extends RoomParent {
         return takingDamage;
     }
 
-
-
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
@@ -1257,6 +1255,7 @@ public class RoomFight extends RoomParent {
 
         public void update() {
             updateStart();
+            updateOverallBoosts();
             if (!pauseStates) {
 
                 if (state == State.PLAYER_TURN) {
@@ -1406,6 +1405,14 @@ public class RoomFight extends RoomParent {
             for (int i = 0; i < 2; i++) {
                 if (skillNames[i] != "") mapSkills.add(i, skills.getSkill(skillNames[i]));
             }
+        }
+
+        private void updateOverallBoosts() {
+            game.setOverallBstCrit(critBoost);
+            game.setOverallBstMiss(missBoost);
+            game.setOverallBstDmg(dmgBoost);
+            game.setOverallBstArmor(armorBoost);
+            game.setOverallBstHeal(healBoost);
         }
 
         // Run away if escape is chosen

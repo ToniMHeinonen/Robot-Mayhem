@@ -193,6 +193,10 @@ public class MainGame extends Game {
 
     private int ramTimer;
 
+    // Stats room uses these to display temporary RoomFight stats
+    private int overallBstCrit, overallBstMiss;
+    private float overallBstDmg, overallBstArmor, overallBstHeal;
+
 	/**
 	 * Initialize these values when the game starts.
 	 */
@@ -1044,6 +1048,49 @@ public class MainGame extends Game {
 	public float getHealBoost() {
 		float wholeBoost = healBoost + permaHealBoost;
 		return wholeBoost;
+	}
+
+	public int getOverallBstCrit() {
+		return overallBstCrit;
+	}
+
+	public void setOverallBstCrit(int overallBstCrit) {
+		this.overallBstCrit = overallBstCrit;
+	}
+
+	public int getOverallBstMiss() {
+		return overallBstMiss;
+	}
+
+	public void setOverallBstMiss(int overallBstMiss) {
+		this.overallBstMiss = overallBstMiss;
+	}
+
+	public float getOverallBstDmg() {
+		return overallBstDmg;
+	}
+
+	public void setOverallBstDmg(double overallBstDmg) {
+		Float converted = (float) overallBstDmg;
+		this.overallBstDmg = converted;
+	}
+
+	public float getOverallBstArmor() {
+		return overallBstArmor;
+	}
+
+	public void setOverallBstArmor(double overallBstArmor) {
+		Float converted = (float) overallBstArmor;
+		this.overallBstArmor = converted;
+	}
+
+	public float getOverallBstHeal() {
+		return overallBstHeal;
+	}
+
+	public void setOverallBstHeal(double overallBstHeal) {
+		Float converted = (float) overallBstHeal;
+		this.overallBstHeal = converted;
 	}
 
 	public SpriteBatch getBatch() {

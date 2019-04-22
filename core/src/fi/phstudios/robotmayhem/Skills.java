@@ -727,7 +727,7 @@ public class Skills {
         map.put(damageOverTime, 0.0);
         map.put(damageOverTimeTurns, 0);
         map.put(dotPurePercent, true);
-        map.put(cooldown, 3);
+        map.put(cooldown, 2);
         map.put(hitAnimation, skillHit);
         map.put(sound, null);
         map.put(button, btnSkill);
@@ -789,7 +789,7 @@ public class Skills {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, SHINE);
         map.put(description, "shineDesc");
-        map.put(damage, 2.0);
+        map.put(damage, 2.5);
         map.put(dmgPurePercent, false);
         map.put(critChance, defCrit);
         map.put(missChance, 15);
