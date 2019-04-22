@@ -139,6 +139,11 @@ public class Skills {
         skillDiamondRoll();
         skillCoinFlip();
         skillEnrichment();
+        // Fabio
+        skillRustify();
+        skillOverpower();
+        skillMayhem();
+        skillVR();
         /*skillShock();
         skillFire();
         skillElectrify();
@@ -861,12 +866,104 @@ public class Skills {
         map.put(damageOverTimeTurns, 0);
         map.put(dotPurePercent, true);
         map.put(cooldown, 2);
-        map.put(hitAnimation, skillHit);
+        map.put(hitAnimation, null);
         map.put(sound, null);
         map.put(button, btnHeal);
         map.put(boostSelf, true);
         map.put(boostType, BOOST_NONE);
         map.put(boostValue, 0.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillRustify() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, RUSTIFY);
+        map.put(description, "rustifyDesc");
+        map.put(damage, 0.0);
+        map.put(dmgPurePercent, true);
+        map.put(critChance, 0);
+        map.put(missChance, 0);
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, true);
+        map.put(cooldown, 5);
+        map.put(hitAnimation, null);
+        map.put(sound, null);
+        map.put(button, btnSkill);
+        map.put(boostSelf, false);
+        map.put(boostType, BOOST_HEAL);
+        map.put(boostValue, -0.5);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillOverpower() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, OVERPOWER);
+        map.put(description, "overpowerDesc");
+        map.put(damage, 5.0);
+        map.put(dmgPurePercent, false);
+        map.put(critChance, defCrit);
+        map.put(missChance, defMiss);
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, true);
+        map.put(cooldown, 4);
+        map.put(hitAnimation, skillHit);
+        map.put(sound, null);
+        map.put(button, btnSkill);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillMayhem() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, MAYHEM);
+        map.put(description, "mayhemDesc");
+        map.put(damage, 0.0);
+        map.put(dmgPurePercent, false);
+        map.put(critChance, defCrit);
+        map.put(missChance, defMiss);
+        map.put(damageOverTime, 2.0);
+        map.put(damageOverTimeTurns, 5);
+        map.put(dotPurePercent, false);
+        map.put(cooldown, 5);
+        map.put(hitAnimation, null);
+        map.put(sound, null);
+        map.put(button, btnSkill);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillVR() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, VR);
+        map.put(description, "vrDesc");
+        map.put(damage, 0.5);
+        map.put(dmgPurePercent, false);
+        map.put(critChance, defCrit);
+        map.put(missChance, defMiss);
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, false);
+        map.put(cooldown, 2);
+        map.put(hitAnimation, skillHit);
+        map.put(sound, null);
+        map.put(button, btnSkill);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_DMG);
+        map.put(boostValue, 0.25);
 
         allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);

@@ -231,10 +231,10 @@ public class Bosses {
         curAttackName = "fabioAttackName";
         curNormalSize = true;
         curSkillName0 = skills.ATTACK;
-        curSkillName1 = skills.ATTACK;
-        curSkillName2 = skills.ATTACK;
-        curSkillName3 = skills.ATTACK;
-        curSkillName4 = skills.ATTACK;
+        curSkillName1 = skills.RUSTIFY;
+        curSkillName2 = skills.OVERPOWER;
+        curSkillName3 = skills.MAYHEM;
+        curSkillName4 = skills.VR;
         curDialogStart = "fabioDialogStart";
         curDialogEnd = "fabioDialogEnd";
 
