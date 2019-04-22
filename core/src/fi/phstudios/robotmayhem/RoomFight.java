@@ -750,7 +750,7 @@ public class RoomFight extends RoomParent {
                 } else if (usedItem != null) {
                     if (!fightersTakingDamage()) {
                         usedItem = null;
-                        turnState = WAIT_FOR_ACTION;
+                        if (opponent.getHp() > 0) turnState = WAIT_FOR_ACTION;
                     }
                 } else {
                     turnState = END_TURN;
