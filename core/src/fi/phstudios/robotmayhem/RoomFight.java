@@ -529,8 +529,6 @@ public class RoomFight extends RoomParent {
         return takingDamage;
     }
 
-
-
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
@@ -631,11 +629,6 @@ public class RoomFight extends RoomParent {
                 actionTimer = actionDelay; // reset actionTimer
                 if (!dialog.isSkillNameOn()) {
                     inflictDoT();
-                    System.out.println("crit: " + String.valueOf(critBoost));
-                    System.out.println("miss: " + String.valueOf(missBoost));
-                    System.out.println("dmg: " + String.valueOf(dmgBoost));
-                    System.out.println("armor: " + String.valueOf(armorBoost));
-                    System.out.println("heal: " + String.valueOf(healBoost));
                 }
 
             } else if (turnState == TAKING_DOT) {
@@ -1256,6 +1249,7 @@ public class RoomFight extends RoomParent {
 
         public void update() {
             updateStart();
+            updateOverallBoosts();
             if (!pauseStates) {
 
                 if (state == State.PLAYER_TURN) {
@@ -1405,6 +1399,14 @@ public class RoomFight extends RoomParent {
             for (int i = 0; i < 2; i++) {
                 if (skillNames[i] != "") mapSkills.add(i, skills.getSkill(skillNames[i]));
             }
+        }
+
+        private void updateOverallBoosts() {
+            game.setOverallBstCrit(critBoost);
+            game.setOverallBstMiss(missBoost);
+            game.setOverallBstDmg(dmgBoost);
+            game.setOverallBstArmor(armorBoost);
+            game.setOverallBstHeal(healBoost);
         }
 
         // Run away if escape is chosen
@@ -1700,7 +1702,7 @@ public class RoomFight extends RoomParent {
 
                     // In tutorial, do suction, else use random value
                     if (tutorial != null && !tutorial.isFightAfterHitFinished()) {
-                        R = 1;
+                        R = 0;
                     }
 
                     String selSkill = "Skill" + String.valueOf(R);

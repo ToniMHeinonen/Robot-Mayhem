@@ -73,11 +73,20 @@ public class Stats {
         skills = game.getSkills();
         allSkills = skills.getAllSkills();
         fightsWon = game.getFightsWon();
-        critBoost = game.getCritBoost();
-        missBoost = game.getMissBoost();
-        dmgBoost = game.getDmgBoost();
-        armorBoost = game.getArmorBoost();
-        healBoost = game.getHealBoost();
+        // If room is fight, retrieve player's current boost values
+        if (room.equals("fight")) {
+            critBoost = game.getOverallBstCrit();
+            missBoost = game.getOverallBstMiss();
+            dmgBoost = game.getOverallBstDmg();
+            armorBoost = game.getOverallBstArmor();
+            healBoost = game.getOverallBstHeal();
+        } else {
+            critBoost = game.getCritBoost();
+            missBoost = game.getMissBoost();
+            dmgBoost = game.getDmgBoost();
+            armorBoost = game.getArmorBoost();
+            healBoost = game.getHealBoost();
+        }
 
         ownedSkillsAmount();
         createStatsDialog();

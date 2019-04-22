@@ -40,7 +40,7 @@ public class MainGame extends Game {
 	private Item items;
 	private Bosses bosses;
 	private Music curMusic, curBossMusic;
-	private int curRoom, ROOM_GAME = 1, ROOM_FIGHT = 2;
+	private int curRoom, ROOM_GAME = 1, ROOM_FIGHT = 2, ROOM_END = 3;
 
 	public final float pixelWidth = 1920f;
 	public final float pixelHeight = 1080f;
@@ -192,6 +192,10 @@ public class MainGame extends Game {
     private boolean pauseWalking, assetsLoaded;
 
     private int ramTimer;
+
+    // Stats room uses these to display temporary RoomFight stats
+    private int overallBstCrit, overallBstMiss;
+    private float overallBstDmg, overallBstArmor, overallBstHeal;
 
 	/**
 	 * Initialize these values when the game starts.
@@ -409,6 +413,15 @@ public class MainGame extends Game {
             checkHard = false;
         }
     }
+
+	public void switchToRoomEnd() {
+		transition();
+		startMusic(files.musMainTheme);
+		RoomEnd room = new RoomEnd(this);
+		setScreen(room);
+		curRoom = ROOM_END;
+		saveStats();
+	}
 
 	public void switchToPowerUps() {
 		transition();
@@ -633,7 +646,7 @@ public class MainGame extends Game {
 	 */
 	public void loadStats() {
 		// NOTE: Remember to write 0f instead of 0 to float defValues, otherwise loading crashes
-		money = stats.loadValue(keyMoney, 1000);
+		money = stats.loadValue(keyMoney, 0);
 		stepCount = stats.loadValue(keyStepCount, 0f);
 		stepAllCount = stats.loadValue(keyStepAllCount, 0f);
 		stepBank = stats.loadValue(keyStepBank, 0f);
@@ -665,8 +678,8 @@ public class MainGame extends Game {
 		reflectiveShield = stats.loadValue(keyReflectiveShield, false);
 
 		// Tutorial // REMEMBER TO CHANGE THESE TO TRUE
-		firstPlayTime = stats.loadValue(keyFirstPlayTime, false);
-		firstPlayTimeFight = stats.loadValue(keyFirstPlayTimeFight, false);
+		firstPlayTime = stats.loadValue(keyFirstPlayTime, true);
+		firstPlayTimeFight = stats.loadValue(keyFirstPlayTimeFight, true);
 		firstPlayInventory = stats.loadValue(keyFirstPlayInventory, true);
 		firstPlayBank = stats.loadValue(keyFirstPlayBank, true);
 		firstPlayVictory = stats.loadValue(keyFirstPlayVictory, true);
@@ -1040,6 +1053,49 @@ public class MainGame extends Game {
 	public float getHealBoost() {
 		float wholeBoost = healBoost + permaHealBoost;
 		return wholeBoost;
+	}
+
+	public int getOverallBstCrit() {
+		return overallBstCrit;
+	}
+
+	public void setOverallBstCrit(int overallBstCrit) {
+		this.overallBstCrit = overallBstCrit;
+	}
+
+	public int getOverallBstMiss() {
+		return overallBstMiss;
+	}
+
+	public void setOverallBstMiss(int overallBstMiss) {
+		this.overallBstMiss = overallBstMiss;
+	}
+
+	public float getOverallBstDmg() {
+		return overallBstDmg;
+	}
+
+	public void setOverallBstDmg(double overallBstDmg) {
+		Float converted = (float) overallBstDmg;
+		this.overallBstDmg = converted;
+	}
+
+	public float getOverallBstArmor() {
+		return overallBstArmor;
+	}
+
+	public void setOverallBstArmor(double overallBstArmor) {
+		Float converted = (float) overallBstArmor;
+		this.overallBstArmor = converted;
+	}
+
+	public float getOverallBstHeal() {
+		return overallBstHeal;
+	}
+
+	public void setOverallBstHeal(double overallBstHeal) {
+		Float converted = (float) overallBstHeal;
+		this.overallBstHeal = converted;
 	}
 
 	public SpriteBatch getBatch() {
