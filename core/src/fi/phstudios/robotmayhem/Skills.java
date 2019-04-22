@@ -73,8 +73,8 @@ public class Skills {
     public final String ORDER = "ORDER";
     // Baller
     public final String SHINE = "SHINE";
-    public final String COIN_FLIP = "COIN_FLIP";
     public final String DIAMOND_ROLL = "DIAMOND_ROLL";
+    public final String COIN_FLIP = "COIN_FLIP";
     public final String ENRICHMENT = "ENRICHMENT";
     // Fabio
     public final String RUSTIFY = "RUSTIFY";
@@ -134,6 +134,11 @@ public class Skills {
         skillLowSpeed();
         skillTheLaw();
         skillOrder();
+        // Baller
+        skillShine();
+        skillDiamondRoll();
+        skillCoinFlip();
+        skillEnrichment();
         /*skillShock();
         skillFire();
         skillElectrify();
@@ -167,6 +172,9 @@ public class Skills {
       deleted in the future)
     - sound = The sound effect what plays on the start of move
     - button = Select correct button type for skill
+    - boostSelf = Whether to do the boost to self or to opponent
+    - boostType = What kind of boost does the skill do
+    - boostValue = How much does the boost affect
      */
 
     /*
@@ -767,6 +775,98 @@ public class Skills {
         map.put(boostSelf, true);
         map.put(boostType, BOOST_CRIT);
         map.put(boostValue, 15.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillShine() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, SHINE);
+        map.put(description, "shineDesc");
+        map.put(damage, 2.0);
+        map.put(dmgPurePercent, false);
+        map.put(critChance, defCrit);
+        map.put(missChance, 15);
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, true);
+        map.put(cooldown, 2);
+        map.put(hitAnimation, skillHit);
+        map.put(sound, null);
+        map.put(button, btnSkill);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillDiamondRoll() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, DIAMOND_ROLL);
+        map.put(description, "diamondRollDesc");
+        map.put(damage, 1.5);
+        map.put(dmgPurePercent, false);
+        map.put(critChance, defCrit);
+        map.put(missChance, defMiss);
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, true);
+        map.put(cooldown, 0);
+        map.put(hitAnimation, skillHit);
+        map.put(sound, null);
+        map.put(button, btnSkill);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillCoinFlip() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, COIN_FLIP);
+        map.put(description, "coinFlipDesc");
+        map.put(damage, 4.0);
+        map.put(dmgPurePercent, false);
+        map.put(critChance, -100);
+        map.put(missChance, 50);
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, true);
+        map.put(cooldown, 3);
+        map.put(hitAnimation, skillHit);
+        map.put(sound, null);
+        map.put(button, btnSkill);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
+
+        allSkills.add((String) map.get(name));
+        mapSkills.put((String) map.get(name), map);
+    }
+
+    private void skillEnrichment() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put(name, ENRICHMENT);
+        map.put(description, "enrichmentDesc");
+        map.put(damage, -20.0);
+        map.put(dmgPurePercent, true);
+        map.put(critChance, 0);
+        map.put(missChance, 0);
+        map.put(damageOverTime, 0.0);
+        map.put(damageOverTimeTurns, 0);
+        map.put(dotPurePercent, true);
+        map.put(cooldown, 2);
+        map.put(hitAnimation, skillHit);
+        map.put(sound, null);
+        map.put(button, btnHeal);
+        map.put(boostSelf, true);
+        map.put(boostType, BOOST_NONE);
+        map.put(boostValue, 0.0);
 
         allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);

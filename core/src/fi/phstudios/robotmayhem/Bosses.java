@@ -211,10 +211,10 @@ public class Bosses {
         curAttackName = "ballerAttackName";
         curNormalSize = true;
         curSkillName0 = skills.ATTACK;
-        curSkillName1 = skills.ATTACK;
-        curSkillName2 = skills.ATTACK;
-        curSkillName3 = skills.ATTACK;
-        curSkillName4 = skills.ATTACK;
+        curSkillName1 = skills.ENRICHMENT;
+        curSkillName2 = skills.DIAMOND_ROLL;
+        curSkillName3 = skills.SHINE;
+        curSkillName4 = skills.COIN_FLIP;
         curDialogStart = "ballerDialogStart";
         curDialogEnd = "ballerDialogEnd";
 
