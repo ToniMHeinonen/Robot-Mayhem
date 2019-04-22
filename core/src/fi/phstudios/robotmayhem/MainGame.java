@@ -80,17 +80,7 @@ public class MainGame extends Game {
 	private String keySkill1 = E.encrypt("skill1");
 	private String keySkill2 = E.encrypt("skill2");
 	private String keyCurrentBoss = E.encrypt("currentBoss");
-	private String keyFirstPlayTime = E.encrypt("firstPlayTime");
-	private String keyFirstPlayTimeFight = E.encrypt("firstPlayTimeFight");
-	private String keyFirstPlayInventory = E.encrypt("firstPlayInventory");
-	private String keyFirstPlayBank = E.encrypt("firstPlayBank");
-	private String keyFirstPlayVictory = E.encrypt("firstPlayVictory");
-	private String keyFirstPlayPoolComplete1 = E.encrypt("firstplayPoolComplete1");
-	private String keyFirstPlayPoolComplete2 = E.encrypt("firstplayPoolComplete2");
-	private String keyFirstPlayPoolComplete3 = E.encrypt("firstplayPoolComplete3");
-    private String keyFirstPlayMoney = E.encrypt("firstPlayMoney");
-    private String keyFirstPlayEscape = E.encrypt("firstPlayEscape");
-	private String keyFirstPlayDeath = E.encrypt("firstPlayDeath");
+
 	private String keyFinishedGame = E.encrypt("finishedGame");
 	private String keyCheckHard = E.encrypt("checkHard");
 	private String keyFinishedGameHard = E.encrypt("finishedGameHard");
@@ -121,6 +111,18 @@ public class MainGame extends Game {
 	private String keyDefeatedBosses = E.encrypt("defeatedBosses");
 	private String keyArrPlayedMusicSize = E.encrypt("arrPlayedMusicSize");
 	private String keyArrPlayedMusic = E.encrypt("arrPlayedMusic");
+
+	private String keyFirstPlayTime = E.encrypt("firstPlayTime");
+	private String keyFirstPlayTimeFight = E.encrypt("firstPlayTimeFight");
+	private String keyFirstPlayInventory = E.encrypt("firstPlayInventory");
+	private String keyFirstPlayBank = E.encrypt("firstPlayBank");
+	private String keyFirstPlayVictory = E.encrypt("firstPlayVictory");
+	private String keyFirstPlayPoolComplete1 = E.encrypt("firstplayPoolComplete1");
+	private String keyFirstPlayPoolComplete2 = E.encrypt("firstplayPoolComplete2");
+	private String keyFirstPlayPoolComplete3 = E.encrypt("firstplayPoolComplete3");
+	private String keyFirstPlayMoney = E.encrypt("firstPlayMoney");
+	private String keyFirstPlayEscape = E.encrypt("firstPlayEscape");
+	private String keyFirstPlayDeath = E.encrypt("firstPlayDeath");
 	// Values
 	private int saveTimerAmount = 1800;
 	private int saveTimer = saveTimerAmount;
@@ -132,7 +134,7 @@ public class MainGame extends Game {
 	private boolean firstPlayTime, firstPlayTimeFight, firstPlayInventory, firstPlayBank,
 			firstPlayVictory, firstPlayPoolComplete1, firstPlayPoolComplete2,
 			firstPlayPoolComplete3, firstPlayMoney, firstPlayEscape, firstPlayDeath,
-            reflectiveShield, finishedGame, checkHard, finishedGameHard;
+			reflectiveShield, finishedGame, checkHard, finishedGameHard;
 	private int critBoost, missBoost, permaCritBoost, permaMissBoost;
 	private float armorBoost, dmgBoost, healBoost, permaArmorBoost, permaDmgBoost, permaHealBoost;
 	// Stat arrays
@@ -309,7 +311,7 @@ public class MainGame extends Game {
 		int currentDate = calendarG.get(Calendar.DAY_OF_YEAR);
 		if (currentDate != prevDayGift) {
 			prevDayGift = currentDate;
-			money += MathUtils.random(5, 10);
+			money += MathUtils.random(10, 15);
 		}
 	}
 
@@ -640,7 +642,7 @@ public class MainGame extends Game {
 		reflectiveShield = stats.loadValue(keyReflectiveShield, false);
 
 		// Tutorial // REMEMBER TO CHANGE THESE TO TRUE
-		firstPlayTime = stats.loadValue(keyFirstPlayTime, true);
+		firstPlayTime = stats.loadValue(keyFirstPlayTime, false);
 		firstPlayTimeFight = stats.loadValue(keyFirstPlayTimeFight, false);
 		firstPlayInventory = stats.loadValue(keyFirstPlayInventory, true);
 		firstPlayBank = stats.loadValue(keyFirstPlayBank, true);

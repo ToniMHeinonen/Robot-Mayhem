@@ -76,10 +76,14 @@ public class AssetHandler {
     public final String pcAttack = "texture/pc/pc_attack.png";
     public final String pcDamage = "texture/pc/pc_damage.png";
     public final String pcStun = "texture/pc/pc_stun.png";
-    public final String fabioIdle = "texture/player/player_idle.png"; // Change later
-    public final String fabioAttack = "texture/player/player_attack.png"; // Change later
-    public final String fabioDamage = "texture/player/player_damage.png"; // Change later
-    public final String fabioStun = "texture/player/player_stun.png"; // Change later
+    public final String ballerIdle = "texture/baller/baller_idle.png";
+    public final String ballerAttack = "texture/baller/baller_attack.png";
+    public final String ballerDamage = "texture/baller/baller_damage.png";
+    public final String ballerStun = "texture/baller/baller_stun.png";
+    public final String fabioIdle = "texture/fabio/fabio_idle.png";
+    public final String fabioAttack = "texture/fabio/fabio_attack.png";
+    public final String fabioDamage = "texture/fabio/fabio_damage.png";
+    public final String fabioStun = "texture/fabio/fabio_stun.png";
 
     /*
     Skins
@@ -187,6 +191,10 @@ public class AssetHandler {
         manager.load(pcAttack, Texture.class);
         manager.load(pcDamage, Texture.class);
         manager.load(pcStun, Texture.class);
+        manager.load(ballerIdle, Texture.class);
+        manager.load(ballerAttack, Texture.class);
+        manager.load(ballerDamage, Texture.class);
+        manager.load(ballerStun, Texture.class);
         manager.load(fabioIdle, Texture.class);
         manager.load(fabioAttack, Texture.class);
         manager.load(fabioDamage, Texture.class);
