@@ -129,6 +129,7 @@ public class MainGame extends Game {
     private String keyAchievComplete = E.encrypt("achievComplete");
     private String keyAchievCompleteSize = E.encrypt("achievCompleteSize");
     private String keyHasCollected = E.encrypt("hasCollected");
+    private String keyResetedGame = E.encrypt("resetedGame");
 
 	// Values
 	private int saveTimerAmount = 1800;
@@ -143,7 +144,7 @@ public class MainGame extends Game {
 	private boolean firstPlayTime, firstPlayTimeFight, firstPlayInventory, firstPlayBank,
 			firstPlayVictory, firstPlayPoolComplete1, firstPlayPoolComplete2,
 			firstPlayPoolComplete3, firstPlayMoney, firstPlayEscape, firstPlayDeath,
-			reflectiveShield, finishedGame, checkHard, finishedGameHard;
+			reflectiveShield, finishedGame, checkHard, finishedGameHard, resetedGame;
 	private int critBoost, missBoost, permaCritBoost, permaMissBoost;
 	private float armorBoost, dmgBoost, healBoost, permaArmorBoost, permaDmgBoost, permaHealBoost;
 	// Stat arrays
@@ -297,8 +298,10 @@ public class MainGame extends Game {
 		prefsStats.clear();
 		prefsStats.flush();
 		// Delete prefsAchievs.clear and .flush in the final version.
-		prefsAchievs.clear();
-		prefsAchievs.flush();
+		//prefsAchievs.clear();
+		//prefsAchievs.flush();
+		resetedGame = true;
+		saveAchievements();
 		initAfterRestarting();
 	}
 
@@ -814,6 +817,7 @@ public class MainGame extends Game {
             achievComplete.add(i, achievs.loadValue(keyAchievComplete + String.valueOf(i), "locked"));
             hasCollected.add(i, achievs.loadValue(keyHasCollected + String.valueOf(i), "false"));
         }
+        resetedGame = achievs.loadValue(keyResetedGame, false);
     }
 
     public void saveAchievements() {
@@ -822,6 +826,7 @@ public class MainGame extends Game {
             achievs.saveValue(keyAchievComplete + String.valueOf(i), achievComplete.get(i));
             achievs.saveValue(keyHasCollected + String.valueOf(i), hasCollected.get(i));
         }
+        achievs.saveValue(keyResetedGame, resetedGame);
 	    prefsAchievs.flush();
     }
 
@@ -1324,6 +1329,10 @@ public class MainGame extends Game {
 
     public boolean isFinishedGameHard() {
 	    return finishedGameHard;
+    }
+
+    public boolean isResetedGame() {
+	    return resetedGame;
     }
 
 	public TextureAtlas getTestButtonAtlas() {

@@ -22,8 +22,7 @@ public class Achievements {
     private I18NBundle localize;
     private float stepAllCount;
     private String lan;
-    private boolean finishedGame;
-    private boolean finishedGameHard;
+    private boolean finishedGame, finishedGameHard, resetedGame;
     private Item items;
     private String[] allItems;
     private Skills skills;
@@ -41,7 +40,7 @@ public class Achievements {
     private int[] achMoney;
 
     private float space = 200f;
-    float posX = 350;
+    float posX = 370;
     float posY = 600;
     private int permanentCounter, positionCounter;
     int ownedSkillAmount;
@@ -67,6 +66,7 @@ public class Achievements {
         skill2 = game.getSkill2();
         inventory = game.getInventory();
         files = game.getFiles();
+        resetedGame = game.isResetedGame();
 
         createAchDialog();
         createHeadersAndDescriptions();
@@ -105,7 +105,7 @@ public class Achievements {
                 localize.get("pepperyWalker"),
                 localize.get("materialist"),
                 localize.get("jackOfAllTrades"),
-                "Achievement 6"};
+                localize.get("cleanSlate")};
 
         achDescriptions = new String[] {
                 localize.get("sundayWalkerDesc"),
@@ -115,7 +115,7 @@ public class Achievements {
                 localize.get("pepperyWalkerDesc"),
                 localize.get("materialistDesc"),
                 localize.get("jackOfAllTradesDesc"),
-                "Achievement 6 description (20 steps)"};
+                localize.get("cleanSlateDesc")};
 
         achMoney = new int[] {
                 5,      // Sunday Walker / 50 steps
@@ -125,7 +125,7 @@ public class Achievements {
                 100,    // Peppery Walker / Finish the game on hard mode
                 25,     // Materialist / Buy every permanent item
                 40,     // Jack Of All Trades / Own every skill
-                2       // For the test-achievement
+                5       // Clean Slate / Reset the game
         };
     }
 
@@ -175,8 +175,8 @@ public class Achievements {
 
         if (allSkills.length-1 == ownedSkillAmount) game.setAchievement(6, "unlocked");
 
-        // Achievement 7
-        if (stepAllCount >= 20) game.setAchievement(7, "unlocked");
+        // Achievement 7 / Clean Slate / Reset the game.
+        if (resetedGame) game.setAchievement(7, "unlocked");
     }
 
     /**
