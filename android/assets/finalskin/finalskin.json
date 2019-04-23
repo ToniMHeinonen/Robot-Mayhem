@@ -148,12 +148,39 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
 		down: button_money_clicked
 	}
 	unlocked: {
-		up: unlock
-		down: unlock
+		up: trophy_unlocked1
+		down: trophy_unlocked2
+		disabled: trophy_unlocked0
 	}
 	locked: {
-		up: lock
-		down: lock
+		up: trophy_locked1
+		down: trophy_locked2
+		disabled: trophy_locked0
+	}
+	achievement: {
+		up: trophy1
+		down: trophy2
+		disabled: trophy0
+	}
+	collect_en: {
+		up: collect1_en
+		down: collect2_en
+		disabled: collect0_en
+	}
+	collect_fi: {
+		up: collect1_fi
+		down: collect2_fi
+		disabled: collect0_fi
+	}
+	collected_en: {
+		up: collected_en
+		down: collected_en
+		disabled: collected_en
+	}
+	collected_fi: {
+		up: collected_fi
+		down: collected_fi
+		disabled: collected_fi
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {

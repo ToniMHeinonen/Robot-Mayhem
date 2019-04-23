@@ -459,15 +459,5 @@ public class Settings {
             }
         });
         settingsDialog.addActor(settingsRoomButton);
-
-        TextButton btnAchiev = new TextButton("Achievements", finalSkin);
-        btnAchiev.setPosition(0, 800);
-        btnAchiev.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                Achievements achievements = new Achievements(game);
-            }
-        });
-        settingsDialog.addActor(btnAchiev);
     }
 }

@@ -34,8 +34,7 @@ public class Achievements {
     private Files files;
 
     private Dialog dialogAch;
-    private TextButton btnCollect;
-    private TextButton btnCancel;
+    private ImageButton btnCancel, btnCollect;
 
     private String[] achHeaders;
     private String[] achDescriptions;
@@ -201,11 +200,11 @@ public class Achievements {
         locked.setAlignment(1);
         dialog.addActor(locked);
 
-        String stringCollect = "collect";
+        String stringCollect = "collect_" + lan;
         if (game.getHasCollected().get(index).equals("true")) {
-            stringCollect = "collected";
+            stringCollect = "collected_" + lan;
         }
-        btnCollect = new TextButton(localize.get(stringCollect), finalSkin, "small");
+        btnCollect = new ImageButton(finalSkin, stringCollect);
         btnCollect.setPosition(dialog.getWidth()/2 - 400, dialog.getHeight()/4 - 55);
         btnCollect.setDisabled(true);
         dialog.addActor(btnCollect);
@@ -223,7 +222,7 @@ public class Achievements {
             });
         }
 
-        btnCancel = new TextButton(localize.get("cancel"), finalSkin, "small");
+        btnCancel = new ImageButton(finalSkin, "cancel_" + lan);
         btnCancel.setPosition(btnCollect.getX() + 445, btnCollect.getY());
         dialog.addActor(btnCancel);
         btnCancel.addListener(new ClickListener(){
