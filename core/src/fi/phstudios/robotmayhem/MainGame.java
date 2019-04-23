@@ -705,8 +705,8 @@ public class MainGame extends Game {
 		reflectiveShield = stats.loadValue(keyReflectiveShield, false);
 
 		// Tutorial // REMEMBER TO CHANGE THESE TO TRUE
-		firstPlayTime = stats.loadValue(keyFirstPlayTime, false);
-		firstPlayTimeFight = stats.loadValue(keyFirstPlayTimeFight, false);
+		firstPlayTime = stats.loadValue(keyFirstPlayTime, true);
+		firstPlayTimeFight = stats.loadValue(keyFirstPlayTimeFight, true);
 		firstPlayInventory = stats.loadValue(keyFirstPlayInventory, true);
 		firstPlayBank = stats.loadValue(keyFirstPlayBank, true);
 		firstPlayVictory = stats.loadValue(keyFirstPlayVictory, true);

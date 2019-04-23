@@ -25,10 +25,10 @@ public class RoomGame extends RoomParent {
     private float curSteps;
     private float bankSpd;
     private float bankRetrieved;
-    private boolean milestoneReached, retrievingSteps;
+    private boolean milestoneReached, retrievingSteps, bankHasSteps;
     private ImageButton fightButton;
     private Skin finalSkin;
-    private FirstPlay victory, pool1Complete, pool2Complete, pool3Complete;
+    private FirstPlay victory, pool1Complete, pool2Complete, pool3Complete, bankTutorial;
 
     /**
      * Retrieve values from game and create necessary variables.
@@ -62,18 +62,19 @@ public class RoomGame extends RoomParent {
         super.render(delta);
 
         if (!game.haveWeChangedTheRoom) {
-            checkTutorialDialogs();
-            calculateBankSpeed();
-            // Set correct milestone in case of difficulty gets changed
-            progressBar.setRange(0f, game.getProgressBarMilestone());
             batch.begin();
             controlBackground();
             drawTopAndBottomBar();
             drawSteps();
             player.update();
-            if (!game.isFirstPlayBank()) retrieveBankSteps();
-            progressBar.setValue(curSteps); // Control progress bar
+            checkTutorialDialogs();
             checkToChangeRoom();
+            checkIfBankHasSteps();
+            // Set correct milestone in case of difficulty gets changed
+            progressBar.setRange(0f, game.getProgressBarMilestone());
+            progressBar.setValue(curSteps); // Control progress bar
+            calculateBankSpeed();
+            retrieveBankSteps();
             batch.end();
             stage.act(Gdx.graphics.getDeltaTime());
             stage.draw();
@@ -85,24 +86,28 @@ public class RoomGame extends RoomParent {
      */
     private void checkTutorialDialogs() {
         if (game.isFirstPlayTime()) game.setPauseWalking(true);
-        else if(game.isFirstPlayBank() && retrievingSteps) game.setPauseWalking(true);
-        else if(game.isFirstPlayVictory() && game.getPoolMult() > 0) {
+        else if(game.isFirstPlayBank() && bankTutorial != null) game.setPauseWalking(true);
+        else if(game.isFirstPlayVictory() && game.getPoolMult() > 0)
+        {
             if (victory == null) victory = new FirstPlay(game, "victory", thisRoom);
             game.setPauseWalking(true);
         }
-        else if (game.isFirstPlayPoolComplete1() && game.getPool() == 2) {
+        else if (game.isFirstPlayPoolComplete1() && game.getPool() == 2)
+        {
             if (pool1Complete == null) {
                 pool1Complete = new FirstPlay(game, "pool1Complete", thisRoom);
             }
             game.setPauseWalking(true);
         }
-        else if (game.isFirstPlayPoolComplete2() && game.getPool() == 3) {
+        else if (game.isFirstPlayPoolComplete2() && game.getPool() == 3)
+        {
             if (pool2Complete == null) {
                 pool2Complete = new FirstPlay(game, "pool2Complete", thisRoom);
             }
             game.setPauseWalking(true);
         }
-        else if (game.isFirstPlayPoolComplete3() && game.getPool() == 4) {
+        else if (game.isFirstPlayPoolComplete3() && game.getPool() == 4)
+        {
             if (pool3Complete == null) {
                 pool3Complete = new FirstPlay(game, "pool3Complete", thisRoom);
             }
@@ -148,14 +153,18 @@ public class RoomGame extends RoomParent {
      * Calculates how many steps will be added every frame.
      */
     private void calculateBankSpeed() {
+        // If walking is not paused
         if (!game.isPauseWalking()) {
-            if (!retrievingSteps && game.getStepBank() > 0 &&
-                    progressBar.getValue() < progressBar.getMaxValue()) {
-                if (game.isFirstPlayBank()) {
-                    FirstPlay bank = new FirstPlay(game, "bank", this);
-                }
+            // If bank speed is not yet calculated AND stepBank has steps AND milestone not reached
+            if (!retrievingSteps && bankHasSteps && !milestoneReached) {
                 retrievingSteps = true;
+                // If it's first time that bank steps are retrieved, show dialogue
+                if (game.isFirstPlayBank()) {
+                    bankTutorial = new FirstPlay(game, "bank", this);
+                }
+                // Round stepBank, in case for some reason it's for example 0.432
                 game.setStepBank(Math.round(game.getStepBank()));
+                // Update bankRetrieved value to match stepCount
                 bankRetrieved = game.getStepCount();
                 float bank = game.getStepBank();
                 float mileStone = game.getProgressBarMilestone();
@@ -172,17 +181,17 @@ public class RoomGame extends RoomParent {
      * Retrieves steps from bank and add them to stepCount.
      */
     private void retrieveBankSteps() {
-        // If bank still has steps
-        if (game.getStepBank() > 0) {
-            // If milestone has not been reached
-            if (progressBar.getValue() < progressBar.getMaxValue()) {
-                /*
-                - Retrieve previous bankRetrieved value, for example 2.9 and floor it to value 2
-                - Add bankSpd value to retrieved then it's value is for example 3.1
-                - Then floor the current retrieved value, which is 3
-                - Now if current (3) is bigger than previous (2) then set Step count to 3, which
-                  causes the player to initialize movement in RoomGame
-                 */
+        // If retrievingSteps is activated
+        if (!game.isPauseWalking()) {
+            // If bank still has steps and if milestone has not been reached
+            if (bankHasSteps && !milestoneReached) {
+            /*
+            - Retrieve previous bankRetrieved value, for example 2.9 and floor it to value 2
+            - Add bankSpd value to retrieved then it's value is for example 3.1
+            - Then floor the current retrieved value, which is 3
+            - Now if current (3) is bigger than previous (2) then set Step count to 3, which
+              causes the player to initialize movement in RoomGame
+             */
                 double prevBankRetrieved = Math.floor(bankRetrieved);
                 bankRetrieved += bankSpd;
                 double curBankRetrieved = Math.floor(bankRetrieved);
@@ -193,19 +202,19 @@ public class RoomGame extends RoomParent {
 
                 // Draw on screen retrieving steps from bank
                 batch.draw(files.retrieveStepsBg, game.gridSize * 6.5f,
-                        game.pixelHeight/2 - files.retrieveStepsBg.getHeight()/2);
+                        game.pixelHeight / 2 - files.retrieveStepsBg.getHeight() / 2);
                 int ceiledBank = (int) Math.ceil(game.getStepBank());
                 finalSkin.getFont("font-average").draw(batch,
-                        localize.get("retrievingSteps") + " " +String.valueOf(ceiledBank),
-                        game.gridSize * 8.5f, game.pixelHeight/2 + 100);
+                        localize.get("retrievingSteps") + " " + String.valueOf(ceiledBank),
+                        game.gridSize * 8.5f, game.pixelHeight / 2 + 100);
             } else retrievingSteps = false;
-        }else retrievingSteps = false;
+        }
     }
 
     /**
      * If milestone has been reached, create button for switching rooms.
      */
-    public void checkToChangeRoom() {
+    private void checkToChangeRoom() {
         if (curSteps >= progressBar.getMaxValue()) {
             if (!milestoneReached) {
                 createButtonFight();
@@ -221,6 +230,14 @@ public class RoomGame extends RoomParent {
                 milestoneReached = false;
             }
         }
+    }
+
+    /**
+     * Checks if bank has steps.
+     */
+    private void checkIfBankHasSteps() {
+        if (game.getStepBank() > 0) bankHasSteps = true;
+        else bankHasSteps = false;
     }
 
     /**

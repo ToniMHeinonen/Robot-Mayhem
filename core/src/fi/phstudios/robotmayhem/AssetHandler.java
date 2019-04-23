@@ -137,7 +137,7 @@ public class AssetHandler {
     public final String sndBlackInk = "sound/skills/BlackInk.mp3";
     public final String sndCatThrower = "sound/skills/CatThrower.mp3";
     public final String sndCoinFlip = "sound/skills/CoinFlip.mp3";
-    public final String sndPCReboot = "sound/skills/ComputerBotReboot.mp3";
+    public final String sndPCReboot = "sound/skills/ComputerbotReboot.mp3";
     public final String sndMayhem = "sound/skills/FabioMayhemIsku.mp3";
     public final String sndOverpower = "sound/skills/FabioOverPower.mp3";
     public final String sndPCPopup = "sound/skills/popUpComputerbot.mp3";
