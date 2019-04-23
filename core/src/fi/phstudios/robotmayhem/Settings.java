@@ -104,7 +104,6 @@ public class Settings {
         createLanguageButtons();
         createMenuButtons();
         createExitButton();
-        createSettingsRoomButton();
         stage.addActor(settingsDialog);
         System.out.println("Setting-dialog opened from room: " + room);
     }
@@ -444,20 +443,5 @@ public class Settings {
         });
 
         settingsDialog.addActor(buttonExit);
-    }
-
-    /**
-     * This will be deleted.
-     */
-    private void createSettingsRoomButton() {
-        settingsRoomButton = new TextButton("SettingsRoom", skin);
-        settingsRoomButton.setPosition(1450, 200);
-        settingsRoomButton.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                game.switchToRoomSettings();
-            }
-        });
-        settingsDialog.addActor(settingsRoomButton);
     }
 }
