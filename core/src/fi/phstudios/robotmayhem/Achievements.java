@@ -46,6 +46,10 @@ public class Achievements {
     private int permanentCounter, positionCounter;
     int ownedSkillAmount;
 
+    /**
+     * Initialize all the basic values.
+     * @param game used for retrieving variables
+     */
     Achievements(MainGame game) {
         this.game = game;
         items = game.getItems();
@@ -73,6 +77,9 @@ public class Achievements {
         game.saveAchievements();
     }
 
+    /**
+     * Create achievement-dialog.
+     */
     private void createAchDialog() {
         dialogAch = new Dialog("", finalSkin, "stats");
         dialogAch.setMovable(false);
@@ -86,6 +93,9 @@ public class Achievements {
         dialogAch.addActor(labelAch);
     }
 
+    /**
+     * Create achievements' headers, descriptions and rewards.
+     */
     private void createHeadersAndDescriptions() {
         achHeaders = new String[] {
                 localize.get("sundayWalker"),
@@ -119,6 +129,9 @@ public class Achievements {
         };
     }
 
+    /**
+     * Check, if achievements are completed.
+     */
     private void checkAchievements() {
         // REMEMBER to change default-value in MainGame -> loadAchievements()
 
@@ -166,6 +179,9 @@ public class Achievements {
         if (stepAllCount >= 20) game.setAchievement(7, "unlocked");
     }
 
+    /**
+     * Create achievement buttons.
+     */
     private void createButtons() {
         for (int i = 0; i < achHeaders.length; i++) {
             final int btnCounter = i;
@@ -187,6 +203,10 @@ public class Achievements {
         }
     }
 
+    /**
+     * This will open, when player has clicked one of the achievements.
+     * @param index achievement-index
+     */
     private void popupAchievement(final int index) {
         Label label = new Label(achDescriptions[index] + " " + localize.get("reward") + " " +
                 String.valueOf(achMoney[index]) + " " + localize.get("shinyCoins"), finalSkin, "font46");
@@ -248,6 +268,9 @@ public class Achievements {
         dialogAch.addActor(dialog);
     }
 
+    /**
+     * Create exit-button.
+     */
     private void createExitButton() {
         ImageButton buttonExit = new ImageButton(finalSkin, "x");
         buttonExit.setPosition(1550, 960);
