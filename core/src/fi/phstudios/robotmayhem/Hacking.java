@@ -126,6 +126,11 @@ public class Hacking {
     private int destroyedNeighbors = 0;
     private boolean limitBodyRemoval = false;
 
+    /**
+     * Initialize all the basic values.
+     * @param game used for retrieving variables
+     * @param firstTry check, if player is trying hacking for the first time.
+     */
     Hacking(MainGame game, boolean firstTry) {
         this.game = game;
         this.hackFirstTry = firstTry;
@@ -144,6 +149,9 @@ public class Hacking {
         createCollisionChecking();
     }
 
+    /**
+     * Update.
+     */
     public void update() {
         batch.setProjectionMatrix(hackingCamera.combined);
         doPhysicsStep(Gdx.graphics.getDeltaTime());
@@ -157,6 +165,9 @@ public class Hacking {
         checkNeighborMethod();
     }
 
+    /**
+     * Create all the basic variables.
+     */
     private void createConstants() {
         this.pool = game.getPool();
         this.poolMult = game.getPoolMult();
@@ -187,13 +198,8 @@ public class Hacking {
         this.pool3InnerHackShieldAmount = game.getPool3InnerHackShieldAmount();
     }
 
-    /*
-    poolSpeeds & poolSizes = Different shieldspeed and shieldsize in different pool
-    increasedSpeed = Added speed to shield depending on the poolmultiplier
-    shieldLength = The length between shield and enemy
-    poolHitArea = The collision area, when bullet hits shield. For example, in pool3
-    it checks if there are shields 1.1f to the right and 1.7f up&down of the collision area.
-    Poorly explained, but maybe you get the idea. :D
+    /**
+     * Create speed, size, length and collision area of the shields
      */
     private void setShieldAttributes() {
         FloatArray poolSpeeds = new FloatArray();
@@ -206,24 +212,23 @@ public class Hacking {
 
         shieldSpeed = poolSpeeds.get(pool - 1) + increasedSpeed;
         shieldRadius = poolSizes.get(pool - 1);
-        //shieldLength = 3f;
+
         if (pool == 1) {
             shieldLength = 1.9f;
         } else {
             shieldLength = 2.8f;
         }
 
-        // These may have to be adjusted a bit, if we are going to change shieldLength.
         poolHitAreaX = new FloatArray();
         poolHitAreaY = new FloatArray();
         poolHitAreaX.add(2f, 1.1f, 1.1f);
         poolHitAreaY.add(3f, 1.7f, 1.7f);
     }
 
-    /*
-    Creates positions to the shields. If player is trying to hack for the first time, it
-    deletes the old positions and put new positions to them depending on pool.
-    If player has failed to hack before, it loads the old positions and amount of shields.
+    /**
+     * Creates positions to the shields. If player is trying to hack for the first time, it
+     * deletes the old positions and put new positions to them depending on pool.
+     * If player has failed to hack before, it loads the old positions and amount of shields.
      */
     private void createPositions() {
         if (hackFirstTry) {
@@ -324,8 +329,8 @@ public class Hacking {
         }
     }
 
-    /*
-    Creates the shields.
+    /**
+     * Create shields.
      */
     private void createShields() {
         BodyDef myBodyDef = new BodyDef();
@@ -353,8 +358,8 @@ public class Hacking {
         }
     }
 
-    /*
-    Creates the joints between shields and enemy.
+    /**
+     * Create joints between shields and enemy.
      */
     private void createJoints() {
         DistanceJointDef distanceJointDef = new DistanceJointDef();
@@ -384,6 +389,9 @@ public class Hacking {
         }
     }
 
+    /**
+     * Create shoot-button.
+     */
     private void createButtonShoot() {
         Drawable normal = finalSkin.getDrawable("button_SHOOT");
         Drawable clicked = finalSkin.getDrawable("button_SHOOT_clicked");
@@ -401,8 +409,8 @@ public class Hacking {
         });
     }
 
-    /*
-    Allows player to shoot only once.
+    /**
+     *  Allows player to shoot only once.
      */
     private void fireBullet() {
         if (bulletBodies.isEmpty()) {
@@ -415,10 +423,8 @@ public class Hacking {
         }
     }
 
-    /*
-    Checks the collisions:
-    bullet & shield
-    bullet & enemy
+    /**
+     * Checks the collisions: bullet & shield / bullet & enemy
      */
     private void createCollisionChecking() {
         world.setContactListener(new ContactListener() {
@@ -471,21 +477,14 @@ public class Hacking {
         });
     }
 
-    /*
-    hitPosX = Horizontal position of the collision + a little amount to the right.
-    hitPosStartY & hitPosEndY = Vertical position of the collision + a little amount to up and down.
-    So hitPosX + hitPosStartY + hitPosEndY = area, where could be more shields to be destroyed.
-
-    In "bodiesToBeDestroyed.add(body1 and body2);" it adds the shield and bullet which have collided
-    to the bodiesToBeDestroyed-array.
-
-    Then it sets the the value of checkNeighbor to true, so it can check which shields
-    are in the collision area in checkNeighborMethod. I tried to combine these two methods, but I
-    didn't manage to get it work.
+    /**
+     * hitPosX = Horizontal position of the collision + a little amount to the right.
+     * hitPosStartY & hitPosEndY = Vertical position of the collision + a little amount to up and down.
+     * So hitPosX + hitPosStartY + hitPosEndY = area, where could be more shields to be destroyed.
+     * @param body1 shield
+     * @param body2 bullet
      */
     private void collisionBulletShield(Body body1, Body body2) {
-        // body1 = shield
-        // body2 = bullet
         hitPosX = body2.getPosition().x + poolHitAreaX.get(pool - 1);
         hitPosStartY = body2.getPosition().y - poolHitAreaY.get(pool - 1);
         hitPosEndY = body2.getPosition().y + poolHitAreaY.get(pool - 1);
@@ -495,9 +494,12 @@ public class Hacking {
         checkNeighbor = true;
     }
 
+    /**
+     * Same as collisionBulletShield-method, but with inner shields.
+     * @param body1 innershield
+     * @param body2 bullet
+     */
     private void collisionBulletInnerShield(Body body1, Body body2) {
-        // body1 = innershield
-        // body2 = bullet
         hitPosX = body2.getPosition().x + poolHitAreaX.get(0);
         hitPosStartY = body2.getPosition().y - poolHitAreaY.get(0);
         hitPosEndY = body2.getPosition().y + poolHitAreaY.get(0);
@@ -507,14 +509,11 @@ public class Hacking {
         checkInnerNeighbor = true;
     }
 
-    /*
-    When checkNeighbor has been set to true, it checks which bullets are in the collision
-    area and puts them to bodiesToBeDestroyed-array.
-
-    DestroyedNeighbors is used to limit the amount of shields to be destroyed, if there happens
-    to be too many shields in the collision area.
-
-    After this, it sets bulletHitShield to true.
+    /**
+     * When checkNeighbor has been set to true, it checks which bullets are in the collision
+     * area and puts them to bodiesToBeDestroyed-array.
+     * DestroyedNeighbors is used to limit the amount of shields to be destroyed, if there happens
+     * to be too many shields in the collision area.
      */
     private void checkNeighborMethod() {
         if (checkNeighbor) {
@@ -549,12 +548,10 @@ public class Hacking {
         destroyedNeighbors = 0;
     }
 
-    /*
-    After the program has added shields and bullet to the bodiesToBeDestroyed-array,
-    it goes through all the remaining shields and saves their position. It also saves the amount
-    of shields left and sets hackFirstTry to false.
-
-    Then it waits for one second and adds the remaining shields to the bodiesToBeDestroyed-array.
+    /**
+     * After the program has added shields and bullet to the bodiesToBeDestroyed-array,
+     * it goes through all the remaining shields and saves their position. It also saves the amount
+     * of shields left and sets hackFirstTry to false.
      */
     private void checkBulletHitShield() {
         int i = 0;
@@ -603,9 +600,10 @@ public class Hacking {
         }
     }
 
-    /*
-    When bullet has hit the enemy, it sets the hackFirstTry to true and adds enemy and shields to
-    bodiesToBeDestroyed-array.
+    /**
+     * When bullet has hit the enemy, it sets the hackFirstTry to true and adds enemy and shields to
+     * bodiesToBeDestroyed-array.
+     * @param body bullet
      */
     private void collisionBulletEnemy(Body body) {
         bodiesToBeDestroyed.add(body);
@@ -623,6 +621,11 @@ public class Hacking {
         }
     }
 
+    /**
+     * Get shield's fixture definition.
+     * @param r radius
+     * @return fixtureDef
+     */
     private FixtureDef getShieldFixtureDefinition(float r) {
         FixtureDef shieldFixtureDef = new FixtureDef();
         shieldFixtureDef.density = 0f;
@@ -634,6 +637,10 @@ public class Hacking {
         return shieldFixtureDef;
     }
 
+    /**
+     * Get bullet's fixture definition.
+     * @return fixtureDef
+     */
     private FixtureDef getBulletFixtureDefinition() {
         FixtureDef bulletFixtureDef = new FixtureDef();
         bulletFixtureDef.density = 1;
@@ -645,6 +652,10 @@ public class Hacking {
         return bulletFixtureDef;
     }
 
+    /**
+     * Get enemy's body definition.
+     * @return bodyDef
+     */
     private BodyDef getDefinitionOfEnemyBody() {
         BodyDef myBodyDef = new BodyDef();
         myBodyDef.type = BodyDef.BodyType.StaticBody;
@@ -652,6 +663,10 @@ public class Hacking {
         return myBodyDef;
     }
 
+    /**
+     * Get bullet's body definition.
+     * @return bodyDef
+     */
     private BodyDef getDefinitionOfBulletBody() {
         BodyDef bulletBodyDef = new BodyDef();
         bulletBodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -659,6 +674,10 @@ public class Hacking {
         return bulletBodyDef;
     }
 
+    /**
+     * Do physics step
+     * @param deltaTime deltatime
+     */
     private void doPhysicsStep(float deltaTime) {
         float frameTime = deltaTime;
         if(deltaTime > 1 / 4f) {
@@ -671,8 +690,10 @@ public class Hacking {
         }
     }
 
-    /*
-    Moves shields. Not exactly sure, how it does it. :D
+    /**
+     * Move shields.
+     * @param shieldSpeed speed of the shield
+     * @param center center-point
      */
     private void movement(float shieldSpeed, Vector2 center) {
         for (Body body : shieldBodies) {
@@ -691,8 +712,8 @@ public class Hacking {
         }
     }
 
-    /*
-    Deletes all the bodies that have been added to bodiesToBeDestoyed-array.
+    /**
+     * Delete bodies.
      */
     private void deleteBodies() {
         for (Body body : bodiesToBeDestroyed) {
@@ -701,6 +722,9 @@ public class Hacking {
         bodiesToBeDestroyed.clear();
     }
 
+    /**
+     * Draw bodies.
+     */
     private void drawBodies() {
         for (Body body : shieldBodies) {
             if (body.getUserData() != null) {
@@ -764,14 +788,25 @@ public class Hacking {
         }
     }
 
+    /**
+     * Dispose.
+     */
     public void dispose () {
         world.dispose();
     }
 
+    /**
+     * Check, if bullet has missed enemy.
+     * @return bulletMissedEnemy
+     */
     public boolean isBulletMissedEnemy() {
         return bulletMissedEnemy;
     }
 
+    /**
+     * Check, if bullet has hit enemy.
+     * @return bulletHitEnemy
+     */
     public boolean isBulletHitEnemy() {
         return bulletHitEnemy;
     }

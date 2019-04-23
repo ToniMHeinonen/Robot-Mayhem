@@ -34,17 +34,22 @@ public class Achievements {
     private Files files;
 
     private Dialog dialogAch;
-    private TextButton btnCollect;
-    private TextButton btnCancel;
+    private ImageButton btnCancel, btnCollect;
 
     private String[] achHeaders;
     private String[] achDescriptions;
     private int[] achMoney;
 
     private float space = 200f;
-    private int permanentCounter;
+    float posX = 350;
+    float posY = 600;
+    private int permanentCounter, positionCounter;
     int ownedSkillAmount;
 
+    /**
+     * Initialize all the basic values.
+     * @param game used for retrieving variables
+     */
     Achievements(MainGame game) {
         this.game = game;
         items = game.getItems();
@@ -72,13 +77,25 @@ public class Achievements {
         game.saveAchievements();
     }
 
+    /**
+     * Create achievement-dialog.
+     */
     private void createAchDialog() {
         dialogAch = new Dialog("", finalSkin, "stats");
         dialogAch.setMovable(false);
         dialogAch.setPosition(0,0);
         dialogAch.setSize(game.pixelWidth, game.pixelHeight);
+
+        Label labelAch = new Label(localize.get("achievements"), finalSkin, "big");
+        labelAch.setPosition(60, dialogAch.getHeight() - 200);
+        labelAch.setSize(1435, labelAch.getPrefHeight());
+        labelAch.setAlignment(1);
+        dialogAch.addActor(labelAch);
     }
 
+    /**
+     * Create achievements' headers, descriptions and rewards.
+     */
     private void createHeadersAndDescriptions() {
         achHeaders = new String[] {
                 localize.get("sundayWalker"),
@@ -112,6 +129,9 @@ public class Achievements {
         };
     }
 
+    /**
+     * Check, if achievements are completed.
+     */
     private void checkAchievements() {
         // REMEMBER to change default-value in MainGame -> loadAchievements()
 
@@ -159,11 +179,19 @@ public class Achievements {
         if (stepAllCount >= 20) game.setAchievement(7, "unlocked");
     }
 
+    /**
+     * Create achievement buttons.
+     */
     private void createButtons() {
         for (int i = 0; i < achHeaders.length; i++) {
             final int btnCounter = i;
             ImageButton imgBtn = new ImageButton(finalSkin, game.getAchievComplete().get(i));
-            imgBtn.setPosition(100 + i*space, 400);
+            imgBtn.setPosition(posX + positionCounter*space, posY);
+            positionCounter++;
+            if (i==3) {
+                posY = 400;
+                positionCounter = 0;
+            }
             dialogAch.addActor(imgBtn);
             imgBtn.addListener(new ClickListener(){
                 int i = btnCounter;
@@ -175,6 +203,10 @@ public class Achievements {
         }
     }
 
+    /**
+     * This will open, when player has clicked one of the achievements.
+     * @param index achievement-index
+     */
     private void popupAchievement(final int index) {
         Label label = new Label(achDescriptions[index] + " " + localize.get("reward") + " " +
                 String.valueOf(achMoney[index]) + " " + localize.get("shinyCoins"), finalSkin, "font46");
@@ -201,11 +233,11 @@ public class Achievements {
         locked.setAlignment(1);
         dialog.addActor(locked);
 
-        String stringCollect = "collect";
+        String stringCollect = "collect_" + lan;
         if (game.getHasCollected().get(index).equals("true")) {
-            stringCollect = "collected";
+            stringCollect = "collected_" + lan;
         }
-        btnCollect = new TextButton(localize.get(stringCollect), finalSkin, "small");
+        btnCollect = new ImageButton(finalSkin, stringCollect);
         btnCollect.setPosition(dialog.getWidth()/2 - 400, dialog.getHeight()/4 - 55);
         btnCollect.setDisabled(true);
         dialog.addActor(btnCollect);
@@ -223,7 +255,7 @@ public class Achievements {
             });
         }
 
-        btnCancel = new TextButton(localize.get("cancel"), finalSkin, "small");
+        btnCancel = new ImageButton(finalSkin, "cancel_" + lan);
         btnCancel.setPosition(btnCollect.getX() + 445, btnCollect.getY());
         dialog.addActor(btnCancel);
         btnCancel.addListener(new ClickListener(){
@@ -236,6 +268,9 @@ public class Achievements {
         dialogAch.addActor(dialog);
     }
 
+    /**
+     * Create exit-button.
+     */
     private void createExitButton() {
         ImageButton buttonExit = new ImageButton(finalSkin, "x");
         buttonExit.setPosition(1550, 960);

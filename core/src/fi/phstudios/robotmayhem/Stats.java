@@ -99,6 +99,7 @@ public class Stats {
         createBoosts();
         createMenuButtons();
         createExitButton();
+        createAchievementButton();
         stage.addActor(statsDialog);
     }
 
@@ -348,5 +349,17 @@ public class Stats {
         });
 
         statsDialog.addActor(buttonExit);
+    }
+
+    private void createAchievementButton() {
+        ImageButton imgBtn = new ImageButton(finalSkin, "achievement");
+        imgBtn.setPosition(1120, 70);
+        statsDialog.addActor(imgBtn);
+        imgBtn.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                Achievements achievements = new Achievements(game);
+            }
+        });
     }
 }
