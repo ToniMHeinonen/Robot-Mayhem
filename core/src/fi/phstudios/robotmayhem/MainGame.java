@@ -252,6 +252,9 @@ public class MainGame extends Game {
 		switchToRoomGame();
 	}
 
+    /**
+     * Renders all the frames of the room.
+     */
 	@Override
 	public void render () {
 		super.render();
@@ -263,11 +266,19 @@ public class MainGame extends Game {
 		//checkRAM(); For testing RAM usage, delete when game ready
 	}
 
+    /**
+     * Set camera's fitviewport.
+     * @param width width of the screen
+     * @param height height of the screen
+     */
 	@Override
 	public void resize(int width, int height) {
 		fitViewport.update(width, height, true);
 	}
 
+    /**
+     * Handles what will be disposed.
+     */
 	@Override
 	public void dispose () {
 		batch.dispose();
@@ -283,6 +294,9 @@ public class MainGame extends Game {
 		saveSettings();
 	}
 
+    /**
+     * Checks RAM-usage.
+     */
 	private void checkRAM() {
 		if (ramTimer > 0) ramTimer--;
 		else {
@@ -292,6 +306,9 @@ public class MainGame extends Game {
 		}
 	}
 
+    /**
+     * Called when game resets. Clears settings and stats.
+     */
 	public void resetGame() {
 		settings.clear();
 		settings.flush();
@@ -305,11 +322,17 @@ public class MainGame extends Game {
 		initAfterRestarting();
 	}
 
+    /**
+     * Select bossmusic.
+     */
 	private void selectLoadedBossMusic() {
 		if (arrPlayedMusicSize == 0) selectRandomBossMusic();
 		else curBossMusic = files.allBossMusic[arrPlayedMusicSize-1];
 	}
 
+    /**
+     * Select random bossmusic.
+     */
 	private void selectRandomBossMusic() {
 		int all = files.allBossMusic.length;
 		if (arrPlayedMusic.size() == all) arrPlayedMusic.clear();
@@ -396,8 +419,14 @@ public class MainGame extends Game {
 
 	boolean haveWeChangedTheRoom = false;
 
+    /**
+     * Transition, when changing room.
+     */
 	public void transition() { haveWeChangedTheRoom = true; }
 
+    /**
+     * Called when game switches to hallway.
+     */
     public void switchToRoomGame() {
 		transition();
 		startMusic(files.musMainTheme);
@@ -407,6 +436,9 @@ public class MainGame extends Game {
         saveStats();
     }
 
+    /**
+     * Called when game switches to fight.
+     */
     public void switchToRoomFight() {
 		transition();
 		startMusic(curBossMusic);
@@ -427,6 +459,9 @@ public class MainGame extends Game {
         }
     }
 
+    /**
+     * Called when game ends.
+     */
 	public void switchToRoomEnd() {
 		transition();
 		startMusic(files.musMainTheme);
@@ -483,6 +518,9 @@ public class MainGame extends Game {
 		this.soundVol = soundVol;
 	}
 
+    /**
+     * Create variables for hacking.
+     */
     private void createHackFiles() {
         hackPosX = new FloatArray();
         hackPosY = new FloatArray();
@@ -502,6 +540,9 @@ public class MainGame extends Game {
         }
     }
 
+    /**
+     * Create variables for dialogs.
+     */
 	private void createDialogConstants() {
 		fontSteps = new BitmapFont(Gdx.files.internal("stepfont/stepfont.fnt"),
 				Gdx.files.internal("stepfont/stepfont.png"),
@@ -517,6 +558,9 @@ public class MainGame extends Game {
 		dialog = new UtilDialog(this);
 	}
 
+    /**
+     * Create variables for progressbar.
+     */
 	private void createProgressBarFiles() {
 	    progBarAtlas = new TextureAtlas("progressbar/progressbar.pack");
 	    progBarSkin = new Skin();
@@ -527,6 +571,9 @@ public class MainGame extends Game {
 	    progBarStyle.background = progBarSkin.getDrawable("tripmeter");
     }
 
+    /**
+     * Choose milestone depending on the difficulty.
+     */
     private void chooseNextMilestone() {
         // If it's the first boss, make milestone 20
 		if (pool == 1) progressBarMilestone = poolMilestones[poolMult];
@@ -538,6 +585,10 @@ public class MainGame extends Game {
 		else if (difficulty.equals(HARD)) progressBarMilestone *= 1.5;
     }
 
+    /**
+     * Called when changing difficulty.
+     * @param dif difficulty
+     */
     public void changeDifficulty(String dif) {
 		difficulty = dif;
 		chooseNextMilestone();
@@ -782,6 +833,9 @@ public class MainGame extends Game {
 		prefsStats.flush();
 	}
 
+    /**
+     * Loads achievements.
+     */
 	public void loadAchievements() {
         // Change default-value when adding new achievements.
         achievCompleteSize = stats.loadValue(keyAchievCompleteSize, 8);
@@ -792,6 +846,9 @@ public class MainGame extends Game {
         resetedGame = achievs.loadValue(keyResetedGame, false);
     }
 
+    /**
+     * Saves achievements.
+     */
     public void saveAchievements() {
         achievs.saveValue(keyAchievCompleteSize, achievComplete.size());
         for (int i = 0; i < achievComplete.size(); i++) {
@@ -802,41 +859,9 @@ public class MainGame extends Game {
 	    prefsAchievs.flush();
     }
 
-	// Methods for name start.
-	public class MyTextInputListener implements Input.TextInputListener {
-		@Override
-		public void input (String text) {
-			boolean legal = setName(text);
-			if (!legal) {
-				askForName();
-			}
-		}
-
-		@Override
-		public void canceled () {
-			askForName();
-		}
-	}
-
-	public void askForName() {
-		MyTextInputListener listener = new MyTextInputListener();
-		Gdx.input.getTextInput(listener, "Enter name", "", "Max 10 characters");
-	}
-
-	// Next up code for the name:
-	public boolean setName(String n) {
-		boolean legal = true;
-
-		if (n.length() <= 10 && !n.equals("defaultDodo")) {
-			playerName = n;
-			dialog.createDialog(playerName + " is your name", "skilldescription", true);
-		} else {
-			legal = false;
-		}
-
-		return legal;
-	}
-
+    /**
+     * Called when boss is defeated.
+     */
 	public void bossDefeated() {
 		defeatedBosses.add(currentBoss);
 
@@ -911,6 +936,11 @@ public class MainGame extends Game {
 		switchToRoomEnd();
 	}
 
+    /**
+     * Called when adding item/skill to inventory.
+     * @param name name of the item/skill
+     * @param isSkill check, if it's skill
+     */
 	public void addToInventory(String name, boolean isSkill) {
 		// If it's skill and either skill1 or 2 is empty, add it instantly
 		if (isSkill) {
@@ -923,11 +953,20 @@ public class MainGame extends Game {
 		saveStats();
 	}
 
+    /**
+     * Called when removing items from inventory
+     * @param name name of the item
+     */
 	public void removeFromInventory(String name) {
         inventory.remove(name);
         saveStats();
     }
 
+    /**
+     * Check if inventory contains specific item/skill.
+     * @param name name of the item/skill
+     * @return return true/false
+     */
 	public boolean inventoryOrSkillsContains(String name) {
 		boolean contains = false;
 
@@ -937,11 +976,18 @@ public class MainGame extends Game {
 		return contains;
 	}
 
+    /**
+     * Called, when player buys permanent item.
+     * @param name name of the item
+     */
 	public void addToBoughtPermanent(String name) {
 	    boughtPermanent.add(name);
 	    saveStats();
     }
 
+    /**
+     * Creates skin and stage.
+     */
     private void createSkinAndStage() {
         stage = new Stage(fitViewport, batch);
 
@@ -949,7 +995,9 @@ public class MainGame extends Game {
 		finalSkin = files.finalSkin;
     }
 
-	// Receive steps on Desktop, if milestone is not reached, else add them to stepBank
+    /**
+     * Receive steps on Desktop, if milestone is not reached, else add them to stepBank.
+     */
     public void simulateStep() {
 		if (!pauseWalking) {
 			stepAllCount++;
@@ -958,7 +1006,10 @@ public class MainGame extends Game {
 		}
 	}
 
-    // Receive steps on Android, if milestone is not reached, else add them to stepBank
+    /**
+     * Receive steps on Android, if milestone is not reached, else add them to stepBank.
+     * @param stepCount stepCount
+     */
 	public void receiveSteps(float stepCount) {
 		if (!pauseWalking) {
 			stepAllCount++;
@@ -967,60 +1018,115 @@ public class MainGame extends Game {
 		}
 	}
 
-	// Deleted steps from bank, when retrieving them on RoomGame
+    /**
+     * Deleted steps from bank, when retrieving them on RoomGame.
+     * @param amount amount of the steps
+     */
 	public void retrieveFromBank(float amount) {
 		stepBank -= amount;
 		if (stepBank < 0) stepBank = 0;
 	}
 
+    /**
+     * Called when adding money.
+     * @param amount amount of money
+     */
 	public void addMoney(int amount) {
 		money += amount;
 	}
 
+    /**
+     * Called when decreasing money.
+     * @param amount amount of money
+     */
 	public void decreaseMoney(int amount) {
 	    money -= amount;
     }
 
+    /**
+     * Add critical boost.
+     * @param amount amount of boost
+     */
     public void addCritBoost(int amount) {
 		critBoost += amount;
 	}
 
+    /**
+     * Add miss boost
+     * @param amount amount of boost
+     */
 	public void addMissBoost(int amount) {
 		missBoost += amount;
 	}
 
+    /**
+     * Add damage boost
+     * @param amount amount of boost
+     */
 	public void addDmgBoost(double amount) {
 		dmgBoost += amount;
 	}
 
+    /**
+     * Add armor boost
+     * @param amount amount of boost
+     */
 	public void addArmorBoost(double amount) {
 		armorBoost += amount;
 	}
 
+    /**
+     * Add heal boost
+     * @param amount amount of boost
+     */
 	public void addHealBoost(double amount) {
 		healBoost += amount;
 	}
 
+    /**
+     * Add permacrit boost
+     * @param amount amount of boost
+     */
 	public void addPermaCritBoost(int amount) {
 		permaCritBoost += amount;
 	}
 
+    /**
+     * Add permamiss boost
+     * @param amount amount of boost
+     */
 	public void addPermaMissBoost(int amount) {
 		permaMissBoost += amount;
 	}
 
+    /**
+     * Add permadmg boost
+     * @param amount amount of boost
+     */
 	public void addPermaDmgBoost(double amount) {
 		permaDmgBoost += amount;
 	}
 
+    /**
+     * Add perma-armor boost
+     * @param amount amount of boost
+     */
 	public void addPermaArmorBoost(double amount) {
 		permaArmorBoost += amount;
 	}
 
+    /**
+     * Add permaheal boost
+     * @param amount amount of boost
+     */
 	public void addPermaHealBoost(double amount) {
 		permaHealBoost += amount;
 	}
 
+    /**
+     * Increase stepbank size
+     * @param amount amount of size
+     */
 	public void increaseStepBankSize(float amount) {
 		stepBankSize += amount;
 	}
@@ -1029,492 +1135,976 @@ public class MainGame extends Game {
 	GETTERS AND SETTERS
 	 */
 
+    /**
+     * Set boss skills
+     * @param skill0 skill0
+     * @param skill1 skill1
+     * @param skill2 skill2
+     */
 	public void setCurBossSkills (String skill0, String skill1, String skill2) {
 		curBossSkills[0] = skill0;
 		curBossSkills[1] = skill1;
 		curBossSkills[2] = skill2;
 	}
 
+    /**
+     * Get boss's current skills
+     * @return skills
+     */
 	public String[] getCurBossSkills() {
 		return curBossSkills;
 	}
 
+    /**
+     * Set pause walking
+     * @param pauseWalking pausewalking
+     */
 	public void setPauseWalking(boolean pauseWalking) {
 		this.pauseWalking = pauseWalking;
 	}
 
+    /**
+     * Get pause walking
+     * @return pausewalking
+     */
 	public boolean isPauseWalking() {
 		return pauseWalking;
 	}
 
+    /**
+     * Get critical boost
+     * @return critical boost
+     */
 	public int getCritBoost() {
 		int wholeBoost = critBoost + permaCritBoost;
 		return wholeBoost;
 	}
 
+    /**
+     * Get miss boost
+     * @return miss boost
+     */
 	public int getMissBoost() {
 		int wholeBoost = missBoost + permaMissBoost;
 		return wholeBoost;
 	}
 
+    /**
+     * Get damage boost
+     * @return damage boost
+     */
 	public float getDmgBoost() {
 		float wholeBoost = dmgBoost + permaDmgBoost;
 		return wholeBoost;
 	}
 
+    /**
+     * Get armor boost
+     * @return armor boost
+     */
 	public float getArmorBoost() {
 		float wholeBoost = armorBoost + permaArmorBoost;
 		return wholeBoost;
 	}
 
+    /**
+     * Get heal boost
+     * @return heal boost
+     */
 	public float getHealBoost() {
 		float wholeBoost = healBoost + permaHealBoost;
 		return wholeBoost;
 	}
 
+    /**
+     * Get overall critical
+     * @return overall critical boost
+     */
 	public int getOverallBstCrit() {
 		return overallBstCrit;
 	}
 
+    /**
+     * Set overall critical
+     * @param overallBstCrit overall critical boost
+     */
 	public void setOverallBstCrit(int overallBstCrit) {
 		this.overallBstCrit = overallBstCrit;
 	}
 
+    /**
+     * Get overall miss
+     * @return overall miss boost
+     */
 	public int getOverallBstMiss() {
 		return overallBstMiss;
 	}
 
+    /**
+     * Set overall miss
+     * @param overallBstMiss overall miss boost
+     */
 	public void setOverallBstMiss(int overallBstMiss) {
 		this.overallBstMiss = overallBstMiss;
 	}
 
+    /**
+     * Get overall damage
+     * @return overall damage boost
+     */
 	public float getOverallBstDmg() {
 		return overallBstDmg;
 	}
 
+    /**
+     * Set overall damage
+     * @param overallBstDmg overall damage boost
+     */
 	public void setOverallBstDmg(double overallBstDmg) {
 		Float converted = (float) overallBstDmg;
 		this.overallBstDmg = converted;
 	}
 
+    /**
+     * Get overall armor
+     * @return overall boost damage
+     */
 	public float getOverallBstArmor() {
 		return overallBstArmor;
 	}
 
+    /**
+     * Set overall armor
+     * @param overallBstArmor overall armor boost
+     */
 	public void setOverallBstArmor(double overallBstArmor) {
 		Float converted = (float) overallBstArmor;
 		this.overallBstArmor = converted;
 	}
 
+    /**
+     * Get overall heal
+     * @return overall heal boost
+     */
 	public float getOverallBstHeal() {
 		return overallBstHeal;
 	}
 
+    /**
+     * Set overall heal
+     * @param overallBstHeal overall heal boost
+     */
 	public void setOverallBstHeal(double overallBstHeal) {
 		Float converted = (float) overallBstHeal;
 		this.overallBstHeal = converted;
 	}
 
+    /**
+     * Get batch
+     * @return batch
+     */
 	public SpriteBatch getBatch() {
 		return batch;
 	}
 
+    /**
+     * Get camera
+     * @return camera
+     */
 	public OrthographicCamera getCamera() {
 		return camera;
 	}
 
+    /**
+     * Get stage
+     * @return stage
+     */
 	public Stage getStage() {
 		return stage;
 	}
 
+    /**
+     * Get skin
+     * @return skin
+     */
 	public Skin getSkin() {
 		return skin;
 	}
 
+    /**
+     * Get musicvol
+     * @return musicvol
+     */
 	public float getMusicVol() {
 		return musicVol;
 	}
 
+    /**
+     * Get localize
+     * @return localize
+     */
 	public I18NBundle getLocalize() {
 		return localize;
 	}
 
+    /**
+     * Get progressbarstyle
+     * @return progbarstyle
+     */
 	public ProgressBar.ProgressBarStyle getProgBarStyle() {
         return progBarStyle;
     }
 
+    /**
+     * Get fontsteps
+     * @return fontsteps
+     */
 	public BitmapFont getFontSteps() {
 	    return fontSteps;
     }
 
+    /**
+     * Get descriptionfont
+     * @return descriptionfont
+     */
     public BitmapFont getDescriptionFont() {
 	    return descriptionFont;
     }
 
+    /**
+     * Get stepcount
+     * @return stepcount
+     */
 	public float getStepCount() {
 		return stepCount;
 	}
 
+    /**
+     * Set stepcount
+     * @param stepCount stepcount
+     */
 	public void setStepCount(float stepCount) {
 		this.stepCount = stepCount;
 	}
 
+    /**
+     * Get stepbank
+     * @return stepbank
+     */
 	public float getStepBank() {
 		return stepBank;
 	}
 
+    /**
+     * Set stepbank
+     * @param stepBank stepbank
+     */
 	public void setStepBank(float stepBank) {
 		this.stepBank = stepBank;
 	}
 
+    /**
+     * Get stepallcount
+     * @return stepallcount
+     */
 	public float getStepAllCount() {
 		return stepAllCount;
 	}
 
+    /**
+     * Get skill1
+     * @return skill1
+     */
 	public String getSkill1() {
 		return skill1;
 	}
 
+    /**
+     * Set skill1
+     * @param skill1 skill1
+     */
 	public void setSkill1(String skill1) {
 		this.skill1 = skill1;
 	}
 
+    /**
+     * Get skill2
+     * @return skill2
+     */
 	public String getSkill2() {
 		return skill2;
 	}
 
+    /**
+     * Set playername
+     * @param playerName playername
+     */
 	public void setPlayerName(String playerName) {
 	    this.playerName = playerName;
     }
 
+    /**
+     * Get playername
+     * @return playername
+     */
 	public String getPlayerName() {
 		return playerName;
 	}
 
+    /**
+     * Set skill2
+     * @param skill2 skill2
+     */
 	public void setSkill2(String skill2) {
 		this.skill2 = skill2;
 	}
 
+    /**
+     * Set firstplaytime
+     * @param firstPlayTime firstplaytime
+     */
 	public void setFirstPlayTime(boolean firstPlayTime) {
 	    this.firstPlayTime = firstPlayTime;
     }
 
+    /**
+     * Get firstplaytime
+     * @return firstplaytime
+     */
 	public boolean isFirstPlayTime() {
 		return firstPlayTime;
 	}
 
+    /**
+     * Set firstPlayTimeFight
+     * @param firstPlayTimeFight firstPlayTimeFight
+     */
 	public void setfirstPlayTimeFight(boolean firstPlayTimeFight) {
 	    this.firstPlayTimeFight = firstPlayTimeFight;
     }
 
+    /**
+     * Get firstPlayTimeFight
+     * @return firstPlayTimeFight
+     */
     public boolean isFirstPlayTimeFight() {
 	    return firstPlayTimeFight;
     }
 
+    /**
+     * Set firstPlayInventory
+     * @param firstPlayInventory firstPlayInventory
+     */
     public void setFirstPlayInventory(boolean firstPlayInventory) {
 	    this.firstPlayInventory = firstPlayInventory;
     }
 
+    /**
+     * Get firstPlayInventory
+     * @return firstPlayInventory
+     */
     public boolean isFirstPlayInventory() {
 	    return firstPlayInventory;
     }
 
+    /**
+     * Get firstPlayBank
+     * @return firstPlayBank
+     */
 	public boolean isFirstPlayBank() {
 		return firstPlayBank;
 	}
 
+    /**
+     * Set firstPlayBank
+     * @param firstPlayBank firstPlayBank
+     */
 	public void setFirstPlayBank(boolean firstPlayBank) {
 		this.firstPlayBank = firstPlayBank;
 	}
 
+    /**
+     * Get firstPlayVictory
+     * @return firstPlayVictory
+     */
 	public boolean isFirstPlayVictory() {
 		return firstPlayVictory;
 	}
 
+    /**
+     * Set firstPlayVictory
+     * @param firstPlayVictory firstPlayVictory
+     */
 	public void setFirstPlayVictory(boolean firstPlayVictory) {
 		this.firstPlayVictory = firstPlayVictory;
 	}
 
+    /**
+     * Get firstPlayPoolComplete1
+     * @return firstPlayPoolComplete1
+     */
 	public boolean isFirstPlayPoolComplete1() {
 		return firstPlayPoolComplete1;
 	}
 
+    /**
+     * Set firstPlayPoolComplete1
+     * @param firstPlayPoolComplete1 firstPlayPoolComplete1
+     */
 	public void setFirstPlayPoolComplete1(boolean firstPlayPoolComplete1) {
 		this.firstPlayPoolComplete1 = firstPlayPoolComplete1;
 	}
 
+    /**
+     * Get firstPlayPoolComplete2
+     * @return firstPlayPoolComplete2
+     */
 	public boolean isFirstPlayPoolComplete2() {
 		return firstPlayPoolComplete2;
 	}
 
+    /**
+     * Set firstPlayPoolComplete2
+     * @param firstPlayPoolComplete2 firstPlayPoolComplete2
+     */
 	public void setFirstPlayPoolComplete2(boolean firstPlayPoolComplete2) {
 		this.firstPlayPoolComplete2 = firstPlayPoolComplete2;
 	}
 
+    /**
+     * Get firstPlayPoolComplete3
+     * @return firstPlayPoolComplete3
+     */
 	public boolean isFirstPlayPoolComplete3() {
 		return firstPlayPoolComplete3;
 	}
 
+    /**
+     * Set firstPlayPoolComplete3
+     * @param firstPlayPoolComplete3 firstPlayPoolComplete3
+     */
 	public void setFirstPlayPoolComplete3(boolean firstPlayPoolComplete3) {
 		this.firstPlayPoolComplete3 = firstPlayPoolComplete3;
 	}
 
+    /**
+     * Get firstPlayMoney
+     * @return firstPlayMoney
+     */
     public boolean isFirstPlayMoney() {
         return firstPlayMoney;
     }
 
+    /**
+     * Set firstPlayMoney
+     * @param firstPlayMoney firstPlayMoney
+     */
     public void setFirstPlayMoney(boolean firstPlayMoney) {
         this.firstPlayMoney = firstPlayMoney;
     }
 
+    /**
+     * Get firstPlayEscape
+     * @return firstPlayEscape
+     */
 	public boolean isFirstPlayEscape() {
 		return firstPlayEscape;
 	}
 
+    /**
+     * Set firstPlayEscape
+     * @param firstPlayEscape firstPlayEscape
+     */
 	public void setFirstPlayEscape(boolean firstPlayEscape) {
 		this.firstPlayEscape = firstPlayEscape;
 	}
 
+    /**
+     * Get firstPlayDeath
+     * @return firstPlayDeath
+     */
 	public boolean isFirstPlayDeath() {
 		return firstPlayDeath;
 	}
 
+    /**
+     * Set firstPlayDeath
+     * @param firstPlayDeath firstPlayDeath
+     */
 	public void setFirstPlayDeath(boolean firstPlayDeath) {
 		this.firstPlayDeath = firstPlayDeath;
 	}
 
+    /**
+     * Set finishedGame
+     * @param finishedGame finishedGame
+     */
 	public void setFinishedGame(boolean finishedGame) {
 	    this.finishedGame = finishedGame;
     }
 
+    /**
+     * Get finishedGame
+     * @return finishedGame
+     */
     public boolean isFinishedGame() {
 	    return finishedGame;
     }
 
+    /**
+     * Set checkHard
+     * @param checkHard checkHard
+     */
     public void setCheckHard(boolean checkHard) {
 	    this.checkHard = checkHard;
     }
 
+    /**
+     * Get checkHard
+     * @return checkHard
+     */
     public boolean isCheckHard() {
 	    return checkHard;
     }
 
+    /**
+     * Get finishedGameHard
+     * @return finishedGameHard
+     */
     public boolean isFinishedGameHard() {
 	    return finishedGameHard;
     }
 
+    /**
+     * Get resetedGame
+     * @return resetedGame
+     */
     public boolean isResetedGame() {
 	    return resetedGame;
     }
 
+    /**
+     * Get testButtonAtlas
+     * @return testButtonAtlas
+     */
 	public TextureAtlas getTestButtonAtlas() {
 		return testButtonAtlas;
 	}
 
+    /**
+     * Get labelStyle
+     * @return labelStyle
+     */
 	public Label.LabelStyle getLabelStyle() {
 		return labelStyle;
 	}
 
+    /**
+     * Get descriptionLabelStyle
+     * @return descriptionLabelStyle
+     */
 	public Label.LabelStyle getDescriptionLabelStyle() {
 	    return descriptionLabelStyle;
     }
 
+    /**
+     * Get fontcolor
+     * @return fontcolor
+     */
 	public Color getFontColor() {
 		return fontColor;
 	}
 
+    /**
+     * Get utilDialog
+     * @return dialog
+     */
 	public UtilDialog getDialog() {
 		return dialog;
 	}
 
+    /**
+     * Set hackPosX
+     * @param hackPosX hackPosX
+     */
 	public void setHackPosX(FloatArray hackPosX) {
 	    this.hackPosX = hackPosX;
     }
 
+    /**
+     * Set hackPosY
+     * @param hackPosY hackPosY
+     */
     public void setHackPosY(FloatArray hackPosY) {
 	    this.hackPosY = hackPosY;
     }
 
+    /**
+     * Set innerPosX
+     * @param innerPosX innerPosX
+     */
     public void setInnerPosX(FloatArray innerPosX) {
 	    this.innerPosX = innerPosX;
     }
 
+    /**
+     * Set innerPosY
+     * @param innerPosY innerPosY
+     */
     public void setInnerPosY(FloatArray innerPosY) {
 	    this.innerPosY = innerPosY;
     }
 
+    /**
+     * Set innerHackShieldAmount
+     * @param innerHackShieldAmount innerHackShieldAmount
+     */
     public void setInnerHackShieldAmount(int innerHackShieldAmount) {
 	    this.innerHackShieldAmount = innerHackShieldAmount;
     }
 
+    /**
+     * Set hackShieldAmount
+     * @param hackShieldAmount hackShieldAmount
+     */
     public void setHackShieldAmount(int hackShieldAmount) {
 	    this.hackShieldAmount = hackShieldAmount;
     }
 
+    /**
+     * Set hackFirstTry
+     * @param hackFirstTry hackFirstTry
+     */
     public void setHackFirstTry(boolean hackFirstTry) {
 	    this.hackFirstTry = hackFirstTry;
     }
 
+    /**
+     * Get hackFirstTry
+     * @return hackFirstTry
+     */
     public boolean getHackFirstTry() {
 	    return hackFirstTry;
     }
 
+    /**
+     * Get hackPosX
+     * @return hackPosX
+     */
     public FloatArray getHackPosX() {
         return hackPosX;
     }
 
+    /**
+     * Get hackPosY
+     * @return hackPosY
+     */
     public FloatArray getHackPosY() {
         return hackPosY;
     }
 
+    /**
+     * Get innerPosX
+     * @return innerPosX
+     */
     public FloatArray getInnerPosX() {
 	    return innerPosX;
     }
 
+    /**
+     * Get innerPosY
+     * @return innerPosY
+     */
     public FloatArray getInnerPosY() {
 	    return innerPosY;
     }
 
+    /**
+     * Get hackShieldAmount
+     * @return hackShieldAmount
+     */
     public int getHackShieldAmount() {
 	    return hackShieldAmount;
     }
 
+    /**
+     * Get innerHackShieldAmount
+     * @return innerHackShieldAmount
+     */
     public int getInnerHackShieldAmount() {
 	    return innerHackShieldAmount;
     }
 
+    /**
+     * Get pool1HackShieldAmount
+     * @return pool1HackShieldAmount
+     */
     public int getPool1HackShieldAmount() {
 	    return pool1HackShieldAmount;
     }
 
+    /**
+     * Get pool2HackShieldAmount
+     * @return pool2HackShieldAmount
+     */
     public int getPool2HackShieldAmount() {
 	    return pool2HackShieldAmount;
     }
 
+    /**
+     * Get pool3HackShieldAmount
+     * @return pool3HackShieldAmount
+     */
     public int getPool3HackShieldAmount() {
 	    return pool3HackShieldAmount;
     }
 
+    /**
+     * Get pool3 innerHackShieldAmount
+     * @return innerHackShieldAmount
+     */
     public int getPool3InnerHackShieldAmount() {
 	    return pool3InnerHackShieldAmount;
     }
 
+    /**
+     * Get pool
+     * @return pool
+     */
 	public int getPool() {
 		return pool;
 	}
 
+    /**
+     * Get poolMult
+     * @return poolMult
+     */
 	public int getPoolMult() {
 		return poolMult;
 	}
 
+    /**
+     * Get emptyWindowStyle
+     * @return emptyWindowsStyle
+     */
 	public Window.WindowStyle getEmptyWindowStyle() {
 		return emptyWindowStyle;
 	}
 
+    /**
+     * Get clickedOpenSettings
+     * @return clickedOpenSettings
+     */
     public boolean getClickedOpenSettings() {
         return clickedOpenSettings;
     }
 
+    /**
+     * Set clickedOpenSettings
+     * @param clickedOpenSettings clickedOpenSettings
+     */
     public void setClickedOpenSettings(boolean clickedOpenSettings) {
         this.clickedOpenSettings = clickedOpenSettings;
     }
 
+    /**
+     * Get currentBoss
+     * @return currentBoss
+     */
 	public String getCurrentBoss() {
 		return currentBoss;
 	}
 
+    /**
+     * Get money
+     * @return money
+     */
     public int getMoney() {
 	    return money;
     }
 
+    /**
+     * Get inventorySize
+     * @return inventorySize
+     */
     public int getInventorySize() {
 	    return inventorySize;
     }
 
+    /**
+     * Get progressBarMileStone
+     * @return progressBarMileStone
+     */
 	public float getProgressBarMilestone() {
 		return progressBarMilestone;
 	}
 
+    /**
+     * Get inventory
+     * @return inventory
+     */
     public ArrayList<String> getInventory() {
         return inventory;
     }
 
+    /**
+     * Get boughtPermanent
+     * @return boughtPermanent
+     */
     public ArrayList<String> getBoughtPermanent() {
 	    return boughtPermanent;
     }
 
+    /**
+     * Get finalSkin
+     * @return finalSkin
+     */
     public Skin getFinalSkin() {
 	    return finalSkin;
     }
 
+    /**
+     * Get files
+     * @return files
+     */
 	public Files getFiles() {
 		return files;
 	}
 
+    /**
+     * Get skills
+     * @return skills
+     */
 	public Skills getSkills() {
 		return skills;
 	}
 
+    /**
+     * Get items
+     * @return items
+     */
 	public Item getItems() {
 		return items;
 	}
 
+    /**
+     * Get bosses
+     * @return bosses
+     */
 	public Bosses getBosses() {
 		return bosses;
 	}
 
+    /**
+     * Get language
+     * @return language
+     */
 	public String getLanguage() {
 		return language;
 	}
 
+    /**
+     * Set language
+     * @param language language
+     */
 	public void setLanguage(String language) {
 	    this.language = language;
     }
 
+    /**
+     * Set difficulty
+     * @param difficulty difficulty
+     */
     public void setDifficulty(String difficulty) {
 	    this.difficulty = difficulty;
     }
 
+    /**
+     * Get difficulty
+     * @return difficulty
+     */
     public String getDifficulty() {
         return difficulty;
     }
 
+    /**
+     * Set buyedItemsCounter
+     * @param buyedItemsCounter buyedItemsCounter
+     */
     public void setBuyedItemsCounter(int buyedItemsCounter) {
 	    this.buyedItemsCounter = buyedItemsCounter;
     }
 
+    /**
+     * Get buyedItemsCounter
+     * @return buyedItemsCounter
+     */
     public int getBuyedItemsCounter() {
 	    return buyedItemsCounter;
     }
 
+    /**
+     * Get fightsWon
+     * @return fightsWon
+     */
     public int getFightsWon() {
 	    return fightsWon;
     }
 
+    /**
+     * Get reflectiveShield
+     * @return reflectiveShield
+     */
 	public boolean isReflectiveShield() {
 		return reflectiveShield;
 	}
 
+    /**
+     * Set reflectiveShield
+     * @param reflectiveShield reflectiveShield
+     */
 	public void setReflectiveShield(boolean reflectiveShield) {
 		this.reflectiveShield = reflectiveShield;
 	}
 
+    /**
+     * Get soundVol
+     * @return soundVol
+     */
 	public float getSoundVol() {
 	    return soundVol;
     }
 
+    /**
+     * Set achievement
+     * @param i i
+     * @param state state
+     */
     public void setAchievement(int i, String state) {
 	    achievComplete.set(i, state);
     }
 
+    /**
+     * Get achievementArray
+     * @return achievComplete
+     */
     public ArrayList<String> getAchievComplete() {
 	    return achievComplete;
     }
 
+    /**
+     * Set if player has collected achievement
+     * @param i i
+     * @param state state
+     */
     public void setHasCollected(int i, String state) {
 	    hasCollected.set(i, state);
     }
 
+    /**
+     * Get hasCollectedArray
+     * @return hasCollected
+     */
     public ArrayList<String> getHasCollected() {
 	    return hasCollected;
     }

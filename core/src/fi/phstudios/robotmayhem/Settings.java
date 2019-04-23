@@ -444,4 +444,8 @@ public class Settings {
 
         settingsDialog.addActor(buttonExit);
     }
+
+    private void createFightButton() {
+
+    }
 }

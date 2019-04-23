@@ -119,13 +119,13 @@ public class Achievements {
 
         achMoney = new int[] {
                 5,      // Sunday Walker / 50 steps
-                15,     // Jogger / 5 000 steps
-                30,     // Marathonist / 10 000 steps
-                30,     // Finisher / Finish the game
+                30,     // Jogger / 5 000 steps
+                50,     // Marathonist / 10 000 steps
+                80,     // Finisher / Finish the game
                 100,    // Peppery Walker / Finish the game on hard mode
-                25,     // Materialist / Buy every permanent item
-                40,     // Jack Of All Trades / Own every skill
-                5       // Clean Slate / Reset the game
+                50,     // Materialist / Buy every permanent item
+                10000,     // Jack Of All Trades / Own every skill
+                10       // Clean Slate / Reset the game
         };
     }
 
