@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.I18NBundle;
 
 public class RoomParent implements Screen {
+
     protected SpriteBatch batch;
     protected Texture imgBG, imgTopBar, imgBottomBar;
     protected I18NBundle localize;
@@ -38,6 +39,10 @@ public class RoomParent implements Screen {
 
     protected Settings settings;
 
+    /**
+     * Retrieves correct values from main game instance.
+     * @param game main game instance
+     */
     RoomParent(MainGame game) {
         this.game = game;
         batch = game.getBatch();
@@ -61,11 +66,10 @@ public class RoomParent implements Screen {
         imgBottomBar = files.imgBottomBar;
     }
 
-    @Override
-    public void show() {
-
-    }
-
+    /**
+     * Renders all the frames of the room. Used for drawing transition colors and stage acting.
+     * @param delta time
+     */
     @Override
     public void render(float delta) {
 
@@ -83,32 +87,45 @@ public class RoomParent implements Screen {
         }
     }
 
+    /**
+     * What color is used when transitioning from room to room.
+     */
     public void transitionColor() {
-
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
+    /**
+     * Handles select item. RoomParent needs to guide the method to correct room.
+     * @param item selected item
+     */
     public void selectItem(String item) {
         // This is need for this method to work correctly in RoomGame and RoomFight
     }
 
+    /**
+     * Handles what is the default color when not transitioning.
+     */
     public void defaultColor() {
-
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
+    /**
+     * Handles transitioning from room to room.
+     */
     public void transitionUpdate() {
-
         transitionCounter--;
 
         if (transitionCounter <= 0) {
-
             game.haveWeChangedTheRoom = false;
         }
     }
 
+    /**
+     * Used for creating top right corner meny button.
+     * @param room what room the method is called
+     */
     public void createMenuButton(final String room) {
         ImageButton button = new ImageButton(finalSkin.getDrawable("button_settings"),
                 finalSkin.getDrawable("button_settings_clicked"));
@@ -126,6 +143,9 @@ public class RoomParent implements Screen {
         stage.addActor(button);
     }
 
+    /**
+     * Draws the top and bottom bar textures.
+     */
     public void drawTopAndBottomBar() {
         batch.draw(imgTopBar, 0,game.pixelHeight - imgTopBar.getHeight(),
                 imgTopBar.getWidth(), imgTopBar.getHeight());
@@ -133,26 +153,51 @@ public class RoomParent implements Screen {
                 imgBottomBar.getWidth(), imgBottomBar.getHeight());
     }
 
+    /**
+     * Handles what happens when room shows up.
+     */
+    @Override
+    public void show() {
+
+    }
+
+    /**
+     * Handles what happens when window is resized.
+     * @param width current width
+     * @param height current height
+     */
     @Override
     public void resize(int width, int height) {
 
     }
 
+    /**
+     * Handles what happens when game is paused in background.
+     */
     @Override
     public void pause() {
 
     }
 
+    /**
+     * Handles what happens when game returns from background.
+     */
     @Override
     public void resume() {
 
     }
 
+    /**
+     * Handles what happens when room is changed. Disposes this current room.
+     */
     @Override
     public void hide() {
         this.dispose();
     }
 
+    /**
+     * Handles what will be disposed.
+     */
     @Override
     public void dispose() {
 

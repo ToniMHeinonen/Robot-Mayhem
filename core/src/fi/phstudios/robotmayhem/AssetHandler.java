@@ -150,6 +150,9 @@ public class AssetHandler {
     public final String sndGeneralItemUse = "sound/GeneralItemUse.mp3";
     public final String sndGeneralNotification = "sound/GeneralNotification.mp3";
 
+    /**
+     * Add assets to load queue.
+     */
     AssetHandler() {
         /*
         Textures

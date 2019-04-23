@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class Files {
+
     private final Animating createAnims = new Animating();
 
     // Game end congratz textures
