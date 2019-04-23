@@ -128,6 +128,9 @@ public class AssetHandler {
     public final String sndPowerupsPopup = "sound/fightGeneral/PowerUpsPopUp.mp3";
     public final String sndMetallicHit = "sound/fightGeneral/MetallicHit.mp3";
     // Skills
+    public final String sndWoosh1 = "sound/skills/Woosh1.mp3";
+    public final String sndWoosh2 = "sound/skills/Woosh2.mp3";
+    public final String sndWoosh3 = "sound/skills/Woosh3.mp3";
     public final String sndDustThrow = "sound/skills/DustThrow.mp3";
     public final String sndSuction = "sound/skills/Suction.mp3";
     public final String sndShieldAbility = "sound/skills/ShieldAbilitySound.mp3";
@@ -264,6 +267,9 @@ public class AssetHandler {
         manager.load(sndPowerupsPopup, Sound.class);
         manager.load(sndMetallicHit, Sound.class);
         // Skills
+        manager.load(sndWoosh1, Sound.class);
+        manager.load(sndWoosh2, Sound.class);
+        manager.load(sndWoosh3, Sound.class);
         manager.load(sndDustThrow, Sound.class);
         manager.load(sndSuction, Sound.class);
         manager.load(sndShieldAbility, Sound.class);

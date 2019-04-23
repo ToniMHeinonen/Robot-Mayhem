@@ -1279,6 +1279,14 @@ public class RoomFight extends RoomParent {
             calcTargetHpSpd(damage);
         }
 
+        protected void playRandomWooshSound() {
+            int random = MathUtils.random(1, 3);
+
+            if (random == 1) game.playSound(files.sndWoosh1);
+            else if (random == 2) game.playSound(files.sndWoosh2);
+            else if (random == 3) game.playSound(files.sndWoosh3);
+        }
+
         /**
          * Health bar uses this.
          * @return amount of hp
@@ -1442,6 +1450,7 @@ public class RoomFight extends RoomParent {
                 skillState = SKILL_DAMAGE;
                 action = attackName;
                 actionSelected = true;
+                playRandomWooshSound();
                 curAnimation = skillAnim;
                 // If skill misses, skip everything
                 boolean miss = randomMissChance((Integer) mapAttack.get(skills.missChance));
@@ -1485,7 +1494,8 @@ public class RoomFight extends RoomParent {
 
                         // Play sound if not null
                         Sound snd = (Sound) skillMap.get(skills.sound);
-                        if (snd != null) game.playSound(snd);
+                        if (snd == null) playRandomWooshSound();
+                        else game.playSound(snd);
 
                         // If skill misses, skip everything
                         boolean miss = randomMissChance((Integer) skillMap.get(skills.missChance));
@@ -1900,7 +1910,8 @@ public class RoomFight extends RoomParent {
                 dialog.showSkillName(localizedName, "skillname_enemy");
 
                 // Play sound if not null
-                if (sounds[R] != null) game.playSound(sounds[R]);
+                if (sounds[R] == null) playRandomWooshSound();
+                else game.playSound(sounds[R]);
 
                 boolean miss = randomMissChance(missChances[R]);
                 if (miss) skillState = SKILL_MISS;
