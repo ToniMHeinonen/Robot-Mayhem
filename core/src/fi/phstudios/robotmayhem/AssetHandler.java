@@ -13,8 +13,14 @@ public class AssetHandler {
     Textures
     */
     // Splash Screen
-    public final String splashScreenFIN = "texture/splashScreenFIN.jpg";
-    public final String splashScreenENG = "texture/splashScreenENG.jpg";
+    public final String splashFI1 = "texture/splash/splash1_fi.jpg";
+    public final String splashFI2 = "texture/splash/splash2_fi.jpg";
+    public final String splashFI3 = "texture/splash/splash3_fi.jpg";
+    public final String splashFI4 = "texture/splash/splash4_fi.jpg";
+    public final String splashEN1 = "texture/splash/splash1_en.jpg";
+    public final String splashEN2 = "texture/splash/splash2_en.jpg";
+    public final String splashEN3 = "texture/splash/splash3_en.jpg";
+    public final String splashEN4 = "texture/splash/splash4_en.jpg";
 
     // Player
     public final String playerIdle = "texture/player/player_idle.png";
@@ -131,8 +137,14 @@ public class AssetHandler {
         Textures
          */
         // Splash Screen
-        manager.load(splashScreenFIN, Texture.class);
-        manager.load(splashScreenENG, Texture.class);
+        manager.load(splashFI1, Texture.class);
+        manager.load(splashFI2, Texture.class);
+        manager.load(splashFI3, Texture.class);
+        manager.load(splashFI4, Texture.class);
+        manager.load(splashEN1, Texture.class);
+        manager.load(splashEN2, Texture.class);
+        manager.load(splashEN3, Texture.class);
+        manager.load(splashEN4, Texture.class);
 
         // Player
         manager.load(playerIdle, Texture.class);
