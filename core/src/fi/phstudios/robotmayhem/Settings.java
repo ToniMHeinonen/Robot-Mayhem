@@ -104,6 +104,7 @@ public class Settings {
         createLanguageButtons();
         createMenuButtons();
         createExitButton();
+        createFightButton();
         stage.addActor(settingsDialog);
         System.out.println("Setting-dialog opened from room: " + room);
     }
@@ -445,7 +446,19 @@ public class Settings {
         settingsDialog.addActor(buttonExit);
     }
 
+    /**
+     * Create fightButton
+     */
     private void createFightButton() {
-
+        ImageButton imgBtn = new ImageButton(finalSkin.getDrawable("button_ATTACK"),
+                finalSkin.getDrawable("button_ATTACK_clicked"));
+        imgBtn.setPosition(1470, 100);
+        settingsDialog.addActor(imgBtn);
+        imgBtn.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                game.switchToRoomFight();
+            }
+        });
     }
 }
