@@ -80,7 +80,8 @@ public class Files {
 
     // Sound effects skills
     public final Sound sndDustThrow, sndDefend, sndSuction, sndBlackInk, sndCatThrower, sndCoinFlip,
-    sndPCReboot, sndPCPopup, sndMayhem, sndOverpower, sndBucket, sndRustify, sndTrojan;
+    sndPCReboot, sndPCPopup, sndMayhem, sndOverpower, sndBucket, sndRustify, sndTrojan, sndWoosh1,
+    sndWoosh2, sndWoosh3;
 
     // Sound effect other
     public final Sound  sndMilestoneAchieved, sndPurchaseItem, sndUseItem, sndNotification;
@@ -259,6 +260,9 @@ public class Files {
         sndPowerUpPopup = manager.get(asset.sndPowerupsPopup);
         sndMetallicHit = manager.get(asset.sndMetallicHit);
         // Skills
+        sndWoosh1 = manager.get(asset.sndWoosh1);
+        sndWoosh2 = manager.get(asset.sndWoosh2);
+        sndWoosh3 = manager.get(asset.sndWoosh3);
         sndDustThrow = manager.get(asset.sndDustThrow);
         sndSuction = manager.get(asset.sndSuction);
         sndDefend = manager.get(asset.sndShieldAbility);
