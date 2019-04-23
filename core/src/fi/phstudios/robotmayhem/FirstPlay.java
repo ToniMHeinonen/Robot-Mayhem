@@ -135,11 +135,14 @@ public class FirstPlay {
         final Input.TextInputListener textInputListener = new Input.TextInputListener() {
             @Override
             public void input(String text) {
-                if (text.length() > 0 && text.length() < 13) {
-                    name = text;
-                    game.setPlayerName(text);
-                    whoAmI.remove();
-                    hallAllInstructions();
+                // Only change name and spawn next tutorial if name has not been yet changed
+                if (game.getPlayerName() == "") {
+                    if (text.length() > 0 && text.length() < 13) {
+                        name = text;
+                        game.setPlayerName(text);
+                        whoAmI.remove();
+                        hallAllInstructions();
+                    }
                 }
             }
 
@@ -151,12 +154,18 @@ public class FirstPlay {
         whoAmI.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
+                /*
+                Reset name in case of player enters name and closes the game before finishing the
+                tutorial. Without this the game get's stuck in asking name.
+                 */
+                game.setPlayerName("");
                 Gdx.input.getTextInput(textInputListener, "Your name", "", "1-12 characters");
             }
         });
     }
 
     private void hallAllInstructions() {
+
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
