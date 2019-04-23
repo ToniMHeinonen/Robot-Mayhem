@@ -89,10 +89,10 @@ public class RoomFight extends RoomParent {
 
         if (game.isFirstPlayTimeFight()) {
             state = State.TUTORIAL_START;
-            tutorial = new FirstPlay(game, "fight", thisRoom);
+            tutorial = new FirstPlay(game, "fight");
         } else if (game.getPool() == 4) {
             state = State.FINALFIGHT_START;
-            finalFight = new FirstPlay(game, "finalFight", thisRoom);
+            finalFight = new FirstPlay(game, "finalFight");
         } else {
             state = State.START_ROOM;
         }
@@ -176,7 +176,7 @@ public class RoomFight extends RoomParent {
                     startDeathTimer = true;
                     game.playSound(files.sndLoseToBoss);
                     if (game.isFirstPlayDeath()) {
-                        FirstPlay death = new FirstPlay(game, "death", thisRoom);
+                        FirstPlay death = new FirstPlay(game, "death");
                     }
                 }
 
@@ -526,7 +526,7 @@ public class RoomFight extends RoomParent {
                     stage.clear();
                     createYesNo();
                     if (game.isFirstPlayEscape()) {
-                        FirstPlay escape = new FirstPlay(game, "escape", thisRoom);
+                        FirstPlay escape = new FirstPlay(game, "escape");
                     }
                 }
             }

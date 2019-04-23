@@ -49,7 +49,7 @@ public class RoomGame extends RoomParent {
         createMenuButton("hall");
 
         if (game.isFirstPlayTime()) {
-            FirstPlay firstPlay = new FirstPlay(game, "firstPlay", thisRoom);
+            FirstPlay firstPlay = new FirstPlay(game, "firstPlay");
         }
     }
 
@@ -89,27 +89,27 @@ public class RoomGame extends RoomParent {
         else if(game.isFirstPlayBank() && bankTutorial != null) game.setPauseWalking(true);
         else if(game.isFirstPlayVictory() && game.getPoolMult() > 0)
         {
-            if (victory == null) victory = new FirstPlay(game, "victory", thisRoom);
+            if (victory == null) victory = new FirstPlay(game, "victory");
             game.setPauseWalking(true);
         }
         else if (game.isFirstPlayPoolComplete1() && game.getPool() == 2)
         {
             if (pool1Complete == null) {
-                pool1Complete = new FirstPlay(game, "pool1Complete", thisRoom);
+                pool1Complete = new FirstPlay(game, "pool1Complete");
             }
             game.setPauseWalking(true);
         }
         else if (game.isFirstPlayPoolComplete2() && game.getPool() == 3)
         {
             if (pool2Complete == null) {
-                pool2Complete = new FirstPlay(game, "pool2Complete", thisRoom);
+                pool2Complete = new FirstPlay(game, "pool2Complete");
             }
             game.setPauseWalking(true);
         }
         else if (game.isFirstPlayPoolComplete3() && game.getPool() == 4)
         {
             if (pool3Complete == null) {
-                pool3Complete = new FirstPlay(game, "pool3Complete", thisRoom);
+                pool3Complete = new FirstPlay(game, "pool3Complete");
             }
             game.setPauseWalking(true);
         }
@@ -160,7 +160,7 @@ public class RoomGame extends RoomParent {
                 retrievingSteps = true;
                 // If it's first time that bank steps are retrieved, show dialogue
                 if (game.isFirstPlayBank()) {
-                    bankTutorial = new FirstPlay(game, "bank", this);
+                    bankTutorial = new FirstPlay(game, "bank");
                 }
                 // Round stepBank, in case for some reason it's for example 0.432
                 game.setStepBank(Math.round(game.getStepBank()));

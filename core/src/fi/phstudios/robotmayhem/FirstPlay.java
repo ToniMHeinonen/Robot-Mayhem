@@ -13,7 +13,6 @@ import com.badlogic.gdx.utils.Timer;
 
 public class FirstPlay {
     private MainGame game;
-    private RoomParent curRoom;
     private Stage stage;
     private Skin finalSkin;
     private I18NBundle localize;
@@ -31,9 +30,13 @@ public class FirstPlay {
     private boolean allowClicking;
     private float clickTimer = 1f;
 
-    FirstPlay(final MainGame game, String tutorial, RoomParent curRoom) {
+    /**
+     * Retrieve correct values from main game instance.
+     * @param game main game instance
+     * @param tutorial which tutorial to start
+     */
+    FirstPlay(final MainGame game, String tutorial) {
         this.game = game;
-        this.curRoom = curRoom;
         stage = game.getStage();
         finalSkin = game.getFinalSkin();
         localize = game.getLocalize();
@@ -128,6 +131,9 @@ public class FirstPlay {
 
     }
 
+    /**
+     * Retrieve player's name.
+     */
     private void hallInstructionsName() {
         whoAmI = utilDialog.createInstructionsDialog(localize.get("tutFirstPlay1"));
         stage.addActor(whoAmI);
@@ -164,6 +170,9 @@ public class FirstPlay {
         });
     }
 
+    /**
+     * Show game start tutorial.
+     */
     private void hallAllInstructions() {
 
         Timer.schedule(new Timer.Task() {
@@ -200,6 +209,9 @@ public class FirstPlay {
         });
     }
 
+    /**
+     * Show fight start tutorial.
+     */
     private void fightStartInstructions() {
         Timer.schedule(new Timer.Task() {
             @Override
@@ -231,6 +243,9 @@ public class FirstPlay {
         });
     }
 
+    /**
+     * Show fight after hit tutorial.
+     */
     public void fightAfterHitInstructions() {
         Timer.schedule(new Timer.Task() {
             @Override
@@ -262,6 +277,9 @@ public class FirstPlay {
         });
     }
 
+    /**
+     * Show fight action tutorial.
+     */
     public void fightActionInstructions() {
         Timer.schedule(new Timer.Task() {
             @Override
@@ -295,6 +313,9 @@ public class FirstPlay {
         });
     }
 
+    /**
+     * Show fight hacking tutorial.
+     */
     public void fightHackingInstructions() {
         Timer.schedule(new Timer.Task() {
             @Override
@@ -329,6 +350,9 @@ public class FirstPlay {
         });
     }
 
+    /**
+     * Show fight powerup tutorial.
+     */
     public void fightPowerupInstructions() {
         Timer.schedule(new Timer.Task() {
             @Override
@@ -364,6 +388,9 @@ public class FirstPlay {
         });
     }
 
+    /**
+     * Show inventory tutorial.
+     */
     private void inventoryInstructions() {
         Timer.schedule(new Timer.Task() {
             @Override
@@ -403,6 +430,9 @@ public class FirstPlay {
         });
     }
 
+    /**
+     * Show bank tutorial.
+     */
     private void bankInstructions() {
         Timer.schedule(new Timer.Task() {
             @Override
@@ -437,6 +467,9 @@ public class FirstPlay {
         });
     }
 
+    /**
+     * Show after first won dialogue.
+     */
     private void victoryInstructions() {
         Timer.schedule(new Timer.Task() {
             @Override
@@ -468,6 +501,9 @@ public class FirstPlay {
         });
     }
 
+    /**
+     * Show after first pool complete dialogue.
+     */
     private void pool1CompleteInstructions() {
         Timer.schedule(new Timer.Task() {
             @Override
@@ -499,6 +535,9 @@ public class FirstPlay {
         });
     }
 
+    /**
+     * Show after second pool complete dialogue.
+     */
     private void pool2CompleteInstructions() {
         Timer.schedule(new Timer.Task() {
             @Override
@@ -531,6 +570,9 @@ public class FirstPlay {
         });
     }
 
+    /**
+     * Show after third pool complete dialogue.
+     */
     private void pool3CompleteInstructions() {
         Timer.schedule(new Timer.Task() {
             @Override
@@ -563,6 +605,9 @@ public class FirstPlay {
         });
     }
 
+    /**
+     * Show money tutorial.
+     */
     private void moneyInstructions() {
         Timer.schedule(new Timer.Task() {
             @Override
@@ -603,6 +648,9 @@ public class FirstPlay {
         });
     }
 
+    /**
+     * Show escape tutorial.
+     */
     private void escapeInstructions() {
         Timer.schedule(new Timer.Task() {
             @Override
@@ -642,6 +690,9 @@ public class FirstPlay {
         });
     }
 
+    /**
+     * Show death tutorial.
+     */
     private void deathInstructions() {
         Timer.schedule(new Timer.Task() {
             @Override
@@ -681,6 +732,9 @@ public class FirstPlay {
         });
     }
 
+    /**
+     * Show final fight start dialogue.
+     */
     private void finalFightStartInstructions() {
         Timer.schedule(new Timer.Task() {
             @Override
@@ -712,6 +766,9 @@ public class FirstPlay {
         });
     }
 
+    /**
+     * Show final fight after start dialogue.
+     */
     public void finalFightAfterStartInstructions() {
         Timer.schedule(new Timer.Task() {
             @Override
@@ -744,6 +801,9 @@ public class FirstPlay {
         });
     }
 
+    /**
+     * Show final fight before end dialogue.
+     */
     public void finalFightBeforeEndInstructions() {
         Timer.schedule(new Timer.Task() {
             @Override
@@ -775,6 +835,9 @@ public class FirstPlay {
         });
     }
 
+    /**
+     * Show final fight end dialogue.
+     */
     public void finalFightEndInstructions() {
         Timer.schedule(new Timer.Task() {
             @Override
@@ -806,38 +869,74 @@ public class FirstPlay {
         });
     }
 
+    /**
+     * Used for checking if fight start has finished.
+     * @return if finished
+     */
     public boolean isFightStartFinished() {
         return fightStartFinished;
     }
 
+    /**
+     * Used for checking if fight after hit has finished.
+     * @return if finished
+     */
     public boolean isFightAfterHitFinished() {
         return fightAfterHitFinished;
     }
 
+    /**
+     * Used for checking if fight action has finished.
+     * @return if finished
+     */
     public boolean isFightActionFinished() {
         return fightActionFinished;
     }
 
+    /**
+     * Used for checking if fight hacking has finished.
+     * @return if finished
+     */
     public boolean isFightHackingFinished() {
         return fightHackingFinished;
     }
 
+    /**
+     * Used for checking if fight powerup has finished.
+     * @return if finished
+     */
     public boolean isFightPowerupFinished() {
         return fightPowerupFinished;
     }
 
+    /**
+     * Used for checking if final fight start has finished.
+     * @return if finished
+     */
     public boolean isFinalFightStartFinished() {
         return finalFightStartFinished;
     }
 
+    /**
+     * Used for checking if final fight after start has finished.
+     * @return if finished
+     */
     public boolean isFinalFightAfterStartFinished() {
         return finalFightAfterStartFinished;
     }
 
+    /**
+     * Used for checking if final fight before end has finished.
+     * @return if finished
+     */
     public boolean isFinalFightBeforeEndFinished() {
         return finalFightBeforeEndFinished;
     }
 
+    /**
+     * Used for checking if final fight end has finished.
+     * @return if finished
+     */
     public boolean isFinalFightEndFinished() {
         return finalFightEndFinished;
     }
