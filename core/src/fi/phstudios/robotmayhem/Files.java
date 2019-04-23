@@ -86,6 +86,10 @@ public class Files {
     // Sound effect other
     public final Sound  sndMilestoneAchieved, sndPurchaseItem, sndUseItem, sndNotification;
 
+    /**
+     * Retrieve all assets and create necessary animations and arrays.
+     * @param asset
+     */
     Files (AssetHandler asset) {
         AssetManager manager = asset.manager;
 
@@ -95,7 +99,6 @@ public class Files {
         // Game end congrats
         congratsFI = manager.get(asset.congratsFI);
         congratsEN = manager.get(asset.congratsEN);
-
         // Player
         playerIdle = manager.get(asset.playerIdle);
         playerAttack = manager.get(asset.playerAttack);

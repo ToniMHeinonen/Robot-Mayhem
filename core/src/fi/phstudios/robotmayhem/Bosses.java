@@ -10,11 +10,10 @@ import java.util.HashMap;
 public class Bosses {
 
     private Files files;
-    //private I18NBundle localize;
     private Skills skills;
     /*
     Use these, since if you need to change the name to something else, you then only need
-    to change it in here.
+    to change it in here. These also lower coding mistake chances.
      */
     public final String name = "name";
     public final String normalSize = "normalSize";
@@ -58,8 +57,9 @@ public class Bosses {
     - Pool 3 uses skills 2 and 4
      */
 
-    /*
-    Create bosses when the game starts.
+    /**
+     * Create bosses when the game starts.
+     * @param game main game instance
      */
     Bosses(MainGame game) {
         files = game.getFiles();
@@ -72,12 +72,16 @@ public class Bosses {
         bossPC();
         bossBaller();
         bossFabio();
-        allBosses.remove(FABIO); // Don't count Fabio in all bosses
+        // Don't count Fabio in all bosses
+        allBosses.remove(FABIO);
+        // Used for checking pool size in MainGame
         poolBossesSize = allBosses.size();
     }
 
-    /*
-    Retrieve correct boss map by using string value.
+    /**
+     * Retrieve correct boss map by using boss's name.
+     * @param boss selected boss
+     * @return map of the boss
      */
     public HashMap<String, Object> getBoss(String boss) {
         HashMap<String, Object> chosenBoss;
@@ -87,6 +91,10 @@ public class Bosses {
         return chosenBoss;
     }
 
+    /**
+     * Selects random boss.
+     * @return random boss
+     */
     public String selectRandomBoss() {
         String selected = "";
         int random = MathUtils.random(0, allBosses.size() - 1);
@@ -95,17 +103,9 @@ public class Bosses {
         return selected;
     }
 
-    public String[] retrieveBossSkills(String boss) {
-        String[] skills = new String[3];
-        HashMap<String, Object> bossMap = getBoss(boss);
-
-        for (int i = 0; i < skills.length; i++) {
-            skills[i] = (String) bossMap.get(skillName + String.valueOf(i));
-        }
-
-        return skills;
-    }
-
+    /**
+     * Create boss Roombot. Change current variables and add them to the map.
+     */
     private void bossRoombot() {
         curName = ROOMBOT;
         curAttackName = "roombotAttackName";
@@ -126,6 +126,9 @@ public class Bosses {
         addToMap();
     }
 
+    /**
+     * Create boss Robber. Change current variables and add them to the map.
+     */
     private void bossRobber() {
         curName = ROBBER;
         curAttackName = "robberAttackName";
@@ -146,6 +149,9 @@ public class Bosses {
         addToMap();
     }
 
+    /**
+     * Create boss Copper. Change current variables and add them to the map.
+     */
     private void bossCopper() {
         curName = COPPER;
         curAttackName = "copperAttackName";
@@ -166,6 +172,9 @@ public class Bosses {
         addToMap();
     }
 
+    /**
+     * Create boss Copier. Change current variables and add them to the map.
+     */
     private void bossCopier() {
         curName = COPIER;
         curAttackName = "copierAttackName";
@@ -186,6 +195,9 @@ public class Bosses {
         addToMap();
     }
 
+    /**
+     * Create boss PC. Change current variables and add them to the map.
+     */
     private void bossPC() {
         curName = PC;
         curAttackName = "pcAttackName";
@@ -206,6 +218,9 @@ public class Bosses {
         addToMap();
     }
 
+    /**
+     * Create boss Baller. Change current variables and add them to the map.
+     */
     private void bossBaller() {
         curName = BALLER;
         curAttackName = "ballerAttackName";
@@ -226,6 +241,9 @@ public class Bosses {
         addToMap();
     }
 
+    /**
+     * Create boss Fabio. Change current variables and add them to the map.
+     */
     private void bossFabio() {
         curName = FABIO;
         curAttackName = "fabioAttackName";
@@ -246,6 +264,10 @@ public class Bosses {
         addToMap();
     }
 
+    /**
+     * Add current variables to the map. Also add current name to allBosses array and add map
+     * to mapBosses.
+     */
     private void addToMap() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, curName);

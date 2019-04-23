@@ -48,12 +48,10 @@ public class Item {
     1. Make a String for it
     2. Make a new method for it
     3. Add it's name and description to MyBundle file
-    4. Retrieve it's localized name
-    5. Add it to the allItems array
      */
 
-    /*
-    Create items when the game starts.
+    /**
+     * Create items when the game starts.
      */
     Item() {
         mapItems = new HashMap<String, HashMap<String,Object>>();
@@ -73,6 +71,11 @@ public class Item {
         itemReflect();
     }
 
+    /**
+     * Retrieve correct item map.
+     * @param item selected item
+     * @return map of the item
+     */
     public HashMap<String, Object> getItem(String item) {
         HashMap<String, Object> chosenItem;
 
@@ -81,6 +84,10 @@ public class Item {
         return chosenItem;
     }
 
+    /**
+     * Select random item. Mainly used by UtilPowerUp.
+     * @return random item
+     */
     public String selectRandomItem() {
         String selected = "";
         int random = MathUtils.random(0, allItems.size() - 1);
@@ -89,6 +96,9 @@ public class Item {
         return selected;
     }
 
+    /**
+     * Create BankUpgrade items. Create map for them and add them to allItems array.
+     */
     private void itemBankUpgrade() {
         float baseValue = 1000f;
         for (int i = 1; i <= 3; i++) {
@@ -109,6 +119,9 @@ public class Item {
         }
     }
 
+    /**
+     * Create HealLiquid items. Create map for them and add them to allItems array.
+     */
     private void itemHealLiquid() {
         double[] values = new double[] {0.0, -15.0, -35.0, -70.0};
         for (int i = 1; i <= 3; i++) {
@@ -129,6 +142,9 @@ public class Item {
         }
     }
 
+    /**
+     * Create GlitterBomb items. Create map for them and add them to allItems array.
+     */
     private void itemGlitterBomb() {
         double[] damages = new double[] {0.0, 1.0, 1.5, 2.0};
         for (int i = 1; i <= 3; i++) {
@@ -149,6 +165,9 @@ public class Item {
         }
     }
 
+    /**
+     * Create Overclock items. Create map for them and add them to allItems array.
+     */
     private void itemOverclock() {
         int baseValue = 10;
         for (int i = 1; i <=3; i++) {
@@ -169,6 +188,9 @@ public class Item {
         }
     }
 
+    /**
+     * Create LongScope items. Create map for them and add them to allItems array.
+     */
     private void itemLongScope() {
         int baseValue = 10;
         for (int i = 1; i <=3; i++) {
@@ -189,6 +211,9 @@ public class Item {
         }
     }
 
+    /**
+     * Create PowerPotion items. Create map for them and add them to allItems array.
+     */
     private void itemPowerPotion() {
         double baseValue = 0.1;
         for (int i = 1; i <=3; i++) {
@@ -209,6 +234,9 @@ public class Item {
         }
     }
 
+    /**
+     * Create IronCase items. Create map for them and add them to allItems array.
+     */
     private void itemIronCase() {
         double[] values = new double[] {0.0, 0.15, 0.34, 0.5};
         for (int i = 1; i <=3; i++) {
@@ -229,6 +257,9 @@ public class Item {
         }
     }
 
+    /**
+     * Create RepairBot items. Create map for them and add them to allItems array.
+     */
     private void itemRepairBot() {
         double baseValue = 0.2;
         for (int i = 1; i <=3; i++) {
@@ -249,6 +280,9 @@ public class Item {
         }
     }
 
+    /**
+     * Create SuperVision item. Create map for it and add it to allItems array.
+     */
     private void itemSuperVision() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, SUPER_VISION);
@@ -265,6 +299,9 @@ public class Item {
         mapItems.put((String) map.get(name), map);
     }
 
+    /**
+     * Create Experimental item. Create map for it and add it to allItems array.
+     */
     private void itemExperimental() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, EXPERIMENTAL);
@@ -281,6 +318,9 @@ public class Item {
         mapItems.put((String) map.get(name), map);
     }
 
+    /**
+     * Create Hardware item. Create map for it and add it to allItems array.
+     */
     private void itemHardware() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, HARDWARE);
@@ -297,6 +337,9 @@ public class Item {
         mapItems.put((String) map.get(name), map);
     }
 
+    /**
+     * Create DiamondCoat item. Create map for it and add it to allItems array.
+     */
     private void itemDiamondCoat() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, DIAMOND_COAT);
@@ -313,6 +356,9 @@ public class Item {
         mapItems.put((String) map.get(name), map);
     }
 
+    /**
+     * Create HealCoolant item. Create map for it and add it to allItems array.
+     */
     private void itemHealCoolant() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, HEAL_COOLANT);
@@ -329,6 +375,9 @@ public class Item {
         mapItems.put((String) map.get(name), map);
     }
 
+    /**
+     * Create Reflect item. Create map for it and add it to allItems array.
+     */
     private void itemReflect() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, ITEM_REFLECT);
@@ -345,6 +394,10 @@ public class Item {
         mapItems.put((String) map.get(name), map);
     }
 
+    /**
+     * Retrieve all items in an array.
+     * @return all items in an array
+     */
     public String[] getAllItems() {
         String[] converted = allItems.toArray(new String[0]);
         return converted;

@@ -1279,6 +1279,9 @@ public class RoomFight extends RoomParent {
             calcTargetHpSpd(damage);
         }
 
+        /**
+         * If current skill's sound is null, play random woosh sound.
+         */
         protected void playRandomWooshSound() {
             int random = MathUtils.random(1, 3);
 

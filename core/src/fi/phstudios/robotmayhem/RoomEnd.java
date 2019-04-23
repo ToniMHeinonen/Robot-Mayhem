@@ -28,10 +28,13 @@ public class RoomEnd extends RoomParent {
 
     private final Animation<TextureRegion>[] animations;
 
-
     private final int animSpeed = 8;
     private int touchTimer = 300;
 
+    /**
+     * Retrieve correct textures and animations.
+     * @param game main game instance
+     */
     RoomEnd(MainGame game) {
         super(game);
         batch = game.getBatch();
@@ -57,6 +60,10 @@ public class RoomEnd extends RoomParent {
         }
     }
 
+    /**
+     * Render all the frames of the game. Handle animations and drawing.
+     * @param delta time
+     */
     @Override
     public void render(float delta) {
         super.render(delta);
@@ -73,10 +80,14 @@ public class RoomEnd extends RoomParent {
         }
     }
 
+    /**
+     * Animate and draw everyone using a certain space between each of them.
+     */
     private void animateAndDrawEveryone() {
         float space = 200f;
         float x;
         for (int i = 0; i < animations.length; i++) {
+            // Make player be further from everyone else
             if (i == 0) x = -100f;
             else x = 0f;
             animatings[i].animate();
@@ -84,6 +95,9 @@ public class RoomEnd extends RoomParent {
         }
     }
 
+    /**
+     * When certain amount of time has passed and screen is pressed, change to RoomGame.
+     */
     private void checkForTouch() {
         if (touchTimer > 0) touchTimer--;
         else {

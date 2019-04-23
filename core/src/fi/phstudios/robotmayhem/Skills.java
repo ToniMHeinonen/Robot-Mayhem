@@ -3,7 +3,6 @@ package fi.phstudios.robotmayhem;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.I18NBundle;
-import com.sun.org.apache.bcel.internal.generic.POP;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -98,6 +97,10 @@ public class Skills {
 
     private HashMap<String,HashMap<String,Object>> mapSkills;
 
+    /**
+     * Create maps for skills. Maps are used by other classes to retrieve correct values.
+     * @param game main game instance
+     */
     Skills(MainGame game) {
         this.game = game;
         files = game.getFiles();
@@ -182,8 +185,10 @@ public class Skills {
     - boostValue = How much does the boost affect
      */
 
-    /*
-    Retrieve correct skill map by using string value.
+    /**
+     * Retrieve correct skill map by using skill's name.
+     * @param skill to retrieve
+     * @return retrieved skill
      */
     public HashMap<String, Object> getSkill(String skill) {
         HashMap<String, Object> chosenSkill;
@@ -193,6 +198,11 @@ public class Skills {
         return chosenSkill;
     }
 
+    /**
+     * Retrieve only the description of skills.
+     * @param skill selected skill
+     * @return description of skill
+     */
     public String retrieveSkillDescription(String skill) {
         String desc = "";
         HashMap<String, Object> skillMap = getSkill(skill);
@@ -205,11 +215,17 @@ public class Skills {
         return desc;
     }
 
+    /**
+     * Retrieve skill hit animations to be used by skills.
+     */
     private void loadSkillAnimations() {
         physicalHit = files.animPhysicalHit;
         skillHit = files.animSkillHit;
     }
 
+    /**
+     * Create skill Attack. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillAttack() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, ATTACK);
@@ -233,6 +249,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Defend. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillDefend() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, DEFEND);
@@ -256,6 +275,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Reflect. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillReflect() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, REFLECT);
@@ -279,6 +301,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Item. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillItem() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, ITEM);
@@ -302,6 +327,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Repair. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillRepair() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, REPAIR);
@@ -325,6 +353,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Suction. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillSuction() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, SUCTION);
@@ -348,6 +379,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Dust. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillDust() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, DUST);
@@ -371,6 +405,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Bucket. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillBucket() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, BUCKET);
@@ -394,6 +431,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Soap. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillSoap() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, SOAP);
@@ -417,6 +457,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Deja-vu. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillDejaVu() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, DEJA_VU);
@@ -440,6 +483,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Flash. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillFlash() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, FLASH);
@@ -463,6 +509,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Copycat. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillCopycat() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, COPYCAT);
@@ -486,6 +535,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill BlackInk. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillBlackInk() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, BLACK_INK);
@@ -509,6 +561,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Hijack. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillHijack() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, HIJACK);
@@ -532,6 +587,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Pickpocket. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillPickpocket() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, PICKPOCKET);
@@ -555,6 +613,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Mischief. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillMischief() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, MISCHIEF);
@@ -578,6 +639,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Shadowstep. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillShadowstep() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, SHADOWSTEP);
@@ -601,6 +665,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Virus. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillVirus() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, VIRUS);
@@ -624,6 +691,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Popup. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillPopup() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, POPUP);
@@ -647,6 +717,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Trojan. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillTrojan() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, TROJAN);
@@ -670,6 +743,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Reboot. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillReboot() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, REBOOT);
@@ -693,6 +769,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Speeding. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillSpeeding() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, SPEEDING);
@@ -716,6 +795,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill LowSpeed. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillLowSpeed() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, LOW_SPEED);
@@ -739,6 +821,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill The Law. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillTheLaw() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, THE_LAW);
@@ -762,6 +847,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Order. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillOrder() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, ORDER);
@@ -785,6 +873,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Shine. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillShine() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, SHINE);
@@ -808,6 +899,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Diamond. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillDiamondRoll() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, DIAMOND_ROLL);
@@ -831,6 +925,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill CoinFlip. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillCoinFlip() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, COIN_FLIP);
@@ -854,6 +951,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Enrichment. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillEnrichment() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, ENRICHMENT);
@@ -877,6 +977,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Rustify. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillRustify() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, RUSTIFY);
@@ -900,6 +1003,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Overpower. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillOverpower() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, OVERPOWER);
@@ -923,6 +1029,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill Mayhem. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillMayhem() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, MAYHEM);
@@ -946,6 +1055,9 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }
 
+    /**
+     * Create skill VR. Add all the necessary values and add them to map and allSkills array.
+     */
     private void skillVR() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, VR);
@@ -1079,6 +1191,10 @@ public class Skills {
         mapSkills.put((String) map.get(name), map);
     }*/
 
+    /**
+     * Retrieve all the skills in an array.
+     * @return array containing all the skills
+     */
     public String[] getAllSkills() {
         String[] converted = allSkills.toArray(new String[0]);
         return converted;
