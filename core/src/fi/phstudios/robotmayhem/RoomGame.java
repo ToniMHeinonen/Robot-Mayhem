@@ -164,6 +164,7 @@ public class RoomGame extends RoomParent {
                 }
                 // Round stepBank, in case for some reason it's for example 0.432
                 game.setStepBank(Math.round(game.getStepBank()));
+                System.out.println("bank holds" + String.valueOf(game.getStepBank()));
                 // Update bankRetrieved value to match stepCount
                 bankRetrieved = game.getStepCount();
                 float bank = game.getStepBank();
@@ -197,6 +198,15 @@ public class RoomGame extends RoomParent {
                 double curBankRetrieved = Math.floor(bankRetrieved);
                 game.retrieveFromBank(bankSpd);
                 if (curBankRetrieved > prevBankRetrieved) {
+                    game.setStepCount(bankRetrieved);
+                }
+                /*
+                If bank does not have anymore steps, add the bankSpd value once more, otherwise
+                5 bank steps retrieved will be 4.9999
+                 */
+                checkIfBankHasSteps();
+                if (!bankHasSteps) {
+                    bankRetrieved += bankSpd;
                     game.setStepCount(bankRetrieved);
                 }
 

@@ -71,7 +71,8 @@ public class Files {
 
     // Music
     public final Music[] allBossMusic;
-    public final Music musMainTheme, musBossRobo, musBossFuturistic, musBossSankari, musBossFabio;
+    public final Music musMainTheme, musBossRobo, musBossFuturistic, musBossSankari,
+    musBossFinalMoment, musBossFabio;
 
     // Sound effects fight general
     public final Sound sndHealOverTime, sndFastHeal, sndLoseToBoss, sndPlayerMiss,
@@ -242,9 +243,11 @@ public class Files {
         musBossFuturistic = manager.get(asset.musBossFuturistic);
         musBossSankari = manager.get(asset.musBossSankari);
         musBossFabio = manager.get(asset.musBossFabio);
+        musBossFinalMoment = manager.get(asset.musBossFinalMoment);
 
         // Remember to add all new boss music here
-        allBossMusic = new Music[] {musBossRobo, musBossFuturistic, musBossSankari};
+        allBossMusic = new Music[] {musBossRobo, musBossFuturistic, musBossSankari,
+        musBossFinalMoment};
 
         /*
         Sound effects
