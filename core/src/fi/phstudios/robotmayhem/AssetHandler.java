@@ -109,6 +109,7 @@ public class AssetHandler {
     public final String musBossFuturistic = "music/bossFuturistic.mp3";
     public final String musBossSankari = "music/bossSankari.mp3";
     public final String musBossFabio = "music/bossFabio.mp3";
+    public final String musBossFinalMoment = "music/bossFinalMoment.mp3";
 
     /*
     Sound effects
@@ -250,6 +251,7 @@ public class AssetHandler {
         manager.load(musBossRobo, Music.class);
         manager.load(musBossFuturistic, Music.class);
         manager.load(musBossSankari, Music.class);
+        manager.load(musBossFinalMoment, Music.class);
         manager.load(musBossFabio, Music.class);
 
         /*

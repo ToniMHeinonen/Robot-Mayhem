@@ -187,7 +187,9 @@ public class FirstPlay {
                 localize.get("tutFirstPlay4"),
                 localize.get("tutFirstPlay5"),
                 localize.get("tutFirstPlay6"),
-                localize.get("tutFirstPlay7")};
+                localize.get("tutFirstPlay7"),
+                localize.get("tutFirstPlay8"),
+                localize.get("tutFirstPlay9")};
 
         final Dialog dialog = utilDialog.createInstructionsDialog(texts[diaCounter]);
         stage.addActor(dialog);

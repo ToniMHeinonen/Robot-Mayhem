@@ -146,7 +146,7 @@ public class Item {
      * Create GlitterBomb items. Create map for them and add them to allItems array.
      */
     private void itemGlitterBomb() {
-        double[] damages = new double[] {0.0, 1.0, 1.5, 2.0};
+        double[] damages = new double[] {0.0, 0.75, 1.75, 3.0};
         for (int i = 1; i <= 3; i++) {
             String index = String.valueOf(i);
             HashMap<String, Object> map = new HashMap<String, Object>();

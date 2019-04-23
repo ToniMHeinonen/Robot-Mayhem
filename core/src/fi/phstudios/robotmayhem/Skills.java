@@ -40,11 +40,6 @@ public class Skills {
     public final String REFLECT = "REFLECT";
     public final String ITEM = "ITEM";
     public final String REPAIR = "REPAIR";
-    /*public final String SHOCK = "SHOCK";
-    public final String FIRE = "FIRE";
-    public final String ELECTRIFY = "ELECTRIFY";
-    public final String MISSILE = "MISSILE";
-    public final String BIG_HEAL = "BIG_HEAL";*/
     // Roombot
     public final String SUCTION = "SUCTION";
     public final String DUST = "DUST";
@@ -147,11 +142,6 @@ public class Skills {
         skillOverpower();
         skillMayhem();
         skillVR();
-        /*skillShock();
-        skillFire();
-        skillElectrify();
-        skillMissile();
-        skillBigHeal();*/
     }
 
     /* NOTE!
@@ -1080,116 +1070,6 @@ public class Skills {
         allSkills.add((String) map.get(name));
         mapSkills.put((String) map.get(name), map);
     }
-
-    /*private void skillShock() {
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put(name, SHOCK);
-        map.put(description, "shockDesc");
-        map.put(damage, 2.0);
-        map.put(dmgPurePercent, false);
-        map.put(critChance, defCrit);
-        map.put(missChance, defMiss);
-        map.put(damageOverTime, 0.0);
-        map.put(damageOverTimeTurns, 0);
-        map.put(dotPurePercent, false);
-        map.put(cooldown, 2);
-        map.put(hitAnimation, skillHit);
-        map.put(sound, null);
-        map.put(button, btnSkill);
-        map.put(boostType, BOOST_NONE);
-        map.put(boostValue, 0.0);
-
-        allSkills.add((String) map.get(name));
-        mapSkills.put((String) map.get(name), map);
-    }
-
-    private void skillFire() {
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put(name, FIRE);
-        map.put(description, "fireDesc");
-        map.put(damage, 0.0);
-        map.put(dmgPurePercent, false);
-        map.put(critChance, 0);
-        map.put(missChance, defMiss);
-        map.put(damageOverTime, 20.0);
-        map.put(damageOverTimeTurns, 3);
-        map.put(dotPurePercent, true);
-        map.put(cooldown, 2);
-        map.put(hitAnimation, null);
-        map.put(sound, null);
-        map.put(button, btnSkill);
-        map.put(boostType, BOOST_NONE);
-        map.put(boostValue, 0.0);
-
-        allSkills.add((String) map.get(name));
-        mapSkills.put((String) map.get(name), map);
-    }
-
-    private void skillElectrify() {
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put(name, ELECTRIFY);
-        map.put(description, "electrifyDesc");
-        map.put(damage, 1.0);
-        map.put(dmgPurePercent, false);
-        map.put(critChance, defCrit);
-        map.put(missChance, defMiss);
-        map.put(damageOverTime, 0.5);
-        map.put(damageOverTimeTurns, 2);
-        map.put(dotPurePercent, false);
-        map.put(cooldown, 2);
-        map.put(hitAnimation, skillHit);
-        map.put(sound, null);
-        map.put(button, btnSkill);
-        map.put(boostType, BOOST_NONE);
-        map.put(boostValue, 0.0);
-
-        allSkills.add((String) map.get(name));
-        mapSkills.put((String) map.get(name), map);
-    }
-
-    private void skillMissile() {
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put(name, MISSILE);
-        map.put(description, "missileDesc");
-        map.put(damage, 3.0);
-        map.put(dmgPurePercent, false);
-        map.put(critChance, defCrit);
-        map.put(missChance, 33);
-        map.put(damageOverTime, 0.0);
-        map.put(damageOverTimeTurns, 0);
-        map.put(dotPurePercent, false);
-        map.put(cooldown, 3);
-        map.put(hitAnimation, skillHit);
-        map.put(sound, null);
-        map.put(button, btnSkill);
-        map.put(boostType, BOOST_NONE);
-        map.put(boostValue, 0.0);
-
-        allSkills.add((String) map.get(name));
-        mapSkills.put((String) map.get(name), map);
-    }
-
-    private void skillBigHeal() {
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put(name, BIG_HEAL);
-        map.put(description, "bigHealDesc");
-        map.put(damage, -30.0);
-        map.put(dmgPurePercent, true);
-        map.put(critChance, 0);
-        map.put(missChance, 0);
-        map.put(damageOverTime, 0.0);
-        map.put(damageOverTimeTurns, 0);
-        map.put(dotPurePercent, true);
-        map.put(cooldown, 3);
-        map.put(hitAnimation, null);
-        map.put(sound, null);
-        map.put(button, btnHeal);
-        map.put(boostType, BOOST_NONE);
-        map.put(boostValue, 0.0);
-
-        allSkills.add((String) map.get(name));
-        mapSkills.put((String) map.get(name), map);
-    }*/
 
     /**
      * Retrieve all the skills in an array.
