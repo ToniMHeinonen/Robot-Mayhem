@@ -384,7 +384,7 @@ public class Skills {
         map.put(dotPurePercent, false);
         map.put(cooldown, 5);
         map.put(hitAnimation, null);
-        map.put(sound, null);
+        map.put(sound, files.sndBucket);
         map.put(button, btnHeal);
         map.put(boostSelf, true);
         map.put(boostType, BOOST_NONE);
@@ -476,7 +476,7 @@ public class Skills {
         map.put(dotPurePercent, false);
         map.put(cooldown, 4);
         map.put(hitAnimation, skillHit);
-        map.put(sound, null);
+        map.put(sound, files.sndCatThrower);
         map.put(button, btnSkill);
         map.put(boostSelf, true);
         map.put(boostType, BOOST_MISS);
@@ -499,7 +499,7 @@ public class Skills {
         map.put(dotPurePercent, false);
         map.put(cooldown, 2);
         map.put(hitAnimation, skillHit);
-        map.put(sound, null);
+        map.put(sound, files.sndBlackInk);
         map.put(button, btnSkill);
         map.put(boostSelf, true);
         map.put(boostType, BOOST_NONE);
@@ -637,7 +637,7 @@ public class Skills {
         map.put(dotPurePercent, false);
         map.put(cooldown, 3);
         map.put(hitAnimation, skillHit);
-        map.put(sound, null);
+        map.put(sound, files.sndPCPopup);
         map.put(button, btnSkill);
         map.put(boostSelf, true);
         map.put(boostType, BOOST_NONE);
@@ -660,7 +660,7 @@ public class Skills {
         map.put(dotPurePercent, false);
         map.put(cooldown, 4);
         map.put(hitAnimation, null);
-        map.put(sound, null);
+        map.put(sound, files.sndTrojan);
         map.put(button, btnSkill);
         map.put(boostSelf, true);
         map.put(boostType, BOOST_NONE);
@@ -683,7 +683,7 @@ public class Skills {
         map.put(dotPurePercent, true);
         map.put(cooldown, 5);
         map.put(hitAnimation, null);
-        map.put(sound, null);
+        map.put(sound, files.sndPCReboot);
         map.put(button, btnHeal);
         map.put(boostSelf, true);
         map.put(boostType, BOOST_NONE);
@@ -844,7 +844,7 @@ public class Skills {
         map.put(dotPurePercent, true);
         map.put(cooldown, 3);
         map.put(hitAnimation, skillHit);
-        map.put(sound, null);
+        map.put(sound, files.sndCoinFlip);
         map.put(button, btnSkill);
         map.put(boostSelf, true);
         map.put(boostType, BOOST_NONE);
@@ -890,7 +890,7 @@ public class Skills {
         map.put(dotPurePercent, true);
         map.put(cooldown, 5);
         map.put(hitAnimation, null);
-        map.put(sound, null);
+        map.put(sound, files.sndRustify);
         map.put(button, btnSkill);
         map.put(boostSelf, false);
         map.put(boostType, BOOST_HEAL);
@@ -913,7 +913,7 @@ public class Skills {
         map.put(dotPurePercent, true);
         map.put(cooldown, 4);
         map.put(hitAnimation, skillHit);
-        map.put(sound, null);
+        map.put(sound, files.sndOverpower);
         map.put(button, btnSkill);
         map.put(boostSelf, true);
         map.put(boostType, BOOST_NONE);
@@ -936,7 +936,7 @@ public class Skills {
         map.put(dotPurePercent, false);
         map.put(cooldown, 5);
         map.put(hitAnimation, null);
-        map.put(sound, null);
+        map.put(sound, files.sndMayhem);
         map.put(button, btnSkill);
         map.put(boostSelf, true);
         map.put(boostType, BOOST_NONE);

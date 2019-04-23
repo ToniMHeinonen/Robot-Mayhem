@@ -70,7 +70,7 @@ public class Files {
 
     // Music
     public final Music[] allBossMusic;
-    public final Music musMainTheme, musBossRobo, musBossFuturistic, musBossSankari;
+    public final Music musMainTheme, musBossRobo, musBossFuturistic, musBossSankari, musBossFabio;
 
     // Sound effects fight general
     public final Sound sndHealOverTime, sndFastHeal, sndLoseToBoss, sndPlayerMiss,
@@ -79,7 +79,8 @@ public class Files {
             sndMetallicHit;
 
     // Sound effects skills
-    public final Sound sndDustThrow, sndDefend, sndSuction;
+    public final Sound sndDustThrow, sndDefend, sndSuction, sndBlackInk, sndCatThrower, sndCoinFlip,
+    sndPCReboot, sndPCPopup, sndMayhem, sndOverpower, sndBucket, sndRustify, sndTrojan;
 
     // Sound effect other
     public final Sound  sndMilestoneAchieved, sndPurchaseItem, sndUseItem, sndNotification;
@@ -235,6 +236,7 @@ public class Files {
         musBossRobo = manager.get(asset.musBossRobo);
         musBossFuturistic = manager.get(asset.musBossFuturistic);
         musBossSankari = manager.get(asset.musBossSankari);
+        musBossFabio = manager.get(asset.musBossFabio);
 
         // Remember to add all new boss music here
         allBossMusic = new Music[] {musBossRobo, musBossFuturistic, musBossSankari};
@@ -260,6 +262,16 @@ public class Files {
         sndDustThrow = manager.get(asset.sndDustThrow);
         sndSuction = manager.get(asset.sndSuction);
         sndDefend = manager.get(asset.sndShieldAbility);
+        sndBlackInk = manager.get(asset.sndBlackInk);
+        sndCatThrower = manager.get(asset.sndCatThrower);
+        sndCoinFlip = manager.get(asset.sndCoinFlip);
+        sndPCReboot = manager.get(asset.sndPCReboot);
+        sndPCPopup = manager.get(asset.sndPCPopup);
+        sndMayhem = manager.get(asset.sndMayhem);
+        sndOverpower = manager.get(asset.sndOverpower);
+        sndBucket = manager.get(asset.sndBucket);
+        sndRustify = manager.get(asset.sndRustify);
+        sndTrojan = manager.get(asset.sndTrojan);
         // Other
         sndMilestoneAchieved = manager.get(asset.sndMilestoneAchieved);
         sndPurchaseItem = manager.get(asset.sndPurchaseItem);

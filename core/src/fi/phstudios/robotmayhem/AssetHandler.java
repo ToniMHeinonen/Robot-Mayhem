@@ -108,6 +108,7 @@ public class AssetHandler {
     public final String musBossRobo = "music/bossRobo.mp3";
     public final String musBossFuturistic = "music/bossFuturistic.mp3";
     public final String musBossSankari = "music/bossSankari.mp3";
+    public final String musBossFabio = "music/bossFabio.mp3";
 
     /*
     Sound effects
@@ -130,6 +131,16 @@ public class AssetHandler {
     public final String sndDustThrow = "sound/skills/DustThrow.mp3";
     public final String sndSuction = "sound/skills/Suction.mp3";
     public final String sndShieldAbility = "sound/skills/ShieldAbilitySound.mp3";
+    public final String sndBlackInk = "sound/skills/BlackInk.mp3";
+    public final String sndCatThrower = "sound/skills/CatThrower.mp3";
+    public final String sndCoinFlip = "sound/skills/CoinFlip.mp3";
+    public final String sndPCReboot = "sound/skills/ComputerBotReboot.mp3";
+    public final String sndMayhem = "sound/skills/FabioMayhemIsku.mp3";
+    public final String sndOverpower = "sound/skills/FabioOverPower.mp3";
+    public final String sndPCPopup = "sound/skills/popUpComputerbot.mp3";
+    public final String sndBucket = "sound/skills/RoombotWaterbucket.mp3";
+    public final String sndRustify = "sound/skills/ruostuta.mp3";
+    public final String sndTrojan = "sound/skills/TrojanHorse.mp3";
     // Other
     public final String sndMilestoneAchieved = "sound/MileStoneAchieved.mp3";
     public final String sndPurchaseItem = "sound/PurchaseItemFromShop.mp3";
@@ -233,6 +244,7 @@ public class AssetHandler {
         manager.load(musBossRobo, Music.class);
         manager.load(musBossFuturistic, Music.class);
         manager.load(musBossSankari, Music.class);
+        manager.load(musBossFabio, Music.class);
 
         /*
         Sound effects
@@ -255,6 +267,16 @@ public class AssetHandler {
         manager.load(sndDustThrow, Sound.class);
         manager.load(sndSuction, Sound.class);
         manager.load(sndShieldAbility, Sound.class);
+        manager.load(sndBlackInk, Sound.class);
+        manager.load(sndCatThrower, Sound.class);
+        manager.load(sndCoinFlip, Sound.class);
+        manager.load(sndPCReboot, Sound.class);
+        manager.load(sndPCPopup, Sound.class);
+        manager.load(sndMayhem, Sound.class);
+        manager.load(sndOverpower, Sound.class);
+        manager.load(sndBucket, Sound.class);
+        manager.load(sndRustify, Sound.class);
+        manager.load(sndTrojan, Sound.class);
         // Other
         manager.load(sndMilestoneAchieved, Sound.class);
         manager.load(sndPurchaseItem, Sound.class);

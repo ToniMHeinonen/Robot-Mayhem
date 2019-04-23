@@ -892,7 +892,8 @@ public class MainGame extends Game {
 			// If last pool, then Fabio remains
 			if (pool == 4) {
 				poolMult = bosses.poolBossesSize-1;
-				currentBoss=bosses.FABIO;
+				currentBoss = bosses.FABIO;
+				curBossMusic = files.musBossFabio;
 			}
 		}
 		// Add later code what happen after Fabio is defeated
