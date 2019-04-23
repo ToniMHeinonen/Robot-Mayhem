@@ -22,6 +22,10 @@ public class AssetHandler {
     public final String splashEN3 = "texture/splash/splash3_en.jpg";
     public final String splashEN4 = "texture/splash/splash4_en.jpg";
 
+    // Game end congratulations
+    public final String congratsFI = "texture/congrats_fi.png";
+    public final String congratsEN = "texture/congrats_en.png";
+
     // Player
     public final String playerIdle = "texture/player/player_idle.png";
     public final String playerAttack = "texture/player/player_attack.png";
@@ -145,6 +149,10 @@ public class AssetHandler {
         manager.load(splashEN2, Texture.class);
         manager.load(splashEN3, Texture.class);
         manager.load(splashEN4, Texture.class);
+
+        // Game end congratulations
+        manager.load(congratsFI, Texture.class);
+        manager.load(congratsEN, Texture.class);
 
         // Player
         manager.load(playerIdle, Texture.class);

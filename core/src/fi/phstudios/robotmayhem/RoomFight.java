@@ -465,7 +465,6 @@ public class RoomFight extends RoomParent {
                     @Override
                     public void run() {
                         game.bossDefeated();
-                        game.switchToRoomGame();
                     }
                 }, 2);
             }

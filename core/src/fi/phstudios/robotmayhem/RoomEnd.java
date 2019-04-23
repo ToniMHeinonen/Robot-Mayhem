@@ -1,5 +1,6 @@
 package fi.phstudios.robotmayhem;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class RoomEnd extends RoomParent {
     private final SpriteBatch batch;
     private final Files files;
-    private final Texture imgBg;
+    private final Texture imgBg, imgCongratz;
 
     private final Animating animPlayer = new Animating();
     private final Animating animRoombot = new Animating();
@@ -29,12 +30,15 @@ public class RoomEnd extends RoomParent {
 
 
     private final int animSpeed = 8;
+    private int touchTimer = 300;
 
     RoomEnd(MainGame game) {
         super(game);
         batch = game.getBatch();
         files = game.getFiles();
         imgBg = files.imgBgBoss;
+        if (game.getLanguage().equals("fi")) imgCongratz = files.congratsFI;
+        else imgCongratz = files.congratsEN;
 
         playerIdle = files.animIdle;
         roombotIdle = files.a_roombotIdle;
@@ -56,11 +60,17 @@ public class RoomEnd extends RoomParent {
     @Override
     public void render(float delta) {
         super.render(delta);
-        batch.begin();
-        drawTopAndBottomBar();
-        batch.draw(imgBg, 0,0);
-        animateAndDrawEveryone();
-        batch.end();
+
+        if (!game.haveWeChangedTheRoom) {
+            checkForTouch();
+            batch.begin();
+            drawTopAndBottomBar();
+            batch.draw(imgBg, 0, 0);
+            batch.draw(imgCongratz,
+                    game.pixelWidth / 2 - imgCongratz.getWidth() / 2, game.gridSize * 7.25f);
+            animateAndDrawEveryone();
+            batch.end();
+        }
     }
 
     private void animateAndDrawEveryone() {
@@ -71,6 +81,15 @@ public class RoomEnd extends RoomParent {
             else x = 0f;
             animatings[i].animate();
             animatings[i].draw(batch, x + space*i, game.gridSize*2);
+        }
+    }
+
+    private void checkForTouch() {
+        if (touchTimer > 0) touchTimer--;
+        else {
+            if (Gdx.input.isTouched()) {
+                game.switchToRoomGame();
+            }
         }
     }
 }

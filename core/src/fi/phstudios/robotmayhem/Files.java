@@ -11,6 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public class Files {
     private final Animating createAnims = new Animating();
 
+    // Game end congratz textures
+    public final Texture congratsFI, congratsEN;
+
     // Player textures and animations
     private final Texture playerIdle, playerAttack, playerDefend, playerItem, playerEscape,
     playerHack, playerDeath, playerTakeHit, playerGameMoving;
@@ -87,6 +90,10 @@ public class Files {
         /*
         Textures and animations
          */
+        // Game end congrats
+        congratsFI = manager.get(asset.congratsFI);
+        congratsEN = manager.get(asset.congratsEN);
+
         // Player
         playerIdle = manager.get(asset.playerIdle);
         playerAttack = manager.get(asset.playerAttack);

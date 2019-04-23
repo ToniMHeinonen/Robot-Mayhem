@@ -702,8 +702,8 @@ public class MainGame extends Game {
 		reflectiveShield = stats.loadValue(keyReflectiveShield, false);
 
 		// Tutorial // REMEMBER TO CHANGE THESE TO TRUE
-		firstPlayTime = stats.loadValue(keyFirstPlayTime, true);
-		firstPlayTimeFight = stats.loadValue(keyFirstPlayTimeFight, true);
+		firstPlayTime = stats.loadValue(keyFirstPlayTime, false);
+		firstPlayTimeFight = stats.loadValue(keyFirstPlayTimeFight, false);
 		firstPlayInventory = stats.loadValue(keyFirstPlayInventory, true);
 		firstPlayBank = stats.loadValue(keyFirstPlayBank, true);
 		firstPlayVictory = stats.loadValue(keyFirstPlayVictory, true);
@@ -890,14 +890,15 @@ public class MainGame extends Game {
 			pool++;
 			poolMult = 0;
 			// If last pool, then Fabio remains
-			if (pool > 3) {
+			if (pool == 4) {
 				poolMult = bosses.poolBossesSize-1;
 				currentBoss=bosses.FABIO;
-			} else if (pool > 4) {
-				gameFinished();
 			}
 		}
 		// Add later code what happen after Fabio is defeated
+
+		if (pool < 5) switchToRoomGame();
+		else gameFinished();
 
 		chooseNextMilestone();
 
@@ -913,9 +914,23 @@ public class MainGame extends Game {
 		// Reset necessary values
 		pool = 1;
 		poolMult = 0;
+		defeatedBosses.clear();
+		currentBoss = bosses.selectRandomBoss(); // Randomize new boss
+		selectRandomBossMusic(); // Randomize new song
+
+		// Dialogues
+		firstPlayVictory = true;
+		firstPlayPoolComplete1 = true;
+		firstPlayPoolComplete2 = true;
+		firstPlayPoolComplete3 = true;
+
+		// Achievements
 		finishedGame = true;
 		if (checkHard) finishedGameHard = true;
 		checkHard = true;
+
+		// Change to RoomEnd
+		switchToRoomEnd();
 	}
 
 	public void addToInventory(String name, boolean isSkill) {
