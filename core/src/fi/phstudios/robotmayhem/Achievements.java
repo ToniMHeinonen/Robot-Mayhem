@@ -41,7 +41,9 @@ public class Achievements {
     private int[] achMoney;
 
     private float space = 200f;
-    private int permanentCounter;
+    float posX = 350;
+    float posY = 600;
+    private int permanentCounter, positionCounter;
     int ownedSkillAmount;
 
     Achievements(MainGame game) {
@@ -76,6 +78,12 @@ public class Achievements {
         dialogAch.setMovable(false);
         dialogAch.setPosition(0,0);
         dialogAch.setSize(game.pixelWidth, game.pixelHeight);
+
+        Label labelAch = new Label(localize.get("achievements"), finalSkin, "big");
+        labelAch.setPosition(60, dialogAch.getHeight() - 200);
+        labelAch.setSize(1435, labelAch.getPrefHeight());
+        labelAch.setAlignment(1);
+        dialogAch.addActor(labelAch);
     }
 
     private void createHeadersAndDescriptions() {
@@ -162,7 +170,12 @@ public class Achievements {
         for (int i = 0; i < achHeaders.length; i++) {
             final int btnCounter = i;
             ImageButton imgBtn = new ImageButton(finalSkin, game.getAchievComplete().get(i));
-            imgBtn.setPosition(100 + i*space, 400);
+            imgBtn.setPosition(posX + positionCounter*space, posY);
+            positionCounter++;
+            if (i==3) {
+                posY = 400;
+                positionCounter = 0;
+            }
             dialogAch.addActor(imgBtn);
             imgBtn.addListener(new ClickListener(){
                 int i = btnCounter;
