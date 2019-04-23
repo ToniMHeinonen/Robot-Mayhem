@@ -50,6 +50,8 @@ public class RoomGame extends RoomParent {
 
         if (game.isFirstPlayTime()) {
             FirstPlay firstPlay = new FirstPlay(game, "firstPlay");
+        } else if (game.isFirstPlayNewGamePlus() && game.getGameCompleteCounter() > 0) {
+            FirstPlay newGamePlus = new FirstPlay(game, "newGamePlus");
         }
     }
 
@@ -86,6 +88,10 @@ public class RoomGame extends RoomParent {
      */
     private void checkTutorialDialogs() {
         if (game.isFirstPlayTime()) game.setPauseWalking(true);
+        else if(game.isFirstPlayNewGamePlus() && game.getGameCompleteCounter() > 0)
+        {
+            game.setPauseWalking(true);
+        }
         else if(game.isFirstPlayBank() && bankTutorial != null) game.setPauseWalking(true);
         else if(game.isFirstPlayVictory() && game.getPoolMult() > 0)
         {

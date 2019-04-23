@@ -92,6 +92,7 @@ public class MainGame extends Game {
 	private String keyName = E.encrypt("name");
 	private String keyFightsWon = E.encrypt("fightsWon");
 	private String keyPrevDayGift = E.encrypt("prevDayGift");
+	private String keyGameCompleteCounter = E.encrypt("gameCompleteCounter");
 
 	private String keyCritBoost = E.encrypt("critBoost");
 	private String keyMissBoost = E.encrypt("missBoost");
@@ -125,6 +126,7 @@ public class MainGame extends Game {
 	private String keyFirstPlayMoney = E.encrypt("firstPlayMoney");
 	private String keyFirstPlayEscape = E.encrypt("firstPlayEscape");
 	private String keyFirstPlayDeath = E.encrypt("firstPlayDeath");
+	private String keyFirstPlayNewGamePlus = E.encrypt("firstPlayNewGamePlus");
 
     private String keyAchievComplete = E.encrypt("achievComplete");
     private String keyAchievCompleteSize = E.encrypt("achievCompleteSize");
@@ -139,12 +141,14 @@ public class MainGame extends Game {
 	private SaveAndLoad stats;
 	private SaveAndLoad achievs;
 	private float stepCount, stepBank, stepAllCount, stepBankSize;
-	private int pool, poolMult, money, fightsWon, prevDayGift, buyedItemsCounter;
+	private int pool, poolMult, money, fightsWon, prevDayGift, buyedItemsCounter,
+			gameCompleteCounter;
 	private String skill1, skill2, currentBoss, playerName;
 	private boolean firstPlayTime, firstPlayTimeFight, firstPlayInventory, firstPlayBank,
 			firstPlayVictory, firstPlayPoolComplete1, firstPlayPoolComplete2,
 			firstPlayPoolComplete3, firstPlayMoney, firstPlayEscape, firstPlayDeath,
-			reflectiveShield, finishedGame, checkHard, finishedGameHard, resetedGame;
+			firstPlayNewGamePlus, reflectiveShield, finishedGame, checkHard, finishedGameHard,
+			resetedGame;
 	private int critBoost, missBoost, permaCritBoost, permaMissBoost;
 	private float armorBoost, dmgBoost, healBoost, permaArmorBoost, permaDmgBoost, permaHealBoost;
 	// Stat arrays
@@ -713,6 +717,7 @@ public class MainGame extends Game {
 		fightsWon = stats.loadValue(keyFightsWon, 0);
 		prevDayGift = stats.loadValue(keyPrevDayGift, -1);
 		buyedItemsCounter = stats.loadValue(keyBuyedItemsCounter, 0);
+		gameCompleteCounter = stats.loadValue(keyGameCompleteCounter, 0);
 
 		// Boosts and item values
 		critBoost = stats.loadValue(keyCritBoost, 0);
@@ -739,6 +744,7 @@ public class MainGame extends Game {
 		firstPlayMoney = stats.loadValue(keyFirstPlayMoney, true);
 		firstPlayEscape = stats.loadValue(keyFirstPlayEscape, true);
 		firstPlayDeath = stats.loadValue(keyFirstPlayDeath, true);
+		firstPlayNewGamePlus = stats.loadValue(keyFirstPlayNewGamePlus, true);
 
 		// Load the size of inventory before loading inventory items
 		inventorySize = stats.loadValue(keyInventorySize, 0);
@@ -784,6 +790,7 @@ public class MainGame extends Game {
 		stats.saveValue(keyFightsWon, fightsWon);
 		stats.saveValue(keyPrevDayGift, prevDayGift);
 		stats.saveValue(keyBuyedItemsCounter, buyedItemsCounter);
+		stats.saveValue(keyGameCompleteCounter, gameCompleteCounter);
 
 		// Boosts and item values
 		stats.saveValue(keyCritBoost, critBoost);
@@ -808,6 +815,7 @@ public class MainGame extends Game {
 		stats.saveValue(keyFirstPlayPoolComplete2, firstPlayPoolComplete2);
 		stats.saveValue(keyFirstPlayPoolComplete3, firstPlayPoolComplete3);
 		stats.saveValue(keyFirstPlayMoney, firstPlayMoney);
+		stats.saveValue(keyFirstPlayNewGamePlus, firstPlayNewGamePlus);
 
 		// Save inventory's current size on inventorySize key
 		stats.saveValue(keyInventorySize, inventory.size());
@@ -920,6 +928,9 @@ public class MainGame extends Game {
 		defeatedBosses.clear();
 		currentBoss = bosses.selectRandomBoss(); // Randomize new boss
 		selectRandomBossMusic(); // Randomize new song
+
+		// Add to game complete counter
+		gameCompleteCounter++;
 
 		// Dialogues
 		firstPlayVictory = true;
@@ -1635,7 +1646,23 @@ public class MainGame extends Game {
 		this.firstPlayDeath = firstPlayDeath;
 	}
 
-    /**
+	/**
+	 * Get firstPlayNewGamePlus
+	 * @return if still true
+	 */
+	public boolean isFirstPlayNewGamePlus() {
+		return firstPlayNewGamePlus;
+	}
+
+	/**
+	 * Set firstPlayNewGamePlus
+	 * @param firstPlayNewGamePlus set value
+	 */
+	public void setFirstPlayNewGamePlus(boolean firstPlayNewGamePlus) {
+		this.firstPlayNewGamePlus = firstPlayNewGamePlus;
+	}
+
+	/**
      * Set finishedGame
      * @param finishedGame finishedGame
      */
@@ -2108,4 +2135,12 @@ public class MainGame extends Game {
     public ArrayList<String> getHasCollected() {
 	    return hasCollected;
     }
+
+	/**
+	 * Get how many times game has been completed.
+	 * @return
+	 */
+    public int getGameCompleteCounter() {
+		return gameCompleteCounter;
+	}
 }

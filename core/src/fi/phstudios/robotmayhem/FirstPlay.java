@@ -127,6 +127,13 @@ public class FirstPlay {
                     finalFightStartInstructions();
                 }
             }, 1f);
+        } else if (tutorial.equals("newGamePlus")) {
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    newGamePlusInstructions();
+                }
+            }, 1f);
         }
 
     }
@@ -864,6 +871,38 @@ public class FirstPlay {
                     if (diaCounter < texts.length) finalFightEndInstructions();
                     else {
                         finalFightEndFinished = true;
+                        diaCounter = 0;
+                    }
+                }
+            }
+        });
+    }
+
+    public void newGamePlusInstructions() {
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                allowClicking = true;
+            }
+        }, clickTimer);
+        final String[] texts = new String[] {
+                localize.get("tutNewGamePlus1"),
+                localize.get("tutNewGamePlus2"),
+                localize.get("tutNewGamePlus3")};
+
+        final Dialog dialog = utilDialog.createInstructionsDialog(texts[diaCounter]);
+        stage.addActor(dialog);
+
+        dialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                if (allowClicking) {
+                    allowClicking = false;
+                    diaCounter++;
+                    dialog.remove();
+                    if (diaCounter < texts.length) newGamePlusInstructions();
+                    else {
+                        game.setFirstPlayNewGamePlus(true);
                         diaCounter = 0;
                     }
                 }
