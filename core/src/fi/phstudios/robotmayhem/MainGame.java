@@ -398,20 +398,6 @@ public class MainGame extends Game {
 
 	public void transition() { haveWeChangedTheRoom = true; }
 
-	public void switchToRoomTestailua() {
-		transition();
-		startMusic(files.musMainTheme);
-	    RoomTestailua room = new RoomTestailua(this);
-	    setScreen(room);
-    }
-
-    public void switchToRoomSettings() {
-		transition();
-		startMusic(files.musMainTheme);
-		RoomSettings room = new RoomSettings(this);
-		setScreen(room);
-    }
-
     public void switchToRoomGame() {
 		transition();
 		startMusic(files.musMainTheme);
@@ -448,20 +434,6 @@ public class MainGame extends Game {
 		setScreen(room);
 		curRoom = ROOM_END;
 		saveStats();
-	}
-
-	public void switchToPowerUps() {
-		transition();
-		startMusic(files.musMainTheme);
-		PowerUps room = new PowerUps(this);
-		setScreen(room);
-	}
-
-	public void switchToRoomItemTest() {
-		startMusic(files.musMainTheme);
-		transition();
-		//RoomItemTest room = new RoomItemTest(this);
-		//setScreen(room);
 	}
 
 	/**
