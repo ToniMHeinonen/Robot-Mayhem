@@ -34,7 +34,8 @@ public class MainGame extends Game {
 	private I18NBundle localize;
 	private Encryptor E = new Encryptor();
 	private AssetHandler assetHandler;
-	private Texture splashScreen;
+	private Texture[] splashScreen;
+	private int currentSplash, switchSplashTimer = 8;
 	private Files files;
 	private Skills skills;
 	private Item items;
@@ -343,25 +344,48 @@ public class MainGame extends Game {
 		if (assetHandler.manager.update()) {
 			if (!assetsLoaded) {
 				initAfterLoaded();
-				man.unload(assetHandler.splashScreenFIN);
-				man.unload(assetHandler.splashScreenENG);
+				// Remove splash screen from memory, it's not needed after this
+				man.unload(assetHandler.splashFI1);
+				man.unload(assetHandler.splashFI2);
+				man.unload(assetHandler.splashFI3);
+				man.unload(assetHandler.splashFI4);
+				man.unload(assetHandler.splashEN1);
+				man.unload(assetHandler.splashEN2);
+				man.unload(assetHandler.splashEN3);
+				man.unload(assetHandler.splashEN4);
 			}
 		} else {
-			// Display splash screen when loading files
+			// Check if assets are loaded, then add them to array
 			if (splashScreen == null) {
 				if (language.equals("fi")) {
-					if (man.isLoaded(assetHandler.splashScreenFIN)) {
-						splashScreen = man.get(assetHandler.splashScreenFIN);
+					if (man.isLoaded(assetHandler.splashFI1) &&
+							man.isLoaded(assetHandler.splashFI2) &&
+							man.isLoaded(assetHandler.splashFI3) &&
+							man.isLoaded(assetHandler.splashFI4)) {
+						splashScreen = new Texture[] {
+								man.get(assetHandler.splashFI1), man.get(assetHandler.splashFI2),
+								man.get(assetHandler.splashFI3), man.get(assetHandler.splashFI4)};
 					}
 				} else {
-					if (man.isLoaded(assetHandler.splashScreenENG)) {
-						splashScreen = man.get(assetHandler.splashScreenENG);
+					if (man.isLoaded(assetHandler.splashEN1) &&
+							man.isLoaded(assetHandler.splashEN2) &&
+							man.isLoaded(assetHandler.splashEN3) &&
+							man.isLoaded(assetHandler.splashEN4)) {
+						splashScreen = new Texture[] {
+								man.get(assetHandler.splashEN1), man.get(assetHandler.splashEN2),
+								man.get(assetHandler.splashEN3), man.get(assetHandler.splashEN4)};
 					}
 				}
 			} else {
+				// Loop through splash screen images to make an animation
+				if (switchSplashTimer > 0) switchSplashTimer--;
+				else {
+					switchSplashTimer = 8;
+					currentSplash++;
+					if (currentSplash == splashScreen.length) currentSplash = 0;
+				}
 				batch.begin();
-				batch.draw(splashScreen, 0, 0,
-						splashScreen.getWidth(), splashScreen.getHeight());
+				batch.draw(splashScreen[currentSplash], 0, 0);
 				batch.end();
 			}
 		}
