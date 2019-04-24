@@ -136,6 +136,8 @@ public class MainGame extends Game {
 	// Values
 	private int saveTimerAmount = 600;
 	private int saveTimer = saveTimerAmount;
+	private int stepSaveAmount = 25;
+	private int stepSaveCounter = stepSaveAmount;
 	private Preferences prefsStats;
 	private Preferences prefsAchievs;
 	private SaveAndLoad stats;
@@ -672,6 +674,18 @@ public class MainGame extends Game {
 	}
 
 	/**
+	 * Save stats every time counter is 0, then reset counter.
+	 */
+	public void controlStepSaveCounter() {
+		if (stepSaveCounter > 0) stepSaveCounter--;
+		else {
+			System.out.println("saved");
+			stepSaveCounter = stepSaveAmount;
+			if (stats != null) saveStats();
+		}
+	}
+
+	/**
 	 * Load correct preferences for statistics and initialize SaveAndLoad class for handling
 	 * loading and saving plus encryption and decryption of file.
 	 */
@@ -1003,7 +1017,8 @@ public class MainGame extends Game {
      * Receive steps on Desktop, if milestone is not reached, else add them to stepBank.
      */
     public void simulateStep() {
-		if (!pauseWalking) {
+		controlStepSaveCounter();
+    	if (!pauseWalking) {
 			stepAllCount++;
 			if (stepCount < progressBarMilestone) this.stepCount++;
 			else if (stepBank < stepBankSize) stepBank++;
@@ -1015,6 +1030,7 @@ public class MainGame extends Game {
      * @param stepCount stepCount
      */
 	public void receiveSteps(float stepCount) {
+		controlStepSaveCounter();
 		if (!pauseWalking) {
 			stepAllCount++;
 			if (this.stepCount < progressBarMilestone && curRoom == ROOM_GAME) this.stepCount++;
