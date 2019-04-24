@@ -31,6 +31,7 @@ public class Achievements {
     private String skill2;
     private ArrayList<String> inventory;
     private Files files;
+    private boolean reflectiveShield;
 
     private Dialog dialogAch;
     private ImageButton btnCancel, btnCollect;
@@ -67,6 +68,7 @@ public class Achievements {
         inventory = game.getInventory();
         files = game.getFiles();
         resetedGame = game.isResetedGame();
+        reflectiveShield = game.isReflectiveShield();
 
         createAchDialog();
         createHeadersAndDescriptions();
@@ -164,6 +166,7 @@ public class Achievements {
 
         // Achievement 6 / Jack Of All Trades / Own every skill
         ownedSkillAmount = 2;
+        if (reflectiveShield) ownedSkillAmount += 1;
 
         for (int i = 0; i < allSkills.length; i++) {
             if (allSkills[i].equals(skill1)) ownedSkillAmount += 1;
