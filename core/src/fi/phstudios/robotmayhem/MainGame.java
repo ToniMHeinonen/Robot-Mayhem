@@ -667,7 +667,7 @@ public class MainGame extends Game {
 		else {
 			System.out.println("saved");
 			saveTimer = saveTimerAmount;
-			saveStats();
+			if (stats != null) saveStats();
 		}
 	}
 

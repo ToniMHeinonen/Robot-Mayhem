@@ -104,7 +104,7 @@ public class Settings {
         createLanguageButtons();
         createMenuButtons();
         createExitButton();
-        createFightButton();
+        //createFightButton();
         stage.addActor(settingsDialog);
         System.out.println("Setting-dialog opened from room: " + room);
     }
