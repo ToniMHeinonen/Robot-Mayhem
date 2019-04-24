@@ -1394,7 +1394,7 @@ public class RoomFight extends RoomParent {
             mapAttack = skills.getSkill(skills.ATTACK);
             mapDefend = skills.getSkill(skills.DEFEND);
             cooldowns = new HashMap<String, Integer>();
-            cooldowns.put(skills.DEFEND, 0);
+            cooldowns.put(btnTexts[1], 0);
             cooldowns.put(skillNames[0], 0);
             cooldowns.put(skillNames[1], 0);
 
@@ -1469,11 +1469,11 @@ public class RoomFight extends RoomParent {
             }
             else if (action.equals(skills.DEFEND) || action.equals(skills.REFLECT))
             {
-                if (cooldowns.get(skills.DEFEND) == 0) {
+                if (cooldowns.get(action) == 0) {
                     actionSelected = true;
                     curAnimation = defendAnim;
                     game.playSound(files.sndDefend);
-                    addCooldown(skills.DEFEND, (Integer) mapDefend.get(skills.cooldown));
+                    addCooldown(action, (Integer) mapDefend.get(skills.cooldown));
                     skillState = SKILL_DEFEND;
                     actionState = LONG_ANIM;
                 }
