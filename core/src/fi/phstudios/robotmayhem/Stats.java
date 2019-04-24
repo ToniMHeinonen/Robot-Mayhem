@@ -28,6 +28,7 @@ public class Stats {
     private Skills skills;
     private String[] allSkills;
     private int fightsWon;
+    private boolean reflectiveShield;
 
     private Dialog statsDialog;
 
@@ -73,6 +74,7 @@ public class Stats {
         skills = game.getSkills();
         allSkills = skills.getAllSkills();
         fightsWon = game.getFightsWon();
+        reflectiveShield = game.isReflectiveShield();
         // If room is fight, retrieve player's current boost values
         if (room.equals("fight")) {
             critBoost = game.getOverallBstCrit();
@@ -109,6 +111,7 @@ public class Stats {
     private void ownedSkillsAmount() {
         // Attack & Defend
         ownedSkillAmount = 2;
+        if (reflectiveShield) ownedSkillAmount += 1;
 
         for (int i = 0; i < allSkills.length; i++) {
             if (allSkills[i].equals(skill1)) ownedSkillAmount += 1;
