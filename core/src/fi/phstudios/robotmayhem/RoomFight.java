@@ -1712,7 +1712,6 @@ public class RoomFight extends RoomParent {
             targetHp = hp;
             defaultDmg = 12.5;
             defaultDmg += 5.0 * game.getGameCompleteCounter();
-            System.out.println(defaultDmg);
             ifDead = State.HACK;
             ID = ENEMY;
 

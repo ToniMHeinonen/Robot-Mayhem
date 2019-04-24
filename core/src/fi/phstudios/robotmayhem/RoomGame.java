@@ -170,7 +170,6 @@ public class RoomGame extends RoomParent {
                 }
                 // Round stepBank, in case for some reason it's for example 0.432
                 game.setStepBank(Math.round(game.getStepBank()));
-                System.out.println("bank holds" + String.valueOf(game.getStepBank()));
                 // Update bankRetrieved value to match stepCount
                 bankRetrieved = game.getStepCount();
                 float bank = game.getStepBank();

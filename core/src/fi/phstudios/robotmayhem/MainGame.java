@@ -134,7 +134,7 @@ public class MainGame extends Game {
     private String keyResetedGame = E.encrypt("resetedGame");
 
 	// Values
-	private int saveTimerAmount = 1800;
+	private int saveTimerAmount = 600;
 	private int saveTimer = saveTimerAmount;
 	private Preferences prefsStats;
 	private Preferences prefsAchievs;
@@ -267,7 +267,7 @@ public class MainGame extends Game {
 		controlSaveTimer();
 		controlSplashScreen();
 
-		//checkRAM(); For testing RAM usage, delete when game ready
+		//checkRAM(); //For testing RAM usage, delete when game ready
 	}
 
     /**
@@ -318,9 +318,6 @@ public class MainGame extends Game {
 		settings.flush();
 		prefsStats.clear();
 		prefsStats.flush();
-		// Delete prefsAchievs.clear and .flush in the final version.
-		//prefsAchievs.clear();
-		//prefsAchievs.flush();
 		resetedGame = true;
 		saveAchievements();
 		initAfterRestarting();
@@ -555,7 +552,6 @@ public class MainGame extends Game {
                 Gdx.files.internal("descriptionfont/descriptionfont.png"),
                 false);
 		testButtonAtlas = new TextureAtlas("testbuttons/actionButtons.pack");
-		//windowStyle = new Window.WindowStyle(fontSteps, fontColor, testSkin.getDrawable("dialog_bg"));
 		emptyWindowStyle = new Window.WindowStyle(fontSteps, fontColor, null);
 		labelStyle = new Label.LabelStyle(fontSteps, fontColor);
 		descriptionLabelStyle = new Label.LabelStyle(descriptionFont, fontColor);
@@ -646,8 +642,6 @@ public class MainGame extends Game {
 	 */
 	public void loadSettings() {
 		settings = Gdx.app.getPreferences("Robot_Mayhem_Settings");
-		//settings.clear(); // For testing purposes
-		//settings.flush(); // Without flushing, clear does not work in Android
 		musicVol = settings.getFloat(keyMusicVol, 0.8f);
 		soundVol = settings.getFloat(keySoundVol, 0.8f);
 		language = settings.getString(keyLanguage, "");
@@ -671,6 +665,7 @@ public class MainGame extends Game {
     public void controlSaveTimer() {
 		if (saveTimer > 0) saveTimer--;
 		else {
+			System.out.println("saved");
 			saveTimer = saveTimerAmount;
 			saveStats();
 		}
@@ -688,8 +683,6 @@ public class MainGame extends Game {
 		achievComplete = new ArrayList<String>();
 		hasCollected = new ArrayList<String>();
 		prefsStats = Gdx.app.getPreferences("Robot_Mayhem_Stats");
-		//prefsStats.clear(); // For testing purposes
-		//prefsStats.flush(); // Without flushing, clear does not work in Android
 		stats = new SaveAndLoad(E, prefsStats);
 		prefsAchievs = Gdx.app.getPreferences("Robot_Mayhem_Achievements");
 		achievs = new SaveAndLoad(E, prefsAchievs);
