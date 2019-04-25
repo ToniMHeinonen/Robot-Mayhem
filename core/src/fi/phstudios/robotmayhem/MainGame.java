@@ -316,8 +316,8 @@ public class MainGame extends Game {
      * Called when game resets. Clears settings and stats.
      */
 	public void resetGame() {
-		settings.clear();
-		settings.flush();
+		//settings.clear(); Don't clear them anymore, so you can change language for the tutorial
+		saveSettings();
 		prefsStats.clear();
 		prefsStats.flush();
 		resetedGame = true;
@@ -329,8 +329,12 @@ public class MainGame extends Game {
      * Select bossmusic.
      */
 	private void selectLoadedBossMusic() {
+		// If none of the music has been played, choose random music, else choose latest selection
 		if (arrPlayedMusicSize == 0) selectRandomBossMusic();
 		else curBossMusic = files.allBossMusic[arrPlayedMusicSize-1];
+
+		// If pool is 4, then boss music is always Fabio
+		if (pool == 4) curBossMusic = files.musBossFabio;
 	}
 
     /**
