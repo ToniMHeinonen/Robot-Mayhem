@@ -127,6 +127,7 @@ public class MainGame extends Game {
 	private String keyFirstPlayEscape = E.encrypt("firstPlayEscape");
 	private String keyFirstPlayDeath = E.encrypt("firstPlayDeath");
 	private String keyFirstPlayNewGamePlus = E.encrypt("firstPlayNewGamePlus");
+	private String keyFirstPlayFinalFightStart = E.encrypt("firstPlayFinalFightStart");
 
     private String keyAchievComplete = E.encrypt("achievComplete");
     private String keyAchievCompleteSize = E.encrypt("achievCompleteSize");
@@ -149,8 +150,8 @@ public class MainGame extends Game {
 	private boolean firstPlayTime, firstPlayTimeFight, firstPlayInventory, firstPlayBank,
 			firstPlayVictory, firstPlayPoolComplete1, firstPlayPoolComplete2,
 			firstPlayPoolComplete3, firstPlayMoney, firstPlayEscape, firstPlayDeath,
-			firstPlayNewGamePlus, reflectiveShield, finishedGame, checkHard, finishedGameHard,
-			resetedGame;
+			firstPlayNewGamePlus, firstPlayFinalFightStart, reflectiveShield, finishedGame,
+			checkHard, finishedGameHard, resetedGame;
 	private int critBoost, missBoost, permaCritBoost, permaMissBoost;
 	private float armorBoost, dmgBoost, healBoost, permaArmorBoost, permaDmgBoost, permaHealBoost;
 	// Stat arrays
@@ -288,16 +289,18 @@ public class MainGame extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
-		stage.dispose();
-		fontSteps.dispose();
-		descriptionFont.dispose();
-		testButtonAtlas.dispose();
-		finalSkin.dispose();
-		progBarAtlas.dispose();
-		progBarSkin.dispose();
+		if (assetsLoaded) {
+			stage.dispose();
+			fontSteps.dispose();
+			descriptionFont.dispose();
+			testButtonAtlas.dispose();
+			finalSkin.dispose();
+			progBarAtlas.dispose();
+			progBarSkin.dispose();
+			saveStats();
+			saveSettings();
+		}
 		assetHandler.manager.dispose();
-		saveStats();
-		saveSettings();
 	}
 
     /**
@@ -756,6 +759,7 @@ public class MainGame extends Game {
 		firstPlayEscape = stats.loadValue(keyFirstPlayEscape, true);
 		firstPlayDeath = stats.loadValue(keyFirstPlayDeath, true);
 		firstPlayNewGamePlus = stats.loadValue(keyFirstPlayNewGamePlus, true);
+		firstPlayFinalFightStart = stats.loadValue(keyFirstPlayFinalFightStart, true);
 
 		// Load the size of inventory before loading inventory items
 		inventorySize = stats.loadValue(keyInventorySize, 0);
@@ -826,7 +830,10 @@ public class MainGame extends Game {
 		stats.saveValue(keyFirstPlayPoolComplete2, firstPlayPoolComplete2);
 		stats.saveValue(keyFirstPlayPoolComplete3, firstPlayPoolComplete3);
 		stats.saveValue(keyFirstPlayMoney, firstPlayMoney);
+		stats.saveValue(keyFirstPlayDeath, firstPlayDeath);
+		stats.saveValue(keyFirstPlayEscape, firstPlayEscape);
 		stats.saveValue(keyFirstPlayNewGamePlus, firstPlayNewGamePlus);
+		stats.saveValue(keyFirstPlayFinalFightStart, firstPlayFinalFightStart);
 
 		// Save inventory's current size on inventorySize key
 		stats.saveValue(keyInventorySize, inventory.size());
@@ -948,6 +955,7 @@ public class MainGame extends Game {
 		firstPlayPoolComplete1 = true;
 		firstPlayPoolComplete2 = true;
 		firstPlayPoolComplete3 = true;
+		firstPlayFinalFightStart = true;
 
 		// Achievements
 		finishedGame = true;
@@ -1673,6 +1681,22 @@ public class MainGame extends Game {
 	 */
 	public void setFirstPlayNewGamePlus(boolean firstPlayNewGamePlus) {
 		this.firstPlayNewGamePlus = firstPlayNewGamePlus;
+	}
+
+	/**
+	 * Get if it's first time playing final fight
+	 * @return
+	 */
+	public boolean isFirstPlayFinalFightStart() {
+		return firstPlayFinalFightStart;
+	}
+
+	/**
+	 * Set if it's first time playing final fight
+	 * @param firstPlayFinalFightStart
+	 */
+	public void setFirstPlayFinalFightStart(boolean firstPlayFinalFightStart) {
+		this.firstPlayFinalFightStart = firstPlayFinalFightStart;
 	}
 
 	/**

@@ -86,13 +86,18 @@ public class RoomFight extends RoomParent {
         escapeBg = files.escapeBg;
         lan = game.getLanguage();
 
-
         if (game.isFirstPlayTimeFight()) {
             state = State.TUTORIAL_START;
             tutorial = new FirstPlay(game, "fight");
         } else if (game.getPool() == 4) {
-            state = State.FINALFIGHT_START;
-            finalFight = new FirstPlay(game, "finalFight");
+            // If it's first match against Fabio, show starting dialogue
+            if (game.isFirstPlayFinalFightStart()) {
+                state = State.FINALFIGHT_START;
+                finalFight = new FirstPlay(game, "finalFight");
+            } else {
+                state = State.START_ROOM;
+                finalFight = new FirstPlay(game, "");
+            }
         } else {
             state = State.START_ROOM;
         }
@@ -269,14 +274,17 @@ public class RoomFight extends RoomParent {
                 break;
             }
             case PLAYER_TURN: {
-                if (!finalFight.isFinalFightAfterStartFinished()) {
-                    state = State.FINALFIGHT_AFTER_START;
-                    Timer.schedule(new Timer.Task() {
-                        @Override
-                        public void run() {
-                            finalFight.finalFightAfterStartInstructions();
-                        }
-                    }, 1);
+                // Only do this if it's first time fighting Fabio
+                if (game.isFirstPlayFinalFightStart()) {
+                    if (!finalFight.isFinalFightAfterStartFinished()) {
+                        state = State.FINALFIGHT_AFTER_START;
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                finalFight.finalFightAfterStartInstructions();
+                            }
+                        }, 1);
+                    }
                 }
                 break;
             }
@@ -628,7 +636,7 @@ public class RoomFight extends RoomParent {
         protected int animSpeed = 8;
         protected Animation<TextureRegion> curAnimation, curHitAnimation, idleAnim, hackAnim,
                 skillAnim, takeHitAnim, healthPlus, healthMinus, criticalHitAnim, missAnim,
-                dotMinus, dotPlus, curBoostAnim;
+                dotMinus, dotPlus;
         protected HashMap<String,Integer> cooldowns;
         protected String usedItem, attackName;
 
@@ -780,10 +788,8 @@ public class RoomFight extends RoomParent {
                     actionState = DOT_ANIM;
                     if (dealDoTDamage > 0) {
                         opponent.addDoT(dealDoTTurns, dealDoTDamage); // Damage
-                        opponent.startHitAnimation(dotMinus);
                     } else {
                         addDoT(dealDoTTurns, dealDoTDamage); // Healing
-                        startHitAnimation(dotPlus);
                     }
                 } else if (dealBoost) {
                     dealBoost = false;
@@ -791,10 +797,8 @@ public class RoomFight extends RoomParent {
                     actionState = DOT_ANIM;
                     if (dealBoostToSelf) {
                         inflictBoost(dealBoostType, dealBoostValue);
-                        startHitAnimation(curBoostAnim);
                     } else {
                         opponent.inflictBoost(dealBoostType, dealBoostValue);
-                        opponent.startHitAnimation(curBoostAnim);
                     }
                 } else if (usedItem != null) {
                     if (!fightersTakingDamage()) {
@@ -975,6 +979,8 @@ public class RoomFight extends RoomParent {
                 dotTurns.add(turns);
                 dotDamage.add(damage);
                 calculateNextDoT();
+                if (damage > 0) startHitAnimation(dotMinus);
+                else if (damage < 0) startHitAnimation(dotPlus);
             }
         }
 
@@ -1047,8 +1053,6 @@ public class RoomFight extends RoomParent {
                 dealBoostToSelf = self;
                 dealBoostType = type;
                 dealBoostValue = value;
-                if (value > 0) curBoostAnim = dotPlus;
-                else curBoostAnim = dotMinus;
             }
         }
 
@@ -1069,6 +1073,8 @@ public class RoomFight extends RoomParent {
                 else if (type == skills.BOOST_DMG) dmgBoost += value;
                 else if (type == skills.BOOST_ARMOR) armorBoost += value;
                 else if (type == skills.BOOST_HEAL) healBoost += value;
+                if (value > 0) startHitAnimation(dotPlus);
+                else if (value < 0) startHitAnimation(dotMinus);
             }
         }
 

@@ -28,7 +28,7 @@ public class FirstPlay {
 
     private int diaCounter;
     private boolean allowClicking;
-    private float clickTimer = 1f;
+    private float clickTimer = 0.75f;
 
     /**
      * Retrieve correct values from main game instance.
@@ -803,6 +803,7 @@ public class FirstPlay {
                     if (diaCounter < texts.length) finalFightAfterStartInstructions();
                     else {
                         finalFightAfterStartFinished = true;
+                        game.setFirstPlayFinalFightStart(false);
                         diaCounter = 0;
                     }
                 }
@@ -902,7 +903,7 @@ public class FirstPlay {
                     dialog.remove();
                     if (diaCounter < texts.length) newGamePlusInstructions();
                     else {
-                        game.setFirstPlayNewGamePlus(true);
+                        game.setFirstPlayNewGamePlus(false);
                         diaCounter = 0;
                     }
                 }
