@@ -1339,7 +1339,7 @@ public class RoomFight extends RoomParent {
         /**
          * Opponent uses this value to know how much damage you inflicted after boost values are
          * calculated.
-         * @return
+         * @return how much dmgBoost fighter has
          */
         public double getDmgBoost() {
             return dmgBoost;

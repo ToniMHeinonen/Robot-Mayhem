@@ -1685,7 +1685,7 @@ public class MainGame extends Game {
 
 	/**
 	 * Get if it's first time playing final fight
-	 * @return
+	 * @return if still true
 	 */
 	public boolean isFirstPlayFinalFightStart() {
 		return firstPlayFinalFightStart;
@@ -2175,7 +2175,7 @@ public class MainGame extends Game {
 
 	/**
 	 * Get how many times game has been completed.
-	 * @return
+	 * @return how many times game has been completed
 	 */
     public int getGameCompleteCounter() {
 		return gameCompleteCounter;
