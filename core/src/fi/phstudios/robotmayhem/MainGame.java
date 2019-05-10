@@ -258,6 +258,7 @@ public class MainGame extends Game {
 		chooseNextMilestone();
 		// Switch to first room
 		switchToRoomGame();
+		tempFixOldPermaValues();
 	}
 
     /**
@@ -271,7 +272,7 @@ public class MainGame extends Game {
 		controlSaveTimer();
 		controlSplashScreen();
 
-		//checkRAM(); //For testing RAM usage, delete when game ready
+		//checkRAM(); //For testing RAM usage
 	}
 
     /**
@@ -302,6 +303,14 @@ public class MainGame extends Game {
 			saveSettings();
 		}
 		assetHandler.manager.dispose();
+	}
+
+	/**
+	 * Fix values that have been modified in patch but don't affect old players without this.
+	 */
+	private void tempFixOldPermaValues() {
+		if (permaArmorBoost > 0.2f) permaArmorBoost = 0.2f;
+		if (permaHealBoost > 0.2f) permaHealBoost = 0.2f;
 	}
 
     /**
