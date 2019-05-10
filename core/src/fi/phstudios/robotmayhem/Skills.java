@@ -402,14 +402,14 @@ public class Skills {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, BUCKET);
         map.put(description, "bucketDesc");
-        map.put(damage, -60.0);
+        map.put(damage, -40.0);
         map.put(dmgPurePercent, true);
         map.put(critChance, 0);
         map.put(missChance, 0);
         map.put(damageOverTime, 0.0);
         map.put(damageOverTimeTurns, 0);
         map.put(dotPurePercent, false);
-        map.put(cooldown, 5);
+        map.put(cooldown, 4);
         map.put(hitAnimation, null);
         map.put(sound, files.sndBucket);
         map.put(button, btnHeal);

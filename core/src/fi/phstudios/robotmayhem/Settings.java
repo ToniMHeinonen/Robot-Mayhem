@@ -106,6 +106,9 @@ public class Settings {
         createExitButton();
         //createFightButton();
         stage.addActor(settingsDialog);
+        if (game.isFirstPlaySettings()) {
+            FirstPlay settings = new FirstPlay(game, "settings");
+        }
         System.out.println("Setting-dialog opened from room: " + room);
     }
 

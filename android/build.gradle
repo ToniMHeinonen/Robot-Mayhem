@@ -20,8 +20,8 @@ android {
         applicationId "fi.phstudios.robotmayhem"
         minSdkVersion 9
         targetSdkVersion 27
-        versionCode 7
-        versionName "1.33"
+        versionCode 8
+        versionName "1.35"
     }
     buildTypes {
         release {

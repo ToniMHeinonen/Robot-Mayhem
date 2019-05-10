@@ -64,6 +64,13 @@ public class FirstPlay {
                     inventoryInstructions();
                 }
             }, 0.5f);
+        } else if (tutorial.equals("settings")) {
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    settingsInstructions();
+                }
+            }, 0.5f);
         } else if (tutorial.equals("bank")) {
             Timer.schedule(new Timer.Task() {
                 @Override
@@ -192,11 +199,7 @@ public class FirstPlay {
                 localize.format("tutFirstPlay2") + " " + name + "!",
                 localize.get("tutFirstPlay3"),
                 localize.get("tutFirstPlay4"),
-                localize.get("tutFirstPlay5"),
-                localize.get("tutFirstPlay6"),
-                localize.get("tutFirstPlay7"),
-                localize.get("tutFirstPlay8"),
-                localize.get("tutFirstPlay9")};
+                localize.get("tutFirstPlay5")};
 
         final Dialog dialog = utilDialog.createInstructionsDialog(texts[diaCounter]);
         stage.addActor(dialog);
@@ -432,6 +435,48 @@ public class FirstPlay {
                     if (diaCounter < texts.length) inventoryInstructions();
                     else {
                         game.setFirstPlayInventory(false);
+                        diaCounter = 0;
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Show settings tutorial.
+     */
+    private void settingsInstructions() {
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                allowClicking = true;
+            }
+        }, clickTimer);
+        final String[] texts = new String[] {
+                localize.get("tutSettings1"),
+                localize.get("tutSettings2"),
+                localize.get("tutSettings3"),
+                localize.get("tutSettings4")};
+        Label label = new Label(texts[diaCounter], finalSkin, "font46");
+        label.setWrap(true);
+        label.setAlignment(1);
+
+        final Dialog dialog = new Dialog("", finalSkin, "skilldescription");
+        dialog.getContentTable().add(label).prefWidth(720);
+        dialog.setPosition(game.pixelWidth/4, game.pixelHeight/4);
+        dialog.setSize(800, 540);
+        stage.addActor(dialog);
+
+        dialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                if (allowClicking) {
+                    allowClicking = false;
+                    diaCounter++;
+                    dialog.remove();
+                    if (diaCounter < texts.length) settingsInstructions();
+                    else {
+                        game.setFirstPlaySettings(false);
                         diaCounter = 0;
                     }
                 }

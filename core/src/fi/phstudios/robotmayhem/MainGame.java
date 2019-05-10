@@ -118,6 +118,7 @@ public class MainGame extends Game {
 	private String keyFirstPlayTime = E.encrypt("firstPlayTime");
 	private String keyFirstPlayTimeFight = E.encrypt("firstPlayTimeFight");
 	private String keyFirstPlayInventory = E.encrypt("firstPlayInventory");
+	private String keyFirstPlaySettings = E.encrypt("firstPlaySettings");
 	private String keyFirstPlayBank = E.encrypt("firstPlayBank");
 	private String keyFirstPlayVictory = E.encrypt("firstPlayVictory");
 	private String keyFirstPlayPoolComplete1 = E.encrypt("firstplayPoolComplete1");
@@ -150,8 +151,8 @@ public class MainGame extends Game {
 	private boolean firstPlayTime, firstPlayTimeFight, firstPlayInventory, firstPlayBank,
 			firstPlayVictory, firstPlayPoolComplete1, firstPlayPoolComplete2,
 			firstPlayPoolComplete3, firstPlayMoney, firstPlayEscape, firstPlayDeath,
-			firstPlayNewGamePlus, firstPlayFinalFightStart, reflectiveShield, finishedGame,
-			checkHard, finishedGameHard, resetedGame;
+			firstPlayNewGamePlus, firstPlayFinalFightStart, firstPlaySettings, reflectiveShield,
+			finishedGame, checkHard, finishedGameHard, resetedGame;
 	private int critBoost, missBoost, permaCritBoost, permaMissBoost;
 	private float armorBoost, dmgBoost, healBoost, permaArmorBoost, permaDmgBoost, permaHealBoost;
 	// Stat arrays
@@ -750,6 +751,7 @@ public class MainGame extends Game {
 		firstPlayTime = stats.loadValue(keyFirstPlayTime, true);
 		firstPlayTimeFight = stats.loadValue(keyFirstPlayTimeFight, true);
 		firstPlayInventory = stats.loadValue(keyFirstPlayInventory, true);
+		firstPlaySettings = stats.loadValue(keyFirstPlaySettings, true);
 		firstPlayBank = stats.loadValue(keyFirstPlayBank, true);
 		firstPlayVictory = stats.loadValue(keyFirstPlayVictory, true);
 		firstPlayPoolComplete1 = stats.loadValue(keyFirstPlayPoolComplete1, true);
@@ -824,6 +826,7 @@ public class MainGame extends Game {
 		stats.saveValue(keyFirstPlayTime, firstPlayTime);
 		stats.saveValue(keyFirstPlayTimeFight, firstPlayTimeFight);
 		stats.saveValue(keyFirstPlayInventory, firstPlayInventory);
+		stats.saveValue(keyFirstPlaySettings, firstPlaySettings);
 		stats.saveValue(keyFirstPlayBank, firstPlayBank);
 		stats.saveValue(keyFirstPlayVictory, firstPlayVictory);
 		stats.saveValue(keyFirstPlayPoolComplete1, firstPlayPoolComplete1);
@@ -1539,7 +1542,23 @@ public class MainGame extends Game {
 	    return firstPlayInventory;
     }
 
-    /**
+	/**
+	 * Get firstPlayInventory
+	 * @return firstPlayInventory
+	 */
+    public boolean isFirstPlaySettings() {
+		return firstPlaySettings;
+	}
+
+	/**
+	 * Set firstPlayInventory
+	 * @param firstPlaySettings firstPlaySettings
+	 */
+	public void setFirstPlaySettings(boolean firstPlaySettings) {
+		this.firstPlaySettings = firstPlaySettings;
+	}
+
+	/**
      * Get firstPlayBank
      * @return firstPlayBank
      */

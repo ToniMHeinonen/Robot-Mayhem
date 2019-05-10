@@ -238,7 +238,7 @@ public class Item {
      * Create IronCase items. Create map for them and add them to allItems array.
      */
     private void itemIronCase() {
-        double[] values = new double[] {0.0, 0.15, 0.34, 0.5};
+        double[] values = new double[] {0.0, 0.1, 0.2, 0.3};
         for (int i = 1; i <=3; i++) {
             String index = String.valueOf(i);
             HashMap<String, Object> map = new HashMap<String, Object>();
@@ -344,7 +344,7 @@ public class Item {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, DIAMOND_COAT);
         map.put(description, "diamondCoatDesc");
-        map.put(value, 0.34);
+        map.put(value, 0.2);
         map.put(usedInHall, true);
         map.put(isSkill, false);
         map.put(itemType, TYPE_BOOST);
@@ -363,7 +363,7 @@ public class Item {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(name, HEAL_COOLANT);
         map.put(description, "healCoolantDesc");
-        map.put(value, 0.3);
+        map.put(value, 0.2);
         map.put(usedInHall, true);
         map.put(isSkill, false);
         map.put(itemType, TYPE_BOOST);
