@@ -115,7 +115,7 @@ public class Achievements {
                 "Robot Mayhem",
                 localize.get("crusader"),
                 localize.get("tripAroundTheWorld"),
-                localize.get("collector")};
+                localize.get("hoarder")};
 
         achDescriptions = new String[] {
                 localize.get("sundayWalkerDesc"),
@@ -129,7 +129,7 @@ public class Achievements {
                 localize.get("robotMayhemDesc"),
                 localize.get("crusaderDesc"),
                 localize.get("tripAroundTheWorldDesc"),
-                localize.get("collectorDesc")};
+                localize.get("hoarderDesc")};
 
         achMoney = new int[] {
                 5,      // Sunday Walker / 50 steps
@@ -143,7 +143,7 @@ public class Achievements {
                 200,    // Robot Mayhem / Defeat 38 bosses
                 50,     // Crusader / 50 000 steps
                 150,    // Trip Around The World / 100 000 steps
-                123     // Collector / Buy 30 items
+                123     // Hoarder / Buy 30 items
         };
     }
 
@@ -206,7 +206,7 @@ public class Achievements {
         // Achievement 10 / Trip Around The World / 100 000 steps
         if (stepAllCount >= 100000) game.setAchievement(10, "unlocked");
 
-        // Achievement 11 / Collector / Buy 30 items.
+        // Achievement 11 / Hoarder / Buy 30 items.
         if (buyedItemsCounter >= 30) game.setAchievement(11, "unlocked");
     }
 
