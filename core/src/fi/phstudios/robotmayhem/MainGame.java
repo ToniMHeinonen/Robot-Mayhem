@@ -93,6 +93,7 @@ public class MainGame extends Game {
 	private String keyFightsWon = E.encrypt("fightsWon");
 	private String keyPrevDayGift = E.encrypt("prevDayGift");
 	private String keyGameCompleteCounter = E.encrypt("gameCompleteCounter");
+	private String keyHardBugFix = E.encrypt("hardBugFix");
 
 	private String keyCritBoost = E.encrypt("critBoost");
 	private String keyMissBoost = E.encrypt("missBoost");
@@ -146,7 +147,7 @@ public class MainGame extends Game {
 	private SaveAndLoad achievs;
 	private float stepCount, stepBank, stepAllCount, stepBankSize;
 	private int pool, poolMult, money, fightsWon, prevDayGift, buyedItemsCounter,
-			gameCompleteCounter;
+			gameCompleteCounter, hardBugFix;
 	private String skill1, skill2, currentBoss, playerName;
 	private boolean firstPlayTime, firstPlayTimeFight, firstPlayInventory, firstPlayBank,
 			firstPlayVictory, firstPlayPoolComplete1, firstPlayPoolComplete2,
@@ -474,9 +475,7 @@ public class MainGame extends Game {
         else if (pool == 3) money += MathUtils.random(8, 12);
         else if (pool == 4) money += MathUtils.random(13, 17);
 
-        if (!difficulty.equals(HARD) || !finishedGameHard) {
-            checkHard = false;
-        }
+        if (!difficulty.equals(HARD)) checkHard = false;
     }
 
     /**
@@ -742,6 +741,7 @@ public class MainGame extends Game {
 		prevDayGift = stats.loadValue(keyPrevDayGift, -1);
 		buyedItemsCounter = stats.loadValue(keyBuyedItemsCounter, 0);
 		gameCompleteCounter = stats.loadValue(keyGameCompleteCounter, 0);
+		hardBugFix = stats.loadValue(keyHardBugFix, 0);
 
 		// Boosts and item values
 		critBoost = stats.loadValue(keyCritBoost, 0);
@@ -793,6 +793,8 @@ public class MainGame extends Game {
 		    boughtPermanent.add(i, stats.loadValue(keyBoughtPermanent + String.valueOf(i), ""));
         }
 		selectLoadedBossMusic();
+
+		fixHardAchievement();
 	}
 
 	/**
@@ -817,6 +819,7 @@ public class MainGame extends Game {
 		stats.saveValue(keyPrevDayGift, prevDayGift);
 		stats.saveValue(keyBuyedItemsCounter, buyedItemsCounter);
 		stats.saveValue(keyGameCompleteCounter, gameCompleteCounter);
+		stats.saveValue(keyHardBugFix, hardBugFix);
 
 		// Boosts and item values
 		stats.saveValue(keyCritBoost, critBoost);
@@ -871,6 +874,20 @@ public class MainGame extends Game {
 		prefsStats.flush();
 	}
 
+	/**
+	 * Rewards everyone who has completed the game with hard achievement. Also resets checkHard if
+	 * someone's hard run is currently running.
+	 */
+	private void fixHardAchievement() {
+		if (hardBugFix != fightsWon) {
+			System.out.println("here");
+			hardBugFix = fightsWon;
+			checkHard = true;
+			if (fightsWon >= 19 && stepAllCount >= 56055) finishedGameHard = true;
+			// 30, 150, 375, 750, 1500, 2250, 3000..., 4500..., 6000
+		}
+	}
+
     /**
      * Loads achievements.
      */
@@ -908,6 +925,7 @@ public class MainGame extends Game {
 		if (difficulty.equals(HARD)) extra = 5;
 		money += MathUtils.random(5 + extra, 10 + extra);
 		fightsWon ++;
+		hardBugFix = fightsWon;
 		poolMult++;
 
 		// Reset boost values
@@ -942,10 +960,6 @@ public class MainGame extends Game {
 		else gameFinished();
 
 		chooseNextMilestone();
-
-		System.out.println(pool);
-		System.out.println(poolMult);
-		System.out.println(currentBoss);
 	}
 
 	/**
