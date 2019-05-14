@@ -135,7 +135,7 @@ public class Achievements {
                 5,      // Sunday Walker / 50 steps
                 30,     // Jogger / 5 000 steps
                 50,     // Marathonist / 10 000 steps
-                80,     // Finisher / Finish the game
+                0,      // Finisher / Finish the game
                 100,    // Peppery Walker / Finish the game on hard mode
                 50,     // Materialist / Buy every permanent item
                 10000,  // Jack Of All Trades / Own every skill
@@ -245,6 +245,10 @@ public class Achievements {
     private void popupAchievement(final int index) {
         Label label = new Label(achDescriptions[index] + " " + localize.get("reward") + " " +
                 String.valueOf(achMoney[index]) + " " + localize.get("shinyCoins"), finalSkin, "font46");
+        if (index == 3) {
+            label.setText(achDescriptions[index] + " " + localize.get("reward") + " " +
+                localize.get("skipWalking"));
+        }
         label.setWrap(true);
         label.setAlignment(1);
 

@@ -30,6 +30,7 @@ public class Settings {
     private String lan;
     private UtilDialog dialog;
     private String difficulty;
+    private ArrayList<String> hasCollected;
 
     private float posX;
     private float onScreenY;
@@ -93,6 +94,7 @@ public class Settings {
         lan = game.getLanguage();
         dialog = game.getDialog();
         difficulty = game.getDifficulty();
+        hasCollected = game.getHasCollected();
 
         setValues();
         createSettingsDialog();
@@ -104,7 +106,7 @@ public class Settings {
         createLanguageButtons();
         createMenuButtons();
         createExitButton();
-        //createFightButton();
+        if (hasCollected.get(3).equals("true")) createFightButton();
         stage.addActor(settingsDialog);
         if (game.isFirstPlaySettings()) {
             FirstPlay settings = new FirstPlay(game, "settings");
