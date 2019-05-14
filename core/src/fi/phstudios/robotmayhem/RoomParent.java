@@ -18,7 +18,7 @@ import com.badlogic.gdx.utils.I18NBundle;
 public class RoomParent implements Screen {
 
     protected SpriteBatch batch;
-    protected Texture imgBG, imgTopBar, imgBottomBar;
+    protected Texture imgBG, imgTopBar, imgBottomBar, dialogArrow;
     protected I18NBundle localize;
     protected MainGame game;
     protected RoomParent thisRoom = this;
@@ -34,6 +34,9 @@ public class RoomParent implements Screen {
     protected ProgressBar.ProgressBarStyle progressBarStyle;
     protected BitmapFont fontSteps;
     private int transitionCounter = 20;
+    private int dialogArrowTime = 60;
+    private int dialogArrowCounter = dialogArrowTime;
+    private boolean showDialogArrow = true;
     protected UtilDialog dialog;
     protected boolean clickedOpenSettings;
 
@@ -64,6 +67,7 @@ public class RoomParent implements Screen {
         dialog = game.getDialog();
         imgTopBar = files.imgTopBar;
         imgBottomBar = files.imgBottomBar;
+        dialogArrow = files.dialogArrow;
     }
 
     /**
@@ -85,6 +89,13 @@ public class RoomParent implements Screen {
 
             stage.act(Gdx.graphics.getDeltaTime());
         }
+    }
+
+    /**
+     * Do this at the end of the render.
+     */
+    public void endOfRender() {
+        drawDialogArrow();
     }
 
     /**
@@ -151,6 +162,46 @@ public class RoomParent implements Screen {
                 imgTopBar.getWidth(), imgTopBar.getHeight());
         batch.draw(imgBottomBar, 0,0,
                 imgBottomBar.getWidth(), imgBottomBar.getHeight());
+    }
+
+    /**
+     * Draws dialog arrow when needed.
+     */
+    public void drawDialogArrow() {
+        int type = game.getDialogType();
+        if (type != game.DIAL_STOP) {
+            if (dialogArrowCounter > 0) dialogArrowCounter--;
+            else {
+                showDialogArrow = !showDialogArrow;
+                dialogArrowCounter = dialogArrowTime;
+            }
+
+            if (showDialogArrow) {
+                float x = game.pixelWidth / 2 - dialogArrow.getWidth() / 2;
+                float y = game.pixelHeight / 2 - dialogArrow.getHeight() / 2;
+                if (type == game.DIAL_TALL) {
+                    x += 375f;
+                    y += 110f;
+                } else if (type == game.DIAL_SMALL) {
+                    x += 375f;
+                    y += 10f;
+                } else if (type == game.DIAL_BOX) {
+                    x += 350f;
+                } else if (type == game.DIAL_PLAYER) {
+                    x += 375f;
+                    y += 110f;
+                } else if (type == game.DIAL_SKILL) {
+                    x += 420f;
+                    y += 30f;
+                }
+                batch.begin();
+                batch.draw(dialogArrow, x, y);
+                batch.end();
+            }
+        } else {
+            showDialogArrow = true;
+            dialogArrowCounter = dialogArrowTime;
+        }
     }
 
     /**

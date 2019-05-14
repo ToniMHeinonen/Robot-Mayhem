@@ -64,6 +64,7 @@ public class AssetHandler {
     public final String retrieveStepsBg = "texture/retrieveStepsBg.png";
     public final String statusNegative = "texture/status_negative.png";
     public final String statusPositive = "texture/status_positive.png";
+    public final String dialogArrow = "texture/blip.png";
 
     // Bosses
     public final String roombotIdle = "texture/roombot/roombot_idle.png";
@@ -208,6 +209,7 @@ public class AssetHandler {
         manager.load(retrieveStepsBg, Texture.class);
         manager.load(statusNegative, Texture.class);
         manager.load(statusPositive, Texture.class);
+        manager.load(dialogArrow, Texture.class);
         // Bosses
         manager.load(roombotIdle, Texture.class);
         manager.load(roombotAttack, Texture.class);

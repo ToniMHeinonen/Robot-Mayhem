@@ -28,7 +28,7 @@ public class FirstPlay {
 
     private int diaCounter;
     private boolean allowClicking;
-    private float clickTimer = 0.75f;
+    private float clickTimer = 0.75f; // If you change this, also change UtilDialog's timer
 
     /**
      * Retrieve correct values from main game instance.
@@ -142,7 +142,6 @@ public class FirstPlay {
                 }
             }, 1f);
         }
-
     }
 
     /**
@@ -151,6 +150,8 @@ public class FirstPlay {
     private void hallInstructionsName() {
         whoAmI = utilDialog.createInstructionsDialog(localize.get("tutFirstPlay1"));
         stage.addActor(whoAmI);
+        game.setDialogType(game.DIAL_PLAYER);
+
 
         final Input.TextInputListener textInputListener = new Input.TextInputListener() {
             @Override
@@ -162,6 +163,7 @@ public class FirstPlay {
                         game.setPlayerName(text);
                         whoAmI.remove();
                         hallAllInstructions();
+                        game.setDialogType(game.DIAL_STOP);
                     }
                 }
             }
@@ -193,6 +195,7 @@ public class FirstPlay {
             @Override
             public void run() {
                 allowClicking = true;
+                game.setDialogType(game.DIAL_PLAYER);
             }
         }, clickTimer);
         final String[] texts = new String[] {
@@ -209,6 +212,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 if (allowClicking) {
                     allowClicking = false;
+                    game.setDialogType(game.DIAL_STOP);
                     diaCounter++;
                     dialog.remove();
                     if (diaCounter < texts.length) hallAllInstructions();
@@ -229,6 +233,7 @@ public class FirstPlay {
             @Override
             public void run() {
                 allowClicking = true;
+                game.setDialogType(game.DIAL_PLAYER);
             }
         }, clickTimer);
         final String[] texts = new String[] {
@@ -243,6 +248,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 if (allowClicking) {
                     allowClicking = false;
+                    game.setDialogType(game.DIAL_STOP);
                     diaCounter++;
                     dialog.remove();
                     if (diaCounter < texts.length) fightStartInstructions();
@@ -263,6 +269,7 @@ public class FirstPlay {
             @Override
             public void run() {
                 allowClicking = true;
+                game.setDialogType(game.DIAL_PLAYER);
             }
         }, clickTimer);
         final String[] texts = new String[] {
@@ -277,6 +284,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 if (allowClicking) {
                     allowClicking = false;
+                    game.setDialogType(game.DIAL_STOP);
                     diaCounter++;
                     dialog.remove();
                     if (diaCounter < texts.length) fightAfterHitInstructions();
@@ -297,6 +305,7 @@ public class FirstPlay {
             @Override
             public void run() {
                 allowClicking = true;
+                game.setDialogType(game.DIAL_PLAYER);
             }
         }, clickTimer);
         final String[] texts = new String[] {
@@ -313,6 +322,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 if (allowClicking) {
                     allowClicking = false;
+                    game.setDialogType(game.DIAL_STOP);
                     diaCounter++;
                     dialog.remove();
                     if (diaCounter < texts.length) fightActionInstructions();
@@ -333,6 +343,7 @@ public class FirstPlay {
             @Override
             public void run() {
                 allowClicking = true;
+                game.setDialogType(game.DIAL_PLAYER);
             }
         }, clickTimer);
         final String[] texts = new String[] {
@@ -350,6 +361,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 if (allowClicking) {
                     allowClicking = false;
+                    game.setDialogType(game.DIAL_STOP);
                     diaCounter++;
                     dialog.remove();
                     if (diaCounter < texts.length) fightHackingInstructions();
@@ -370,6 +382,7 @@ public class FirstPlay {
             @Override
             public void run() {
                 allowClicking = true;
+                game.setDialogType(game.DIAL_PLAYER);
             }
         }, clickTimer);
         final String[] texts = new String[] {
@@ -387,6 +400,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 if (allowClicking) {
                     allowClicking = false;
+                    game.setDialogType(game.DIAL_STOP);
                     diaCounter++;
                     dialog.remove();
                     if (diaCounter < texts.length) fightPowerupInstructions();
@@ -408,6 +422,7 @@ public class FirstPlay {
             @Override
             public void run() {
                 allowClicking = true;
+                game.setDialogType(game.DIAL_BOX);
             }
         }, clickTimer);
         final String[] texts = new String[] {
@@ -430,6 +445,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 if (allowClicking) {
                     allowClicking = false;
+                    game.setDialogType(game.DIAL_STOP);
                     diaCounter++;
                     dialog.remove();
                     if (diaCounter < texts.length) inventoryInstructions();
@@ -450,6 +466,7 @@ public class FirstPlay {
             @Override
             public void run() {
                 allowClicking = true;
+                game.setDialogType(game.DIAL_BOX);
             }
         }, clickTimer);
         final String[] texts = new String[] {
@@ -472,6 +489,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 if (allowClicking) {
                     allowClicking = false;
+                    game.setDialogType(game.DIAL_STOP);
                     diaCounter++;
                     dialog.remove();
                     if (diaCounter < texts.length) settingsInstructions();
@@ -492,6 +510,7 @@ public class FirstPlay {
             @Override
             public void run() {
                 allowClicking = true;
+                game.setDialogType(game.DIAL_PLAYER);
             }
         }, clickTimer);
         final String[] texts = new String[] {
@@ -509,6 +528,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 if (allowClicking) {
                     allowClicking = false;
+                    game.setDialogType(game.DIAL_STOP);
                     diaCounter++;
                     dialog.remove();
                     if (diaCounter < texts.length) bankInstructions();
@@ -529,6 +549,7 @@ public class FirstPlay {
             @Override
             public void run() {
                 allowClicking = true;
+                game.setDialogType(game.DIAL_PLAYER);
             }
         }, clickTimer);
         final String[] texts = new String[] {
@@ -543,6 +564,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 if (allowClicking) {
                     allowClicking = false;
+                    game.setDialogType(game.DIAL_STOP);
                     diaCounter++;
                     dialog.remove();
                     if (diaCounter < texts.length) victoryInstructions();
@@ -563,6 +585,7 @@ public class FirstPlay {
             @Override
             public void run() {
                 allowClicking = true;
+                game.setDialogType(game.DIAL_PLAYER);
             }
         }, clickTimer);
         final String[] texts = new String[] {
@@ -577,6 +600,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 if (allowClicking) {
                     allowClicking = false;
+                    game.setDialogType(game.DIAL_STOP);
                     diaCounter++;
                     dialog.remove();
                     if (diaCounter < texts.length) pool1CompleteInstructions();
@@ -597,6 +621,7 @@ public class FirstPlay {
             @Override
             public void run() {
                 allowClicking = true;
+                game.setDialogType(game.DIAL_PLAYER);
             }
         }, clickTimer);
         final String[] texts = new String[] {
@@ -612,6 +637,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 if (allowClicking) {
                     allowClicking = false;
+                    game.setDialogType(game.DIAL_STOP);
                     diaCounter++;
                     dialog.remove();
                     if (diaCounter < texts.length) pool2CompleteInstructions();
@@ -632,6 +658,7 @@ public class FirstPlay {
             @Override
             public void run() {
                 allowClicking = true;
+                game.setDialogType(game.DIAL_PLAYER);
             }
         }, clickTimer);
         final String[] texts = new String[] {
@@ -647,6 +674,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 if (allowClicking) {
                     allowClicking = false;
+                    game.setDialogType(game.DIAL_STOP);
                     diaCounter++;
                     dialog.remove();
                     if (diaCounter < texts.length) pool3CompleteInstructions();
@@ -667,6 +695,7 @@ public class FirstPlay {
             @Override
             public void run() {
                 allowClicking = true;
+                game.setDialogType(game.DIAL_BOX);
             }
         }, clickTimer);
         final String[] texts = new String[] {
@@ -690,6 +719,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 if (allowClicking) {
                     allowClicking = false;
+                    game.setDialogType(game.DIAL_STOP);
                     diaCounter++;
                     dialog.remove();
                     if (diaCounter < texts.length) moneyInstructions();
@@ -710,6 +740,7 @@ public class FirstPlay {
             @Override
             public void run() {
                 allowClicking = true;
+                game.setDialogType(game.DIAL_BOX);
             }
         }, clickTimer);
         final String[] texts = new String[] {
@@ -732,6 +763,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 if (allowClicking) {
                     allowClicking = false;
+                    game.setDialogType(game.DIAL_STOP);
                     diaCounter++;
                     dialog.remove();
                     if (diaCounter < texts.length) escapeInstructions();
@@ -752,6 +784,7 @@ public class FirstPlay {
             @Override
             public void run() {
                 allowClicking = true;
+                game.setDialogType(game.DIAL_BOX);
             }
         }, clickTimer);
         final String[] texts = new String[] {
@@ -774,6 +807,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 if (allowClicking) {
                     allowClicking = false;
+                    game.setDialogType(game.DIAL_STOP);
                     diaCounter++;
                     dialog.remove();
                     if (diaCounter < texts.length) deathInstructions();
@@ -794,6 +828,7 @@ public class FirstPlay {
             @Override
             public void run() {
                 allowClicking = true;
+                game.setDialogType(game.DIAL_PLAYER);
             }
         }, clickTimer);
         final String[] texts = new String[] {
@@ -808,6 +843,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 if (allowClicking) {
                     allowClicking = false;
+                    game.setDialogType(game.DIAL_STOP);
                     diaCounter++;
                     dialog.remove();
                     if (diaCounter < texts.length) finalFightStartInstructions();
@@ -828,6 +864,7 @@ public class FirstPlay {
             @Override
             public void run() {
                 allowClicking = true;
+                game.setDialogType(game.DIAL_PLAYER);
             }
         }, clickTimer);
         final String[] texts = new String[] {
@@ -843,6 +880,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 if (allowClicking) {
                     allowClicking = false;
+                    game.setDialogType(game.DIAL_STOP);
                     diaCounter++;
                     dialog.remove();
                     if (diaCounter < texts.length) finalFightAfterStartInstructions();
@@ -864,6 +902,7 @@ public class FirstPlay {
             @Override
             public void run() {
                 allowClicking = true;
+                game.setDialogType(game.DIAL_PLAYER);
             }
         }, clickTimer);
         final String[] texts = new String[] {
@@ -878,6 +917,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 if (allowClicking) {
                     allowClicking = false;
+                    game.setDialogType(game.DIAL_STOP);
                     diaCounter++;
                     dialog.remove();
                     if (diaCounter < texts.length) finalFightBeforeEndInstructions();
@@ -898,6 +938,7 @@ public class FirstPlay {
             @Override
             public void run() {
                 allowClicking = true;
+                game.setDialogType(game.DIAL_PLAYER);
             }
         }, clickTimer);
         final String[] texts = new String[] {
@@ -912,6 +953,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 if (allowClicking) {
                     allowClicking = false;
+                    game.setDialogType(game.DIAL_STOP);
                     diaCounter++;
                     dialog.remove();
                     if (diaCounter < texts.length) finalFightEndInstructions();
@@ -929,6 +971,7 @@ public class FirstPlay {
             @Override
             public void run() {
                 allowClicking = true;
+                game.setDialogType(game.DIAL_PLAYER);
             }
         }, clickTimer);
         final String[] texts = new String[] {
@@ -944,6 +987,7 @@ public class FirstPlay {
             public void clicked(InputEvent event, float x, float y){
                 if (allowClicking) {
                     allowClicking = false;
+                    game.setDialogType(game.DIAL_STOP);
                     diaCounter++;
                     dialog.remove();
                     if (diaCounter < texts.length) newGamePlusInstructions();

@@ -201,6 +201,9 @@ public class MainGame extends Game {
     private final int pool3InnerHackShieldAmount = 7;
 
     private boolean pauseWalking, assetsLoaded;
+    private int dialogType;
+    public final int DIAL_STOP = 0, DIAL_BOX = 1, DIAL_TALL = 2, DIAL_SMALL = 3, DIAL_PLAYER = 4,
+			DIAL_SKILL = 5;
 
     private int ramTimer;
 
@@ -875,12 +878,11 @@ public class MainGame extends Game {
 	}
 
 	/**
-	 * Rewards everyone who has completed the game with hard achievement. Also resets checkHard if
-	 * someone's hard run is currently running.
+	 * Rewards everyone who has completed the game and reached potential steps with hard
+	 * achievement. Also resets checkHard if someone's hard run is currently running.
 	 */
 	private void fixHardAchievement() {
 		if (hardBugFix != fightsWon) {
-			System.out.println("here");
 			hardBugFix = fightsWon;
 			checkHard = true;
 			if (fightsWon >= 19 && stepAllCount >= 56055) finishedGameHard = true;
@@ -1973,7 +1975,7 @@ public class MainGame extends Game {
 	    return pool3InnerHackShieldAmount;
     }
 
-    /**
+	/**
      * Get pool
      * @return pool
      */
@@ -2221,5 +2223,21 @@ public class MainGame extends Game {
 	 */
     public int getGameCompleteCounter() {
 		return gameCompleteCounter;
+	}
+
+	/**
+	 * Sets what type of dialog is on.
+	 * @param dialogType type of dialog
+	 */
+	public void setDialogType(int dialogType) {
+		this.dialogType = dialogType;
+	}
+
+	/**
+	 * Gets the type of dialog.
+	 * @return type of dialog
+	 */
+	public int getDialogType() {
+		return dialogType;
 	}
 }

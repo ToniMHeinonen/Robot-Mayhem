@@ -64,7 +64,8 @@ public class Files {
 
     // Other textures
     public final Texture imgBgHall, imgBgBoss, imgTopBar, imgBottomBar, escapeBg, hpBarLeft,
-            hpBarRight, powerUpBg, powerUpPopup, itemBg, retrieveStepsBg, dotArrowUp, dotArrowDown;
+            hpBarRight, powerUpBg, powerUpPopup, itemBg, retrieveStepsBg, dotArrowUp, dotArrowDown,
+            dialogArrow;
 
     // Skins
     public final Skin skin, finalSkin;
@@ -137,6 +138,7 @@ public class Files {
         retrieveStepsBg = manager.get(asset.retrieveStepsBg);
         dotArrowUp = manager.get(asset.statusPositive);
         dotArrowDown = manager.get(asset.statusNegative);
+        dialogArrow = manager.get(asset.dialogArrow);
 
         /*
         Animations

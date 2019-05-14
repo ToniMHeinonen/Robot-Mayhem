@@ -80,6 +80,7 @@ public class RoomGame extends RoomParent {
             batch.end();
             stage.act(Gdx.graphics.getDeltaTime());
             stage.draw();
+            endOfRender();
         }
     }
 

@@ -15,6 +15,8 @@ public class UtilDialog {
     private Skin finalSkin;
     private float dialogY = 380f;
     private float dialogYsmall = 300f;
+    private boolean allowClicking;
+    private float clickTimer = 0.75f; // If you change this, also change FirstPlay's timer
 
     /**
      * Initialize all the basic values.
@@ -31,8 +33,18 @@ public class UtilDialog {
      * @param text text, which will show in the dialog
      * @param style background
      * @param normalPos check, which position to use
+     * @param type dialog type
      */
-    public void createDialog(String text, String style, boolean normalPos) {
+    public void createDialog(String text, String style, final boolean normalPos, final int type) {
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                allowClicking = true;
+                if (normalPos) game.setDialogType(game.DIAL_TALL);
+                else game.setDialogType(game.DIAL_SMALL);
+                if (type != 0) game.setDialogType(type);
+            }
+        }, clickTimer);
         dialogOn = true;
         float areaWidth = 780f;
         float areaHeight = 540f;
@@ -68,8 +80,12 @@ public class UtilDialog {
         dialog.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                dialog.remove();
-                dialogOn = false;
+                if (allowClicking) {
+                    allowClicking = false;
+                    dialog.remove();
+                    dialogOn = false;
+                    game.setDialogType(game.DIAL_STOP);
+                }
             }
         });
     }

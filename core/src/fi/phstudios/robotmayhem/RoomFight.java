@@ -135,6 +135,7 @@ public class RoomFight extends RoomParent {
 
             hackingPhase();
             powerUpPhase();
+            endOfRender();
         }
     }
 
@@ -1674,7 +1675,7 @@ public class RoomFight extends RoomParent {
 
                         public boolean longPress(Actor actor, float x, float y) {
                             dialog.createDialog(descriptions.get(i), "skilldescription",
-                                    false);
+                                    false, game.DIAL_SKILL);
                             return true;
                         }
 
@@ -1967,7 +1968,7 @@ public class RoomFight extends RoomParent {
                 if (showFirstDialogTimer > 0) showFirstDialogTimer--;
                 else {
                     state = State.DIALOG_START;
-                    dialog.createDialog(dialogStart, "dialog_enemy", normalSize);
+                    dialog.createDialog(dialogStart, "dialog_enemy", normalSize, 0);
                 }
             }
         }
@@ -1982,7 +1983,7 @@ public class RoomFight extends RoomParent {
                 public void run() {
                     startIdle();
                     state = State.DIALOG_END;
-                    dialog.createDialog(dialogEnd, "dialog_enemy", normalSize);
+                    dialog.createDialog(dialogEnd, "dialog_enemy", normalSize, 0);
                 }
             }, 2);
         }
