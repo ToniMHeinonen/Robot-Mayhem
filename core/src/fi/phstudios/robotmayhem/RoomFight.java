@@ -132,10 +132,10 @@ public class RoomFight extends RoomParent {
             escaping();
             batch.end();
             stage.draw(); // Keep before hacking and powerup since they use the same stage
+            endOfRender();
 
             hackingPhase();
             powerUpPhase();
-            endOfRender();
         }
     }
 
@@ -553,8 +553,10 @@ public class RoomFight extends RoomParent {
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                float rounded = Math.round(game.getProgressBarMilestone()*0.75f);
-                game.setStepCount(rounded);
+                if (!game.isWalkingSkipped()) {
+                    float rounded = Math.round(game.getProgressBarMilestone() * 0.75f);
+                    game.setStepCount(rounded);
+                }
                 state = State.ESCAPE;
                 escapePopup = false;
                 stage.clear();

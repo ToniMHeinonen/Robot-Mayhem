@@ -130,6 +130,7 @@ public class MainGame extends Game {
 	private String keyFirstPlayDeath = E.encrypt("firstPlayDeath");
 	private String keyFirstPlayNewGamePlus = E.encrypt("firstPlayNewGamePlus");
 	private String keyFirstPlayFinalFightStart = E.encrypt("firstPlayFinalFightStart");
+	private String keyFirstPlaySkip = E.encrypt("firstPlaySkip");
 
     private String keyAchievComplete = E.encrypt("achievComplete");
     private String keyAchievCompleteSize = E.encrypt("achievCompleteSize");
@@ -152,8 +153,8 @@ public class MainGame extends Game {
 	private boolean firstPlayTime, firstPlayTimeFight, firstPlayInventory, firstPlayBank,
 			firstPlayVictory, firstPlayPoolComplete1, firstPlayPoolComplete2,
 			firstPlayPoolComplete3, firstPlayMoney, firstPlayEscape, firstPlayDeath,
-			firstPlayNewGamePlus, firstPlayFinalFightStart, firstPlaySettings, reflectiveShield,
-			finishedGame, checkHard, finishedGameHard, resetedGame;
+			firstPlayNewGamePlus, firstPlayFinalFightStart, firstPlaySettings, firstPlaySkip,
+			reflectiveShield, finishedGame, checkHard, finishedGameHard, resetedGame;
 	private int critBoost, missBoost, permaCritBoost, permaMissBoost;
 	private float armorBoost, dmgBoost, healBoost, permaArmorBoost, permaDmgBoost, permaHealBoost;
 	// Stat arrays
@@ -200,10 +201,10 @@ public class MainGame extends Game {
     private final int pool3HackShieldAmount = 15;
     private final int pool3InnerHackShieldAmount = 7;
 
-    private boolean pauseWalking, assetsLoaded;
+    private boolean pauseWalking, assetsLoaded, walkingSkipped;
     private int dialogType;
     public final int DIAL_STOP = 0, DIAL_BOX = 1, DIAL_TALL = 2, DIAL_SMALL = 3, DIAL_PLAYER = 4,
-			DIAL_SKILL = 5;
+			DIAL_SKILL = 5, DIAL_DEATH = 6;
 
     private int ramTimer;
 
@@ -463,22 +464,28 @@ public class MainGame extends Game {
     /**
      * Called when game switches to fight.
      */
-    public void switchToRoomFight() {
+    public void switchToRoomFight(boolean skipButton) {
 		transition();
 		startMusic(curBossMusic);
-	    RoomFight room = new RoomFight(this);
-	    setScreen(room);
-	    curRoom = ROOM_FIGHT;
-	    stepCount = progressBarMilestone / 2;
-	    stepCount = Math.round(stepCount);
-	    saveStats();
+		RoomFight room = new RoomFight(this);
+		setScreen(room);
+		curRoom = ROOM_FIGHT;
+		saveStats();
+		walkingSkipped = skipButton;
 
-	    // Add money for trying fighting
-        if (pool == 2) money += MathUtils.random(3,7);
-        else if (pool == 3) money += MathUtils.random(8, 12);
-        else if (pool == 4) money += MathUtils.random(13, 17);
+    	if (!skipButton) {
+    		stepCount = progressBarMilestone / 2;
+			stepCount = Math.round(stepCount);
 
-        if (!difficulty.equals(HARD)) checkHard = false;
+			// Add money for trying fighting
+			if (pool == 2) money += MathUtils.random(3, 7);
+			else if (pool == 3) money += MathUtils.random(8, 12);
+			else if (pool == 4) money += MathUtils.random(13, 17);
+
+			if (!difficulty.equals(HARD)) checkHard = false;
+		} else {
+    		checkHard = false;
+		}
     }
 
     /**
@@ -774,6 +781,7 @@ public class MainGame extends Game {
 		firstPlayDeath = stats.loadValue(keyFirstPlayDeath, true);
 		firstPlayNewGamePlus = stats.loadValue(keyFirstPlayNewGamePlus, true);
 		firstPlayFinalFightStart = stats.loadValue(keyFirstPlayFinalFightStart, true);
+		firstPlaySkip = stats.loadValue(keyFirstPlaySkip, true);
 
 		// Load the size of inventory before loading inventory items
 		inventorySize = stats.loadValue(keyInventorySize, 0);
@@ -852,6 +860,7 @@ public class MainGame extends Game {
 		stats.saveValue(keyFirstPlayEscape, firstPlayEscape);
 		stats.saveValue(keyFirstPlayNewGamePlus, firstPlayNewGamePlus);
 		stats.saveValue(keyFirstPlayFinalFightStart, firstPlayFinalFightStart);
+		stats.saveValue(keyFirstPlaySkip, firstPlaySkip);
 
 		// Save inventory's current size on inventorySize key
 		stats.saveValue(keyInventorySize, inventory.size());
@@ -1744,6 +1753,22 @@ public class MainGame extends Game {
 	}
 
 	/**
+	 * Gets firstPlaySkip.
+	 * @return firsPlaySkip
+	 */
+	public boolean isFirstPlaySkip() {
+		return firstPlaySkip;
+	}
+
+	/**
+	 * Sets firstPlaySkip
+	 * @param firstPlaySkip value
+	 */
+	public void setFirstPlaySkip(boolean firstPlaySkip) {
+		this.firstPlaySkip = firstPlaySkip;
+	}
+
+	/**
      * Set finishedGame
      * @param finishedGame finishedGame
      */
@@ -2239,5 +2264,13 @@ public class MainGame extends Game {
 	 */
 	public int getDialogType() {
 		return dialogType;
+	}
+
+	/**
+	 * Checks if walking has been skipped.
+	 * @return if skipped
+	 */
+	public boolean isWalkingSkipped() {
+		return walkingSkipped;
 	}
 }

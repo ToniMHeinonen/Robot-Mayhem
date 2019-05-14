@@ -462,7 +462,11 @@ public class Settings {
         imgBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                game.switchToRoomFight();
+                if (game.isFirstPlaySkip()) {
+                    FirstPlay skip = new FirstPlay(game, "skip");
+                } else {
+                    game.switchToRoomFight(true);
+                }
             }
         });
     }

@@ -141,6 +141,13 @@ public class FirstPlay {
                     newGamePlusInstructions();
                 }
             }, 1f);
+        } else if (tutorial.equals("skip")) {
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    skipInstructions();
+                }
+            }, 0f);
         }
     }
 
@@ -740,7 +747,7 @@ public class FirstPlay {
             @Override
             public void run() {
                 allowClicking = true;
-                game.setDialogType(game.DIAL_BOX);
+                game.setDialogType(game.DIAL_DEATH);
             }
         }, clickTimer);
         final String[] texts = new String[] {
@@ -784,7 +791,7 @@ public class FirstPlay {
             @Override
             public void run() {
                 allowClicking = true;
-                game.setDialogType(game.DIAL_BOX);
+                game.setDialogType(game.DIAL_DEATH);
             }
         }, clickTimer);
         final String[] texts = new String[] {
@@ -993,6 +1000,49 @@ public class FirstPlay {
                     if (diaCounter < texts.length) newGamePlusInstructions();
                     else {
                         game.setFirstPlayNewGamePlus(false);
+                        diaCounter = 0;
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Show skip button tutorial.
+     */
+    private void skipInstructions() {
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                allowClicking = true;
+                game.setDialogType(game.DIAL_BOX);
+            }
+        }, clickTimer);
+        final String[] texts = new String[] {
+                localize.get("tutSkip1"),
+                localize.get("tutSkip2"),
+                localize.get("tutSkip3")};
+        Label label = new Label(texts[diaCounter], finalSkin, "font46");
+        label.setWrap(true);
+        label.setAlignment(1);
+
+        final Dialog dialog = new Dialog("", finalSkin, "skilldescription");
+        dialog.getContentTable().add(label).prefWidth(720);
+        dialog.setPosition(game.pixelWidth/4, game.pixelHeight/4);
+        dialog.setSize(800, 540);
+        stage.addActor(dialog);
+
+        dialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                if (allowClicking) {
+                    allowClicking = false;
+                    game.setDialogType(game.DIAL_STOP);
+                    diaCounter++;
+                    dialog.remove();
+                    if (diaCounter < texts.length) skipInstructions();
+                    else {
+                        game.setFirstPlaySkip(false);
                         diaCounter = 0;
                     }
                 }

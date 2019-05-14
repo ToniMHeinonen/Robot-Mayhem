@@ -193,6 +193,8 @@ public class RoomParent implements Screen {
                 } else if (type == game.DIAL_SKILL) {
                     x += 420f;
                     y += 30f;
+                } else if (type == game.DIAL_DEATH) {
+                    x += 420f;
                 }
                 batch.begin();
                 batch.draw(dialogArrow, x, y);
