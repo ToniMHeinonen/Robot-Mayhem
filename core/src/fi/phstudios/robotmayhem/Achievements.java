@@ -32,6 +32,8 @@ public class Achievements {
     private ArrayList<String> inventory;
     private Files files;
     private boolean reflectiveShield;
+    private int fightsWon;
+    private int buyedItemsCounter;
 
     private Dialog dialogAch;
     private ImageButton btnCancel, btnCollect;
@@ -69,6 +71,8 @@ public class Achievements {
         files = game.getFiles();
         resetedGame = game.isResetedGame();
         reflectiveShield = game.isReflectiveShield();
+        fightsWon = game.getFightsWon();
+        buyedItemsCounter = game.getBuyedItemsCounter();
 
         createAchDialog();
         createHeadersAndDescriptions();
@@ -107,7 +111,11 @@ public class Achievements {
                 localize.get("pepperyWalker"),
                 localize.get("materialist"),
                 localize.get("jackOfAllTrades"),
-                localize.get("cleanSlate")};
+                localize.get("cleanSlate"),
+                "Robot Mayhem",
+                localize.get("crusader"),
+                localize.get("tripAroundTheWorld"),
+                localize.get("hoarder")};
 
         achDescriptions = new String[] {
                 localize.get("sundayWalkerDesc"),
@@ -117,7 +125,11 @@ public class Achievements {
                 localize.get("pepperyWalkerDesc"),
                 localize.get("materialistDesc"),
                 localize.get("jackOfAllTradesDesc"),
-                localize.get("cleanSlateDesc")};
+                localize.get("cleanSlateDesc"),
+                localize.get("robotMayhemDesc"),
+                localize.get("crusaderDesc"),
+                localize.get("tripAroundTheWorldDesc"),
+                localize.get("hoarderDesc")};
 
         achMoney = new int[] {
                 5,      // Sunday Walker / 50 steps
@@ -126,8 +138,12 @@ public class Achievements {
                 80,     // Finisher / Finish the game
                 100,    // Peppery Walker / Finish the game on hard mode
                 50,     // Materialist / Buy every permanent item
-                10000,     // Jack Of All Trades / Own every skill
-                10       // Clean Slate / Reset the game
+                10000,  // Jack Of All Trades / Own every skill
+                10,     // Clean Slate / Reset the game
+                200,    // Robot Mayhem / Defeat 38 bosses
+                50,     // Crusader / 50 000 steps
+                150,    // Trip Around The World / 100 000 steps
+                123     // Hoarder / Buy 30 items
         };
     }
 
@@ -180,6 +196,18 @@ public class Achievements {
 
         // Achievement 7 / Clean Slate / Reset the game.
         if (resetedGame) game.setAchievement(7, "unlocked");
+
+        // Achievement 8 / Robot Mayhem / Defeat 38 bosses.
+        if (fightsWon >= 38) game.setAchievement(8, "unlocked");
+
+        // Achievement 9 / Crusader / 50 000 steps.
+        if (stepAllCount >= 50000) game.setAchievement(9, "unlocked");
+
+        // Achievement 10 / Trip Around The World / 100 000 steps
+        if (stepAllCount >= 100000) game.setAchievement(10, "unlocked");
+
+        // Achievement 11 / Hoarder / Buy 30 items.
+        if (buyedItemsCounter >= 30) game.setAchievement(11, "unlocked");
     }
 
     /**
@@ -193,6 +221,10 @@ public class Achievements {
             positionCounter++;
             if (i==3) {
                 posY = 400;
+                positionCounter = 0;
+            }
+            if (i==7) {
+                posY = 200;
                 positionCounter = 0;
             }
             dialogAch.addActor(imgBtn);
